@@ -3,16 +3,40 @@ apply plugin: 'com.android.application'
 sourceCompatibility = 1.7
 
 android {
-    compileSdkVersion 21
+    compileSdkVersion 19
     buildToolsVersion "21.0.0"
 
+    productFlavors {
+        TEST {
+            buildConfigField "String", "MT_DISTRIBUTION_TYPE", "\"TEST\""
+        }
+
+        UAT {
+            buildConfigField "String", "MT_DISTRIBUTION_TYPE", "\"UAT\""
+        }
+
+        PROD {
+            buildConfigField "String", "MT_DISTRIBUTION_TYPE", "\"PROD\""
+        }
+    }
+
     defaultConfig {
-        applicationId "met.com.met"
+        applicationId "met.com.openlink"
         minSdkVersion 18
-        targetSdkVersion 21
+        targetSdkVersion 19
         versionCode 1
         versionName "1.0"
     }
+
+    signingConfigs {
+        release {
+            storeFile file("openlink.keystore")
+            storePassword "op4nl4nk"
+            keyAlias "met_openlink"
+            keyPassword "op4nl4nk"
+        }
+    }
+
     buildTypes {
         debug {
             buildConfigField "String", "ML_DISTRIBUTION_TYPE", "\"DEV\""
@@ -21,6 +45,7 @@ android {
         release {
             runProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }
