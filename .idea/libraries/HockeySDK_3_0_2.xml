@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="HockeySDK-3.0.2">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/METOpenLink/libs/HockeySDK-3.0.2.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.hockeyapp.android/HockeySDK/3.0.2/8a3412e04f95700d4b65d40d1ee28d401a5ba28/HockeySDK-3.0.2.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
