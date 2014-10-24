@@ -11,8 +11,19 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/topTextView"
         android:text="@string/hello_world"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"/>
+
+    <com.milwaukeetool.mymilwaukee.view.MTButton
+        android:id="@+id/createAccountButton"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:text="Create Account"
+        android:layout_below="@id/topTextView"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>

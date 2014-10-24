@@ -1,12 +1,15 @@
 package com.milwaukeetool.mymilwaukee.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
-import com.milwaukeetool.test.R;
 import com.milwaukeetool.mymilwaukee.config.MTConfig;
+import com.milwaukeetool.mymilwaukee.view.MTButton;
+import com.milwaukeetool.test.R;
 
 import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.CrashManagerListener;
@@ -21,10 +24,21 @@ public class MainActivity extends Activity {
 
     private static final String TAG = makeLogTag(MainActivity.class);
 
+    private MTButton mCreateAccountBtn = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mCreateAccountBtn = (MTButton)findViewById(R.id.createAccountButton);
+        mCreateAccountBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent createAccountIntent = new Intent(MainActivity.this, CreateAccountActivity.class);
+                startActivity(createAccountIntent);
+            }
+        });
     }
 
     @Override

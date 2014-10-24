@@ -82,6 +82,8 @@ dependencies {
 //    compile 'com.android.support:support-v4:19.1.0'
 //    compile 'com.android.support:appcompat-v7:19.+'
 //    compile 'commons-io:commons-io:2.4'
-    compile 'net.hockeyapp.android:HockeySDK:3.0.2'
+
     monkeytalkCompile fileTree(dir: 'monkey-libs', include: ['*.jar'])
+
+    compile 'net.hockeyapp.android:HockeySDK:3.0.2'
 }
