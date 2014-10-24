@@ -1,10 +1,24 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.uphyca.gradle:gradle-android-aspectj-plugin:0.9.5'
+    }
+}
+
 apply plugin: 'com.android.application'
+apply plugin: 'android-aspectj'
 
 sourceCompatibility = 1.7
 
 android {
     compileSdkVersion 19
     buildToolsVersion "21.0.0"
+
+    lintOptions {
+        abortOnError false
+    }
 
     productFlavors {
         TEST {
@@ -21,7 +35,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "met.com.openlink"
+        applicationId "com.milwaukeetool.mymilwaukee"
         minSdkVersion 18
         targetSdkVersion 19
         versionCode 1
@@ -47,6 +61,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
+
+        monkeytalk.initWith(buildTypes.debug)
+        monkeytalk {
+            applicationIdSuffix ".monkey"
+        }
     }
 }
 
@@ -56,4 +75,5 @@ task wrapper(type: Wrapper) {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    monkeytalkCompile fileTree(dir: 'monkey-libs', include: ['*.jar'])
 }

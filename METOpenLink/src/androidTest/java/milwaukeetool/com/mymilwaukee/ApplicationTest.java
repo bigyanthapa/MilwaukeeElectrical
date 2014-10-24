@@ -1,4 +1,4 @@
-package met.com.openlink;
+package milwaukeetool.com.mymilwaukee;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
