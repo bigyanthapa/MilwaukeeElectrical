@@ -21,8 +21,8 @@ android {
     }
 
     productFlavors {
-        TEST {
-            buildConfigField "String", "MT_DISTRIBUTION_TYPE", "\"TEST\""
+        QA {
+            buildConfigField "String", "MT_DISTRIBUTION_TYPE", "\"QA\""
         }
 
         UAT {
@@ -32,6 +32,10 @@ android {
         PROD {
             buildConfigField "String", "MT_DISTRIBUTION_TYPE", "\"PROD\""
         }
+
+        BETA {
+            buildConfigField "String", "MT_DISTRIBUTION_TYPE", "\"BETA\""
+        }
     }
 
     defaultConfig {
@@ -39,7 +43,7 @@ android {
         minSdkVersion 18
         targetSdkVersion 19
         versionCode 1
-        versionName "1.0"
+        versionName "0.1.1.1"
     }
 
     signingConfigs {
@@ -53,7 +57,7 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField "String", "ML_DISTRIBUTION_TYPE", "\"DEV\""
+            buildConfigField "String", "MT_DISTRIBUTION_TYPE", "\"DEV\""
         }
 
         release {
@@ -75,5 +79,9 @@ task wrapper(type: Wrapper) {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+//    compile 'com.android.support:support-v4:19.1.0'
+//    compile 'com.android.support:appcompat-v7:19.+'
+//    compile 'commons-io:commons-io:2.4'
+
     monkeytalkCompile fileTree(dir: 'monkey-libs', include: ['*.jar'])
 }
