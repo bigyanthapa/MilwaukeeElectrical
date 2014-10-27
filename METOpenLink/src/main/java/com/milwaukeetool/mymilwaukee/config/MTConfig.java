@@ -1,6 +1,6 @@
 package com.milwaukeetool.mymilwaukee.config;
 
-import com.milwaukeetool.test.BuildConfig;
+import com.milwaukeetool.mymilwaukee.BuildConfig;
 
 /**
  * Created by cent146 on 10/24/14.

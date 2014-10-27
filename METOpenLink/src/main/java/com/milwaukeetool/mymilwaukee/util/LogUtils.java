@@ -2,7 +2,7 @@ package com.milwaukeetool.mymilwaukee.util;
 
 import android.util.Log;
 
-import com.milwaukeetool.test.BuildConfig;
+import com.milwaukeetool.mymilwaukee.BuildConfig;
 
 /**
  * Created by cent146 on 10/24/14.

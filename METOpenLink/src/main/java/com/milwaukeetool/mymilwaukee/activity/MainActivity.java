@@ -9,7 +9,7 @@ import android.view.View;
 
 import com.milwaukeetool.mymilwaukee.config.MTConfig;
 import com.milwaukeetool.mymilwaukee.view.MTButton;
-import com.milwaukeetool.test.R;
+import com.milwaukeetool.mymilwaukee.R;
 
 import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.CrashManagerListener;
