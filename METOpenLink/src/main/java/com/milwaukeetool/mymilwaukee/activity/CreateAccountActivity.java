@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
-import com.milwaukeetool.test.R;
+import com.milwaukeetool.mymilwaukee.R;
 
 /**
  * Created by cent146 on 10/24/14.
