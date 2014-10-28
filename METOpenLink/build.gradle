@@ -24,24 +24,27 @@ android {
     productFlavors {
         QA {
             buildConfigField "String", "MT_DISTRIBUTION_TYPE", "\"QA\""
+            applicationId 'com.milwaukeetool.mymilwaukee_QA'
         }
         UAT {
             buildConfigField "String", "MT_DISTRIBUTION_TYPE", "\"UAT\""
+            applicationId 'com.milwaukeetool.mymilwaukee_UAT'
         }
         PROD {
             buildConfigField "String", "MT_DISTRIBUTION_TYPE", "\"PROD\""
+            applicationId 'com.milwaukeetool.mymilwaukee'
         }
         BETA {
             buildConfigField "String", "MT_DISTRIBUTION_TYPE", "\"BETA\""
+            applicationId 'com.milwaukeetool.mymilwaukee_BETA'
         }
     }
 
     defaultConfig {
-        applicationId 'com.milwaukeetool.mymilwaukee'
         minSdkVersion 18
         targetSdkVersion 19
         versionCode 3
-        versionName '0.1.1.1'
+        versionName '0.1.1.2'
     }
 
     signingConfigs {
