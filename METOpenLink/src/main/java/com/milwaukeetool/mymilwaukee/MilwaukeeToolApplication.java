@@ -5,11 +5,18 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
+import com.milwaukeetool.mymilwaukee.config.MTConfig;
+import com.milwaukeetool.mymilwaukee.util.AnalyticUtils;
+
 /**
  * Created by cent146 on 10/24/14.
  */
 public class MilwaukeeToolApplication extends Application {
     private static Context _context;
+    private Tracker tracker;
+
     public static Context getAppContext() {
         return _context;
     }
@@ -23,6 +30,15 @@ public class MilwaukeeToolApplication extends Application {
         } catch (Exception e) {
         }
         return "";
+    }
+
+    public Tracker getTracker() {
+        if (this.tracker == null) {
+            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+            this.tracker = analytics.newTracker(MTConfig.getGoogleAnalyticsId());
+        }
+
+        return this.tracker;
     }
 
     public static int getApplicationVersionCode(Context context) {

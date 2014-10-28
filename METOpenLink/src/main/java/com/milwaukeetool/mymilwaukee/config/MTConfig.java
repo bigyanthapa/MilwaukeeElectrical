@@ -59,9 +59,35 @@ public class MTConfig {
     public static final String MT_GOOGLE_ANALYTICS_APP_ID_UAT = "UA-22972315-5";
     public static final String MT_GOOGLE_ANALYTICS_APP_ID_BETA = "UA-22972315-5";
 
-
     // OpenLink
 
+
+    public static String getGoogleAnalyticsId() {
+        String id = MT_GOOGLE_ANALYTICS_APP_ID_DEFAULT;
+
+        if (BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_DEBUG)) {
+            id = MT_GOOGLE_ANALYTICS_APP_ID_DEV;
+        } else if (BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_RELEASE)) {
+            switch (BuildConfig.MT_DISTRIBUTION_TYPE) {
+                case MT_DISTRIBUTION_TYPE_PROD:
+                    id = MT_GOOGLE_ANALYTICS_APP_ID_PROD;
+                    break;
+                case MT_DISTRIBUTION_TYPE_QA:
+                    id = MT_GOOGLE_ANALYTICS_APP_ID_QA;
+                    break;
+                case MT_DISTRIBUTION_TYPE_UAT:
+                    id = MT_GOOGLE_ANALYTICS_APP_ID_UAT;
+                    break;
+                case MT_DISTRIBUTION_TYPE_BETA:
+                    id = MT_GOOGLE_ANALYTICS_APP_ID_BETA;
+                    break;
+                default:
+                    id = MT_HOCKEY_APP_ID_DEV;
+            }
+        }
+
+        return id;
+    }
 
     public static String getHockeyAppID() {
 
@@ -75,7 +101,7 @@ public class MTConfig {
         } else if (BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_RELEASE)) {
 
             // Release build
-            if (BuildConfig.MT_DISTRIBUTION_TYPE.equalsIgnoreCase(MT_HOCKEY_APP_ID_PROD)) {
+            if (BuildConfig.MT_DISTRIBUTION_TYPE.equalsIgnoreCase(MT_DISTRIBUTION_TYPE_PROD)) {
                 appID = MT_HOCKEY_APP_ID_PROD;
             } else if (BuildConfig.MT_DISTRIBUTION_TYPE.equalsIgnoreCase(MT_DISTRIBUTION_TYPE_QA)) {
                 appID = MT_HOCKEY_APP_ID_QA;
