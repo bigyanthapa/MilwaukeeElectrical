@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
 
@@ -32,14 +33,14 @@ public class LogInActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-
+        GoogleAnalytics.getInstance(this).reportActivityStart(this);
         // Analytics
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
+        GoogleAnalytics.getInstance(this).reportActivityStop(this);
 
     }
 

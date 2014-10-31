@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.milwaukeetool.mymilwaukee.util.AnalyticUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
 import com.milwaukeetool.mymilwaukee.R;
 
@@ -32,15 +34,13 @@ public class CreateAccountActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        // Analytics
+        GoogleAnalytics.getInstance(this).reportActivityStart(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
-
+        GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 
     @Override

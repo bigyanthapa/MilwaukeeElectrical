@@ -21,6 +21,11 @@ public class MilwaukeeToolApplication extends Application {
         return _context;
     }
 
+    public MilwaukeeToolApplication() {
+        GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+        this.tracker = analytics.newTracker(MTConfig.getGoogleAnalyticsId());
+    }
+
     public static String getApplicationVersionName(Context context) {
         PackageManager packageManager = _context.getPackageManager();
         try {
@@ -33,11 +38,6 @@ public class MilwaukeeToolApplication extends Application {
     }
 
     public Tracker getTracker() {
-        if (this.tracker == null) {
-            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-            this.tracker = analytics.newTracker(MTConfig.getGoogleAnalyticsId());
-        }
-
         return this.tracker;
     }
 
@@ -57,6 +57,4 @@ public class MilwaukeeToolApplication extends Application {
 
         // Google Analytics ?
     }
-
-
 }

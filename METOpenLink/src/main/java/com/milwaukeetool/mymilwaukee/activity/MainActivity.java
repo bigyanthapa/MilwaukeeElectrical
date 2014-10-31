@@ -8,8 +8,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.milwaukeetool.mymilwaukee.MilwaukeeToolApplication;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.config.MTConfig;
+import com.milwaukeetool.mymilwaukee.util.AnalyticUtils;
 import com.milwaukeetool.mymilwaukee.view.MTButton;
 
 import net.hockeyapp.android.CrashManager;
@@ -54,6 +59,8 @@ public class MainActivity extends Activity {
                 startActivity(logInIntent);
             }
         });
+
+        AnalyticUtils.init(this);
     }
 
     @Override
@@ -61,6 +68,22 @@ public class MainActivity extends Activity {
         super.onResume();
         checkForCrashes();
         checkForUpdates();
+
+        //GoogleAnalytics.getInstance(this).reportActivityStart(this);
+        Tracker t = ((MilwaukeeToolApplication) this.getApplication()).getTracker();
+
+        // Set screen name.
+        t.setScreenName("Main screen");
+
+        // Send a screen view.
+        t.send(new HitBuilders.AppViewBuilder().build());
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //GoogleAnalytics.getInstance(this).reportActivityStop(this);
+
     }
 
     @Override
