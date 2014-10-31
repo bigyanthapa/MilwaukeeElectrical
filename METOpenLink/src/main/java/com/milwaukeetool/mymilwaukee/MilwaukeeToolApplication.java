@@ -6,9 +6,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Logger;
 import com.google.android.gms.analytics.Tracker;
 import com.milwaukeetool.mymilwaukee.config.MTConfig;
-import com.milwaukeetool.mymilwaukee.util.AnalyticUtils;
 
 /**
  * Created by cent146 on 10/24/14.
@@ -19,10 +19,6 @@ public class MilwaukeeToolApplication extends Application {
 
     public static Context getAppContext() {
         return _context;
-    }
-
-    public MilwaukeeToolApplication() {
-
     }
 
     public static String getApplicationVersionName(Context context) {
@@ -36,9 +32,15 @@ public class MilwaukeeToolApplication extends Application {
         return "";
     }
 
+
     public Tracker getTracker() {
+
         if (this.tracker == null) {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+            if (!MTConfig.isExternalRelease()) {
+                analytics.getLogger()
+                        .setLogLevel(Logger.LogLevel.VERBOSE);
+            }
             this.tracker = analytics.newTracker(MTConfig.getGoogleAnalyticsId());
         }
 
