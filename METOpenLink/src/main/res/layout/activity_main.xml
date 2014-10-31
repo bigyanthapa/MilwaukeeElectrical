@@ -8,22 +8,40 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@drawable/background">
 
-    <TextView
-        android:id="@+id/topTextView"
-        android:text="@string/hello_world"
+
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"/>
+        android:id="@+id/imageView"
+        android:src="@drawable/ic_mtlrg"
+        android:layout_above="@+id/createAccountButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="82dp" />
 
     <com.milwaukeetool.mymilwaukee.view.MTButton
         android:id="@+id/createAccountButton"
         android:layout_width="200dp"
         android:layout_height="60dp"
-        android:text="Create Account"
-        android:layout_below="@id/topTextView"
-        android:layout_marginTop="10dp"
-        android:layout_centerHorizontal="true"/>
+        android:text="CREATE ACCOUNT"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="133dp"
+        android:textColor="#ffffffff"
+        android:background="@drawable/create_account"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true" />
+
+    <com.milwaukeetool.mymilwaukee.view.MTButton
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:text="LOG IN"
+        android:id="@+id/logInButton"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="66dp"
+        android:background="@drawable/log_in"
+        android:layout_alignEnd="@+id/createAccountButton"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

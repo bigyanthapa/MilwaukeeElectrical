@@ -24,7 +24,8 @@ public class MainActivity extends Activity {
 
     private static final String TAG = makeLogTag(MainActivity.class);
 
-    private MTButton mCreateAccountBtn = null;
+    private MTButton mCreateAccountBtn;
+    private MTButton mLogInBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,15 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 Intent createAccountIntent = new Intent(MainActivity.this, CreateAccountActivity.class);
                 startActivity(createAccountIntent);
+            }
+        });
+
+        mLogInBtn = (MTButton)findViewById(R.id.logInButton);
+        mLogInBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent logInIntent = new Intent(MainActivity.this, LogInActivity.class);
+                startActivity(logInIntent);
             }
         });
     }

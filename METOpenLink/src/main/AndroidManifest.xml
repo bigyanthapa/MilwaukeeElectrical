@@ -43,6 +43,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity" />
         </activity>
+        <activity
+            android:name="com.milwaukeetool.mymilwaukee.activity.LogInActivity"
+            android:label="@string/title_log_in"
+            android:screenOrientation="sensorPortrait"
+            android:launchMode="singleTop"
+            android:parentActivityName="com.milwaukeetool.mymilwaukee.activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
