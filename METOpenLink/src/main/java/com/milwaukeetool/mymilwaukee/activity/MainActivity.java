@@ -69,21 +69,13 @@ public class MainActivity extends Activity {
         checkForCrashes();
         checkForUpdates();
 
-        //GoogleAnalytics.getInstance(this).reportActivityStart(this);
-        Tracker t = ((MilwaukeeToolApplication) this.getApplication()).getTracker();
-
-        // Set screen name.
-        t.setScreenName("Main screen");
-
-        // Send a screen view.
-        t.send(new HitBuilders.AppViewBuilder().build());
+        GoogleAnalytics.getInstance(this).reportActivityStart(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        //GoogleAnalytics.getInstance(this).reportActivityStop(this);
-
+        GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 
     @Override
