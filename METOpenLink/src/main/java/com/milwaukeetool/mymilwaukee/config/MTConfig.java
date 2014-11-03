@@ -1,10 +1,6 @@
 package com.milwaukeetool.mymilwaukee.config;
 
-import android.util.Log;
-
 import com.milwaukeetool.mymilwaukee.BuildConfig;
-
-import java.lang.reflect.Field;
 
 /**
  * Created by cent146 on 10/24/14.
@@ -52,7 +48,7 @@ public class MTConfig {
     public static final String MT_HOCKEY_APP_ID_DEV = "";
     public static final String MT_HOCKEY_APP_ID_QA = "3f1e886329de8dde358e49a0e3b08682";
     public static final String MT_HOCKEY_APP_ID_DEFAULT = MT_HOCKEY_APP_ID_QA;
-    public static final String MT_HOCKEY_APP_ID_UAT = "";
+    public static final String MT_HOCKEY_APP_ID_UAT = "05472a98222110a16f1d98bc20226693";
     public static final String MT_HOCKEY_APP_ID_BETA = "";
 
     // Google Analytics
@@ -71,16 +67,16 @@ public class MTConfig {
 
         switch (BuildConfig.MT_DISTRIBUTION_TYPE) {
             case MT_DISTRIBUTION_TYPE_PROD:
-                apiEndPoint = MT_API_SECRET_PROD;
+                apiEndPoint = MT_API_END_POINT_PROD;
                 break;
             case MT_DISTRIBUTION_TYPE_QA:
-                apiEndPoint = MT_API_SECRET_QA;
+                apiEndPoint = MT_API_END_POINT_QA;
                 break;
             case MT_DISTRIBUTION_TYPE_UAT:
-                apiEndPoint = MT_API_SECRET_UAT;
+                apiEndPoint = MT_API_END_POINT_UAT;
                 break;
             case MT_DISTRIBUTION_TYPE_BETA:
-                apiEndPoint = MT_API_SECRET_BETA;
+                apiEndPoint = MT_API_END_POINT_BETA;
                 break;
             default:
                 apiEndPoint = MT_API_END_POINT_QA;
@@ -89,24 +85,24 @@ public class MTConfig {
         return apiEndPoint;
     }
 
-    public static String getParseSecret() {
+    public static String getAPISecret() {
         String parseSecret = null;
 
         switch (BuildConfig.MT_DISTRIBUTION_TYPE) {
             case MT_DISTRIBUTION_TYPE_PROD:
-                parseSecret = MT_API_END_POINT_PROD;
+                parseSecret = MT_API_SECRET_PROD;
                 break;
             case MT_DISTRIBUTION_TYPE_QA:
-                parseSecret = MT_API_END_POINT_QA;
+                parseSecret = MT_API_SECRET_QA;
                 break;
             case MT_DISTRIBUTION_TYPE_UAT:
-                parseSecret = MT_API_END_POINT_UAT;
+                parseSecret = MT_API_SECRET_UAT;
                 break;
             case MT_DISTRIBUTION_TYPE_BETA:
-                parseSecret = MT_API_END_POINT_BETA;
+                parseSecret = MT_API_SECRET_BETA;
                 break;
             default:
-                parseSecret = MT_API_END_POINT_QA;
+                parseSecret = MT_API_SECRET_QA;
         }
 
         return parseSecret;
@@ -132,7 +128,7 @@ public class MTConfig {
                     id = MT_GOOGLE_ANALYTICS_APP_ID_BETA;
                     break;
                 default:
-                    id = MT_HOCKEY_APP_ID_DEV;
+                    id = MT_GOOGLE_ANALYTICS_APP_ID_QA;
             }
         }
 
