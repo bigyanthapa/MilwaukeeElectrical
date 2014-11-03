@@ -71,9 +71,18 @@ android {
             signingConfig signingConfigs.release
         }
         monkeytalk.initWith(buildTypes.debug)
-        monkeytalk {
-            applicationIdSuffix '.monkey'
-        }
+//        monkeytalk-QA {
+//            applicationIdSuffix '_QA'
+//        }
+//        monkeytalk-UAT {
+//            applicationIdSuffix '.monkeytalk'
+//        }
+//        monkeytalk-PROD {
+//            applicationIdSuffix '.monkeytalk'
+//        }
+//        monkeytalk-BETA {
+//            applicationIdSuffix '.monkeytalk'
+//        }
     }
 }
 

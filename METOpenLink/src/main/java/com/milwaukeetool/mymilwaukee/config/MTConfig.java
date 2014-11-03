@@ -36,6 +36,7 @@ public class MTConfig {
     // Build info
     public static final String MT_BUILD_TYPE_DEBUG = "debug";
     public static final String MT_BUILD_TYPE_RELEASE = "release";
+    public static final String MT_BUILD_TYPE_MONKEYTALK= "monkeytalk";
 
     public static final String MT_DISTRIBUTION_TYPE_DEV = "DEV";
     public static final String MT_DISTRIBUTION_TYPE_QA = "QA";
@@ -65,8 +66,13 @@ public class MTConfig {
     public static String getWebServicesURL() {
         String apiEndPoint = null;
 
-        if (BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_DEBUG)) {
-            apiEndPoint = MT_API_SECRET_DEV;
+        if (BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_DEBUG) || BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_MONKEYTALK)) {
+            if (BuildConfig.MT_DISTRIBUTION_TYPE == MT_DISTRIBUTION_TYPE_QA) {
+                apiEndPoint = MT_API_SECRET_QA;
+            } else {
+                apiEndPoint = MT_API_SECRET_DEV;
+            }
+
         } else if (BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_RELEASE)) {
             switch (BuildConfig.MT_DISTRIBUTION_TYPE) {
                 case MT_DISTRIBUTION_TYPE_PROD:
@@ -92,8 +98,12 @@ public class MTConfig {
     public static String getAPISecret() {
         String apiSecret = null;
 
-        if (BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_DEBUG)) {
-            apiSecret = MT_API_SECRET_DEV;
+        if (BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_DEBUG) || BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_MONKEYTALK)) {
+            if (BuildConfig.MT_DISTRIBUTION_TYPE == MT_DISTRIBUTION_TYPE_QA) {
+                apiSecret = MT_API_SECRET_QA;
+            } else {
+                apiSecret = MT_API_SECRET_DEV;
+            }
         } else if (BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_RELEASE)) {
             switch (BuildConfig.MT_DISTRIBUTION_TYPE) {
                 case MT_DISTRIBUTION_TYPE_PROD:
@@ -119,8 +129,13 @@ public class MTConfig {
     public static String getGoogleAnalyticsId() {
         String id = MT_GOOGLE_ANALYTICS_APP_ID_DEFAULT;
 
-        if (BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_DEBUG)) {
-            id = MT_GOOGLE_ANALYTICS_APP_ID_DEV;
+        if (BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_DEBUG) || BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_MONKEYTALK)) {
+            if (BuildConfig.MT_DISTRIBUTION_TYPE == MT_DISTRIBUTION_TYPE_QA) {
+                id = MT_GOOGLE_ANALYTICS_APP_ID_QA;
+            } else {
+                id = MT_GOOGLE_ANALYTICS_APP_ID_DEV;
+            }
+
         } else if (BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_RELEASE)) {
             switch (BuildConfig.MT_DISTRIBUTION_TYPE) {
                 case MT_DISTRIBUTION_TYPE_PROD:
@@ -147,11 +162,13 @@ public class MTConfig {
 
         String appID = MT_HOCKEY_APP_ID_DEFAULT;
 
-        if (BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_DEBUG)) {
-
-            // Standard dev build
-            appID = MT_HOCKEY_APP_ID_DEV;
-
+        if (BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_DEBUG) || BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_MONKEYTALK)) {
+            if (BuildConfig.MT_DISTRIBUTION_TYPE == MT_DISTRIBUTION_TYPE_QA) {
+                appID = MT_HOCKEY_APP_ID_QA;
+            } else {
+                // Standard dev build
+                appID = MT_HOCKEY_APP_ID_DEV;
+            }
         } else if (BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_RELEASE)) {
 
             // Release build
