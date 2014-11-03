@@ -65,47 +65,55 @@ public class MTConfig {
     public static String getWebServicesURL() {
         String apiEndPoint = null;
 
-        switch (BuildConfig.MT_DISTRIBUTION_TYPE) {
-            case MT_DISTRIBUTION_TYPE_PROD:
-                apiEndPoint = MT_API_END_POINT_PROD;
-                break;
-            case MT_DISTRIBUTION_TYPE_QA:
-                apiEndPoint = MT_API_END_POINT_QA;
-                break;
-            case MT_DISTRIBUTION_TYPE_UAT:
-                apiEndPoint = MT_API_END_POINT_UAT;
-                break;
-            case MT_DISTRIBUTION_TYPE_BETA:
-                apiEndPoint = MT_API_END_POINT_BETA;
-                break;
-            default:
-                apiEndPoint = MT_API_END_POINT_QA;
+        if (BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_DEBUG)) {
+            apiEndPoint = MT_API_SECRET_DEV;
+        } else if (BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_RELEASE)) {
+            switch (BuildConfig.MT_DISTRIBUTION_TYPE) {
+                case MT_DISTRIBUTION_TYPE_PROD:
+                    apiEndPoint = MT_API_END_POINT_PROD;
+                    break;
+                case MT_DISTRIBUTION_TYPE_QA:
+                    apiEndPoint = MT_API_END_POINT_QA;
+                    break;
+                case MT_DISTRIBUTION_TYPE_UAT:
+                    apiEndPoint = MT_API_END_POINT_UAT;
+                    break;
+                case MT_DISTRIBUTION_TYPE_BETA:
+                    apiEndPoint = MT_API_END_POINT_BETA;
+                    break;
+                default:
+                    apiEndPoint = MT_API_END_POINT_DEV;
+            }
         }
 
         return apiEndPoint;
     }
 
     public static String getAPISecret() {
-        String parseSecret = null;
+        String apiSecret = null;
 
-        switch (BuildConfig.MT_DISTRIBUTION_TYPE) {
-            case MT_DISTRIBUTION_TYPE_PROD:
-                parseSecret = MT_API_SECRET_PROD;
-                break;
-            case MT_DISTRIBUTION_TYPE_QA:
-                parseSecret = MT_API_SECRET_QA;
-                break;
-            case MT_DISTRIBUTION_TYPE_UAT:
-                parseSecret = MT_API_SECRET_UAT;
-                break;
-            case MT_DISTRIBUTION_TYPE_BETA:
-                parseSecret = MT_API_SECRET_BETA;
-                break;
-            default:
-                parseSecret = MT_API_SECRET_QA;
+        if (BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_DEBUG)) {
+            apiSecret = MT_API_SECRET_DEV;
+        } else if (BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_RELEASE)) {
+            switch (BuildConfig.MT_DISTRIBUTION_TYPE) {
+                case MT_DISTRIBUTION_TYPE_PROD:
+                    apiSecret = MT_API_SECRET_PROD;
+                    break;
+                case MT_DISTRIBUTION_TYPE_QA:
+                    apiSecret = MT_API_SECRET_QA;
+                    break;
+                case MT_DISTRIBUTION_TYPE_UAT:
+                    apiSecret = MT_API_SECRET_UAT;
+                    break;
+                case MT_DISTRIBUTION_TYPE_BETA:
+                    apiSecret = MT_API_SECRET_BETA;
+                    break;
+                default:
+                    apiSecret = MT_API_SECRET_DEV;
+            }
         }
 
-        return parseSecret;
+        return apiSecret;
     }
 
     public static String getGoogleAnalyticsId() {
@@ -128,7 +136,7 @@ public class MTConfig {
                     id = MT_GOOGLE_ANALYTICS_APP_ID_BETA;
                     break;
                 default:
-                    id = MT_GOOGLE_ANALYTICS_APP_ID_QA;
+                    id = MT_GOOGLE_ANALYTICS_APP_ID_DEV;
             }
         }
 
