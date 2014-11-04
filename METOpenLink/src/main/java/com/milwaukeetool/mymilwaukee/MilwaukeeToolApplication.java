@@ -32,7 +32,6 @@ public class MilwaukeeToolApplication extends Application {
         return "";
     }
 
-
     public Tracker getTracker() {
 
         if (this.tracker == null) {
@@ -60,7 +59,5 @@ public class MilwaukeeToolApplication extends Application {
 
     public void onCreate() {
         _context = getApplicationContext();
-
-        // Google Analytics ?
     }
 }

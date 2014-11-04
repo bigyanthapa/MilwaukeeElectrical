@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.milwaukeetool.mymilwaukee.R;
@@ -34,12 +33,9 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        getActionBar().hide();
-
         setContentView(R.layout.activity_main);
 
-        Log.i(TAG,"PACKAGE NAME: " + getApplicationContext().getPackageName());
+        Log.i(TAG, "PACKAGE NAME: " + getApplicationContext().getPackageName());
 
         mCreateAccountBtn = (MTButton)findViewById(R.id.createAccountButton);
         mCreateAccountBtn.setOnClickListener(new View.OnClickListener() {

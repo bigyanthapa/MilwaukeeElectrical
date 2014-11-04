@@ -17,7 +17,6 @@ public class AnalyticUtils {
     public static void init(Activity activity) {
         MilwaukeeToolApplication mtApp = (MilwaukeeToolApplication) activity.getApplication();
         Tracker tracker = mtApp.getTracker();
-        //tracker.enableAdvertisingIdCollection(true);
         tracker.enableAutoActivityTracking(true);
     }
 }
