@@ -38,6 +38,10 @@ android {
             buildConfigField "String", "MT_DISTRIBUTION_TYPE", "\"BETA\""
             applicationId 'com.milwaukeetool.mymilwaukee_BETA'
         }
+        DEV {
+            buildConfigField "String", "MT_DISTRIBUTION_TYPE", "\"DEV\""
+            applicationId 'com.milwaukeetool.mymilwaukee_DEV'
+        }
     }
 
     defaultConfig {
@@ -70,25 +74,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
-        //monkeytalk.initWith(buildTypes.debug)
-        monkeytalk {
+        qa {
             buildConfigField "String", "MT_DISTRIBUTION_TYPE", "\"QA\""
             debuggable true
             signingConfig signingConfigs.release
         }
-
-//        monkeytalk-QA {
-//            applicationIdSuffix '_QA'
-//        }
-//        monkeytalk-UAT {
-//            applicationIdSuffix '.monkeytalk'
-//        }
-//        monkeytalk-PROD {
-//            applicationIdSuffix '.monkeytalk'
-//        }
-//        monkeytalk-BETA {
-//            applicationIdSuffix '.monkeytalk'
-//        }
+        monkeytalk.initWith(buildTypes.qa)
     }
 }
 
