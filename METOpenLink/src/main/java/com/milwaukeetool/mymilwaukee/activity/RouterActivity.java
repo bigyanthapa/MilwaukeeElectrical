@@ -41,7 +41,7 @@ public class RouterActivity extends Activity {
         Intent intent = new Intent(this, MainActivity.class);
 
         // TODO: Add any extras???? Anything to pass
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
         finish();
 
