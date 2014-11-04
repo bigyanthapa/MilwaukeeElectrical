@@ -48,7 +48,7 @@
                     android:layout_below="@+id/logoImageView"
                     android:layout_marginTop="82dp"
                     android:textColor="@color/mt_white"
-                    android:background="@drawable/create_account"
+                    android:background="@drawable/black_button_selector"
                     android:layout_centerHorizontal="true" />
 
                 <com.milwaukeetool.mymilwaukee.view.MTButton
@@ -60,7 +60,7 @@
                     android:id="@+id/logInButton"
                     android:layout_below="@id/createAccountButton"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/log_in"
+                    android:background="@drawable/outline_button_selector"
                     android:textColor="@color/mt_white"
                     android:layout_centerHorizontal="true" />
 
