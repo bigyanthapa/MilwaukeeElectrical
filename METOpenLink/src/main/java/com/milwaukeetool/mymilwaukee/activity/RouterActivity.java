@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Window;
 
 import com.milwaukeetool.mymilwaukee.R;
+import com.milwaukeetool.mymilwaukee.util.AnalyticUtils;
 
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 
@@ -21,6 +22,8 @@ public class RouterActivity extends Activity {
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         getActionBar().hide();
         setContentView(R.layout.activity_router);
+
+        AnalyticUtils.init(this);
     }
 
     @Override

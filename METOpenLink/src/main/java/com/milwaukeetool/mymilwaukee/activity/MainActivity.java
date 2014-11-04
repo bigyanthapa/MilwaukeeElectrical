@@ -12,7 +12,6 @@ import android.view.Window;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.config.MTConfig;
-import com.milwaukeetool.mymilwaukee.util.AnalyticUtils;
 import com.milwaukeetool.mymilwaukee.view.MTButton;
 
 import net.hockeyapp.android.CrashManager;
@@ -59,8 +58,6 @@ public class MainActivity extends Activity {
                 startActivity(logInIntent);
             }
         });
-
-        AnalyticUtils.init(this);
 
         checkForUpdates();
     }

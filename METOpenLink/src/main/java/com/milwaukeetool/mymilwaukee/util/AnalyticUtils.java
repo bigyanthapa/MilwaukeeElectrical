@@ -1,13 +1,9 @@
 package com.milwaukeetool.mymilwaukee.util;
 
 import android.app.Activity;
-import android.app.Application;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.milwaukeetool.mymilwaukee.MilwaukeeToolApplication;
-
-import java.util.HashMap;
 
 /**
  * Created by cent146 on 10/24/14.
@@ -21,6 +17,7 @@ public class AnalyticUtils {
     public static void init(Activity activity) {
         MilwaukeeToolApplication mtApp = (MilwaukeeToolApplication) activity.getApplication();
         Tracker tracker = mtApp.getTracker();
-        tracker.enableAdvertisingIdCollection(true);
+        //tracker.enableAdvertisingIdCollection(true);
+        tracker.enableAutoActivityTracking(true);
     }
 }
