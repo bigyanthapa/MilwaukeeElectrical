@@ -162,6 +162,8 @@ public class MTConfig {
 
     public static String getHockeyAppID() {
 
+        Log.i("MTConfig", "BuildType: " + BuildConfig.BUILD_TYPE + " DistributionType: " + BuildConfig.MT_DISTRIBUTION_TYPE);
+
         String appID = MT_HOCKEY_APP_ID_DEFAULT;
 
         if (BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_DEBUG) || BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_MONKEYTALK)) {
@@ -187,7 +189,7 @@ public class MTConfig {
             }
         }
 
-        Log.i("MTConfig","HockeyApp ID: " + appID + " for distribution type: " + BuildConfig.MT_DISTRIBUTION_TYPE);
+        Log.i("MTConfig", "HockeyApp ID: " + appID + " for distribution type: " + BuildConfig.MT_DISTRIBUTION_TYPE);
 
         return appID;
     }
