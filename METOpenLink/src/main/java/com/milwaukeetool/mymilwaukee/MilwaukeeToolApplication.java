@@ -54,6 +54,7 @@ public class MilwaukeeToolApplication extends Application {
         } catch (PackageManager.NameNotFoundException ex) {
         } catch (Exception e) {
         }
+
         return 0;
     }
 

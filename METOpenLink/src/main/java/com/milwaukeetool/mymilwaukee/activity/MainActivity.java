@@ -10,12 +10,7 @@ import android.view.View;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.milwaukeetool.mymilwaukee.R;
-import com.milwaukeetool.mymilwaukee.config.MTConfig;
 import com.milwaukeetool.mymilwaukee.view.MTButton;
-
-import net.hockeyapp.android.CrashManager;
-import net.hockeyapp.android.CrashManagerListener;
-import net.hockeyapp.android.UpdateManager;
 
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 
@@ -54,14 +49,12 @@ public class MainActivity extends Activity {
                 startActivity(logInIntent);
             }
         });
-
-        checkForUpdates();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        checkForCrashes();
+
 
         GoogleAnalytics.getInstance(this).reportActivityStart(this);
     }
@@ -91,19 +84,5 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void checkForCrashes() {
-        CrashManager.register(this, MTConfig.getHockeyAppID(), new CrashManagerListener() {
-            public boolean shouldAutoUploadCrashes() {
-                // Always upload automatically for ALL release builds
-                return MTConfig.isExternalRelease();
-            }
-        });
-    }
 
-    private void checkForUpdates() {
-        if (!MTConfig.isExternalRelease()) {
-            // Include for hockey app builds
-            UpdateManager.register(this, MTConfig.getHockeyAppID());
-        }
-    }
 }
