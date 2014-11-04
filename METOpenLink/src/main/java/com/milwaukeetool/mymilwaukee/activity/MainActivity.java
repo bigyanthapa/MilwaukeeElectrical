@@ -9,9 +9,6 @@ import android.view.View;
 import android.view.Window;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-import com.milwaukeetool.mymilwaukee.MilwaukeeToolApplication;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.config.MTConfig;
 import com.milwaukeetool.mymilwaukee.util.AnalyticUtils;
@@ -61,13 +58,14 @@ public class MainActivity extends Activity {
         });
 
         AnalyticUtils.init(this);
+
+        checkForUpdates();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         checkForCrashes();
-        checkForUpdates();
 
         GoogleAnalytics.getInstance(this).reportActivityStart(this);
     }

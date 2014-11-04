@@ -1,5 +1,7 @@
 package com.milwaukeetool.mymilwaukee.config;
 
+import android.util.Log;
+
 import com.milwaukeetool.mymilwaukee.BuildConfig;
 
 /**
@@ -45,12 +47,12 @@ public class MTConfig {
     public static final String MT_DISTRIBUTION_TYPE_PROD = "PROD";
 
     // HockeyApp
-    public static final String MT_HOCKEY_APP_ID_PROD = "";
-    public static final String MT_HOCKEY_APP_ID_DEV = "";
     public static final String MT_HOCKEY_APP_ID_QA = "3f1e886329de8dde358e49a0e3b08682";
+    public static final String MT_HOCKEY_APP_ID_PROD = "";
+    public static final String MT_HOCKEY_APP_ID_BETA = "";
+    public static final String MT_HOCKEY_APP_ID_DEV = MT_HOCKEY_APP_ID_QA;
     public static final String MT_HOCKEY_APP_ID_DEFAULT = MT_HOCKEY_APP_ID_QA;
     public static final String MT_HOCKEY_APP_ID_UAT = "05472a98222110a16f1d98bc20226693";
-    public static final String MT_HOCKEY_APP_ID_BETA = "";
 
     // Google Analytics
     public static final String MT_GOOGLE_ANALYTICS_APP_ID_PROD = "UA-22972315-5";
@@ -184,6 +186,8 @@ public class MTConfig {
                 appID = MT_HOCKEY_APP_ID_DEV;
             }
         }
+
+        Log.i("MTConfig","HockeyApp ID: " + appID + " for distribution type: " + BuildConfig.MT_DISTRIBUTION_TYPE);
 
         return appID;
     }
