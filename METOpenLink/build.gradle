@@ -74,12 +74,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
-        qa {
+        qaBuild {
             buildConfigField "String", "MT_DISTRIBUTION_TYPE", "\"QA\""
             debuggable true
             signingConfig signingConfigs.release
         }
-        monkeytalk.initWith(buildTypes.qa)
+        monkeytalk.initWith(buildTypes.qaBuild)
     }
 }
 
