@@ -6,6 +6,7 @@ import android.view.MenuItem;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.milwaukeetool.mymilwaukee.R;
+import com.milwaukeetool.mymilwaukee.util.AnalyticUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
 
 /**
@@ -44,6 +45,7 @@ public class LogInActivity extends Activity {
         super.onResume();
         GoogleAnalytics.getInstance(this).reportActivityStart(this);
         // Analytics
+        AnalyticUtils.logScreenView(this,"Sign In");AnalyticUtils.logScreenView(this,"Sign In");
     }
 
     @Override

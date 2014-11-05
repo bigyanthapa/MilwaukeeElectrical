@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.milwaukeetool.mymilwaukee.R;
@@ -17,6 +18,7 @@ import com.milwaukeetool.mymilwaukee.view.MTButton;
 import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.CrashManagerListener;
 import net.hockeyapp.android.UpdateManager;
+import net.hockeyapp.android.UpdateManagerListener;
 
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.LOGD;
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
@@ -111,7 +113,16 @@ public class MainActivity extends Activity {
             LOGD(TAG,"Checking for HockeyApp Updates...");
 
             // Include for hockey app builds
-            UpdateManager.register(this, MTConfig.getHockeyAppID());
+            UpdateManager.register(this, MTConfig.getHockeyAppID(),new UpdateManagerListener() {
+                public void onUpdateAvailable() {
+                    super.onUpdateAvailable();
+
+                    LOGD(TAG,"Update is available!");
+                }
+                public void onNoUpdateAvailable() {
+                    Toast.makeText(MainActivity.this, "No updates found.", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 }

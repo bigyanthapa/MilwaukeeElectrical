@@ -35,6 +35,7 @@ public class CreateAccountActivity extends Activity {
     protected void onResume() {
         super.onResume();
         GoogleAnalytics.getInstance(this).reportActivityStart(this);
+        AnalyticUtils.logScreenView(this,"Register");
     }
 
     @Override
