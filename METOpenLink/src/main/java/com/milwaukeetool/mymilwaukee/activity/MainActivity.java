@@ -115,8 +115,8 @@ public class MainActivity extends Activity {
             // Include for hockey app builds
             UpdateManager.register(this, MTConfig.getHockeyAppID(),new UpdateManagerListener() {
                 public void onUpdateAvailable() {
-                    super.onUpdateAvailable();
                     Toast.makeText(MainActivity.this, "Update is available!", Toast.LENGTH_SHORT).show();
+                    super.onUpdateAvailable();
                 }
                 public void onNoUpdateAvailable() {
                     Toast.makeText(MainActivity.this, "No updates found.", Toast.LENGTH_SHORT).show();
