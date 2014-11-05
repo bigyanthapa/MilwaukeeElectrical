@@ -2,6 +2,7 @@ package com.milwaukeetool.mymilwaukee.util;
 
 import android.app.Activity;
 
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.milwaukeetool.mymilwaukee.MilwaukeeToolApplication;
 
@@ -18,5 +19,16 @@ public class AnalyticUtils {
         MilwaukeeToolApplication mtApp = (MilwaukeeToolApplication) activity.getApplication();
         Tracker tracker = mtApp.getTracker();
         tracker.enableAutoActivityTracking(true);
+    }
+
+    public static void logScreenView(Activity activity, String screenName) {
+        // Get tracker.
+        Tracker t = ((MilwaukeeToolApplication)activity.getApplication()).getTracker();
+
+        // Set screen name.
+        t.setScreenName(screenName);
+
+        // Send a screen view.
+        t.send(new HitBuilders.AppViewBuilder().build());
     }
 }

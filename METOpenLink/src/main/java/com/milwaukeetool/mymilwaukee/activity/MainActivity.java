@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.milwaukeetool.mymilwaukee.R;
+import com.milwaukeetool.mymilwaukee.util.AnalyticUtils;
 import com.milwaukeetool.mymilwaukee.view.MTButton;
 
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
@@ -49,13 +50,14 @@ public class MainActivity extends Activity {
                 startActivity(logInIntent);
             }
         });
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-
+        AnalyticUtils.logScreenView(this,"Sign Up / Log In");
         GoogleAnalytics.getInstance(this).reportActivityStart(this);
     }
 
