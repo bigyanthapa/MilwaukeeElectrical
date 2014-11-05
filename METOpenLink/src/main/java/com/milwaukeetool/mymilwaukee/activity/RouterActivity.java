@@ -62,7 +62,7 @@ public class RouterActivity extends Activity {
     }
 
     private void checkForUpdates() {
-        if (!MTConfig.isExternalRelease()) {
+        if (!MTConfig.isProduction() && !MTConfig.isBeta()) {
 
             LOGD(TAG,"Checking for HockeyApp Updates...");
 

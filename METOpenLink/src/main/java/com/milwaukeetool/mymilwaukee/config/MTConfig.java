@@ -198,6 +198,10 @@ public class MTConfig {
         return (BuildConfig.MT_DISTRIBUTION_TYPE.equalsIgnoreCase(MT_DISTRIBUTION_TYPE_PROD));
     }
 
+    public static boolean isBeta() {
+        return (BuildConfig.MT_DISTRIBUTION_TYPE.equalsIgnoreCase(MT_DISTRIBUTION_TYPE_BETA));
+    }
+
     public static boolean isExternalRelease() {
         return (BuildConfig.MT_DISTRIBUTION_TYPE.equalsIgnoreCase(MT_DISTRIBUTION_TYPE_PROD) ||
                 BuildConfig.MT_DISTRIBUTION_TYPE.equalsIgnoreCase(MT_DISTRIBUTION_TYPE_UAT)) ||
