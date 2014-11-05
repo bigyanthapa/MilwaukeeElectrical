@@ -3,8 +3,6 @@ package com.milwaukeetool.mymilwaukee.activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.milwaukeetool.mymilwaukee.R;
@@ -15,7 +13,7 @@ import com.milwaukeetool.mymilwaukee.util.UIUtils;
  */
 public class LogInActivity extends Activity {
 
-    private Button mTestButton;
+//    private Button mTestButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,18 +24,14 @@ public class LogInActivity extends Activity {
 
         // Link back to UI
 
-        mTestButton = (Button)findViewById(R.id.testButton);
-        mTestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                // Do something that crashes
-
-                int i = 1/0;
-
-
-            }
-        });
+//        mTestButton = (Button)findViewById(R.id.testButton);
+//        mTestButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // Do something that crashes
+//                int i = 1/0;
+//            }
+//        });
     }
 
     @Override
