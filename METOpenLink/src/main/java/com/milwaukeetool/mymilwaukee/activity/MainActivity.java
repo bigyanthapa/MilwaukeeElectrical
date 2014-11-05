@@ -118,6 +118,7 @@ public class MainActivity extends Activity {
                     super.onUpdateAvailable();
 
                     LOGD(TAG,"Update is available!");
+                    Toast.makeText(MainActivity.this, "Update is available!", Toast.LENGTH_SHORT).show();
                 }
                 public void onNoUpdateAvailable() {
                     Toast.makeText(MainActivity.this, "No updates found.", Toast.LENGTH_SHORT).show();
