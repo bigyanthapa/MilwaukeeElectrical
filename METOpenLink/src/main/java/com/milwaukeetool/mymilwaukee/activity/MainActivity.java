@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -14,6 +15,7 @@ import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.config.MTConfig;
 import com.milwaukeetool.mymilwaukee.util.AnalyticUtils;
 import com.milwaukeetool.mymilwaukee.view.MTButton;
+import com.milwaukeetool.mymilwaukee.view.MTTextView;
 
 import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.CrashManagerListener;
@@ -32,12 +34,15 @@ public class MainActivity extends Activity {
 
     private MTButton mCreateAccountBtn;
     private MTButton mLogInBtn;
+    private MTTextView mVersionTypeDistributionTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         Log.i(TAG, "PACKAGE NAME: " + getApplicationContext().getPackageName());
 
@@ -58,6 +63,16 @@ public class MainActivity extends Activity {
                 startActivity(logInIntent);
             }
         });
+
+        mVersionTypeDistributionTextView = (MTTextView)findViewById(R.id.versionTypeDistributionTextView);
+
+        if (MTConfig.isExternalRelease()) {
+            // Hide the version label
+            mVersionTypeDistributionTextView.setVisibility(View.GONE);
+        } else {
+            mVersionTypeDistributionTextView.setVisibility(View.VISIBLE);
+            mVersionTypeDistributionTextView.setText(MTConfig.getDistributionTypeVersionString());
+        }
         checkForUpdates();
     }
 

@@ -3,6 +3,7 @@ package com.milwaukeetool.mymilwaukee.config;
 import android.util.Log;
 
 import com.milwaukeetool.mymilwaukee.BuildConfig;
+import com.milwaukeetool.mymilwaukee.MilwaukeeToolApplication;
 
 /**
  * Created by cent146 on 10/24/14.
@@ -65,7 +66,7 @@ public class MTConfig {
     // OpenLink
 
 
-    public static String getWebServicesURL() {
+    public static String getWebServicesBaseURL() {
         String apiEndPoint = null;
 
         if (BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_DEBUG) || BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_MONKEYTALK)) {
@@ -206,5 +207,12 @@ public class MTConfig {
         return (BuildConfig.MT_DISTRIBUTION_TYPE.equalsIgnoreCase(MT_DISTRIBUTION_TYPE_PROD) ||
                 BuildConfig.MT_DISTRIBUTION_TYPE.equalsIgnoreCase(MT_DISTRIBUTION_TYPE_UAT)) ||
                 BuildConfig.MT_DISTRIBUTION_TYPE.equalsIgnoreCase(MT_DISTRIBUTION_TYPE_BETA);
+    }
+
+    public static String getDistributionTypeVersionString() {
+        String versionString = BuildConfig.MT_DISTRIBUTION_TYPE + " : v" +
+                MilwaukeeToolApplication.getApplicationVersionName(MilwaukeeToolApplication.getAppContext()) + " (" +
+                MilwaukeeToolApplication.getApplicationVersionCode(MilwaukeeToolApplication.getAppContext()) + ")";
+        return versionString;
     }
 }
