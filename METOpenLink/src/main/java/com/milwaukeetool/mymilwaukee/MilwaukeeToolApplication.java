@@ -36,7 +36,10 @@ public class MilwaukeeToolApplication extends Application {
 
         if (this.tracker == null) {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-            if (!MTConfig.isExternalRelease()) {
+            if (MTConfig.isExternalRelease()) {
+                analytics.getLogger()
+                        .setLogLevel(Logger.LogLevel.ERROR);
+            } else {
                 analytics.getLogger()
                         .setLogLevel(Logger.LogLevel.VERBOSE);
             }

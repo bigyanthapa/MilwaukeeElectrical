@@ -6,20 +6,20 @@
     <!--Debug logging-->
     <bool name="ga_debug">true</bool>
 
-    <bool name="ga_dispatchPeriod">1</bool>
+    <bool name="ga_dispatchPeriod">20</bool>
 
     <!-- Enable automatic Activity measurement -->
     <bool name="ga_autoActivityTracking">false</bool>
 
-    <!-- The screen names that will appear in reports -->
-    <screenName name="com.milwaukeetool.mymilwaukee.activity.MainActivity">
-        Sign Up / Log In
-    </screenName>
-    <screenName name="com.milwaukeetool.mymilwaukee.activity.LogInActivity">
-        Sign In
-    </screenName>
-    <screenName name="com.milwaukeetool.mymilwaukee.activity.CreateAccountActivity">
-        Register
-    </screenName>
+    <!--&lt;!&ndash; The screen names that will appear in reports &ndash;&gt;-->
+    <!--<screenName name="com.milwaukeetool.mymilwaukee.activity.MainActivity">-->
+        <!--Sign Up / Log In-->
+    <!--</screenName>-->
+    <!--<screenName name="com.milwaukeetool.mymilwaukee.activity.LogInActivity">-->
+        <!--Sign In-->
+    <!--</screenName>-->
+    <!--<screenName name="com.milwaukeetool.mymilwaukee.activity.CreateAccountActivity">-->
+        <!--Register-->
+    <!--</screenName>-->
 
 </resources>
