@@ -7,6 +7,12 @@ buildscript {
     }
 }
 
+repositories {
+    maven {
+        url "https://repo.commonsware.com.s3.amazonaws.com"
+    }
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'android-aspectj'
 apply plugin: 'android'
@@ -95,5 +101,6 @@ dependencies {
 //    compile 'com.google.code.gson:gson:2.2.4'
 //    compile 'org.roboguice:roboguice:2.0'
 //    compile 'com.squareup.retrofit:retrofit:1.7.1'
+    compile 'com.commonsware.cwac:sacklist:1.0.0'
     monkeytalkCompile fileTree(dir: 'monkey-libs', include: ['*.jar'])
 }
