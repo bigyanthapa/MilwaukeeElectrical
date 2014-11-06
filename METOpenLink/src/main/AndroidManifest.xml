@@ -44,6 +44,7 @@
             android:label="@string/title_create_account"
             android:screenOrientation="sensorPortrait"
             android:launchMode="singleTop"
+            android:theme="@android:style/Theme.DeviceDefault.NoActionBar"
             android:parentActivityName="com.milwaukeetool.mymilwaukee.activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
