@@ -10,6 +10,7 @@ import android.widget.ListView;
 import com.commonsware.cwac.sacklist.SackOfViewsAdapter;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.milwaukeetool.mymilwaukee.R;
+import com.milwaukeetool.mymilwaukee.util.AnalyticUtils;
 import com.milwaukeetool.mymilwaukee.view.MTFooterView;
 import com.milwaukeetool.mymilwaukee.view.MTHeaderView;
 import com.milwaukeetool.mymilwaukee.view.MTSimpleFieldView;
@@ -87,7 +88,7 @@ public class CreateAccountActivity extends Activity {
     protected void onResume() {
         super.onResume();
         GoogleAnalytics.getInstance(this).reportActivityStart(this);
-        AnalyticUtils.logScreenView(this,"Register");
+        AnalyticUtils.logScreenView(this, "Register");
     }
 
     @Override

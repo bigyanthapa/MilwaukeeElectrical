@@ -98,9 +98,9 @@ dependencies {
 //    compile 'net.hockeyapp.android:HockeySDK:3.0.2'
     compile 'com.android.support:appcompat-v7:20.+'
     compile 'com.google.android.gms:play-services:6.1.+'
-//    compile 'com.google.code.gson:gson:2.2.4'
-//    compile 'org.roboguice:roboguice:2.0'
-//    compile 'com.squareup.retrofit:retrofit:1.7.1'
     compile 'com.commonsware.cwac:sacklist:1.0.0'
+    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'org.roboguice:roboguice:2.0'
+    compile 'com.squareup.retrofit:retrofit:1.7.1'
     monkeytalkCompile fileTree(dir: 'monkey-libs', include: ['*.jar'])
 }
