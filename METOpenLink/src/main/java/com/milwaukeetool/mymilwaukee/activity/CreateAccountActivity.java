@@ -2,10 +2,13 @@ package com.milwaukeetool.mymilwaukee.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.commonsware.cwac.sacklist.SackOfViewsAdapter;
@@ -17,6 +20,7 @@ import com.milwaukeetool.mymilwaukee.util.AnalyticUtils;
 import com.milwaukeetool.mymilwaukee.view.MTCreateAccountFooterView;
 import com.milwaukeetool.mymilwaukee.view.MTCreateAccountHeaderView;
 import com.milwaukeetool.mymilwaukee.view.MTSimpleFieldView;
+import com.milwaukeetool.mymilwaukee.view.MTTextView;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -65,15 +69,15 @@ public class CreateAccountActivity extends Activity {
         listView.addHeaderView(mHeaderView);
 
         mEmailFieldView = MTSimpleFieldView.createSimpleFieldView(this,"Email Address")
-                .setFieldType(MTSimpleFieldView.FieldType.FIELD_TYPE_EMAIL).updateFocus();
+                .setFieldType(MTSimpleFieldView.FieldType.EMAIL).updateFocus();
         views.add(mEmailFieldView);
 
         mPasswordFieldView = MTSimpleFieldView.createSimpleFieldView(this,"Password")
-                .setFieldType(MTSimpleFieldView.FieldType.FIELD_TYPE_PASSWORD);
+                .setFieldType(MTSimpleFieldView.FieldType.PASSWORD);
         views.add(mPasswordFieldView);
 
         mConfirmPasswordFieldView = MTSimpleFieldView.createSimpleFieldView(this, "Confirm Password")
-                .setFieldType(MTSimpleFieldView.FieldType.FIELD_TYPE_PASSWORD);
+                .setFieldType(MTSimpleFieldView.FieldType.PASSWORD);
         views.add(mConfirmPasswordFieldView);
 
         mFirstNameFieldView = MTSimpleFieldView.createSimpleFieldView(this, "First Name");
@@ -141,10 +145,21 @@ public class CreateAccountActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    protected boolean isTextFieldsValid() {
+        if (mEmailFieldView.isValid() &&
+                mPasswordFieldView.isValid() &&
+                mConfirmPasswordFieldView.isValid() &&
+                mFirstNameFieldView.isValid() &&
+                mLastNameFieldView.isValid()) {
+            return true;
+        }
+
+        return false;
+    }
     public void postCreateAccount() {
 
         // TODO: Run validation, show error
-        mEmailFieldView.validateFieldInfo();
+        boolean status = this.isTextFieldsValid();
 
         // Validation passed, continue with request
 

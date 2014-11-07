@@ -1,6 +1,7 @@
 package com.milwaukeetool.mymilwaukee.view;
 
 import android.content.Context;
+import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
@@ -9,25 +10,26 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import com.milwaukeetool.mymilwaukee.R;
+import com.milwaukeetool.mymilwaukee.util.StringHelper;
 
 /**
  * Created by scott.hopfensperger on 11/6/2014.
  */
 public class MTSimpleFieldView extends RelativeLayout {
     private EditText mEditText;
-    private boolean mFieldIsRequired;
-    private boolean mFieldIsPassword;
-    private boolean mFieldIsEmail;
+    private FieldType mFieldType;
+    private boolean mRequired;
 
     public MTSimpleFieldView(Context context) {
         super(context);
 
         LayoutInflater.from(context).inflate(R.layout.view_create_account_content, this);
         this.mEditText = (EditText) this.findViewById(R.id.editTextField);
+        this.mFieldType = FieldType.STANDARD;
+        this.mRequired = true;
     }
 
     public void setFieldName(String fieldName) {
-
         this.mEditText.setHint(fieldName);
     }
 
@@ -35,24 +37,30 @@ public class MTSimpleFieldView extends RelativeLayout {
         return this.mEditText.getText().toString();
     }
 
-    public MTSimpleFieldView setFieldIsRequired(boolean isRequired) {
-        mFieldIsRequired = isRequired;
-        return this;
+    public FieldType getFieldType() {
+        return this.mFieldType;
+    }
+
+    public boolean isRequired() {
+        return mRequired;
+    }
+
+    public void setRequired(boolean isRequired) {
+        this.mRequired = isRequired;
     }
 
     public MTSimpleFieldView setFieldType(FieldType fieldType) {
         switch (fieldType) {
-            case FIELD_TYPE_EMAIL:
+            case EMAIL:
                 mEditText.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS|InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+                this.mFieldType = fieldType;
                 break;
-            case FIELD_TYPE_PASSWORD:
+            case PASSWORD:
                 //mEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 mEditText.setTransformationMethod(new PasswordTransformationMethod());
                 mEditText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+                this.mFieldType = fieldType;
                 break;
-            case FIELD_TYPE_STANDARD:
-            default:
-                    break;
         }
 
         return this;
@@ -65,9 +73,9 @@ public class MTSimpleFieldView extends RelativeLayout {
     }
 
     public enum FieldType {
-        FIELD_TYPE_STANDARD,
-        FIELD_TYPE_PASSWORD,
-        FIELD_TYPE_EMAIL
+        STANDARD,
+        PASSWORD,
+        EMAIL
     }
 
     public MTSimpleFieldView updateFocus() {
@@ -75,12 +83,28 @@ public class MTSimpleFieldView extends RelativeLayout {
         return this;
     }
 
-    public boolean validateFieldInfo() {
-
-        // Check if field is required
-        if (mFieldIsRequired) {
-            if (TextUtils.isEmpty(mEditText.getText().toString())) {
+    public boolean isValid() {
+        if (this.isRequired()) {
+            if (TextUtils.isEmpty(this.getFieldValue()) || this.getFieldValue().length() > 1024) {
                 return false;
+            }
+
+            switch (this.getFieldType()) {
+                case EMAIL:
+                    if (!StringHelper.isEmailValid(this.getFieldValue())) {
+                        return false;
+                    }
+                    break;
+                case PASSWORD:
+                    if (this.getFieldValue().length() < 8) {
+                        return false;
+                    }
+                    if (!StringHelper.containsLowercase(this.getFieldValue()) ||
+                            !StringHelper.containsNumber(this.getFieldValue()) ||
+                            !StringHelper.containsUppercase(this.getFieldValue())) {
+                        return false;
+                    }
+                    break;
             }
         }
 
