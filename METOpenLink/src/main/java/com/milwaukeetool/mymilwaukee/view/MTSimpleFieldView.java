@@ -133,6 +133,8 @@ public class MTSimpleFieldView extends RelativeLayout {
                 break;
         }
 
+        mEditText.setError(null);
+
         return true;
     }
 }
