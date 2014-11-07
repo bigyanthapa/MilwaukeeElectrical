@@ -25,7 +25,7 @@
         android:layout_marginTop="25dp"
         android:background="@null"
         android:gravity="center"
-        android:text="Create a My Milwaukee&#174; account"
+        android:text="@string/title_create_my_milwaukee_account"
         android:textColor="@color/mt_white" />
 
 </RelativeLayout>

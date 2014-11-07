@@ -7,8 +7,8 @@
     android:layout_centerVertical="true"
     android:background="@null">
 
-    <CheckBox
-        android:id="@+id/checkBox"
+    <com.milwaukeetool.mymilwaukee.view.MTCheckBox
+        android:id="@+id/emailCommunicationCheckbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -18,30 +18,31 @@
         android:layout_gravity="center_vertical"
         android:textSize="15sp"
         android:background="@drawable/shaded_background"
-        android:text="I would like to receive email communications from Milwaukee Tool." />
+        android:checked="true"
+        android:text="@string/text_receive_email_communications" />
 
     <com.milwaukeetool.mymilwaukee.view.MTButton
-        android:id="@+id/createAccountButton2"
+        android:id="@+id/footerCreateAccountButton"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/black_button_selector"
-        android:text="CREATE ACCOUNT"
-        android:layout_below="@+id/checkBox"
+        android:text="@string/btn_title_create_account"
+        android:layout_below="@+id/emailCommunicationCheckbox"
         android:textColor="@color/mt_white" />
 
-    <TextView
-        android:id="@+id/privacy_policy"
+    <com.milwaukeetool.mymilwaukee.view.MTTextView
+        android:id="@+id/privacyPolicyTextView"
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        android:layout_below="@+id/createAccountButton2"
+        android:layout_below="@+id/footerCreateAccountButton"
         android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"
         android:background="@null"
         android:gravity="center"
-        android:text="Privacy Policy"
+        android:text="@string/title_privacy_policy"
         android:textColor="@color/mt_white"
         android:textStyle="normal" />
 

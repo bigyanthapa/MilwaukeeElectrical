@@ -43,7 +43,8 @@
             android:screenOrientation="sensorPortrait"
             android:launchMode="singleTop"
             android:theme="@android:style/Theme.DeviceDefault.NoActionBar"
-            android:parentActivityName="com.milwaukeetool.mymilwaukee.activity.MainActivity">
+            android:parentActivityName="com.milwaukeetool.mymilwaukee.activity.MainActivity"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity" />

@@ -9,9 +9,9 @@ import com.milwaukeetool.mymilwaukee.R;
 /**
  * Created by scott.hopfensperger on 11/6/2014.
  */
-public class MTHeaderView extends RelativeLayout {
+public class MTCreateAccountHeaderView extends RelativeLayout {
 
-    public MTHeaderView(Context context) {
+    public MTCreateAccountHeaderView(Context context) {
         super(context);
         LayoutInflater.from(context).inflate(R.layout.view_create_account_header, this);
     }

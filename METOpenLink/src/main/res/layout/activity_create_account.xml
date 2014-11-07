@@ -23,6 +23,7 @@
         android:background="@null"
         android:choiceMode="singleChoice"
         android:divider="@android:color/transparent"
-        android:dividerHeight="0dp" />
+        android:dividerHeight="0dp"
+        android:descendantFocusability="afterDescendants"/>
 
 </FrameLayout>
