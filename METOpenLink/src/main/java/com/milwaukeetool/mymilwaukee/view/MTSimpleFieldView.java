@@ -83,7 +83,6 @@ public class MTSimpleFieldView extends RelativeLayout {
                 return false;
             }
         }
-        if ()
 
         return true;
     }

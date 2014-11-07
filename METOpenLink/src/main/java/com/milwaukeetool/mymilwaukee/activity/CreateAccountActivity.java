@@ -144,7 +144,7 @@ public class CreateAccountActivity extends Activity {
     public void postCreateAccount() {
 
         // TODO: Run validation, show error
-
+        mEmailFieldView.validateFieldInfo();
 
         // Validation passed, continue with request
 
