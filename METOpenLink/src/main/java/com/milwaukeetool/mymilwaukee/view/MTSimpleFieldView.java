@@ -1,7 +1,6 @@
 package com.milwaukeetool.mymilwaukee.view;
 
 import android.content.Context;
-import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
@@ -19,6 +18,13 @@ public class MTSimpleFieldView extends RelativeLayout {
     private EditText mEditText;
     private FieldType mFieldType;
     private boolean mRequired;
+    private int mMinLength;
+
+    public enum FieldType {
+        STANDARD,
+        PASSWORD,
+        EMAIL
+    }
 
     public MTSimpleFieldView(Context context) {
         super(context);
@@ -27,6 +33,7 @@ public class MTSimpleFieldView extends RelativeLayout {
         this.mEditText = (EditText) this.findViewById(R.id.editTextField);
         this.mFieldType = FieldType.STANDARD;
         this.mRequired = true;
+        this.mMinLength = 0;
     }
 
     public void setFieldName(String fieldName) {
@@ -45,8 +52,14 @@ public class MTSimpleFieldView extends RelativeLayout {
         return mRequired;
     }
 
-    public void setRequired(boolean isRequired) {
+    public MTSimpleFieldView setRequired(boolean isRequired) {
         this.mRequired = isRequired;
+        return this;
+    }
+
+    public MTSimpleFieldView setMinLength(int minLength) {
+        this.mMinLength = minLength;
+        return this;
     }
 
     public MTSimpleFieldView setFieldType(FieldType fieldType) {
@@ -61,6 +74,8 @@ public class MTSimpleFieldView extends RelativeLayout {
                 mEditText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
                 this.mFieldType = fieldType;
                 break;
+            default:
+                this.mFieldType = FieldType.STANDARD;
         }
 
         return this;
@@ -72,11 +87,7 @@ public class MTSimpleFieldView extends RelativeLayout {
         return simpleFieldView;
     }
 
-    public enum FieldType {
-        STANDARD,
-        PASSWORD,
-        EMAIL
-    }
+
 
     public MTSimpleFieldView updateFocus() {
         mEditText.requestFocus();
@@ -85,27 +96,41 @@ public class MTSimpleFieldView extends RelativeLayout {
 
     public boolean isValid() {
         if (this.isRequired()) {
-            if (TextUtils.isEmpty(this.getFieldValue()) || this.getFieldValue().length() > 1024) {
+            if (TextUtils.isEmpty(this.getFieldValue())) {
+                mEditText.setError("Field is required");
                 return false;
             }
+        }
 
-            switch (this.getFieldType()) {
-                case EMAIL:
-                    if (!StringHelper.isEmailValid(this.getFieldValue())) {
-                        return false;
-                    }
-                    break;
-                case PASSWORD:
-                    if (this.getFieldValue().length() < 8) {
-                        return false;
-                    }
-                    if (!StringHelper.containsLowercase(this.getFieldValue()) ||
-                            !StringHelper.containsNumber(this.getFieldValue()) ||
-                            !StringHelper.containsUppercase(this.getFieldValue())) {
-                        return false;
-                    }
-                    break;
+        if (this.getFieldValue().length() > 1024) {
+            mEditText.setError("Field exceeds 1024 character limit");
+        }
+
+        if (mMinLength > 0) {
+            if (this.getFieldValue().length() < mMinLength) {
+                mEditText.setError("Field must be at least " + mMinLength + " characters");
+                return false;
             }
+        }
+
+        switch (this.getFieldType()) {
+            case EMAIL:
+                if (!StringHelper.isEmailValid(this.getFieldValue())) {
+                    mEditText.setError("Invalid email address");
+                    return false;
+                }
+                break;
+            case PASSWORD:
+                if (!StringHelper.containsLowercase(this.getFieldValue()) ||
+                        !StringHelper.containsNumber(this.getFieldValue()) ||
+                        !StringHelper.containsUppercase(this.getFieldValue())) {
+                    mEditText.setError("Invalid password");
+                    return false;
+                }
+                break;
+            default:
+                // Standard validation?
+                break;
         }
 
         return true;

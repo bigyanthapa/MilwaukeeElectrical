@@ -6,7 +6,6 @@ import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.CreateAccountActivity;
@@ -47,19 +46,9 @@ public class MTCreateAccountFooterView extends RelativeLayout {
     }
 
     private void setLegalText() {
-        /*
-        StringBuilder legalTextString = new StringBuilder(100);
-        legalTextString.append("<a href=\"");
-        legalTextString.append(MTConstants.PRIVACY_POLICY_URL);
-        legalTextString.append("\">");
-        legalTextString.append(this.getResources().getString(R.string.title_privacy_policy));
-        legalTextString.append("</a>");
-
-        String legalTextString = "<a href=\"" + MTConstants.PRIVACY_POLICY_URL + "\">" + this.getResources().getString(R.string.title_privacy_policy);
-
-        */
-
-        //mLegalText.setText(Html.fromHtml(legalTextString.toString()));
+        String privacyString = "<a href=\"" + MTConstants.PRIVACY_POLICY_URL + "\">" +
+                getResources().getString(R.string.title_privacy_policy) + "</a>";
+        mLegalText.setText(Html.fromHtml(privacyString));
         mLegalText.setMovementMethod(LinkMovementMethod.getInstance());
     }
 

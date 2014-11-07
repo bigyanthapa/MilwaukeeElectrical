@@ -2,13 +2,10 @@ package com.milwaukeetool.mymilwaukee.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.text.method.LinkMovementMethod;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.commonsware.cwac.sacklist.SackOfViewsAdapter;
@@ -20,7 +17,6 @@ import com.milwaukeetool.mymilwaukee.util.AnalyticUtils;
 import com.milwaukeetool.mymilwaukee.view.MTCreateAccountFooterView;
 import com.milwaukeetool.mymilwaukee.view.MTCreateAccountHeaderView;
 import com.milwaukeetool.mymilwaukee.view.MTSimpleFieldView;
-import com.milwaukeetool.mymilwaukee.view.MTTextView;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -29,8 +25,8 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.LOGD;
+import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 
 /**
  * Created by cent146 on 10/24/14.
@@ -69,21 +65,21 @@ public class CreateAccountActivity extends Activity {
         listView.addHeaderView(mHeaderView);
 
         mEmailFieldView = MTSimpleFieldView.createSimpleFieldView(this,"Email Address")
-                .setFieldType(MTSimpleFieldView.FieldType.EMAIL).updateFocus();
+                .setFieldType(MTSimpleFieldView.FieldType.EMAIL).setRequired(true).updateFocus();
         views.add(mEmailFieldView);
 
         mPasswordFieldView = MTSimpleFieldView.createSimpleFieldView(this,"Password")
-                .setFieldType(MTSimpleFieldView.FieldType.PASSWORD);
+                .setFieldType(MTSimpleFieldView.FieldType.PASSWORD).setRequired(true).setMinLength(8);
         views.add(mPasswordFieldView);
 
         mConfirmPasswordFieldView = MTSimpleFieldView.createSimpleFieldView(this, "Confirm Password")
-                .setFieldType(MTSimpleFieldView.FieldType.PASSWORD);
+                .setFieldType(MTSimpleFieldView.FieldType.PASSWORD).setRequired(true).setMinLength(8);
         views.add(mConfirmPasswordFieldView);
 
-        mFirstNameFieldView = MTSimpleFieldView.createSimpleFieldView(this, "First Name");
+        mFirstNameFieldView = MTSimpleFieldView.createSimpleFieldView(this, "First Name").setRequired(true);
         views.add(mFirstNameFieldView);
 
-        mLastNameFieldView = MTSimpleFieldView.createSimpleFieldView(this, "Last Name");
+        mLastNameFieldView = MTSimpleFieldView.createSimpleFieldView(this, "Last Name").setRequired(true);
         views.add(mLastNameFieldView);
 
         mFooterView = new MTCreateAccountFooterView(this);
@@ -158,8 +154,16 @@ public class CreateAccountActivity extends Activity {
     }
     public void postCreateAccount() {
 
-        // TODO: Run validation, show error
-        boolean status = this.isTextFieldsValid();
+        // Run validation, show error
+        if (!this.isTextFieldsValid()) {
+            return;
+        }
+
+        // Check if the confirmation password matches the given password
+        if (!mPasswordFieldView.getFieldValue().equals(mConfirmPasswordFieldView.getFieldValue())) {
+            Toast.makeText(CreateAccountActivity.this, "Passwords don't match", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         // Validation passed, continue with request
 
