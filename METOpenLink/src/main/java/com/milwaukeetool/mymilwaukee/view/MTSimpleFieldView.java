@@ -2,6 +2,7 @@ package com.milwaukeetool.mymilwaukee.view;
 
 import android.content.Context;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.widget.EditText;
@@ -15,6 +16,8 @@ import com.milwaukeetool.mymilwaukee.R;
 public class MTSimpleFieldView extends RelativeLayout {
     private EditText mEditText;
     private boolean mFieldIsRequired;
+    private boolean mFieldIsPassword;
+    private boolean mFieldIsEmail;
 
     public MTSimpleFieldView(Context context) {
         super(context);
@@ -70,5 +73,18 @@ public class MTSimpleFieldView extends RelativeLayout {
     public MTSimpleFieldView updateFocus() {
         mEditText.requestFocus();
         return this;
+    }
+
+    public boolean validateFieldInfo() {
+
+        // Check if field is required
+        if (mFieldIsRequired) {
+            if (TextUtils.isEmpty(mEditText.getText().toString())) {
+                return false;
+            }
+        }
+        if ()
+
+        return true;
     }
 }
