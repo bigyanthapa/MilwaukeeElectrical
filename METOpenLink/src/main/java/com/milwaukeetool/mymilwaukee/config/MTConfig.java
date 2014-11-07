@@ -67,13 +67,21 @@ public class MTConfig {
 
 
     public static String getWebServicesBaseURL() {
+        String webServicesBaseURL = getWebServicesAPILocation();
+        webServicesBaseURL = webServicesBaseURL.concat("/");
+        webServicesBaseURL = webServicesBaseURL.concat(getCurrentWebAPIVersion());
+        Log.d("MTConfig","Web service base URL: " + webServicesBaseURL);
+        return webServicesBaseURL;
+    }
+
+    public static String getWebServicesAPILocation() {
         String apiEndPoint = null;
 
         if (BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_DEBUG) || BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_MONKEYTALK)) {
             if (BuildConfig.MT_DISTRIBUTION_TYPE == MT_DISTRIBUTION_TYPE_QA) {
-                apiEndPoint = MT_API_SECRET_QA;
+                apiEndPoint = MT_API_END_POINT_QA;
             } else {
-                apiEndPoint = MT_API_SECRET_DEV;
+                apiEndPoint = MT_API_END_POINT_DEV;
             }
 
         } else if (BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_RELEASE)) {
@@ -92,6 +100,38 @@ public class MTConfig {
                     break;
                 default:
                     apiEndPoint = MT_API_END_POINT_DEV;
+            }
+        }
+
+        return apiEndPoint;
+    }
+
+    public static String getCurrentWebAPIVersion() {
+        String apiEndPoint = null;
+
+        if (BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_DEBUG) || BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_MONKEYTALK)) {
+            if (BuildConfig.MT_DISTRIBUTION_TYPE == MT_DISTRIBUTION_TYPE_QA) {
+                apiEndPoint = MT_API_VERSION_QA;
+            } else {
+                apiEndPoint = MT_API_VERSION_DEV;
+            }
+
+        } else if (BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_RELEASE)) {
+            switch (BuildConfig.MT_DISTRIBUTION_TYPE) {
+                case MT_DISTRIBUTION_TYPE_PROD:
+                    apiEndPoint = MT_API_VERSION_PROD;
+                    break;
+                case MT_DISTRIBUTION_TYPE_QA:
+                    apiEndPoint = MT_API_VERSION_QA;
+                    break;
+                case MT_DISTRIBUTION_TYPE_UAT:
+                    apiEndPoint = MT_API_VERSION_UAT;
+                    break;
+                case MT_DISTRIBUTION_TYPE_BETA:
+                    apiEndPoint = MT_API_VERSION_BETA;
+                    break;
+                default:
+                    apiEndPoint = MT_API_VERSION_DEV;
             }
         }
 

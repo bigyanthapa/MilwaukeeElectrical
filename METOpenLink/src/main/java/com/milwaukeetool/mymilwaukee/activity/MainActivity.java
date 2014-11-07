@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.milwaukeetool.mymilwaukee.R;
@@ -129,13 +128,13 @@ public class MainActivity extends Activity {
 
             // Include for hockey app builds
             UpdateManager.register(this, MTConfig.getHockeyAppID(),new UpdateManagerListener() {
-                public void onUpdateAvailable() {
-                    Toast.makeText(MainActivity.this, "Update is available!", Toast.LENGTH_SHORT).show();
-                    super.onUpdateAvailable();
-                }
-                public void onNoUpdateAvailable() {
-                    Toast.makeText(MainActivity.this, "No updates found.", Toast.LENGTH_SHORT).show();
-                }
+//                public void onUpdateAvailable() {
+//                    Toast.makeText(MainActivity.this, "Update is available!", Toast.LENGTH_SHORT).show();
+//                    super.onUpdateAvailable();
+//                }
+//                public void onNoUpdateAvailable() {
+//                    Toast.makeText(MainActivity.this, "No updates found.", Toast.LENGTH_SHORT).show();
+//                }
             });
         }
     }
