@@ -45,6 +45,8 @@
         android:gravity="center"
         android:text="@string/title_privacy_policy"
         android:textColor="@color/mt_white"
+        android:linksClickable="true"
+        android:autoLink="all"
         android:textStyle="normal" />
 
 </RelativeLayout>

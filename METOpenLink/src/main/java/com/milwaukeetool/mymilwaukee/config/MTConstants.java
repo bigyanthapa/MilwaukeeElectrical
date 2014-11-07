@@ -5,5 +5,6 @@ package com.milwaukeetool.mymilwaukee.config;
  */
 public class MTConstants {
 
+    public static final String PRIVACY_POLICY_URL = "http://www.milwaukeetool.com/privacy";
 
 }
