@@ -9,6 +9,7 @@
 
     <com.milwaukeetool.mymilwaukee.view.MTEditText
         android:id="@+id/editTextField"
+        style="@style/EditText.MilwaukeeTool"
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:layout_marginTop="5dp"
@@ -18,11 +19,11 @@
         android:paddingRight="10dp"
         android:ems="50"
         android:singleLine="true"
-        android:textColor="@color/mt_common_gray"
+        android:textColor="@color/mt_white"
         android:textSize="16sp"
-        android:textColorHint="@color/mt_common_gray"
+        android:textColorHint="@color/mt_very_light_gray"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/white_textfield"
+
         android:textCursorDrawable="@null"/>
 
 
