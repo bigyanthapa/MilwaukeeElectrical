@@ -75,13 +75,14 @@ public class MTSelectableFieldView extends MTSimpleFieldView {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
-                textView.setTextColor(mCallingActivity.getResources().getColor(R.color.mt_red));
+                textView.setTextColor(mCallingActivity.getResources().getColor(R.color.mt_black));
                 return textView;
             }
         };
 
         Delivery delivery = PostOffice.newMail(mCallingActivity)
                 .setTitle(this.getFieldName())
+                .setThemeColorFromResource(R.color.mt_red)
                 .setStyle(new ListStyle.Builder(mCallingActivity)
                         .setDividerHeight(2)
                         .setOnItemAcceptedListener(new ListStyle.OnItemAcceptedListener<CharSequence>() {

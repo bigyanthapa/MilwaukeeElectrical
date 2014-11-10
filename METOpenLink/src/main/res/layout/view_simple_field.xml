@@ -19,7 +19,9 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:singleLine="true"
+        android:maxLines="1"
         android:textSize="16sp"
+        android:ellipsize="end"
         android:textColor="@color/mt_white"
         android:textColorHint="@color/mt_very_light_gray"
         android:textCursorDrawable="@null"/>
