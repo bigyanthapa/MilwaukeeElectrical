@@ -59,6 +59,10 @@ public class MTSimpleFieldView extends RelativeLayout {
         this.mEditText.setHint(fieldName);
     }
 
+    public String getFieldName() {
+        return this.mFieldName;
+    }
+
     public String getFieldValue() {
         return this.mEditText.getText().toString();
     }
