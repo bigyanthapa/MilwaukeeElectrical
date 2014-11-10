@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="trade_occupation_array">
+        <item>Electrician</item>
+        <item>Plumber</item>
+        <item>Pipefitter, Steamfitter &amp; Sprinklerfitter</item>
+        <item>Mechanical &amp; HVACR</item>
+        <item>Carpenter</item>
+        <item>Masonry/Concrete</item>
+        <item>Drywall/Ceiling Installer</item>
+        <item>Metalworking</item>
+        <item>Facility Maintenance/Repair</item>
+        <item>Automotive/Aircraft/Equipment Mechanics/Repair</item>
+        <item>Farm/Ranch/Agriculture</item>
+        <item>Remodeler</item>
+        <item>DIY</item>
+        <item>Other</item>
+    </string-array>
+</resources>

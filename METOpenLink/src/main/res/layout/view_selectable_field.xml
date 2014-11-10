@@ -15,16 +15,16 @@
         android:layout_marginTop="5dp"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
+        android:layout_centerHorizontal="true"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:ems="50"
         android:singleLine="true"
-        android:textColor="@color/mt_white"
         android:textSize="16sp"
+        android:textColor="@color/mt_white"
         android:textColorHint="@color/mt_very_light_gray"
-        android:layout_centerHorizontal="true"
-
-        android:textCursorDrawable="@null"/>
+        android:textCursorDrawable="@null"
+        android:focusable="false"
+        android:clickable="true"/>
 
 
 </RelativeLayout>

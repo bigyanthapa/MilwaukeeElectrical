@@ -15,5 +15,6 @@
     <color name="mt_transparent">#00000000</color>
 
     <color name="milwaukeetool_color">#000000</color>
+    <color name="milwaukeetool_color_alt">#ffffff</color>
 
 </resources>

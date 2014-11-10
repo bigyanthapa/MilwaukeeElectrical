@@ -16,7 +16,9 @@ import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
 import com.milwaukeetool.mymilwaukee.util.AnalyticUtils;
 import com.milwaukeetool.mymilwaukee.view.MTCreateAccountFooterView;
 import com.milwaukeetool.mymilwaukee.view.MTCreateAccountHeaderView;
+import com.milwaukeetool.mymilwaukee.view.MTSelectableFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTSimpleFieldView;
+import com.r0adkll.postoffice.PostOffice;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -46,6 +48,7 @@ public class CreateAccountActivity extends Activity {
     private MTSimpleFieldView mConfirmPasswordFieldView;
     private MTSimpleFieldView mFirstNameFieldView;
     private MTSimpleFieldView mLastNameFieldView;
+    private MTSelectableFieldView mTradeOccupationFieldView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,11 +72,11 @@ public class CreateAccountActivity extends Activity {
         views.add(mEmailFieldView);
 
         mPasswordFieldView = MTSimpleFieldView.createSimpleFieldView(this,"Password")
-                .setFieldType(MTSimpleFieldView.FieldType.PASSWORD).setRequired(true).setMinLength(8);
+                .setFieldType(MTSimpleFieldView.FieldType.PASSWORD).setRequired(true).setMinLength(8).setMaxLength(1024);
         views.add(mPasswordFieldView);
 
         mConfirmPasswordFieldView = MTSimpleFieldView.createSimpleFieldView(this, "Confirm Password")
-                .setFieldType(MTSimpleFieldView.FieldType.PASSWORD).setRequired(true).setMinLength(8);
+                .setFieldType(MTSimpleFieldView.FieldType.PASSWORD).setRequired(true).setMinLength(8).setMaxLength(1024);
         views.add(mConfirmPasswordFieldView);
 
         mFirstNameFieldView = MTSimpleFieldView.createSimpleFieldView(this, "First Name").setRequired(true);
@@ -81,6 +84,10 @@ public class CreateAccountActivity extends Activity {
 
         mLastNameFieldView = MTSimpleFieldView.createSimpleFieldView(this, "Last Name").setRequired(true);
         views.add(mLastNameFieldView);
+        mLastNameFieldView.setNextActionDone();
+
+        mTradeOccupationFieldView = MTSelectableFieldView.createSelectableFieldView(this,"Trade/Occupation").setRequired(true);
+        views.add(mTradeOccupationFieldView);
 
         mFooterView = new MTCreateAccountFooterView(this);
         listView.addFooterView(mFooterView);
@@ -156,6 +163,10 @@ public class CreateAccountActivity extends Activity {
 
         // Run validation, show error
         if (!this.isTextFieldsValid()) {
+
+            PostOffice.newAlertMail(this, "Title", "Message")
+                    .show(getFragmentManager());
+
             return;
         }
 
@@ -166,6 +177,8 @@ public class CreateAccountActivity extends Activity {
         }
 
         // Validation passed, continue with request
+
+        // Show progress indicator
 
         MTUserRegistrationRequest request = new MTUserRegistrationRequest();
         request.userFirstName = mFirstNameFieldView.getFieldValue();
@@ -180,6 +193,9 @@ public class CreateAccountActivity extends Activity {
 
             @Override
             public void success(Response result, Response response) {
+
+                // Hide progress indicator
+
                 LOGD(TAG, "Successfully registered user: " + result.getBody().toString());
                 Toast.makeText(CreateAccountActivity.this, "Account created successfully", Toast.LENGTH_SHORT).show();
                 finish();
@@ -187,8 +203,17 @@ public class CreateAccountActivity extends Activity {
 
             @Override
             public void failure(RetrofitError retrofitError) {
+
+                // Hide progress indicator
+
                 LOGD(TAG, "Failed to register user");
                 retrofitError.printStackTrace();
+
+                // Handle timeout
+
+                // Handle standard error
+
+
                 Toast.makeText(CreateAccountActivity.this, MTWebInterface.getErrorMessage(retrofitError), Toast.LENGTH_SHORT).show();
             }
         };
