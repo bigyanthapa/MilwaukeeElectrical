@@ -105,6 +105,7 @@ dependencies {
     // Retrofit / OKHTTP / GSON
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.squareup.retrofit:retrofit:1.7.1'
+    compile 'com.hannesdorfmann.smoothprogressbar:library:1.0.0'
 //    compile 'org.roboguice:roboguice:2.0'
 
 //    // Crouton Alert (Toast) messages
@@ -129,6 +130,9 @@ dependencies {
 
     // Android Iconify
     compile 'com.joanzapata.android:android-iconify:1.0.8'
+
+    // Smooth progress bar
+    compile 'com.hannesdorfmann.smoothprogressbar:library:1.0.0'
 
     monkeytalkCompile fileTree(dir: 'monkey-libs', include: ['*.jar'])
 }

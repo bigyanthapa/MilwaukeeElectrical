@@ -24,6 +24,7 @@ import com.r0adkll.postoffice.model.Design;
 import java.util.LinkedList;
 import java.util.List;
 
+import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -50,6 +51,7 @@ public class CreateAccountActivity extends Activity {
     private MTSimpleFieldView mFirstNameFieldView;
     private MTSimpleFieldView mLastNameFieldView;
     private MTSelectableFieldView mTradeOccupationFieldView;
+    private SmoothProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,9 @@ public class CreateAccountActivity extends Activity {
         listView.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
 
         LinkedList<View> views = new LinkedList<View>();
+
+        mProgressBar = (SmoothProgressBar)findViewById(R.id.createAccountProgressBar);
+        mProgressBar.setVisibility(View.GONE);
 
         mHeaderView = new MTCreateAccountHeaderView(this);
         listView.addHeaderView(mHeaderView);
@@ -173,7 +178,6 @@ public class CreateAccountActivity extends Activity {
             PostOffice.newMail(this)
                     .setTitle("Account cannot be created")
                     .setMessage("Please correct any errors indicated.")
-//                    .setIcon(R.drawable.ic_launcher)
                     .setThemeColor(getResources().getColor(R.color.mt_red))
                     .setDesign(Design.HOLO_LIGHT)
                     .show(getFragmentManager());
@@ -190,6 +194,8 @@ public class CreateAccountActivity extends Activity {
         // Validation passed, continue with request
 
         // Show progress indicator
+        mProgressBar.setVisibility(View.VISIBLE);
+        mProgressBar.progressiveStart();
 
         MTUserRegistrationRequest request = new MTUserRegistrationRequest();
         request.userFirstName = mFirstNameFieldView.getFieldValue();
@@ -206,6 +212,8 @@ public class CreateAccountActivity extends Activity {
             public void success(Response result, Response response) {
 
                 // Hide progress indicator
+                mProgressBar.progressiveStop();
+                mProgressBar.setVisibility(View.GONE);
 
                 LOGD(TAG, "Successfully registered user: " + result.getBody().toString());
                 Toast.makeText(CreateAccountActivity.this, "Account created successfully", Toast.LENGTH_SHORT).show();
@@ -216,6 +224,8 @@ public class CreateAccountActivity extends Activity {
             public void failure(RetrofitError retrofitError) {
 
                 // Hide progress indicator
+                mProgressBar.progressiveStop();
+                mProgressBar.setVisibility(View.GONE);
 
                 LOGD(TAG, "Failed to register user");
                 retrofitError.printStackTrace();
