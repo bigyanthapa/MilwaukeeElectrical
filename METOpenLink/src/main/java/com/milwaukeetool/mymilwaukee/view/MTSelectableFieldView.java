@@ -31,6 +31,7 @@ public class MTSelectableFieldView extends MTSimpleFieldView {
             public void didTapView(MotionEvent event) {
                 // Launch post office selector
                 LOGD(TAG, "Touched selectable field view");
+                showSelectableOptions();
             }
         });
         mEditText.setOnTouchListener(new MTTouchListener(mCallingActivity) {
@@ -38,6 +39,7 @@ public class MTSelectableFieldView extends MTSimpleFieldView {
             public void didTapView(MotionEvent event) {
                 // Launch post office selector
                 LOGD(TAG, "Touched selectable field view - edittext");
+                showSelectableOptions();
             }
         });
         mEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
@@ -56,6 +58,10 @@ public class MTSelectableFieldView extends MTSimpleFieldView {
                 return true;
             }
         });
+    }
+
+    public void showSelectableOptions() {
+
     }
 
     public static MTSelectableFieldView createSelectableFieldView(Activity activity, String fieldName) {

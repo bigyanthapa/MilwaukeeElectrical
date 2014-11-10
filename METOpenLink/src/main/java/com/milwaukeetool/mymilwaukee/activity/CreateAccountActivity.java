@@ -160,6 +160,11 @@ public class CreateAccountActivity extends Activity {
 
         return false;
     }
+
+    public void postSelectedTradeOccupation(String tradeOccupation) {
+
+    }
+
     public void postCreateAccount() {
 
         // Run validation, show error
