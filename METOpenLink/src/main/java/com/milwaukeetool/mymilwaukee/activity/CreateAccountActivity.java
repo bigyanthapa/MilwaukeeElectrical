@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.commonsware.cwac.sacklist.SackOfViewsAdapter;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.milwaukeetool.mymilwaukee.R;
+import com.milwaukeetool.mymilwaukee.interfaces.Postable;
 import com.milwaukeetool.mymilwaukee.model.request.MTUserRegistrationRequest;
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
 import com.milwaukeetool.mymilwaukee.util.AnalyticUtils;
@@ -35,7 +36,7 @@ import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 /**
  * Created by cent146 on 10/24/14.
  */
-public class CreateAccountActivity extends Activity {
+public class CreateAccountActivity extends Activity implements Postable{
 
     private static final String TAG = makeLogTag(MainActivity.class);
 
@@ -92,7 +93,8 @@ public class CreateAccountActivity extends Activity {
         views.add(mLastNameFieldView);
         mLastNameFieldView.setNextActionDone();
 
-        mTradeOccupationFieldView = MTSelectableFieldView.createSelectableFieldView(this,"Trade/Occupation").setRequired(true);
+        String[] selectableOptionArray = this.getResources().getStringArray(R.array.trade_occupation_array);
+        mTradeOccupationFieldView = MTSelectableFieldView.createSelectableFieldView(this,"Trade/Occupation",selectableOptionArray).setRequired(true);
         views.add(mTradeOccupationFieldView);
 
         mFooterView = new MTCreateAccountFooterView(this);
@@ -166,8 +168,8 @@ public class CreateAccountActivity extends Activity {
         return false;
     }
 
-    public void postSelectedTradeOccupation(String tradeOccupation) {
-
+    public void post(CharSequence option) {
+        this.getTradeOccupationFieldView().setFieldValue(option.toString());
     }
 
     public void postCreateAccount() {
@@ -240,5 +242,9 @@ public class CreateAccountActivity extends Activity {
         };
 
         MTWebInterface.sharedInstance().getUserService().registerUser(request, responseCallback);
+    }
+
+    public MTSelectableFieldView getTradeOccupationFieldView() {
+        return mTradeOccupationFieldView;
     }
 }
