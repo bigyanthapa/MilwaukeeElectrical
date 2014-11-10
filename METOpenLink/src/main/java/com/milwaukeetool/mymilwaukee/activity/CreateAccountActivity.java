@@ -19,6 +19,7 @@ import com.milwaukeetool.mymilwaukee.view.MTCreateAccountHeaderView;
 import com.milwaukeetool.mymilwaukee.view.MTSelectableFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTSimpleFieldView;
 import com.r0adkll.postoffice.PostOffice;
+import com.r0adkll.postoffice.model.Design;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -164,7 +165,12 @@ public class CreateAccountActivity extends Activity {
         // Run validation, show error
         if (!this.isTextFieldsValid()) {
 
-            PostOffice.newAlertMail(this, "Title", "Message")
+            PostOffice.newMail(this)
+                    .setTitle("Account cannot be created")
+                    .setMessage("Please correct any errors indicated.")
+//                    .setIcon(R.drawable.ic_launcher)
+                    .setThemeColor(getResources().getColor(R.color.mt_red))
+                    .setDesign(Design.HOLO_LIGHT)
                     .show(getFragmentManager());
 
             return;
