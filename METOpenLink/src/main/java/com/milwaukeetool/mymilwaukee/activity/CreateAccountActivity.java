@@ -11,27 +11,32 @@ import android.widget.Toast;
 import com.commonsware.cwac.sacklist.SackOfViewsAdapter;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.milwaukeetool.mymilwaukee.R;
+import com.milwaukeetool.mymilwaukee.interfaces.Postable;
 import com.milwaukeetool.mymilwaukee.model.request.MTUserRegistrationRequest;
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
 import com.milwaukeetool.mymilwaukee.util.AnalyticUtils;
 import com.milwaukeetool.mymilwaukee.view.MTCreateAccountFooterView;
 import com.milwaukeetool.mymilwaukee.view.MTCreateAccountHeaderView;
+import com.milwaukeetool.mymilwaukee.view.MTSelectableFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTSimpleFieldView;
+import com.r0adkll.postoffice.PostOffice;
+import com.r0adkll.postoffice.model.Design;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.LOGD;
+import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 
 /**
  * Created by cent146 on 10/24/14.
  */
-public class CreateAccountActivity extends Activity {
+public class CreateAccountActivity extends Activity implements Postable{
 
     private static final String TAG = makeLogTag(MainActivity.class);
 
@@ -46,6 +51,8 @@ public class CreateAccountActivity extends Activity {
     private MTSimpleFieldView mConfirmPasswordFieldView;
     private MTSimpleFieldView mFirstNameFieldView;
     private MTSimpleFieldView mLastNameFieldView;
+    private MTSelectableFieldView mTradeOccupationFieldView;
+    private SmoothProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,26 +68,34 @@ public class CreateAccountActivity extends Activity {
 
         LinkedList<View> views = new LinkedList<View>();
 
+        mProgressBar = (SmoothProgressBar)findViewById(R.id.createAccountProgressBar);
+        mProgressBar.setVisibility(View.GONE);
+
         mHeaderView = new MTCreateAccountHeaderView(this);
         listView.addHeaderView(mHeaderView);
 
         mEmailFieldView = MTSimpleFieldView.createSimpleFieldView(this,"Email Address")
-                .setFieldType(MTSimpleFieldView.FieldType.FIELD_TYPE_EMAIL).updateFocus();
+                .setFieldType(MTSimpleFieldView.FieldType.EMAIL).setRequired(true).updateFocus();
         views.add(mEmailFieldView);
 
         mPasswordFieldView = MTSimpleFieldView.createSimpleFieldView(this,"Password")
-                .setFieldType(MTSimpleFieldView.FieldType.FIELD_TYPE_PASSWORD);
+                .setFieldType(MTSimpleFieldView.FieldType.PASSWORD).setRequired(true).setMinLength(8).setMaxLength(1024);
         views.add(mPasswordFieldView);
 
         mConfirmPasswordFieldView = MTSimpleFieldView.createSimpleFieldView(this, "Confirm Password")
-                .setFieldType(MTSimpleFieldView.FieldType.FIELD_TYPE_PASSWORD);
+                .setFieldType(MTSimpleFieldView.FieldType.PASSWORD).setRequired(true).setMinLength(8).setMaxLength(1024);
         views.add(mConfirmPasswordFieldView);
 
-        mFirstNameFieldView = MTSimpleFieldView.createSimpleFieldView(this, "First Name");
+        mFirstNameFieldView = MTSimpleFieldView.createSimpleFieldView(this, "First Name").setRequired(true);
         views.add(mFirstNameFieldView);
 
-        mLastNameFieldView = MTSimpleFieldView.createSimpleFieldView(this, "Last Name");
+        mLastNameFieldView = MTSimpleFieldView.createSimpleFieldView(this, "Last Name").setRequired(true);
         views.add(mLastNameFieldView);
+        mLastNameFieldView.setNextActionDone();
+
+        String[] selectableOptionArray = this.getResources().getStringArray(R.array.trade_occupation_array);
+        mTradeOccupationFieldView = MTSelectableFieldView.createSelectableFieldView(this,"Trade/Occupation",selectableOptionArray).setRequired(true);
+        views.add(mTradeOccupationFieldView);
 
         mFooterView = new MTCreateAccountFooterView(this);
         listView.addFooterView(mFooterView);
@@ -141,12 +156,48 @@ public class CreateAccountActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    protected boolean isTextFieldsValid() {
+        if (mEmailFieldView.isValid() &&
+                mPasswordFieldView.isValid() &&
+                mConfirmPasswordFieldView.isValid() &&
+                mFirstNameFieldView.isValid() &&
+                mLastNameFieldView.isValid()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public void post(CharSequence option) {
+        this.getTradeOccupationFieldView().setFieldValue(option.toString());
+    }
+
     public void postCreateAccount() {
 
-        // TODO: Run validation, show error
-        
+        // Run validation, show error
+        if (!this.isTextFieldsValid()) {
+
+            PostOffice.newMail(this)
+                    .setTitle("Account cannot be created")
+                    .setMessage("Please correct any errors indicated.")
+                    .setThemeColor(getResources().getColor(R.color.mt_red))
+                    .setDesign(Design.HOLO_LIGHT)
+                    .show(getFragmentManager());
+
+            return;
+        }
+
+        // Check if the confirmation password matches the given password
+        if (!mPasswordFieldView.getFieldValue().equals(mConfirmPasswordFieldView.getFieldValue())) {
+            Toast.makeText(CreateAccountActivity.this, "Passwords don't match", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         // Validation passed, continue with request
+
+        // Show progress indicator
+        mProgressBar.setVisibility(View.VISIBLE);
+        mProgressBar.progressiveStart();
 
         MTUserRegistrationRequest request = new MTUserRegistrationRequest();
         request.userFirstName = mFirstNameFieldView.getFieldValue();
@@ -161,6 +212,11 @@ public class CreateAccountActivity extends Activity {
 
             @Override
             public void success(Response result, Response response) {
+
+                // Hide progress indicator
+                mProgressBar.progressiveStop();
+                mProgressBar.setVisibility(View.GONE);
+
                 LOGD(TAG, "Successfully registered user: " + result.getBody().toString());
                 Toast.makeText(CreateAccountActivity.this, "Account created successfully", Toast.LENGTH_SHORT).show();
                 finish();
@@ -168,12 +224,27 @@ public class CreateAccountActivity extends Activity {
 
             @Override
             public void failure(RetrofitError retrofitError) {
+
+                // Hide progress indicator
+                mProgressBar.progressiveStop();
+                mProgressBar.setVisibility(View.GONE);
+
                 LOGD(TAG, "Failed to register user");
                 retrofitError.printStackTrace();
+
+                // Handle timeout
+
+                // Handle standard error
+
+
                 Toast.makeText(CreateAccountActivity.this, MTWebInterface.getErrorMessage(retrofitError), Toast.LENGTH_SHORT).show();
             }
         };
 
         MTWebInterface.sharedInstance().getUserService().registerUser(request, responseCallback);
+    }
+
+    public MTSelectableFieldView getTradeOccupationFieldView() {
+        return mTradeOccupationFieldView;
     }
 }

@@ -2,13 +2,18 @@
 <resources>
 
     <string name="app_name">My Milwaukee</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <!-- Landing Page -->
     <string name="title_create_account">Create Account</string>
     <string name="title_log_in">Log In</string>
     <string name="btn_title_create_account">CREATE ACCOUNT</string>
     <string name="btn_title_log_in">LOG IN</string>
-    <string name="title_privacy_policy">Privacy Policy</string>
+
+    <!-- Create Account -->
+    <string name="title_privacy_policy"><a href="http://www.milwaukeetool.com/privacy">Privacy Policy</a></string>
     <string name="text_receive_email_communications">I would like to receive email communications from Milwaukee Tool.</string>
     <string name="title_create_my_milwaukee_account">Create a My Milwaukee&#174; account</string>
+
+
 </resources>

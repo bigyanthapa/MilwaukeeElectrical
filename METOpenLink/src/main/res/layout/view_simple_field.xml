@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerVertical="true"
+    android:background="@null">
+
+    <com.milwaukeetool.mymilwaukee.view.MTEditText
+        android:id="@+id/editTextField"
+        style="@style/EditText.MilwaukeeTool"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_centerHorizontal="true"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:textSize="16sp"
+        android:ellipsize="end"
+        android:textColor="@color/mt_white"
+        android:textColorHint="@color/mt_very_light_gray"
+        android:textCursorDrawable="@null"/>
+
+
+</RelativeLayout>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="mt_white_selected">#33ffffff</color>
+    <color name="mt_black_shaded">#33000000</color>
+    <color name="mt_white">#ffffff</color>
+    <color name="mt_black">#000000</color>
+    <color name="mt_black_selected">#BB000000</color>
+    <color name="mt_red">#db011c</color>
+
+    <color name="mt_placeholder">#aaaaaa</color>
+    <color name="mt_common_gray">#999999</color>
+    <color name="mt_table_group_gray">#f0f0f4</color>
+    <color name="mt_very_light_gray">#f3f3f3</color>
+    <color name="mt_transparent">#00000000</color>
+
+    <color name="milwaukeetool_color">#000000</color>
+    <color name="milwaukeetool_color_alt">#ffffff</color>
+
+</resources>

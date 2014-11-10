@@ -9,6 +9,7 @@
 
     <com.milwaukeetool.mymilwaukee.view.MTCheckBox
         android:id="@+id/emailCommunicationCheckbox"
+        style="@style/CheckBox.MilwaukeeTool"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -44,6 +45,7 @@
         android:gravity="center"
         android:text="@string/title_privacy_policy"
         android:textColor="@color/mt_white"
+        android:textColorLink="@color/mt_white"
         android:textStyle="normal" />
 
 </RelativeLayout>
