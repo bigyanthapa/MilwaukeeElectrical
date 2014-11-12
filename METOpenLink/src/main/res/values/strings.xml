@@ -18,5 +18,6 @@
     <string name="progress_bar_default_message">Loading...</string>
     <string name="progress_bar_registering">Registering...</string>
 
+    <string name="title_sign_in_my_milwaukee_account">Sign in with My Milwaukee&#174; account</string>
 
 </resources>

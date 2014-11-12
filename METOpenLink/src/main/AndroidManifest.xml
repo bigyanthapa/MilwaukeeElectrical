@@ -55,6 +55,7 @@
             android:screenOrientation="sensorPortrait"
             android:launchMode="singleTop"
             android:parentActivityName=".activity.LandingActivity">
+            android:theme="@android:style/Theme.DeviceDefault.NoActionBar"
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity" />
