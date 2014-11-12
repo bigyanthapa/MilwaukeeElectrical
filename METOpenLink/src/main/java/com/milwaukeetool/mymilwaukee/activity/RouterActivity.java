@@ -38,7 +38,7 @@ public class RouterActivity extends Activity {
 
         checkForCrashes();
 
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, LandingActivity.class);
 
         // TODO: Add any extras???? Anything to pass
         //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);

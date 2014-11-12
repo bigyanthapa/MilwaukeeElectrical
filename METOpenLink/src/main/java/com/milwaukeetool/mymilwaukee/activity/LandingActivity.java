@@ -27,9 +27,9 @@ import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 /**
  * Created by cent146 on 10/24/14.
  */
-public class MainActivity extends Activity {
+public class LandingActivity extends Activity {
 
-    private static final String TAG = makeLogTag(MainActivity.class);
+    private static final String TAG = makeLogTag(LandingActivity.class);
 
     private MTButton mCreateAccountBtn;
     private MTButton mLogInBtn;
@@ -49,7 +49,7 @@ public class MainActivity extends Activity {
         mCreateAccountBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent createAccountIntent = new Intent(MainActivity.this, CreateAccountActivity.class);
+                Intent createAccountIntent = new Intent(LandingActivity.this, CreateAccountActivity.class);
                 startActivity(createAccountIntent);
             }
         });
@@ -58,7 +58,7 @@ public class MainActivity extends Activity {
         mLogInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent logInIntent = new Intent(MainActivity.this, LogInActivity.class);
+                Intent logInIntent = new Intent(LandingActivity.this, LogInActivity.class);
                 startActivity(logInIntent);
             }
         });

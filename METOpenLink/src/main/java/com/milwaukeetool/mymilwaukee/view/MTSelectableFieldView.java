@@ -4,11 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.interfaces.Postable;
@@ -27,12 +24,12 @@ import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 public class MTSelectableFieldView extends MTSimpleFieldView {
 
     private static final String TAG = makeLogTag(MTSelectableFieldView.class);
-    private String[] selectableOptionArray;
+    private String[] mSelectableOptionArray;
 
     public MTSelectableFieldView(Activity activity, String[] selectableOptionArray) {
         super(activity);
 
-        this.selectableOptionArray = selectableOptionArray;
+        this.mSelectableOptionArray = selectableOptionArray;
 
         mEditText.setFocusable(false);
         mEditText.setFocusableInTouchMode(true);
@@ -85,15 +82,8 @@ public class MTSelectableFieldView extends MTSimpleFieldView {
         imm.hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
 
         // Create the adapter
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(mCallingActivity, android.R.layout.simple_list_item_1, selectableOptionArray) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                TextView textView = (TextView) super.getView(position, convertView, parent);
-                textView.setTextColor(mCallingActivity.getResources().getColor(R.color.mt_black));
-                return textView;
-            }
-        };
-
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(mCallingActivity, R.layout.view_popup_list_item, mSelectableOptionArray);
+        
         // Create list popup
         Delivery delivery = PostOffice.newMail(mCallingActivity)
                 .setTitle(this.getFieldName())
@@ -102,10 +92,6 @@ public class MTSelectableFieldView extends MTSimpleFieldView {
                 .setCanceledOnTouchOutside(true)
                 .setCancelable(true)
                 .setStyle(new ListStyle.Builder(mCallingActivity)
-                        .setFooterDividersEnabled(true)
-                        .setHeaderDividersEnabled(true)
-                        .setDividerHeight(5)
-                        .setDivider(new ColorDrawable(mCallingActivity.getResources().getColor(R.color.mt_red)))
                         .setOnItemAcceptedListener(new ListStyle.OnItemAcceptedListener<CharSequence>() {
                             @Override
                             public void onItemAccepted(CharSequence item, int position) {
@@ -113,6 +99,8 @@ public class MTSelectableFieldView extends MTSimpleFieldView {
                                 postable.post(item);
                             }
                         })
+                        .setDividerHeight(1)
+                        .setDivider(new ColorDrawable(mCallingActivity.getResources().getColor(R.color.mt_common_gray)))
                         .build(adapter))
                 .build();
 
