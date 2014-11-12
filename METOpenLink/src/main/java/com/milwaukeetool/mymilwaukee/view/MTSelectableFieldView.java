@@ -1,10 +1,12 @@
 package com.milwaukeetool.mymilwaukee.view;
 
 import android.app.Activity;
-import android.view.KeyEvent;
+import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
@@ -13,6 +15,7 @@ import com.milwaukeetool.mymilwaukee.interfaces.Postable;
 import com.milwaukeetool.mymilwaukee.util.MTTouchListener;
 import com.r0adkll.postoffice.PostOffice;
 import com.r0adkll.postoffice.model.Delivery;
+import com.r0adkll.postoffice.model.Design;
 import com.r0adkll.postoffice.styles.ListStyle;
 
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.LOGD;
@@ -33,6 +36,7 @@ public class MTSelectableFieldView extends MTSimpleFieldView {
 
         mEditText.setFocusable(false);
         mEditText.setFocusableInTouchMode(true);
+        mEditText.setKeyListener(null);
 
         this.mFieldType = FieldType.SELECTABLE;
 
@@ -52,25 +56,35 @@ public class MTSelectableFieldView extends MTSimpleFieldView {
                 showSelectableOptions();
             }
         });
-        mEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                LOGD(TAG, "Has focus: " + hasFocus);
-                if (hasFocus) {
-                    mEditText.clearFocus();
-                }
-            }
-        });
-        mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                // Do some stuff
-                return true;
-            }
-        });
+//        mEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                LOGD(TAG, "Has focus: " + hasFocus);
+//                if (hasFocus) {
+//                    //mEditText.clearFocus();
+//                }
+//            }
+//        });
+//        mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//            @Override
+//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                // Do some stuff
+//                return false;
+//            }
+//        });
     }
 
     public void showSelectableOptions() {
+
+        // Request focus
+        updateFocus();
+
+        // Hide the keyboard
+        InputMethodManager imm = (InputMethodManager)mCallingActivity.getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
+
+        // Create the adapter
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(mCallingActivity, android.R.layout.simple_list_item_1, selectableOptionArray) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -80,11 +94,18 @@ public class MTSelectableFieldView extends MTSimpleFieldView {
             }
         };
 
+        // Create list popup
         Delivery delivery = PostOffice.newMail(mCallingActivity)
                 .setTitle(this.getFieldName())
                 .setThemeColorFromResource(R.color.mt_red)
+                .setDesign(Design.HOLO_LIGHT)
+                .setCanceledOnTouchOutside(true)
+                .setCancelable(true)
                 .setStyle(new ListStyle.Builder(mCallingActivity)
-                        .setDividerHeight(2)
+                        .setFooterDividersEnabled(true)
+                        .setHeaderDividersEnabled(true)
+                        .setDividerHeight(5)
+                        .setDivider(new ColorDrawable(mCallingActivity.getResources().getColor(R.color.mt_red)))
                         .setOnItemAcceptedListener(new ListStyle.OnItemAcceptedListener<CharSequence>() {
                             @Override
                             public void onItemAccepted(CharSequence item, int position) {

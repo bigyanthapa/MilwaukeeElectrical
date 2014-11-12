@@ -52,4 +52,14 @@ public class StringHelper {
 
         return false;
     }
+
+    public static boolean isPasswordValid(String password) {
+        if (!StringHelper.containsLowercase(password) ||
+                !StringHelper.containsNumber(password) ||
+                !StringHelper.containsUppercase(password)) {
+
+            return false;
+        }
+        return true;
+    }
 }

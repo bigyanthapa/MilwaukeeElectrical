@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.milwaukeetool.mymilwaukee.view.MTLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/createAccountLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -14,11 +15,10 @@
         android:scaleType="fitXY"
         android:src="@drawable/background" />
 
-
     <ListView
         android:id="@+id/header_stuff"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:background="@null"
         android:choiceMode="singleChoice"
@@ -26,22 +26,10 @@
         android:dividerHeight="0dp"
         android:descendantFocusability="afterDescendants"/>
 
-    <fr.castorflex.android.smoothprogressbar.SmoothProgressBar
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/createAccountProgressBar"
+    <com.milwaukeetool.mymilwaukee.view.MTProgressView
+        android:id="@+id/progressIndicatorView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:indeterminate="true"
-        app:spb_sections_count="4"
-        app:spb_color="@color/mt_white"
-        app:spb_speed="2.0"
-        app:spb_stroke_width="4dp"
-        app:spb_stroke_separator_length="4dp"
-        app:spb_reversed="false"
-        app:spb_mirror_mode="false"
-        app:spb_progressiveStart_activated="true"
-        app:spb_progressiveStart_speed="1.5"
-        app:spb_progressiveStop_speed="3.4"
-        />
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 
-</FrameLayout>
+</com.milwaukeetool.mymilwaukee.view.MTLayout>

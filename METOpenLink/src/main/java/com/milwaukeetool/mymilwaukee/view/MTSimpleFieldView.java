@@ -4,15 +4,21 @@ import android.app.Activity;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
 import com.milwaukeetool.mymilwaukee.MilwaukeeToolApplication;
 import com.milwaukeetool.mymilwaukee.R;
+import com.milwaukeetool.mymilwaukee.model.event.MTimeActionEvent;
 import com.milwaukeetool.mymilwaukee.util.StringHelper;
+
+import de.greenrobot.event.EventBus;
 
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 
@@ -52,6 +58,21 @@ public class MTSimpleFieldView extends RelativeLayout {
         this.mMaxLength = 0;
 
         mEditText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS|InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+
+        mEditText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId,
+                                          KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    EventBus.getDefault().post(new MTimeActionEvent(this, EditorInfo.IME_ACTION_DONE, mCallingActivity, mFieldName));
+                    return false;
+                } else if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    EventBus.getDefault().post(new MTimeActionEvent(this, EditorInfo.IME_ACTION_NEXT, mCallingActivity, mFieldName));
+                    return false;
+                }
+                return false;
+            }
+        });
     }
 
     public void setFieldName(String fieldName) {
@@ -103,7 +124,6 @@ public class MTSimpleFieldView extends RelativeLayout {
                 this.mFieldType = fieldType;
                 break;
             case PASSWORD:
-                //mEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 mEditText.setTransformationMethod(new PasswordTransformationMethod());
                 mEditText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
                 this.mFieldType = fieldType;
@@ -161,12 +181,7 @@ public class MTSimpleFieldView extends RelativeLayout {
                 }
                 break;
             case PASSWORD:
-                if (!StringHelper.containsLowercase(this.getFieldValue()) ||
-                        !StringHelper.containsNumber(this.getFieldValue()) ||
-                        !StringHelper.containsUppercase(this.getFieldValue())) {
-                    showError("Invalid password");
-                    return false;
-                }
+
                 break;
             default:
                 // Standard validation?

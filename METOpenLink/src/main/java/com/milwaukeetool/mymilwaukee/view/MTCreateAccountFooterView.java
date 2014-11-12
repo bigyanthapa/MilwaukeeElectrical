@@ -20,6 +20,7 @@ public class MTCreateAccountFooterView extends RelativeLayout {
     private MTCheckBox mOptInCheckBox;
     private MTButton mCreateAccountBtn;
     private MTTextView mLegalText;
+    //private View mFooterExtendedView;
 
     public MTCreateAccountFooterView(Activity activity) {
         super(activity);
@@ -32,6 +33,7 @@ public class MTCreateAccountFooterView extends RelativeLayout {
         mOptInCheckBox = (MTCheckBox)findViewById(R.id.emailCommunicationCheckbox);
         mCreateAccountBtn = (MTButton)findViewById(R.id.footerCreateAccountButton);
         mLegalText = (MTTextView)findViewById(R.id.privacyPolicyTextView);
+        //mFooterExtendedView = (View)findViewById(R.id.footerExtendedView);
 
         this.setLegalText();
 
@@ -55,4 +57,21 @@ public class MTCreateAccountFooterView extends RelativeLayout {
     public boolean userOptedIn() {
         return mOptInCheckBox.isChecked();
     }
+
+//    public void showExtendedView(boolean show) {
+//       mFooterExtendedView.setVisibility(show ? View.VISIBLE : View.GONE);
+//
+//        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mFooterExtendedView.getLayoutParams();
+//        if (show) {
+//
+//            params.height = 375;
+//
+//        } else {
+//            params.height = 0;
+//        }
+//
+//        mFooterExtendedView.setLayoutParams(params);
+//        mFooterExtendedView.invalidate();
+//        invalidate();
+//    }
 }

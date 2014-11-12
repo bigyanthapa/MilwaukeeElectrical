@@ -15,5 +15,8 @@
     <string name="text_receive_email_communications">I would like to receive email communications from Milwaukee Tool.</string>
     <string name="title_create_my_milwaukee_account">Create a My Milwaukee&#174; account</string>
 
+    <string name="progress_bar_default_message">Loading...</string>
+    <string name="progress_bar_registering">Registering...</string>
+
 
 </resources>

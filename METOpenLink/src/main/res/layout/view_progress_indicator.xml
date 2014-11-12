@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/mt_black_mask">
+
+    <fr.castorflex.android.smoothprogressbar.SmoothProgressBar
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:layout_alignParentTop="true"
+        app:spb_sections_count="4"
+        app:spb_color="@color/mt_white"
+        app:spb_speed="2.0"
+        app:spb_stroke_width="4dp"
+        app:spb_stroke_separator_length="4dp"
+        app:spb_reversed="false"
+        app:spb_mirror_mode="false"
+        app:spb_progressiveStart_activated="true"
+        app:spb_progressiveStart_speed="1.5"
+        app:spb_progressiveStop_speed="3.4"
+        />
+
+    <com.milwaukeetool.mymilwaukee.view.MTTextView
+        android:id="@+id/progressMessageTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:singleLine="false"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:textColor="@color/mt_white"
+        android:text="@string/progress_bar_default_message"
+        android:padding="15dp"
+        android:background="@drawable/shaded_background_light"
+        />
+
+</RelativeLayout>

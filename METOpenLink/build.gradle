@@ -106,6 +106,10 @@ dependencies {
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.squareup.retrofit:retrofit:1.7.1'
     compile 'com.hannesdorfmann.smoothprogressbar:library:1.0.0'
+
+    // Green Robot EventBus
+    compile 'de.greenrobot:eventbus:2.2.1'
+
 //    compile 'org.roboguice:roboguice:2.0'
 
 //    // Crouton Alert (Toast) messages
