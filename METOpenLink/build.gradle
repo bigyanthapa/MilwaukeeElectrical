@@ -105,6 +105,9 @@ dependencies {
     // Retrofit / OKHTTP / GSON
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.squareup.retrofit:retrofit:1.7.1'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
+    compile 'com.squareup.okhttp:okhttp:2.0.0'
+    compile 'com.squareup.okio:okio:1.0.1'
     compile 'com.hannesdorfmann.smoothprogressbar:library:1.0.0'
 //    compile 'org.roboguice:roboguice:2.0'
 
