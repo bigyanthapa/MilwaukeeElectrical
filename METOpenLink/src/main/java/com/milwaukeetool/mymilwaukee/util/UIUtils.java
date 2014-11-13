@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import com.milwaukeetool.mymilwaukee.MilwaukeeToolApplication;
@@ -428,5 +429,11 @@ public class UIUtils {
             return false;
         }
         return true;
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        // Hide the keyboard, if shown
+        InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 }

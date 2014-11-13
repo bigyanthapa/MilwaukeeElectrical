@@ -1,6 +1,5 @@
 package com.milwaukeetool.mymilwaukee.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,10 +8,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.config.MTConfig;
-import com.milwaukeetool.mymilwaukee.util.AnalyticUtils;
 import com.milwaukeetool.mymilwaukee.view.MTButton;
 import com.milwaukeetool.mymilwaukee.view.MTTextView;
 
@@ -27,7 +24,7 @@ import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 /**
  * Created by cent146 on 10/24/14.
  */
-public class LandingActivity extends Activity {
+public class LandingActivity extends MTActivity {
 
     private static final String TAG = makeLogTag(LandingActivity.class);
 
@@ -39,7 +36,7 @@ public class LandingActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_landing);
 
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -78,16 +75,22 @@ public class LandingActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
-
-        AnalyticUtils.logScreenView(this,"Sign Up / Log In");
-        GoogleAnalytics.getInstance(this).reportActivityStart(this);
         checkForCrashes();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        GoogleAnalytics.getInstance(this).reportActivityStop(this);
+    }
+
+    @Override
+    protected String getLogTag() {
+        return TAG;
+    }
+
+    @Override
+    protected String getScreenName() {
+        return getResources().getString(R.string.mt_screen_name_landing);
     }
 
     @Override

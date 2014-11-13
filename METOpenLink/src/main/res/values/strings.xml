@@ -14,10 +14,27 @@
     <string name="title_privacy_policy"><a href="http://www.milwaukeetool.com/privacy">Privacy Policy</a></string>
     <string name="text_receive_email_communications">I would like to receive email communications from Milwaukee Tool.</string>
     <string name="title_create_my_milwaukee_account">Create a My Milwaukee&#174; account</string>
+    <string name="create_account_no_password_match">Passwords don\'t match.</string>
+    <string name="create_account_field_email">Email Address</string>
+    <string name="create_account_field_password">Password</string>
+    <string name="create_account_field_confirm_password">Confirm Password</string>
+    <string name="create_account_field_first_name">First Name</string>
+    <string name="create_account_field_last_name">Last Name</string>
+    <string name="create_account_field_trade">Trade/Occupation</string>
 
+    <!-- Progress Indicator -->
     <string name="progress_bar_default_message">Loading...</string>
     <string name="progress_bar_registering">Registering...</string>
+    <string name="progress_bar_logging_in">Signing In...</string>
 
+    <!-- Sign In -->
     <string name="title_sign_in_my_milwaukee_account">Sign in with My Milwaukee&#174; account</string>
+
+    <string name="sign_in_field_title_email">Email Address</string>
+    <string name="sign_in_field_title_password">Password</string>
+
+    <!-- Error Dialogs -->
+    <string name="dialog_title_register_failure">Error Registering</string>
+    <string name="dialog_title_sign_in_failure">Error Signing In</string>
 
 </resources>

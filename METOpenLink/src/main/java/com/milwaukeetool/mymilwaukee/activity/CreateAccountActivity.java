@@ -1,23 +1,27 @@
 package com.milwaukeetool.mymilwaukee.activity;
 
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.commonsware.cwac.sacklist.SackOfViewsAdapter;
 import com.milwaukeetool.mymilwaukee.R;
+import com.milwaukeetool.mymilwaukee.config.MTConfig;
+import com.milwaukeetool.mymilwaukee.config.MTConstants;
 import com.milwaukeetool.mymilwaukee.interfaces.Postable;
 import com.milwaukeetool.mymilwaukee.model.event.MTKeyboardEvent;
 import com.milwaukeetool.mymilwaukee.model.event.MTimeActionEvent;
 import com.milwaukeetool.mymilwaukee.model.request.MTUserRegistrationRequest;
+import com.milwaukeetool.mymilwaukee.model.response.MTLogInResponse;
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
+import com.milwaukeetool.mymilwaukee.util.MTUtils;
+import com.milwaukeetool.mymilwaukee.util.MiscUtils;
+import com.milwaukeetool.mymilwaukee.util.UIUtils;
 import com.milwaukeetool.mymilwaukee.view.MTCreateAccountFooterView;
 import com.milwaukeetool.mymilwaukee.view.MTCreateAccountHeaderView;
 import com.milwaukeetool.mymilwaukee.view.MTProgressView;
@@ -78,26 +82,26 @@ public class CreateAccountActivity extends MTActivity implements Postable {
         mHeaderView = new MTCreateAccountHeaderView(this);
         mListView.addHeaderView(mHeaderView, null, false);
 
-        mEmailFieldView = MTSimpleFieldView.createSimpleFieldView(this,"Email Address")
+        mEmailFieldView = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.create_account_field_email))
                 .setFieldType(MTSimpleFieldView.FieldType.EMAIL).setRequired(true);//.updateFocus();
         views.add(mEmailFieldView);
 
-        mPasswordFieldView = MTSimpleFieldView.createSimpleFieldView(this,"Password")
+        mPasswordFieldView = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.create_account_field_password))
                 .setFieldType(MTSimpleFieldView.FieldType.PASSWORD).setRequired(true).setMinLength(8).setMaxLength(1024);
         views.add(mPasswordFieldView);
 
-        mConfirmPasswordFieldView = MTSimpleFieldView.createSimpleFieldView(this, "Confirm Password")
+        mConfirmPasswordFieldView = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.create_account_field_confirm_password))
                 .setFieldType(MTSimpleFieldView.FieldType.PASSWORD).setRequired(true).setMinLength(8).setMaxLength(1024);
         views.add(mConfirmPasswordFieldView);
 
-        mFirstNameFieldView = MTSimpleFieldView.createSimpleFieldView(this, "First Name").setRequired(true);
+        mFirstNameFieldView = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.create_account_field_first_name)).setRequired(true);
         views.add(mFirstNameFieldView);
 
-        mLastNameFieldView = MTSimpleFieldView.createSimpleFieldView(this, "Last Name").setRequired(true);
+        mLastNameFieldView = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.create_account_field_last_name)).setRequired(true);
         views.add(mLastNameFieldView);
 
         String[] selectableOptionArray = this.getResources().getStringArray(R.array.trade_occupation_array);
-        mTradeOccupationFieldView = MTSelectableFieldView.createSelectableFieldView(this,"Trade/Occupation",selectableOptionArray).setRequired(true);
+        mTradeOccupationFieldView = MTSelectableFieldView.createSelectableFieldView(this, MiscUtils.getString(R.string.create_account_field_trade),selectableOptionArray).setRequired(true);
         mTradeOccupationFieldView.setNextActionDone();
         views.add(mTradeOccupationFieldView);
 
@@ -111,6 +115,214 @@ public class CreateAccountActivity extends MTActivity implements Postable {
             mListView.setFocusable(true);
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // Log analytics
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected String getLogTag() {
+        return TAG;
+    }
+
+    @Override
+    protected String getScreenName() {
+        return getResources().getString(R.string.mt_screen_name_create_account);
+    }
+
+    protected boolean isTextFieldsValid() {
+        if (mEmailFieldView.isValid() &&
+                mPasswordFieldView.isValid() &&
+                mConfirmPasswordFieldView.isValid() &&
+                mFirstNameFieldView.isValid() &&
+                mLastNameFieldView.isValid()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public void post(CharSequence option) {
+        mTradeOccupationFieldView.setFieldValue(option.toString());
+    }
+
+    public void postCreateAccount() {
+
+        UIUtils.hideKeyboard(this);
+
+        // Run validation, show error
+        if (!this.isTextFieldsValid()) {
+            return;
+        }
+
+        // Check if the confirmation password matches the given password
+        if (!mPasswordFieldView.getFieldValue().equals(mConfirmPasswordFieldView.getFieldValue())) {
+            //Toast.makeText(CreateAccountActivity.this, "Passwords don't match", Toast.LENGTH_SHORT).show();
+            PostOffice.newMail(CreateAccountActivity.this)
+                    .setTitle(getResources().getString(R.string.dialog_title_register_failure))
+                    .setMessage(getResources().getString(R.string.create_account_no_password_match))
+                    .setThemeColor(getResources().getColor(R.color.mt_red))
+                    .setDesign(Design.HOLO_LIGHT)
+                    .show(getFragmentManager());
+            return;
+        }
+
+        // Validation passed, continue with request
+
+        // Show progress indicator
+        mProgressView.updateMessage(this.getResources().getString(R.string.progress_bar_registering));
+        mProgressView.startProgress();
+
+        // Create the request for user registration
+        final MTUserRegistrationRequest request = new MTUserRegistrationRequest();
+        request.userFirstName = mFirstNameFieldView.getFieldValue();
+        request.userLastName = mLastNameFieldView.getFieldValue();
+        request.userOccupation = mTradeOccupationFieldView.getFieldValue();
+        request.userEmail = mEmailFieldView.getFieldValue();
+        request.userPassword = mPasswordFieldView.getFieldValue();
+        request.userConfirmPassword = mConfirmPasswordFieldView.getFieldValue();
+        request.userOptIn = mFooterView.userOptedIn();
+
+//        // Test
+//        MiscUtils.runDelayed(5000,new MiscUtils.RunDelayedCallback() {
+//            @Override
+//            public void onFinished() {
+//                // Do something
+//            }
+//        });
+
+        Callback<Response> responseCallback = new Callback<Response>() {
+
+            @Override
+            public void success(Response result, Response response) {
+
+                // Hide progress indicator
+                mProgressView.stopProgress();
+
+                LOGD(TAG, "Successfully registered user: " + result.getBody().toString());
+//                Toast.makeText(CreateAccountActivity.this, "Account created successfully", Toast.LENGTH_SHORT).show();
+//                finish();
+                performLogin(request);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+
+                LOGD(TAG, "Failed to register user");
+                retrofitError.printStackTrace();
+
+                // Hide progress indicator
+                mProgressView.stopProgress();
+
+                // Handle timeout
+
+                // Handle standard error
+                PostOffice.newMail(CreateAccountActivity.this)
+                        .setTitle(getResources().getString(R.string.dialog_title_register_failure))
+                        .setMessage(MTWebInterface.getErrorMessage(retrofitError))
+                        .setThemeColor(getResources().getColor(R.color.mt_red))
+                        .setDesign(Design.HOLO_LIGHT)
+                        .show(getFragmentManager());
+            }
+        };
+
+        MTWebInterface.sharedInstance().getUserService().registerUser(request, responseCallback);
+    }
+
+    public void onEvent(MTKeyboardEvent event) {
+        if (event.keyboardDisplayed) {
+            LOGD(TAG, "Keyboard listener: Shown");
+            //mFooterView.showExtendedView(true);
+        } else {
+            LOGD(TAG, "Keyboard listener: Hidden");
+            //mFooterView.showExtendedView(false);
+        }
+    }
+
+    public void onEvent(MTimeActionEvent event) {
+        if (event.callingActivity == this) {
+            if (event.action == EditorInfo.IME_ACTION_NEXT && event.fieldName.equalsIgnoreCase(mLastNameFieldView.getFieldName())) {
+                mTradeOccupationFieldView.showSelectableOptions();
+            }
+        }
+    }
+
+    private void performLogin(MTUserRegistrationRequest request) {
+        // Show progress indicator
+        mProgressView.updateMessage(MiscUtils.getString(R.string.progress_bar_logging_in));
+        mProgressView.startProgress();
+
+        Callback<MTLogInResponse> responseCallback = new Callback<MTLogInResponse>() {
+            @Override
+            public void success(MTLogInResponse result, Response response) {
+
+                // Hide progress indicator
+                mProgressView.stopProgress();
+
+                if (MTConstants.TOKEN_TYPE_BEARER.equalsIgnoreCase(result.tokenType)) {
+                    MTUtils.setLoginInfo(mEmailFieldView.getFieldValue(), result.token, result.tokenType);
+                }
+
+                LOGD(TAG, "Successfully logged in for user with token: " + result.token);
+
+                Intent mainIntent = new Intent(CreateAccountActivity.this, MainActivity.class);
+                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(mainIntent);
+                finish();
+
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                LOGD(TAG, "Failed to log in for user");
+                retrofitError.printStackTrace();
+
+                // Hide progress indicator
+                mProgressView.stopProgress();
+
+                // Handle timeout
+
+                // Handle standard error
+                PostOffice.newMail(CreateAccountActivity.this)
+                        .setTitle(MiscUtils.getString(R.string.dialog_title_sign_in_failure))
+                        .setMessage(MTWebInterface.getErrorMessage(retrofitError))
+                        .setThemeColor(MiscUtils.getAppResources().getColor(R.color.mt_red))
+                        .setDesign(Design.HOLO_LIGHT)
+                        .show(getFragmentManager());
+            }
+        };
+
+        MTWebInterface.sharedInstance().getUserService().login(MTConfig.getServerToken(),
+                request.userEmail,
+                request.userPassword,
+                MTConstants.LOG_IN_GRANT_TYPE_PASSWORD,
+                responseCallback);
+    }
+
 
     private class CreateAccountAdapter extends SackOfViewsAdapter {
 
@@ -163,164 +375,4 @@ public class CreateAccountActivity extends MTActivity implements Postable {
 //                mTextLostFocusTimestamp = System.currentTimeMillis();
 //        }
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                // Log analytics
-                finish();
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    protected String getLogTag() {
-        return TAG;
-    }
-
-    protected String getScreenName() {
-        return getResources().getString(R.string.mt_screen_name_create_account);
-    }
-
-    protected boolean isTextFieldsValid() {
-        if (mEmailFieldView.isValid() &&
-                mPasswordFieldView.isValid() &&
-                mConfirmPasswordFieldView.isValid() &&
-                mFirstNameFieldView.isValid() &&
-                mLastNameFieldView.isValid()) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public void post(CharSequence option) {
-        this.getTradeOccupationFieldView().setFieldValue(option.toString());
-    }
-
-    public void postCreateAccount() {
-
-        // Hide the keyboard, if shown
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-
-        // Run validation, show error
-        if (!this.isTextFieldsValid()) {
-            return;
-        }
-
-        // Check if the confirmation password matches the given password
-        if (!mPasswordFieldView.getFieldValue().equals(mConfirmPasswordFieldView.getFieldValue())) {
-            //Toast.makeText(CreateAccountActivity.this, "Passwords don't match", Toast.LENGTH_SHORT).show();
-            PostOffice.newMail(CreateAccountActivity.this)
-                    .setTitle("Error Registering")
-                    .setMessage("Passwords don't match.")
-                    .setThemeColor(getResources().getColor(R.color.mt_red))
-                    .setDesign(Design.HOLO_LIGHT)
-                    .show(getFragmentManager());
-            return;
-        }
-
-        // Validation passed, continue with request
-
-        // Show progress indicator
-        mProgressView.updateMessage(this.getResources().getString(R.string.progress_bar_registering));
-        mProgressView.startProgress();
-
-        // Create the request for user registration
-        MTUserRegistrationRequest request = new MTUserRegistrationRequest();
-        request.userFirstName = mFirstNameFieldView.getFieldValue();
-        request.userLastName = mLastNameFieldView.getFieldValue();
-        request.userOccupation = mTradeOccupationFieldView.getFieldValue();
-        request.userEmail = mEmailFieldView.getFieldValue();
-        request.userPassword = mPasswordFieldView.getFieldValue();
-        request.userConfirmPassword = mConfirmPasswordFieldView.getFieldValue();
-        request.userOptIn = mFooterView.userOptedIn();
-
-        // Test
-        final android.os.Handler handler = new android.os.Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mProgressView.stopProgress();
-            }
-        }, 5000);
-
-        Callback<Response> responseCallback = new Callback<Response>() {
-
-            @Override
-            public void success(Response result, Response response) {
-
-                // Hide progress indicator
-                mProgressView.stopProgress();
-
-                LOGD(TAG, "Successfully registered user: " + result.getBody().toString());
-                Toast.makeText(CreateAccountActivity.this, "Account created successfully", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-
-            @Override
-            public void failure(RetrofitError retrofitError) {
-
-                LOGD(TAG, "Failed to register user");
-                retrofitError.printStackTrace();
-
-                // Hide progress indicator
-                mProgressView.stopProgress();
-
-                // Handle timeout
-
-                // Handle standard error
-                PostOffice.newMail(CreateAccountActivity.this)
-                        .setTitle("Error Registering")
-                        .setMessage(MTWebInterface.getErrorMessage(retrofitError))
-                        .setThemeColor(getResources().getColor(R.color.mt_red))
-                        .setDesign(Design.HOLO_LIGHT)
-                        .show(getFragmentManager());
-            }
-        };
-
-        MTWebInterface.sharedInstance().getUserService().registerUser(request, responseCallback);
-    }
-
-    public MTSelectableFieldView getTradeOccupationFieldView() {
-        return mTradeOccupationFieldView;
-    }
-
-    public void onEvent(MTKeyboardEvent event) {
-        if (event.keyboardDisplayed) {
-            LOGD(TAG, "Keyboard listener: Shown");
-            //mFooterView.showExtendedView(true);
-        } else {
-            LOGD(TAG, "Keyboard listener: Hidden");
-            //mFooterView.showExtendedView(false);
-        }
-    }
-
-    public void onEvent(MTimeActionEvent event) {
-        if (event.callingActivity == this) {
-            if (event.action == EditorInfo.IME_ACTION_NEXT && event.fieldName.equalsIgnoreCase(mLastNameFieldView.getFieldName())) {
-                mTradeOccupationFieldView.showSelectableOptions();
-            }
-        }
-    }
-
 }

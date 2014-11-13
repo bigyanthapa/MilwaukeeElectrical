@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
+import com.milwaukeetool.mymilwaukee.model.event.MTNetworkAvailabilityEvent;
 import com.milwaukeetool.mymilwaukee.util.AnalyticUtils;
 
 import de.greenrobot.event.EventBus;
@@ -40,5 +41,9 @@ public abstract class MTActivity extends Activity {
 
     protected abstract String getLogTag();
     protected abstract String getScreenName();
+
+    public void onEvent(MTNetworkAvailabilityEvent event) {
+        
+    }
 
 }

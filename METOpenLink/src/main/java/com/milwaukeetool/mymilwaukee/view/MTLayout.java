@@ -53,14 +53,14 @@ public class MTLayout extends FrameLayout {
         // Keyboard is shown
         mKeyboardVisible = true;
         LOGD(TAG, "Keyboard listener: Shown");
-        EventBus.getDefault().post(new MTKeyboardEvent(true));
+        EventBus.getDefault().post(new MTKeyboardEvent(this,true));
     }
 
     public void keyboardHidden() {
         // Keyboard is hidden
         mKeyboardVisible = false;
         LOGD(TAG, "Keyboard listener: Hidden");
-        EventBus.getDefault().post(new MTKeyboardEvent(false));
+        EventBus.getDefault().post(new MTKeyboardEvent(this,false));
     }
 
     public void setListenerToRootView(){

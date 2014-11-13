@@ -7,6 +7,7 @@ import android.os.Bundle;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.config.MTConfig;
 import com.milwaukeetool.mymilwaukee.util.AnalyticUtils;
+import com.milwaukeetool.mymilwaukee.util.MTUtils;
 
 import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.CrashManagerListener;
@@ -38,14 +39,21 @@ public class RouterActivity extends Activity {
 
         checkForCrashes();
 
-        Intent intent = new Intent(this, LandingActivity.class);
+        Intent intent = null;
+
+        // Check if we have logged in already, if not launch Login Activity instead
+        if (MTUtils.isLoggedIn()) {
+            intent = new Intent(this, MainActivity.class);
+        } else {
+            intent = new Intent(this, LandingActivity.class);
+        }
 
         // TODO: Add any extras???? Anything to pass
         //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
         finish();
 
-        // TODO: Check if we have logged in already, if not launch Login Activity instead
+
 
     }
 

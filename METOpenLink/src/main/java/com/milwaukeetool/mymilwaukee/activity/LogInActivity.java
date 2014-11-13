@@ -1,6 +1,6 @@
 package com.milwaukeetool.mymilwaukee.activity;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -8,15 +8,17 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.commonsware.cwac.sacklist.SackOfViewsAdapter;
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.gson.Gson;
 import com.milwaukeetool.mymilwaukee.R;
-import com.milwaukeetool.mymilwaukee.model.request.MTLogInRequest;
-import com.milwaukeetool.mymilwaukee.model.response.MTTokenResponse;
-import com.milwaukeetool.mymilwaukee.provider.RestClient;
-import com.milwaukeetool.mymilwaukee.util.AnalyticUtils;
+import com.milwaukeetool.mymilwaukee.config.MTConfig;
+import com.milwaukeetool.mymilwaukee.config.MTConstants;
+import com.milwaukeetool.mymilwaukee.model.response.MTLogInResponse;
+import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
+import com.milwaukeetool.mymilwaukee.util.MTUtils;
+import com.milwaukeetool.mymilwaukee.util.MiscUtils;
+import com.milwaukeetool.mymilwaukee.util.UIUtils;
 import com.milwaukeetool.mymilwaukee.view.MTLoginFooterView;
 import com.milwaukeetool.mymilwaukee.view.MTLoginHeaderView;
+import com.milwaukeetool.mymilwaukee.view.MTProgressView;
 import com.milwaukeetool.mymilwaukee.view.MTSimpleFieldView;
 import com.r0adkll.postoffice.PostOffice;
 import com.r0adkll.postoffice.model.Design;
@@ -24,18 +26,17 @@ import com.r0adkll.postoffice.model.Design;
 import java.util.LinkedList;
 import java.util.List;
 
-import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import retrofit.mime.TypedString;
 
+import static com.milwaukeetool.mymilwaukee.util.LogUtils.LOGD;
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 
 /**
  * Created by scott.hopfensperger on 10/30/2014.
  */
-public class LogInActivity extends Activity {
+public class LogInActivity extends MTActivity {
 
     private static final String TAG = makeLogTag(LogInActivity.class);
 
@@ -48,13 +49,12 @@ public class LogInActivity extends Activity {
     private MTSimpleFieldView mEmailFieldView;
     private MTSimpleFieldView mPasswordFieldView;
 
-    private SmoothProgressBar mProgressBar;
+    private MTProgressView mProgressView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
-
         this.setupViews();
     }
 
@@ -64,17 +64,17 @@ public class LogInActivity extends Activity {
 
         LinkedList<View> views = new LinkedList<View>();
 
-        mProgressBar = (SmoothProgressBar)findViewById(R.id.loginProgressBar);
-        mProgressBar.setVisibility(View.GONE);
+        mProgressView = (MTProgressView)findViewById(R.id.progressIndicatorView);
+        mProgressView.setVisibility(View.GONE);
 
         mHeaderView = new MTLoginHeaderView(this);
         listView.addHeaderView(mHeaderView);
 
-        mEmailFieldView = MTSimpleFieldView.createSimpleFieldView(this,"Email Address")
+        mEmailFieldView = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.sign_in_field_title_email))
                 .setFieldType(MTSimpleFieldView.FieldType.EMAIL).setRequired(true).updateFocus();
         views.add(mEmailFieldView);
 
-        mPasswordFieldView = MTSimpleFieldView.createSimpleFieldView(this,"Password")
+        mPasswordFieldView = MTSimpleFieldView.createSimpleFieldView(this,MiscUtils.getString(R.string.sign_in_field_title_password))
                 .setFieldType(MTSimpleFieldView.FieldType.PASSWORD).setRequired(true).setMinLength(8).setMaxLength(1024);
         views.add(mPasswordFieldView);
 
@@ -89,24 +89,6 @@ public class LogInActivity extends Activity {
         }
     }
 
-    private class LogInAdapter extends SackOfViewsAdapter {
-
-        public LogInAdapter(List<View> views) {
-            super(views);
-        }
-
-        @Override
-        protected View newView(int position, ViewGroup parent) {
-            View view = super.newView(position, parent);
-            return view;
-        }
-
-        @Override
-        public boolean isEnabled(int position) {
-            return true;
-        }
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -115,16 +97,21 @@ public class LogInActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        GoogleAnalytics.getInstance(this).reportActivityStart(this);
-        // Analytics
-        AnalyticUtils.logScreenView(this,"Sign In");AnalyticUtils.logScreenView(this,"Sign In");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        GoogleAnalytics.getInstance(this).reportActivityStop(this);
+    }
 
+    @Override
+    protected String getLogTag() {
+        return TAG;
+    }
+
+    @Override
+    protected String getScreenName() {
+        return MiscUtils.getString(R.string.mt_screen_name_sign_in);
     }
 
     protected boolean isTextFieldsValid() {
@@ -148,49 +135,81 @@ public class LogInActivity extends Activity {
     }
 
     public void postLogIn() {
-        if (!this.isTextFieldsValid()) {
-            PostOffice.newMail(this)
-                    .setTitle("Account cannot be created")
-                    .setMessage("Please correct any errors indicated.")
-                    .setThemeColor(getResources().getColor(R.color.mt_red))
-                    .setDesign(Design.HOLO_LIGHT)
-                    .show(getFragmentManager());
 
+        // Hide the keyboard, if shown
+        UIUtils.hideKeyboard(this);
+
+        if (!this.isTextFieldsValid()) {
             return;
         }
 
-        MTLogInRequest request = new MTLogInRequest();
-        request.setGrantType("password");
-        request.setPassword(this.mPasswordFieldView.getFieldValue());
-        request.setUserName(this.mEmailFieldView.getFieldValue());
-
         // Show progress indicator
-        mProgressBar.setVisibility(View.VISIBLE);
-        mProgressBar.progressiveStart();
+        mProgressView.updateMessage(MiscUtils.getString(R.string.progress_bar_logging_in));
+        mProgressView.startProgress();
 
-        //String token = "bWlsd2F1a2VlX2FuZHJvaWQ6bmg1c2Z2dHgwcHF1bTM1cnpzNWdkNnJ4M3Q2bXQ1czN4d2JpaXRmeQ==";
-        String token = "Basic bWlsd2F1a2VlX2FuZHJvaWQ6bmg1c2Z2dHgwcHF1bTM1cnpzNWdkNnJ4M3Q2bXQ1czN4d2JpaXRmeQ==";
-
-        Gson gson = new Gson();
-        TypedString typedString = new TypedString(gson.toJson(request));
-        RestClient.get().login(token, this.mEmailFieldView.getFieldValue(), this.mPasswordFieldView.getFieldValue(),
-                "password", new Callback<MTTokenResponse>() {
+        Callback<MTLogInResponse> responseCallback = new Callback<MTLogInResponse>() {
             @Override
-            public void success(MTTokenResponse result, Response response) {
+            public void success(MTLogInResponse result, Response response) {
 
                 // Hide progress indicator
-                mProgressBar.progressiveStop();
-                mProgressBar.setVisibility(View.GONE);
+                mProgressView.stopProgress();
 
-                //LOGD(TAG, "Successfully registered user: " + result.getBody().toString());
-                //Toast.makeText(LogInActivity.this, "Account created successfully", Toast.LENGTH_SHORT).show();
+                if (MTConstants.TOKEN_TYPE_BEARER.equalsIgnoreCase(result.tokenType)) {
+                    MTUtils.setLoginInfo(mEmailFieldView.getFieldValue(), result.token, result.tokenType);
+                }
+
+                LOGD(TAG, "Successfully logged in for user with token: " + result.token);
+
+                Intent mainIntent = new Intent(LogInActivity.this, MainActivity.class);
+                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(mainIntent);
                 finish();
             }
 
             @Override
-            public void failure(RetrofitError error) {
-                String a = "failure";
+            public void failure(RetrofitError retrofitError) {
+                LOGD(TAG, "Failed to log in for user");
+                retrofitError.printStackTrace();
+
+                // Hide progress indicator
+                mProgressView.stopProgress();
+
+                // Handle timeout
+
+                // Handle standard error
+                PostOffice.newMail(LogInActivity.this)
+                        .setTitle(MiscUtils.getString(R.string.dialog_title_sign_in_failure))
+                        .setMessage(MTWebInterface.getErrorMessage(retrofitError))
+                        .setThemeColor(MiscUtils.getAppResources().getColor(R.color.mt_red))
+                        .setDesign(Design.HOLO_LIGHT)
+                        .show(getFragmentManager());
             }
-        });
+        };
+
+        MTWebInterface.sharedInstance().getUserService().login(MTConfig.getServerToken(),
+                this.mEmailFieldView.getFieldValue(),
+                this.mPasswordFieldView.getFieldValue(),
+                MTConstants.LOG_IN_GRANT_TYPE_PASSWORD,
+                responseCallback);
     }
+
+
+    private class LogInAdapter extends SackOfViewsAdapter {
+
+        public LogInAdapter(List<View> views) {
+            super(views);
+        }
+
+        @Override
+        protected View newView(int position, ViewGroup parent) {
+            View view = super.newView(position, parent);
+            return view;
+        }
+
+        @Override
+        public boolean isEnabled(int position) {
+            return true;
+        }
+    }
+
 }

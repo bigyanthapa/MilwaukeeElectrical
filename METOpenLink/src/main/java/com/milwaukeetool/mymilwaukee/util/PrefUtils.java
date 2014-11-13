@@ -25,6 +25,10 @@ public class PrefUtils {
      */
     public static final String USER_NAME = "mt_user_name";
 
+    public static final String TOKEN_EXPIRATION = "mt_token_expiration";
+
+    public static final String TOKEN_TYPE = "mt_token_type";
+
     public static void clear(final Context context)
     {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -45,6 +49,8 @@ public class PrefUtils {
         sp.edit().putBoolean(LOGIN_DONE, false).commit();
         sp.edit().putString(USER_NAME, userName).commit();
         sp.edit().putString(AUTH_TOKEN, "").commit();
+        sp.edit().putInt(TOKEN_EXPIRATION, 0).commit();
+        sp.edit().putString(TOKEN_TYPE, "").commit();
     }
 
     public static String dumpPrefs(final Context context) {
@@ -56,6 +62,10 @@ public class PrefUtils {
         sb.append("User Name: " + sp.getString(USER_NAME, ""));
         sb.append("\n");
         sb.append("Auth Token: " + sp.getString(AUTH_TOKEN, ""));
+        sb.append("\n");
+        sb.append("Token Type: " + sp.getString(TOKEN_TYPE, ""));
+        sb.append("\n");
+        sb.append("Token Expiration (seconds): " + sp.getInt(TOKEN_EXPIRATION, 0));
         sb.append("\n");
 
         return sb.toString();
@@ -89,5 +99,25 @@ public class PrefUtils {
     public static String getAuthToken(final Context context) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         return sp.getString(AUTH_TOKEN, "");
+    }
+
+    public static void setTokenType(final Context context, final String tokenType) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        sp.edit().putString(TOKEN_TYPE, tokenType).commit();
+    }
+
+    public static String getTokenType(final Context context) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        return sp.getString(TOKEN_TYPE, "");
+    }
+
+    public static void setTokenExpiration(final Context context, final int tokenExpiration) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        sp.edit().putInt(TOKEN_EXPIRATION, tokenExpiration).commit();
+    }
+
+    public static int getTokenExpiration(final Context context) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        return sp.getInt(TOKEN_EXPIRATION, 0);
     }
 }
