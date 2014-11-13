@@ -15,6 +15,7 @@ import com.milwaukeetool.mymilwaukee.config.MTConfig;
 import com.milwaukeetool.mymilwaukee.config.MTConstants;
 import com.milwaukeetool.mymilwaukee.interfaces.Postable;
 import com.milwaukeetool.mymilwaukee.model.event.MTKeyboardEvent;
+import com.milwaukeetool.mymilwaukee.model.event.MTNetworkAvailabilityEvent;
 import com.milwaukeetool.mymilwaukee.model.event.MTimeActionEvent;
 import com.milwaukeetool.mymilwaukee.model.request.MTUserRegistrationRequest;
 import com.milwaukeetool.mymilwaukee.model.response.MTLogInResponse;
@@ -323,6 +324,11 @@ public class CreateAccountActivity extends MTActivity implements Postable {
                 responseCallback);
     }
 
+    public void onEvent(MTNetworkAvailabilityEvent event) {
+        if (!event.isNetworkAvailable) {
+            this.mFooterView.showNoNetworkMessage();
+        }
+    }
 
     private class CreateAccountAdapter extends SackOfViewsAdapter {
 

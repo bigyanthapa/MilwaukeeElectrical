@@ -48,6 +48,20 @@
         android:textColorLink="@color/mt_white"
         android:textStyle="normal" />
 
+    <com.milwaukeetool.mymilwaukee.view.MTTextView
+        android:id="@+id/noNetworkConnectivity"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_below="@+id/privacyPolicyTextView"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:background="@null"
+        android:gravity="center"
+        android:text="@string/no_network_connection"
+        android:textColor="@color/mt_white"
+        android:textColorLink="@color/mt_white"
+        android:textStyle="normal" />
+
     <!--<View-->
         <!--android:id="@+id/footerExtendedView"-->
         <!--android:layout_width="match_parent"-->

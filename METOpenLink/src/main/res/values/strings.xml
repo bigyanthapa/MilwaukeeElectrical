@@ -37,5 +37,6 @@
     <!-- Error Dialogs -->
     <string name="dialog_title_register_failure">Error Registering</string>
     <string name="dialog_title_sign_in_failure">Error Signing In</string>
+    <string name="no_network_connection">There is no network connection</string>
 
 </resources>

@@ -20,6 +20,7 @@ public class MTCreateAccountFooterView extends RelativeLayout {
     private MTCheckBox mOptInCheckBox;
     private MTButton mCreateAccountBtn;
     private MTTextView mLegalText;
+    private MTTextView mNoNetworkConnectivity;
     //private View mFooterExtendedView;
 
     public MTCreateAccountFooterView(Activity activity) {
@@ -33,6 +34,10 @@ public class MTCreateAccountFooterView extends RelativeLayout {
         mOptInCheckBox = (MTCheckBox)findViewById(R.id.emailCommunicationCheckbox);
         mCreateAccountBtn = (MTButton)findViewById(R.id.footerCreateAccountButton);
         mLegalText = (MTTextView)findViewById(R.id.privacyPolicyTextView);
+        mNoNetworkConnectivity = (MTTextView)findViewById(R.id.noNetworkConnectivity);
+
+        mNoNetworkConnectivity.setVisibility(View.INVISIBLE);
+
         //mFooterExtendedView = (View)findViewById(R.id.footerExtendedView);
 
         this.setLegalText();
@@ -52,6 +57,10 @@ public class MTCreateAccountFooterView extends RelativeLayout {
                 getResources().getString(R.string.title_privacy_policy) + "</a>";
         mLegalText.setText(Html.fromHtml(privacyString));
         mLegalText.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    public void showNoNetworkMessage() {
+        mNoNetworkConnectivity.setVisibility(View.VISIBLE);
     }
 
     public boolean userOptedIn() {

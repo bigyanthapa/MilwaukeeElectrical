@@ -1,0 +1,32 @@
+package com.milwaukeetool.mymilwaukee.model.receiver;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.widget.Toast;
+
+import com.milwaukeetool.mymilwaukee.model.event.MTNetworkAvailabilityEvent;
+import com.milwaukeetool.mymilwaukee.util.NetworkUtil;
+
+import de.greenrobot.event.EventBus;
+
+/**
+ * Created by scott.hopfensperger on 11/13/2014.
+ */
+public class NetworkChangeReceiver extends BroadcastReceiver {
+    @Override
+    public void onReceive(final Context context, final Intent intent) {
+        NetworkUtil.NetworkType type = NetworkUtil.getConnectivityStatus(context);
+
+        switch(type) {
+            case TYPE_NOT_CONNECTED:
+                MTNetworkAvailabilityEvent e1 = new MTNetworkAvailabilityEvent(this, false);
+                EventBus.getDefault().post(e1);
+                break;
+            default:
+                MTNetworkAvailabilityEvent e2 = new MTNetworkAvailabilityEvent(this, true);
+                EventBus.getDefault().post(e2);
+                break;
+        }
+    }
+}
