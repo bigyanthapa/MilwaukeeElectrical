@@ -59,9 +59,9 @@ public class MainActivity extends MTActivity {
             public void didTapView(MotionEvent event) {
                 MTUtils.clearLoginInfo();
 
-                Intent mainIntent = new Intent(MainActivity.this, LandingActivity.class);
-                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(mainIntent);
+                Intent intent = new Intent(MainActivity.this, LandingActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
                 finish();
             }
         });

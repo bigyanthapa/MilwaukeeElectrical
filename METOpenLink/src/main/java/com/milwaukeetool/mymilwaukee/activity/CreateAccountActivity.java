@@ -290,7 +290,7 @@ public class CreateAccountActivity extends MTActivity implements Postable {
                 LOGD(TAG, "Successfully logged in for user with token: " + result.token);
 
                 Intent mainIntent = new Intent(CreateAccountActivity.this, MainActivity.class);
-                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(mainIntent);
                 finish();
 
@@ -309,7 +309,7 @@ public class CreateAccountActivity extends MTActivity implements Postable {
                 // Handle standard error
                 PostOffice.newMail(CreateAccountActivity.this)
                         .setTitle(MiscUtils.getString(R.string.dialog_title_sign_in_failure))
-                        .setMessage(MTWebInterface.getErrorMessage(retrofitError))
+                        .setMessage(MTWebInterface.getCreateAccountErrorMessage(retrofitError))
                         .setThemeColor(MiscUtils.getAppResources().getColor(R.color.mt_red))
                         .setDesign(Design.HOLO_LIGHT)
                         .show(getFragmentManager());

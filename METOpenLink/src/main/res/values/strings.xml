@@ -32,6 +32,7 @@
 
     <string name="sign_in_field_title_email">Email Address</string>
     <string name="sign_in_field_title_password">Password</string>
+    <string name="text_sign_in_failure">The Email Address field or Password field is incorrect.</string>
 
     <!-- Error Dialogs -->
     <string name="dialog_title_register_failure">Error Registering</string>

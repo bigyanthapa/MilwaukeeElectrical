@@ -1,6 +1,7 @@
 package com.milwaukeetool.mymilwaukee.services;
 
 import com.milwaukeetool.mymilwaukee.config.MTConfig;
+import com.milwaukeetool.mymilwaukee.model.response.MTCreateAccountErrorResponse;
 import com.milwaukeetool.mymilwaukee.model.response.MTErrorResponse;
 
 import retrofit.RestAdapter;
@@ -50,10 +51,18 @@ public class MTWebInterface {
         return mUserService;
     }
 
+    public static String getCreateAccountErrorMessage(RetrofitError retrofitError) {
+        if (retrofitError.getResponse() != null) {
+            MTCreateAccountErrorResponse body = (MTCreateAccountErrorResponse) retrofitError.getBodyAs(MTCreateAccountErrorResponse.class);
+            return body.errorMessage;
+        }
+        return "";
+    }
+
     public static String getErrorMessage(RetrofitError retrofitError) {
         if (retrofitError.getResponse() != null) {
             MTErrorResponse body = (MTErrorResponse) retrofitError.getBodyAs(MTErrorResponse.class);
-            return body.errorMessage;
+            return body.errorDescription;
         }
         return "";
     }

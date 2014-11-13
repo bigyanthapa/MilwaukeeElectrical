@@ -161,7 +161,7 @@ public class LogInActivity extends MTActivity {
                 LOGD(TAG, "Successfully logged in for user with token: " + result.token);
 
                 Intent mainIntent = new Intent(LogInActivity.this, MainActivity.class);
-                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(mainIntent);
                 finish();
             }
@@ -175,6 +175,13 @@ public class LogInActivity extends MTActivity {
                 mProgressView.stopProgress();
 
                 // Handle timeout
+
+
+//                String errorMsg = MTWebInterface.getErrorMessage(retrofitError);
+
+//                if (TextUtils.isEmpty(errorMsg)) {
+//                    errorMsg = MiscUtils.getString(R.string.text_sign_in_failure);
+//                }
 
                 // Handle standard error
                 PostOffice.newMail(LogInActivity.this)
