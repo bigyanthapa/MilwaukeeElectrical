@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.CreateAccountActivity;
 import com.milwaukeetool.mymilwaukee.config.MTConstants;
+import com.milwaukeetool.mymilwaukee.util.NetworkUtil;
 
 /**
  * Created by scott.hopfensperger on 11/6/2014.
@@ -28,15 +29,14 @@ public class MTCreateAccountFooterView extends RelativeLayout {
         LayoutInflater.from(activity).inflate(R.layout.view_create_account_footer, this);
 
         if (activity instanceof CreateAccountActivity) {
-            mCreateAccountActivity = (CreateAccountActivity)activity;
+            mCreateAccountActivity = (CreateAccountActivity) activity;
         }
 
-        mOptInCheckBox = (MTCheckBox)findViewById(R.id.emailCommunicationCheckbox);
-        mCreateAccountBtn = (MTButton)findViewById(R.id.footerCreateAccountButton);
-        mLegalText = (MTTextView)findViewById(R.id.privacyPolicyTextView);
-        mNoNetworkConnectivity = (MTTextView)findViewById(R.id.noNetworkConnectivity);
-
-        mNoNetworkConnectivity.setVisibility(View.INVISIBLE);
+        mOptInCheckBox = (MTCheckBox) findViewById(R.id.emailCommunicationCheckbox);
+        mCreateAccountBtn = (MTButton) findViewById(R.id.footerCreateAccountButton);
+        mLegalText = (MTTextView) findViewById(R.id.privacyPolicyTextView);
+        mNoNetworkConnectivity = (MTTextView) findViewById(R.id.noNetworkConnectivity);
+        this.setConnectivityDisplay();
 
         //mFooterExtendedView = (View)findViewById(R.id.footerExtendedView);
 
@@ -52,6 +52,18 @@ public class MTCreateAccountFooterView extends RelativeLayout {
         });
     }
 
+    public void setConnectivityDisplay() {
+        NetworkUtil.NetworkType type = NetworkUtil.getConnectivityStatus(mNoNetworkConnectivity.getContext());
+
+        switch (type) {
+            case TYPE_NOT_CONNECTED:
+                mNoNetworkConnectivity.setVisibility(View.VISIBLE);
+                break;
+            default:
+                mNoNetworkConnectivity.setVisibility(View.INVISIBLE);
+        }
+    }
+
     private void setLegalText() {
         String privacyString = "<a href=\"" + MTConstants.PRIVACY_POLICY_URL + "\">" +
                 getResources().getString(R.string.title_privacy_policy) + "</a>";
@@ -61,6 +73,10 @@ public class MTCreateAccountFooterView extends RelativeLayout {
 
     public void showNoNetworkMessage() {
         mNoNetworkConnectivity.setVisibility(View.VISIBLE);
+    }
+
+    public void hideNoNetworkMessage() {
+        mNoNetworkConnectivity.setVisibility(View.INVISIBLE);
     }
 
     public boolean userOptedIn() {

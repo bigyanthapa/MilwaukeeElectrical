@@ -3,6 +3,9 @@ package com.milwaukeetool.mymilwaukee.util;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.view.View;
+
+import com.milwaukeetool.mymilwaukee.view.MTTextView;
 
 /**
  * Created by scott.hopfensperger on 11/13/2014.
@@ -42,5 +45,17 @@ public class NetworkUtil {
         }
 
         return status;
+    }
+
+    public static void setConnectivityDisplay(MTTextView textView) {
+        NetworkType type = NetworkUtil.getConnectivityStatus(textView.getContext());
+
+        switch (type) {
+            case TYPE_NOT_CONNECTED:
+                textView.setVisibility(View.VISIBLE);
+                break;
+            default:
+                textView.setVisibility(View.INVISIBLE);
+        }
     }
 }

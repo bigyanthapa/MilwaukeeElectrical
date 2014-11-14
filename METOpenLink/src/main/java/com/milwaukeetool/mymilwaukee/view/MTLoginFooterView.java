@@ -11,6 +11,7 @@ import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.CreateAccountActivity;
 import com.milwaukeetool.mymilwaukee.activity.LogInActivity;
 import com.milwaukeetool.mymilwaukee.config.MTConstants;
+import com.milwaukeetool.mymilwaukee.util.NetworkUtil;
 
 /**
  * Created by scott.hopfensperger on 11/6/2014.
@@ -19,6 +20,7 @@ public class MTLoginFooterView extends RelativeLayout {
 
     private LogInActivity mLoginActivity;
     private MTButton mLogInBtn;
+    private MTTextView mNoNetworkConnectivity;
 
     public MTLoginFooterView(Activity activity) {
         super(activity);
@@ -27,6 +29,9 @@ public class MTLoginFooterView extends RelativeLayout {
         if (activity instanceof LogInActivity) {
             mLoginActivity = (LogInActivity) activity;
         }
+
+        mNoNetworkConnectivity = (MTTextView)findViewById(R.id.loginNoNetworkConnectivity);
+        this.setConnectivityDisplay();
 
         mLogInBtn = (MTButton) findViewById(R.id.footerLoginButton);
 
@@ -38,5 +43,25 @@ public class MTLoginFooterView extends RelativeLayout {
                 }
             }
         });
+    }
+
+    public void setConnectivityDisplay() {
+        NetworkUtil.NetworkType type = NetworkUtil.getConnectivityStatus(mNoNetworkConnectivity.getContext());
+
+        switch (type) {
+            case TYPE_NOT_CONNECTED:
+                mNoNetworkConnectivity.setVisibility(View.VISIBLE);
+                break;
+            default:
+                mNoNetworkConnectivity.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    public void showNoNetworkMessage() {
+        mNoNetworkConnectivity.setVisibility(View.VISIBLE);
+    }
+
+    public void hideNoNetworkMessage() {
+        mNoNetworkConnectivity.setVisibility(View.INVISIBLE);
     }
 }

@@ -327,6 +327,8 @@ public class CreateAccountActivity extends MTActivity implements Postable {
     public void onEvent(MTNetworkAvailabilityEvent event) {
         if (!event.isNetworkAvailable) {
             this.mFooterView.showNoNetworkMessage();
+        } else {
+            this.mFooterView.hideNoNetworkMessage();
         }
     }
 

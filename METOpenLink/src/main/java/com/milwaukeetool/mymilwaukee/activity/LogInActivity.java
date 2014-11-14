@@ -203,7 +203,9 @@ public class LogInActivity extends MTActivity {
 
     public void onEvent(MTNetworkAvailabilityEvent event) {
         if (!event.isNetworkAvailable) {
-
+            this.mFooterView.showNoNetworkMessage();
+        } else {
+            this.mFooterView.hideNoNetworkMessage();
         }
     }
 
