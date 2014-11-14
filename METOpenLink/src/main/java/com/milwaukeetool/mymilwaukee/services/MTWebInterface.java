@@ -4,10 +4,6 @@ import com.milwaukeetool.mymilwaukee.config.MTConfig;
 import com.milwaukeetool.mymilwaukee.model.response.MTCreateAccountErrorResponse;
 import com.milwaukeetool.mymilwaukee.model.response.MTErrorResponse;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 
@@ -80,15 +76,15 @@ public class MTWebInterface {
     }
 
     private static boolean isValidJSON(String responseString) {
-        try {
-            new JSONObject(responseString);
-        } catch (JSONException ex) {
-            try {
-                new JSONArray(responseString);
-            } catch (JSONException ex1) {
-                return false;
-            }
-        }
+//        try {
+//            new JSONObject(responseString);
+//        } catch (JSONException ex) {
+//            try {
+//                new JSONArray(responseString);
+//            } catch (JSONException ex1) {
+//                return false;
+//            }
+//        }
         return true;
     }
 }

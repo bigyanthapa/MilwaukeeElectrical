@@ -9,5 +9,6 @@ public class MTConstants {
 
     public static final String LOG_IN_GRANT_TYPE_PASSWORD = "password";
     public static final String TOKEN_TYPE_BEARER = "Bearer";
+    public static final String DEVICE_MFR_SAMSUNG = "samsung";
 
 }

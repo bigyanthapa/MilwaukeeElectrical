@@ -1,6 +1,7 @@
 package com.milwaukeetool.mymilwaukee.view;
 
 import android.app.Activity;
+import android.os.Build;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -17,6 +18,7 @@ import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
 import com.milwaukeetool.mymilwaukee.MilwaukeeToolApplication;
 import com.milwaukeetool.mymilwaukee.R;
+import com.milwaukeetool.mymilwaukee.config.MTConstants;
 import com.milwaukeetool.mymilwaukee.model.event.MTimeActionEvent;
 import com.milwaukeetool.mymilwaukee.util.StringHelper;
 
@@ -151,12 +153,20 @@ public class MTSimpleFieldView extends RelativeLayout {
     public MTSimpleFieldView setFieldType(FieldType fieldType) {
         switch (fieldType) {
             case EMAIL:
-                mEditText.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS|InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-                this.mFieldType = fieldType;
+                String mfr = Build.MANUFACTURER;
+                if (mfr.equalsIgnoreCase(MTConstants.DEVICE_MFR_SAMSUNG)) {
+                    mEditText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+                } else {
+                    mEditText.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS|InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+                    this.mFieldType = fieldType;
+                }
+
                 break;
             case PASSWORD:
+
+                mEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
                 mEditText.setTransformationMethod(new PasswordTransformationMethod());
-                mEditText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+
                 this.mFieldType = fieldType;
                 break;
             default:
