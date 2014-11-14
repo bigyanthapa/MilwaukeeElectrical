@@ -11,12 +11,13 @@ import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.CreateAccountActivity;
 import com.milwaukeetool.mymilwaukee.activity.LogInActivity;
 import com.milwaukeetool.mymilwaukee.config.MTConstants;
+import com.milwaukeetool.mymilwaukee.interfaces.ConnectivityAware;
 import com.milwaukeetool.mymilwaukee.util.NetworkUtil;
 
 /**
  * Created by scott.hopfensperger on 11/6/2014.
  */
-public class MTLoginFooterView extends RelativeLayout {
+public class MTLoginFooterView extends RelativeLayout implements ConnectivityAware {
 
     private LogInActivity mLoginActivity;
     private MTButton mLogInBtn;
@@ -57,11 +58,10 @@ public class MTLoginFooterView extends RelativeLayout {
         }
     }
 
-    public void showNoNetworkMessage() {
-        mNoNetworkConnectivity.setVisibility(View.VISIBLE);
-    }
-
-    public void hideNoNetworkMessage() {
+    public void connectionEstablished() {
         mNoNetworkConnectivity.setVisibility(View.INVISIBLE);
+    }
+    public void connectionDestroyed() {
+        mNoNetworkConnectivity.setVisibility(View.VISIBLE);
     }
 }

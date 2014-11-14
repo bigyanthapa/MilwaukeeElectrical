@@ -52,10 +52,18 @@ public class NetworkUtil {
 
         switch (type) {
             case TYPE_NOT_CONNECTED:
-                textView.setVisibility(View.VISIBLE);
+                NetworkUtil.showConnectivityDisplay(textView);
                 break;
             default:
-                textView.setVisibility(View.INVISIBLE);
+                NetworkUtil.hideConnectivityDisplay(textView);
         }
+    }
+
+    public static void hideConnectivityDisplay(MTTextView textView) {
+        textView.setVisibility(View.INVISIBLE);
+    }
+
+    public static void showConnectivityDisplay(MTTextView textView) {
+        textView.setVisibility(View.VISIBLE);
     }
 }

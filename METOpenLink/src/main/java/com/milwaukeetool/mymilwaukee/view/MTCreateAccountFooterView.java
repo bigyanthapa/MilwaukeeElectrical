@@ -10,12 +10,13 @@ import android.widget.RelativeLayout;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.CreateAccountActivity;
 import com.milwaukeetool.mymilwaukee.config.MTConstants;
+import com.milwaukeetool.mymilwaukee.interfaces.ConnectivityAware;
 import com.milwaukeetool.mymilwaukee.util.NetworkUtil;
 
 /**
  * Created by scott.hopfensperger on 11/6/2014.
  */
-public class MTCreateAccountFooterView extends RelativeLayout {
+public class MTCreateAccountFooterView extends RelativeLayout implements ConnectivityAware {
 
     private CreateAccountActivity mCreateAccountActivity;
     private MTCheckBox mOptInCheckBox;
@@ -71,12 +72,11 @@ public class MTCreateAccountFooterView extends RelativeLayout {
         mLegalText.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
-    public void showNoNetworkMessage() {
-        mNoNetworkConnectivity.setVisibility(View.VISIBLE);
-    }
-
-    public void hideNoNetworkMessage() {
+    public void connectionEstablished() {
         mNoNetworkConnectivity.setVisibility(View.INVISIBLE);
+    }
+    public void connectionDestroyed() {
+        mNoNetworkConnectivity.setVisibility(View.VISIBLE);
     }
 
     public boolean userOptedIn() {

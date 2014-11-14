@@ -13,6 +13,7 @@ import com.commonsware.cwac.sacklist.SackOfViewsAdapter;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.config.MTConfig;
 import com.milwaukeetool.mymilwaukee.config.MTConstants;
+import com.milwaukeetool.mymilwaukee.interfaces.ConnectivityAware;
 import com.milwaukeetool.mymilwaukee.interfaces.Postable;
 import com.milwaukeetool.mymilwaukee.model.event.MTKeyboardEvent;
 import com.milwaukeetool.mymilwaukee.model.event.MTNetworkAvailabilityEvent;
@@ -326,9 +327,11 @@ public class CreateAccountActivity extends MTActivity implements Postable {
 
     public void onEvent(MTNetworkAvailabilityEvent event) {
         if (!event.isNetworkAvailable) {
-            this.mFooterView.showNoNetworkMessage();
+            ConnectivityAware view = (ConnectivityAware) mFooterView;
+            view.connectionDestroyed();
         } else {
-            this.mFooterView.hideNoNetworkMessage();
+            ConnectivityAware view = (ConnectivityAware) mFooterView;
+            view.connectionEstablished();
         }
     }
 

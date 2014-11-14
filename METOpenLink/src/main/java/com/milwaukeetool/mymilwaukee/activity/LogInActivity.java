@@ -11,6 +11,7 @@ import com.commonsware.cwac.sacklist.SackOfViewsAdapter;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.config.MTConfig;
 import com.milwaukeetool.mymilwaukee.config.MTConstants;
+import com.milwaukeetool.mymilwaukee.interfaces.ConnectivityAware;
 import com.milwaukeetool.mymilwaukee.model.event.MTNetworkAvailabilityEvent;
 import com.milwaukeetool.mymilwaukee.model.response.MTLogInResponse;
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
@@ -203,9 +204,11 @@ public class LogInActivity extends MTActivity {
 
     public void onEvent(MTNetworkAvailabilityEvent event) {
         if (!event.isNetworkAvailable) {
-            this.mFooterView.showNoNetworkMessage();
+            ConnectivityAware view = (ConnectivityAware) mFooterView;
+            view.connectionDestroyed();
         } else {
-            this.mFooterView.hideNoNetworkMessage();
+            ConnectivityAware view = (ConnectivityAware) mFooterView;
+            view.connectionEstablished();
         }
     }
 
