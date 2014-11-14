@@ -57,11 +57,15 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:background="@null"
-            android:layout_alignParentBottom="true"
             android:text="QA : v.0.1.2.1 (3)"
             android:gravity="center"
-            android:textColor="@color/mt_white"
-            android:visibility="invisible"/>
+            android:textColor="@color/mt_white"/>
+
+        <com.milwaukeetool.mymilwaukee.view.MTNoNetworkView
+            android:id="@+id/noNetworkView"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_alignParentBottom="true"/>
 
     </RelativeLayout>
 

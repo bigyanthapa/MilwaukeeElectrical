@@ -117,15 +117,6 @@ public class CreateAccountActivity extends MTActivity implements Postable {
 
         mCreateAccountAdapter = new CreateAccountAdapter(views);
 
-//        mCloseButton = (ImageButton)findViewById(R.id.closeButton);
-//        mCloseButton.setImageDrawable(new IconDrawable(this, Iconify.IconValue.fa_times_circle).colorRes(R.color.mt_white));
-//        mCloseButton.setOnTouchListener(new MTTouchListener(this) {
-//            @Override
-//            public void didTapView(MotionEvent event) {
-//                finish();
-//            }
-//        });
-
         if (mListView != null) {
             mListView.setAdapter(mCreateAccountAdapter);
             mListView.setFocusable(true);

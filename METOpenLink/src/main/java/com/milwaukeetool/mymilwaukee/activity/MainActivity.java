@@ -5,12 +5,18 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageButton;
 
+import com.joanzapata.android.iconify.IconDrawable;
+import com.joanzapata.android.iconify.Iconify;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.config.MTConfig;
+import com.milwaukeetool.mymilwaukee.model.event.MTNetworkAvailabilityEvent;
 import com.milwaukeetool.mymilwaukee.util.MTTouchListener;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
+import com.milwaukeetool.mymilwaukee.util.NetworkUtil;
 import com.milwaukeetool.mymilwaukee.view.MTButton;
+import com.milwaukeetool.mymilwaukee.view.MTNoNetworkView;
 import com.milwaukeetool.mymilwaukee.view.MTTextView;
 
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
@@ -24,6 +30,7 @@ public class MainActivity extends MTActivity {
 
     private MTTextView mVersionTypeDistributionTextView;
     private MTButton mLogOutButton;
+    private MTNoNetworkView mNoNetworkView;
 
     @Override
     protected String getLogTag() {
@@ -43,7 +50,7 @@ public class MainActivity extends MTActivity {
     }
 
     protected void setupViews() {
-        mVersionTypeDistributionTextView = (MTTextView)findViewById(R.id.versionTypeDistributionTextView);
+        mVersionTypeDistributionTextView = (MTTextView) findViewById(R.id.versionTypeDistributionTextView);
 
         if (MTConfig.isExternalRelease()) {
             // Hide the version label
@@ -53,7 +60,7 @@ public class MainActivity extends MTActivity {
             mVersionTypeDistributionTextView.setText(MTConfig.getDistributionTypeVersionString());
         }
 
-        mLogOutButton = (MTButton)findViewById(R.id.logOutButton);
+        mLogOutButton = (MTButton) findViewById(R.id.logOutButton);
         mLogOutButton.setOnTouchListener(new MTTouchListener(this) {
             @Override
             public void didTapView(MotionEvent event) {
@@ -65,6 +72,14 @@ public class MainActivity extends MTActivity {
                 finish();
             }
         });
+
+        this.mNoNetworkView = (MTNoNetworkView) this.findViewById(R.id.noNetworkView);
+    }
+
+    public void onEvent(MTNetworkAvailabilityEvent event) {
+        if (!event.isNetworkAvailable) {
+            this.mNoNetworkView.showMessage();
+        }
     }
 
     @Override
