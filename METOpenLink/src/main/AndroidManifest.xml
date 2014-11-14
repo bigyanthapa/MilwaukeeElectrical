@@ -47,7 +47,7 @@
             android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MainActivity" />
+                android:value=".activity.LandingActivity" />
         </activity>
         <activity
             android:name=".activity.LogInActivity"
@@ -55,11 +55,10 @@
             android:screenOrientation="sensorPortrait"
             android:launchMode="singleTop"
             android:parentActivityName=".activity.LandingActivity"
-            android:theme="@android:style/Theme.DeviceDefault.NoActionBar"
-            android:windowSoftInputMode="adjustPan">
+            android:theme="@android:style/Theme.DeviceDefault.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MainActivity" />
+                android:value=".activity.LandingActivity" />
         </activity>
         <activity
             android:name=".activity.MainActivity"

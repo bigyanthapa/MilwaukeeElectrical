@@ -26,6 +26,19 @@
         android:dividerHeight="0dp"
         android:descendantFocusability="afterDescendants"/>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageButton
+            android:id="@+id/closeButton"
+            android:background="@android:color/transparent"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="10dp"/>
+    </RelativeLayout>
+
     <com.milwaukeetool.mymilwaukee.view.MTProgressView
         android:id="@+id/progressIndicatorView"
         android:layout_width="match_parent"

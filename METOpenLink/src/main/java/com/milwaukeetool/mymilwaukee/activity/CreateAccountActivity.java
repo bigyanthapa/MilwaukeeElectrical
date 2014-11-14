@@ -1,15 +1,18 @@
 package com.milwaukeetool.mymilwaukee.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.commonsware.cwac.sacklist.SackOfViewsAdapter;
+import com.joanzapata.android.iconify.IconDrawable;
+import com.joanzapata.android.iconify.Iconify;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.config.MTConfig;
 import com.milwaukeetool.mymilwaukee.config.MTConstants;
@@ -19,6 +22,7 @@ import com.milwaukeetool.mymilwaukee.model.event.MTimeActionEvent;
 import com.milwaukeetool.mymilwaukee.model.request.MTUserRegistrationRequest;
 import com.milwaukeetool.mymilwaukee.model.response.MTLogInResponse;
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
+import com.milwaukeetool.mymilwaukee.util.MTTouchListener;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
@@ -60,6 +64,7 @@ public class CreateAccountActivity extends MTActivity implements Postable {
     private MTSimpleFieldView mLastNameFieldView;
     private MTSelectableFieldView mTradeOccupationFieldView;
     private MTProgressView mProgressView;
+    private ImageButton mCloseButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +114,15 @@ public class CreateAccountActivity extends MTActivity implements Postable {
         mListView.addFooterView(mFooterView, null, false);
 
         mCreateAccountAdapter = new CreateAccountAdapter(views);
+
+        mCloseButton = (ImageButton)findViewById(R.id.closeButton);
+        mCloseButton.setImageDrawable(new IconDrawable(this, Iconify.IconValue.fa_times_circle).colorRes(R.color.mt_white));
+        mCloseButton.setOnTouchListener(new MTTouchListener(this) {
+            @Override
+            public void didTapView(MotionEvent event) {
+                finish();
+            }
+        });
 
         if (mListView != null) {
             mListView.setAdapter(mCreateAccountAdapter);
@@ -224,8 +238,7 @@ public class CreateAccountActivity extends MTActivity implements Postable {
                 mProgressView.stopProgress();
 
                 LOGD(TAG, "Successfully registered user: " + result.getBody().toString());
-//                Toast.makeText(CreateAccountActivity.this, "Account created successfully", Toast.LENGTH_SHORT).show();
-//                finish();
+
                 performLogin(request);
             }
 
@@ -233,20 +246,12 @@ public class CreateAccountActivity extends MTActivity implements Postable {
             public void failure(RetrofitError retrofitError) {
 
                 LOGD(TAG, "Failed to register user");
-                retrofitError.printStackTrace();
 
                 // Hide progress indicator
                 mProgressView.stopProgress();
 
-                // Handle timeout
-
-                // Handle standard error
-                PostOffice.newMail(CreateAccountActivity.this)
-                        .setTitle(getResources().getString(R.string.dialog_title_register_failure))
-                        .setMessage(MTWebInterface.getErrorMessage(retrofitError))
-                        .setThemeColor(getResources().getColor(R.color.mt_red))
-                        .setDesign(Design.HOLO_LIGHT)
-                        .show(getFragmentManager());
+                MTUtils.handleRetrofitError(retrofitError, CreateAccountActivity.this,
+                        MiscUtils.getString(R.string.dialog_title_register_failure));
             }
         };
 
@@ -289,30 +294,20 @@ public class CreateAccountActivity extends MTActivity implements Postable {
 
                 LOGD(TAG, "Successfully logged in for user with token: " + result.token);
 
-                Intent mainIntent = new Intent(CreateAccountActivity.this, MainActivity.class);
-                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(mainIntent);
+                MTUtils.launchMainActivity(CreateAccountActivity.this);
                 finish();
-
             }
 
             @Override
             public void failure(RetrofitError retrofitError) {
+
                 LOGD(TAG, "Failed to log in for user");
-                retrofitError.printStackTrace();
 
                 // Hide progress indicator
                 mProgressView.stopProgress();
 
-                // Handle timeout
-
-                // Handle standard error
-                PostOffice.newMail(CreateAccountActivity.this)
-                        .setTitle(MiscUtils.getString(R.string.dialog_title_sign_in_failure))
-                        .setMessage(MTWebInterface.getCreateAccountErrorMessage(retrofitError))
-                        .setThemeColor(MiscUtils.getAppResources().getColor(R.color.mt_red))
-                        .setDesign(Design.HOLO_LIGHT)
-                        .show(getFragmentManager());
+                MTUtils.handleRetrofitError(retrofitError, CreateAccountActivity.this,
+                        MiscUtils.getString(R.string.dialog_title_sign_in_failure));
             }
         };
 

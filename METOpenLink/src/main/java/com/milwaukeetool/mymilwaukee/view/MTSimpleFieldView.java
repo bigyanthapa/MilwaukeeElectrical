@@ -1,8 +1,10 @@
 package com.milwaukeetool.mymilwaukee.view;
 
 import android.app.Activity;
+import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -37,6 +39,7 @@ public class MTSimpleFieldView extends RelativeLayout {
     protected int mMinLength;
     protected int mMaxLength;
     protected String mFieldName;
+    protected boolean mResetField;
 
     public enum FieldType {
         STANDARD,
@@ -56,6 +59,7 @@ public class MTSimpleFieldView extends RelativeLayout {
         this.mRequired = false;
         this.mMinLength = 0;
         this.mMaxLength = 0;
+        this.mResetField = false;
 
         mEditText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS|InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
 
@@ -69,10 +73,37 @@ public class MTSimpleFieldView extends RelativeLayout {
                 } else if (actionId == EditorInfo.IME_ACTION_NEXT) {
                     EventBus.getDefault().post(new MTimeActionEvent(this, EditorInfo.IME_ACTION_NEXT, mCallingActivity, mFieldName));
                     return false;
+                } else if (actionId == EditorInfo.IME_ACTION_GO) {
+                    EventBus.getDefault().post(new MTimeActionEvent(this, EditorInfo.IME_ACTION_GO, mCallingActivity, mFieldName));
+                    return true;
                 }
                 return false;
             }
         });
+
+        mEditText.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+                if (mResetField && mFieldType == FieldType.PASSWORD) {
+                    mResetField = false;
+                    mEditText.setText("");
+                    mEditText.append(s.subSequence(start, start + count).toString());
+                }
+            }
+        });
+    }
+
+    public void fieldRequiresReset(boolean requiresReset) {
+        mResetField = requiresReset;
     }
 
     public void setFieldName(String fieldName) {
@@ -150,6 +181,10 @@ public class MTSimpleFieldView extends RelativeLayout {
         mEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
     }
 
+    public void setNextActionGo() {
+        mEditText.setImeOptions(EditorInfo.IME_ACTION_GO);
+    }
+
     public boolean isValid() {
 
         if (this.isRequired()) {
@@ -161,14 +196,14 @@ public class MTSimpleFieldView extends RelativeLayout {
 
         if (mMaxLength > 0) {
             if (this.getFieldValue().length() > mMaxLength) {
-                showError("Field exceeds " + mMaxLength + " character limit");
+                showError(mFieldName + " exceeds " + mMaxLength + " character limit");
             }
         }
 
 
         if (mMinLength > 0) {
             if (this.getFieldValue().length() < mMinLength) {
-                showError("Field must be at least " + mMinLength + " characters");
+                showError(mFieldName + " must be at least " + mMinLength + " characters");
                 return false;
             }
         }
@@ -176,7 +211,7 @@ public class MTSimpleFieldView extends RelativeLayout {
         switch (this.getFieldType()) {
             case EMAIL:
                 if (!StringHelper.isEmailValid(this.getFieldValue())) {
-                    showError("Invalid email address");
+                    showError("The " + mFieldName + " is invalid");
                     return false;
                 }
                 break;

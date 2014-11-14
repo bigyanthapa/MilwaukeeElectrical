@@ -33,7 +33,6 @@
     public static final ** CREATOR;
 }
 
--keepattributes Signature
 -keepattributes *Annotation*
 
 #Retrofit
@@ -77,4 +76,4 @@
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
 
 # Keep all configs
--keepclassmembers class com.milwaukeetool.mymilwaukee.Config {*;}
+-keepclassmembers class com.milwaukeetool.mymilwaukee.config {*;}

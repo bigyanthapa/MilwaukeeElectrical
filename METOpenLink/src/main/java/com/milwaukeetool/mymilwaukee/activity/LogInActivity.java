@@ -1,18 +1,24 @@
 package com.milwaukeetool.mymilwaukee.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.commonsware.cwac.sacklist.SackOfViewsAdapter;
+import com.joanzapata.android.iconify.IconDrawable;
+import com.joanzapata.android.iconify.Iconify;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.config.MTConfig;
 import com.milwaukeetool.mymilwaukee.config.MTConstants;
+import com.milwaukeetool.mymilwaukee.model.event.MTimeActionEvent;
 import com.milwaukeetool.mymilwaukee.model.response.MTLogInResponse;
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
+import com.milwaukeetool.mymilwaukee.util.MTTouchListener;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
@@ -20,8 +26,6 @@ import com.milwaukeetool.mymilwaukee.view.MTLoginFooterView;
 import com.milwaukeetool.mymilwaukee.view.MTLoginHeaderView;
 import com.milwaukeetool.mymilwaukee.view.MTProgressView;
 import com.milwaukeetool.mymilwaukee.view.MTSimpleFieldView;
-import com.r0adkll.postoffice.PostOffice;
-import com.r0adkll.postoffice.model.Design;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -50,6 +54,7 @@ public class LogInActivity extends MTActivity {
     private MTSimpleFieldView mPasswordFieldView;
 
     private MTProgressView mProgressView;
+    private ImageButton mCloseButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +80,9 @@ public class LogInActivity extends MTActivity {
         views.add(mEmailFieldView);
 
         mPasswordFieldView = MTSimpleFieldView.createSimpleFieldView(this,MiscUtils.getString(R.string.sign_in_field_title_password))
-                .setFieldType(MTSimpleFieldView.FieldType.PASSWORD).setRequired(true).setMinLength(8).setMaxLength(1024);
+                .setFieldType(MTSimpleFieldView.FieldType.PASSWORD).setRequired(true).setMaxLength(1024);
         views.add(mPasswordFieldView);
+        mPasswordFieldView.setNextActionGo();
 
         mFooterView = new MTLoginFooterView(this);
         listView.addFooterView(mFooterView);
@@ -87,6 +93,15 @@ public class LogInActivity extends MTActivity {
             listView.setAdapter(mLoginAdapter);
             listView.setFocusable(true);
         }
+
+        mCloseButton = (ImageButton)findViewById(R.id.closeButton);
+        mCloseButton.setImageDrawable(new IconDrawable(this, Iconify.IconValue.fa_times_circle).colorRes(R.color.mt_white));
+        mCloseButton.setOnTouchListener(new MTTouchListener(this) {
+            @Override
+            public void didTapView(MotionEvent event) {
+                finish();
+            }
+        });
     }
 
     @Override
@@ -160,36 +175,24 @@ public class LogInActivity extends MTActivity {
 
                 LOGD(TAG, "Successfully logged in for user with token: " + result.token);
 
-                Intent mainIntent = new Intent(LogInActivity.this, MainActivity.class);
-                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(mainIntent);
+                MTUtils.launchMainActivity(LogInActivity.this);
                 finish();
             }
 
             @Override
             public void failure(RetrofitError retrofitError) {
+
                 LOGD(TAG, "Failed to log in for user");
-                retrofitError.printStackTrace();
 
                 // Hide progress indicator
                 mProgressView.stopProgress();
 
-                // Handle timeout
+                MTUtils.handleRetrofitError(retrofitError, LogInActivity.this,
+                        MiscUtils.getString(R.string.dialog_title_sign_in_failure));
 
+                // On failure, reset the password field
+                mPasswordFieldView.fieldRequiresReset(true);
 
-//                String errorMsg = MTWebInterface.getErrorMessage(retrofitError);
-
-//                if (TextUtils.isEmpty(errorMsg)) {
-//                    errorMsg = MiscUtils.getString(R.string.text_sign_in_failure);
-//                }
-
-                // Handle standard error
-                PostOffice.newMail(LogInActivity.this)
-                        .setTitle(MiscUtils.getString(R.string.dialog_title_sign_in_failure))
-                        .setMessage(MTWebInterface.getErrorMessage(retrofitError))
-                        .setThemeColor(MiscUtils.getAppResources().getColor(R.color.mt_red))
-                        .setDesign(Design.HOLO_LIGHT)
-                        .show(getFragmentManager());
             }
         };
 
@@ -200,6 +203,11 @@ public class LogInActivity extends MTActivity {
                 responseCallback);
     }
 
+    public void onEvent(MTimeActionEvent event) {
+        if (event.action == EditorInfo.IME_ACTION_GO) {
+            postLogIn();
+        }
+    }
 
     private class LogInAdapter extends SackOfViewsAdapter {
 
