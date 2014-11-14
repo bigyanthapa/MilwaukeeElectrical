@@ -19,6 +19,15 @@
         <meta-data android:name="com.google.android.gms.analytics.globalConfigResource"
         android:resource="@xml/global_tracker" />
 
+        <receiver
+            android:name=".receiver.NetworkChangeReceiver"
+            android:label="NetworkChangeReceiver" >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".activity.RouterActivity"
             android:label="@string/app_name"

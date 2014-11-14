@@ -18,6 +18,7 @@ import com.milwaukeetool.mymilwaukee.config.MTConfig;
 import com.milwaukeetool.mymilwaukee.config.MTConstants;
 import com.milwaukeetool.mymilwaukee.interfaces.Postable;
 import com.milwaukeetool.mymilwaukee.model.event.MTKeyboardEvent;
+import com.milwaukeetool.mymilwaukee.model.event.MTNetworkAvailabilityEvent;
 import com.milwaukeetool.mymilwaukee.model.event.MTimeActionEvent;
 import com.milwaukeetool.mymilwaukee.model.request.MTUserRegistrationRequest;
 import com.milwaukeetool.mymilwaukee.model.response.MTLogInResponse;
@@ -25,12 +26,14 @@ import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
 import com.milwaukeetool.mymilwaukee.util.MTTouchListener;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
+import com.milwaukeetool.mymilwaukee.util.NetworkUtil;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
 import com.milwaukeetool.mymilwaukee.view.MTCreateAccountFooterView;
 import com.milwaukeetool.mymilwaukee.view.MTCreateAccountHeaderView;
 import com.milwaukeetool.mymilwaukee.view.MTProgressView;
 import com.milwaukeetool.mymilwaukee.view.MTSelectableFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTSimpleFieldView;
+import com.milwaukeetool.mymilwaukee.view.MTTextView;
 import com.r0adkll.postoffice.PostOffice;
 import com.r0adkll.postoffice.model.Design;
 
@@ -65,6 +68,7 @@ public class CreateAccountActivity extends MTActivity implements Postable {
     private MTSelectableFieldView mTradeOccupationFieldView;
     private MTProgressView mProgressView;
     private ImageButton mCloseButton;
+    private MTTextView mNoNetworkConnectivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +78,9 @@ public class CreateAccountActivity extends MTActivity implements Postable {
     }
 
     protected void setupViews() {
+
+        mNoNetworkConnectivity = (MTTextView)findViewById(R.id.noNetworkConnectivity);
+
         mListView = (ListView)findViewById(R.id.header_stuff);
         mListView.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
         mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
@@ -138,7 +145,7 @@ public class CreateAccountActivity extends MTActivity implements Postable {
     @Override
     protected void onResume() {
         super.onResume();
-
+        NetworkUtil.setConnectivityDisplay(mNoNetworkConnectivity);
     }
 
     @Override
@@ -261,10 +268,10 @@ public class CreateAccountActivity extends MTActivity implements Postable {
     public void onEvent(MTKeyboardEvent event) {
         if (event.keyboardDisplayed) {
             LOGD(TAG, "Keyboard listener: Shown");
-            //mFooterView.showExtendedView(true);
+
         } else {
             LOGD(TAG, "Keyboard listener: Hidden");
-            //mFooterView.showExtendedView(false);
+
         }
     }
 
@@ -318,6 +325,20 @@ public class CreateAccountActivity extends MTActivity implements Postable {
                 responseCallback);
     }
 
+    public void onEvent(MTNetworkAvailabilityEvent event) {
+        if (!event.isNetworkAvailable) {
+            connectionDestroyed();
+        } else {
+            connectionEstablished();
+        }
+    }
+
+    public void connectionEstablished() {
+        mNoNetworkConnectivity.setVisibility(View.INVISIBLE);
+    }
+    public void connectionDestroyed() {
+        mNoNetworkConnectivity.setVisibility(View.VISIBLE);
+    }
 
     private class CreateAccountAdapter extends SackOfViewsAdapter {
 

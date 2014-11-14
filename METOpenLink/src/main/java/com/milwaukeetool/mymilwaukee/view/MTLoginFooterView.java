@@ -1,16 +1,12 @@
 package com.milwaukeetool.mymilwaukee.view;
 
 import android.app.Activity;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.milwaukeetool.mymilwaukee.R;
-import com.milwaukeetool.mymilwaukee.activity.CreateAccountActivity;
 import com.milwaukeetool.mymilwaukee.activity.LogInActivity;
-import com.milwaukeetool.mymilwaukee.config.MTConstants;
 
 /**
  * Created by scott.hopfensperger on 11/6/2014.
@@ -19,6 +15,7 @@ public class MTLoginFooterView extends RelativeLayout {
 
     private LogInActivity mLoginActivity;
     private MTButton mLogInBtn;
+
 
     public MTLoginFooterView(Activity activity) {
         super(activity);

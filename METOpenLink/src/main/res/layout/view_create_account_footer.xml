@@ -48,9 +48,4 @@
         android:textColorLink="@color/mt_white"
         android:textStyle="normal" />
 
-    <!--<View-->
-        <!--android:id="@+id/footerExtendedView"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="0dp"/>-->
-
 </RelativeLayout>

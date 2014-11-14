@@ -15,17 +15,20 @@ import com.joanzapata.android.iconify.Iconify;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.config.MTConfig;
 import com.milwaukeetool.mymilwaukee.config.MTConstants;
+import com.milwaukeetool.mymilwaukee.model.event.MTNetworkAvailabilityEvent;
 import com.milwaukeetool.mymilwaukee.model.event.MTimeActionEvent;
 import com.milwaukeetool.mymilwaukee.model.response.MTLogInResponse;
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
 import com.milwaukeetool.mymilwaukee.util.MTTouchListener;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
+import com.milwaukeetool.mymilwaukee.util.NetworkUtil;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
 import com.milwaukeetool.mymilwaukee.view.MTLoginFooterView;
 import com.milwaukeetool.mymilwaukee.view.MTLoginHeaderView;
 import com.milwaukeetool.mymilwaukee.view.MTProgressView;
 import com.milwaukeetool.mymilwaukee.view.MTSimpleFieldView;
+import com.milwaukeetool.mymilwaukee.view.MTTextView;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -55,6 +58,7 @@ public class LogInActivity extends MTActivity {
 
     private MTProgressView mProgressView;
     private ImageButton mCloseButton;
+    private MTTextView mNoNetworkConnectivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +68,9 @@ public class LogInActivity extends MTActivity {
     }
 
     protected void setupViews() {
+
+        mNoNetworkConnectivity = (MTTextView)findViewById(R.id.noNetworkConnectivity);
+
         ListView listView = (ListView)findViewById(R.id.login_header);
         listView.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
 
@@ -112,6 +119,7 @@ public class LogInActivity extends MTActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        NetworkUtil.setConnectivityDisplay(mNoNetworkConnectivity);
     }
 
     @Override
@@ -207,6 +215,21 @@ public class LogInActivity extends MTActivity {
         if (event.action == EditorInfo.IME_ACTION_GO) {
             postLogIn();
         }
+    }
+    
+    public void onEvent(MTNetworkAvailabilityEvent event) {
+        if (!event.isNetworkAvailable) {
+            connectionDestroyed();
+        } else {
+            connectionEstablished();
+        }
+    }
+
+    public void connectionEstablished() {
+        mNoNetworkConnectivity.setVisibility(View.INVISIBLE);
+    }
+    public void connectionDestroyed() {
+        mNoNetworkConnectivity.setVisibility(View.VISIBLE);
     }
 
     private class LogInAdapter extends SackOfViewsAdapter {
