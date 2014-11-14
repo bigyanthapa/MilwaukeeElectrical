@@ -41,13 +41,17 @@
             <!--android:layout_margin="10dp"/>-->
 
         <com.milwaukeetool.mymilwaukee.view.MTTextView
-            android:id="@+id/noNetworkConnectivity"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@null"
+            android:id="@+id/noNetworkConnectivityTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:background="@drawable/medium_shaded_background"
             android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/mt_margin_standard"
+            android:padding="@dimen/mt_padding_standard"
             android:text="@string/dialog_title_no_network_connection"
             android:gravity="center"
+            android:textSize="@dimen/mt_font_size_large"
             android:textColor="@color/mt_white"
             android:visibility="invisible"/>
 

@@ -18,8 +18,8 @@
         android:text="@string/btn_title_log_in"
         android:textColor="@color/mt_white" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="100dp"/>
+    <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="100dp"/>-->
 
 </RelativeLayout>

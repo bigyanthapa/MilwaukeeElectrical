@@ -63,7 +63,7 @@ public class CreateAccountActivity extends MTActivity implements Postable {
     private MTSelectableFieldView mTradeOccupationFieldView;
     private MTProgressView mProgressView;
 //    private ImageButton mCloseButton;
-    private MTTextView mNoNetworkConnectivity;
+    private MTTextView mNoNetworkConnectivityTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +74,7 @@ public class CreateAccountActivity extends MTActivity implements Postable {
 
     protected void setupViews() {
 
-        mNoNetworkConnectivity = (MTTextView)findViewById(R.id.noNetworkConnectivity);
+        mNoNetworkConnectivityTextView = (MTTextView)findViewById(R.id.noNetworkConnectivityTextView);
 
         mListView = (ListView)findViewById(R.id.header_stuff);
         mListView.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
@@ -131,7 +131,7 @@ public class CreateAccountActivity extends MTActivity implements Postable {
     @Override
     protected void onResume() {
         super.onResume();
-        NetworkUtil.setConnectivityDisplay(mNoNetworkConnectivity);
+        NetworkUtil.checkNetworkConnectivity(this);
     }
 
     @Override
@@ -320,10 +320,10 @@ public class CreateAccountActivity extends MTActivity implements Postable {
     }
 
     public void connectionEstablished() {
-        mNoNetworkConnectivity.setVisibility(View.INVISIBLE);
+        NetworkUtil.hideConnectivityDisplayAnimated(mNoNetworkConnectivityTextView);
     }
     public void connectionDestroyed() {
-        mNoNetworkConnectivity.setVisibility(View.VISIBLE);
+        NetworkUtil.showConnectivityDisplayAnimated(mNoNetworkConnectivityTextView);
     }
 
     private class CreateAccountAdapter extends SackOfViewsAdapter {

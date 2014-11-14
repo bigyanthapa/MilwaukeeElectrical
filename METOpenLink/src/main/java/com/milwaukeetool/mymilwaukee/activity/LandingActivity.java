@@ -80,7 +80,7 @@ public class LandingActivity extends MTActivity {
     @Override
     public void onResume() {
         super.onResume();
-        NetworkUtil.setConnectivityDisplay(mNoNetworkConnectivityTextView);
+        NetworkUtil.checkNetworkConnectivity(this);
         checkForCrashes();
     }
 

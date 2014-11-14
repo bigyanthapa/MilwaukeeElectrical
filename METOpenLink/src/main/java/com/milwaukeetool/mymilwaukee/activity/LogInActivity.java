@@ -53,7 +53,7 @@ public class LogInActivity extends MTActivity {
 
     private MTProgressView mProgressView;
 //    private ImageButton mCloseButton;
-    private MTTextView mNoNetworkConnectivity;
+    private MTTextView mNoNetworkConnectivityTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,10 +64,12 @@ public class LogInActivity extends MTActivity {
 
     protected void setupViews() {
 
-        mNoNetworkConnectivity = (MTTextView)findViewById(R.id.noNetworkConnectivity);
+        mNoNetworkConnectivityTextView = (MTTextView)findViewById(R.id.noNetworkConnectivityTextView);
 
-        ListView listView = (ListView)findViewById(R.id.login_header);
-        listView.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
+        mListView = (ListView)findViewById(R.id.login_header);
+        mListView.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
+        mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
+        mListView.setStackFromBottom(true);
 
         LinkedList<View> views = new LinkedList<View>();
 
@@ -75,7 +77,7 @@ public class LogInActivity extends MTActivity {
         mProgressView.setVisibility(View.GONE);
 
         mHeaderView = new MTLoginHeaderView(this);
-        listView.addHeaderView(mHeaderView);
+        mListView.addHeaderView(mHeaderView);
 
         mEmailFieldView = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.sign_in_field_title_email))
                 .setFieldType(MTSimpleFieldView.FieldType.EMAIL).setRequired(true).updateFocus();
@@ -87,13 +89,13 @@ public class LogInActivity extends MTActivity {
         mPasswordFieldView.setNextActionGo();
 
         mFooterView = new MTLoginFooterView(this);
-        listView.addFooterView(mFooterView);
+        mListView.addFooterView(mFooterView);
 
         mLoginAdapter = new LogInAdapter(views);
 
-        if (listView != null) {
-            listView.setAdapter(mLoginAdapter);
-            listView.setFocusable(true);
+        if (mListView != null) {
+            mListView.setAdapter(mLoginAdapter);
+            mListView.setFocusable(true);
         }
 
 //        mCloseButton = (ImageButton)findViewById(R.id.closeButton);
@@ -114,7 +116,7 @@ public class LogInActivity extends MTActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        NetworkUtil.setConnectivityDisplay(mNoNetworkConnectivity);
+        NetworkUtil.checkNetworkConnectivity(this);
     }
 
     @Override
@@ -220,10 +222,10 @@ public class LogInActivity extends MTActivity {
     }
 
     public void connectionEstablished() {
-        mNoNetworkConnectivity.setVisibility(View.INVISIBLE);
+        NetworkUtil.hideConnectivityDisplayAnimated(mNoNetworkConnectivityTextView);
     }
     public void connectionDestroyed() {
-        mNoNetworkConnectivity.setVisibility(View.VISIBLE);
+        NetworkUtil.showConnectivityDisplayAnimated(mNoNetworkConnectivityTextView);
     }
 
     private class LogInAdapter extends SackOfViewsAdapter {

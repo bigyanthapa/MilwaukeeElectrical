@@ -10,6 +10,7 @@
 
     <color name="mt_white_shaded">#11ffffff</color>
     <color name="mt_black_shaded">#33000000</color>
+    <color name="mt_black_shaded_50">#88000000</color>
 
     <color name="mt_white">#ffffff</color>
     <color name="mt_black">#000000</color>
