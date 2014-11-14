@@ -5,7 +5,10 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.view.View;
 
+import com.milwaukeetool.mymilwaukee.model.event.MTNetworkAvailabilityEvent;
 import com.milwaukeetool.mymilwaukee.view.MTTextView;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by scott.hopfensperger on 11/13/2014.
@@ -13,6 +16,25 @@ import com.milwaukeetool.mymilwaukee.view.MTTextView;
 public class NetworkUtil {
     public enum NetworkType {
         TYPE_NOT_CONNECTED, TYPE_WIFI, TYPE_MOBILE
+    }
+
+    public static void checkNetworkConnectivity(Context context) {
+
+        boolean isConnected = false;
+
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (null != activeNetwork) {
+            if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
+                isConnected = true;
+            }
+            if (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
+                isConnected = true;
+            }
+        }
+
+        EventBus.getDefault().post(new MTNetworkAvailabilityEvent(context, isConnected));
     }
 
     public static NetworkType getConnectivityStatus(Context context) {

@@ -195,7 +195,6 @@ public class LogInActivity extends MTActivity {
 
                 // On failure, reset the password field
                 mPasswordFieldView.fieldRequiresReset(true);
-
             }
         };
 

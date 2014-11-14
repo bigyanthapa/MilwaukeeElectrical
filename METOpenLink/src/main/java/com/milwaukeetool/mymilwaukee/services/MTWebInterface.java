@@ -4,6 +4,10 @@ import com.milwaukeetool.mymilwaukee.config.MTConfig;
 import com.milwaukeetool.mymilwaukee.model.response.MTCreateAccountErrorResponse;
 import com.milwaukeetool.mymilwaukee.model.response.MTErrorResponse;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 
@@ -53,18 +57,38 @@ public class MTWebInterface {
 
     public static String getCreateAccountErrorMessage(RetrofitError retrofitError) {
         if (retrofitError.getResponse() != null) {
-            MTCreateAccountErrorResponse body = (MTCreateAccountErrorResponse) retrofitError.getBodyAs(MTCreateAccountErrorResponse.class);
-            return body.errorMessage;
+            if (isValidJSON(retrofitError.getResponse().getBody().toString())) {
+                MTCreateAccountErrorResponse body = (MTCreateAccountErrorResponse) retrofitError.getBodyAs(MTCreateAccountErrorResponse.class);
+                return body.errorMessage;
+            } else {
+                return "Unknown Server Error";
+            }
         }
-        return "";
+        return "Unknown Error";
     }
 
     public static String getErrorMessage(RetrofitError retrofitError) {
         if (retrofitError.getResponse() != null) {
-            MTErrorResponse body = (MTErrorResponse) retrofitError.getBodyAs(MTErrorResponse.class);
-            return body.errorDescription;
+            if (isValidJSON(retrofitError.getResponse().getBody().toString())) {
+                MTErrorResponse body = (MTErrorResponse) retrofitError.getBodyAs(MTErrorResponse.class);
+                return body.errorDescription;
+            } else {
+                return "Unknown Server Error";
+            }
         }
-        return "";
+        return "Unknown Error";
     }
 
+    private static boolean isValidJSON(String responseString) {
+        try {
+            new JSONObject(responseString);
+        } catch (JSONException ex) {
+            try {
+                new JSONArray(responseString);
+            } catch (JSONException ex1) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

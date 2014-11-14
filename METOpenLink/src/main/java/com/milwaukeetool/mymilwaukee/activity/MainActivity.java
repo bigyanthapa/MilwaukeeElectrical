@@ -5,10 +5,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageButton;
 
-import com.joanzapata.android.iconify.IconDrawable;
-import com.joanzapata.android.iconify.Iconify;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.config.MTConfig;
 import com.milwaukeetool.mymilwaukee.model.event.MTNetworkAvailabilityEvent;
@@ -74,6 +71,7 @@ public class MainActivity extends MTActivity {
         });
 
         this.mNoNetworkView = (MTNoNetworkView) this.findViewById(R.id.noNetworkView);
+        this.mNoNetworkView.setVisibility(View.GONE);
     }
 
     public void onEvent(MTNetworkAvailabilityEvent event) {
@@ -90,7 +88,7 @@ public class MainActivity extends MTActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+        NetworkUtil.checkNetworkConnectivity(this);
     }
 
     @Override

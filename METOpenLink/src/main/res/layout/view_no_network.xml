@@ -2,16 +2,16 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="80dp"
     android:background="@color/mt_black">
 
     <ImageButton
         android:id="@+id/noNetworkConnectivityCloseButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/mt_margin_small"
         android:background="@android:color/transparent" />
 
     <com.milwaukeetool.mymilwaukee.view.MTTextView
@@ -20,7 +20,9 @@
         android:layout_height="40dp"
         android:background="@null"
         android:gravity="center"
+        android:layout_centerVertical="true"
         android:text="@string/dialog_title_no_network_connection"
+        android:textSize="@dimen/mt_font_size_large"
         android:textColor="@color/mt_white" />
 
 </RelativeLayout>
