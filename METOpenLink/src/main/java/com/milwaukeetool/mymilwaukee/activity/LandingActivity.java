@@ -10,6 +10,8 @@ import android.view.WindowManager;
 
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.config.MTConfig;
+import com.milwaukeetool.mymilwaukee.model.event.MTNetworkAvailabilityEvent;
+import com.milwaukeetool.mymilwaukee.util.NetworkUtil;
 import com.milwaukeetool.mymilwaukee.view.MTButton;
 import com.milwaukeetool.mymilwaukee.view.MTTextView;
 
@@ -31,6 +33,7 @@ public class LandingActivity extends MTActivity {
     private MTButton mCreateAccountBtn;
     private MTButton mLogInBtn;
     private MTTextView mVersionTypeDistributionTextView;
+    private MTTextView mNoNetworkConnectivityTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +44,8 @@ public class LandingActivity extends MTActivity {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         Log.i(TAG, "PACKAGE NAME: " + getApplicationContext().getPackageName());
+
+        mNoNetworkConnectivityTextView = (MTTextView)findViewById(R.id.noNetworkConnectivityTextView);
 
         mCreateAccountBtn = (MTButton)findViewById(R.id.createAccountButton);
         mCreateAccountBtn.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +80,7 @@ public class LandingActivity extends MTActivity {
     @Override
     public void onResume() {
         super.onResume();
+        NetworkUtil.setConnectivityDisplay(mNoNetworkConnectivityTextView);
         checkForCrashes();
     }
 
@@ -110,6 +116,21 @@ public class LandingActivity extends MTActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onEvent(MTNetworkAvailabilityEvent event) {
+        if (!event.isNetworkAvailable) {
+            connectionDestroyed();
+        } else {
+            connectionEstablished();
+        }
+    }
+
+    public void connectionEstablished() {
+        NetworkUtil.hideConnectivityDisplayAnimated(mNoNetworkConnectivityTextView);
+    }
+    public void connectionDestroyed() {
+        NetworkUtil.showConnectivityDisplayAnimated(mNoNetworkConnectivityTextView);
     }
 
     private void checkForCrashes() {

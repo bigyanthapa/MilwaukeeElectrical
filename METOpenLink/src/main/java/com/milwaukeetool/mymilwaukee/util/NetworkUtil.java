@@ -66,4 +66,24 @@ public class NetworkUtil {
     public static void showConnectivityDisplay(MTTextView textView) {
         textView.setVisibility(View.VISIBLE);
     }
+
+    public static void setConnectivityDisplayAnimated(MTTextView textView) {
+        NetworkType type = NetworkUtil.getConnectivityStatus(textView.getContext());
+
+        switch (type) {
+            case TYPE_NOT_CONNECTED:
+                NetworkUtil.showConnectivityDisplayAnimated(textView);
+                break;
+            default:
+                NetworkUtil.hideConnectivityDisplayAnimated(textView);
+        }
+    }
+
+    public static void hideConnectivityDisplayAnimated(MTTextView textView) {
+        UIUtils.hideView(textView,500);
+    }
+
+    public static void showConnectivityDisplayAnimated(MTTextView textView) {
+        UIUtils.showView(textView,500);
+    }
 }
