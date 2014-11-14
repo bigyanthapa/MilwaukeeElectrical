@@ -232,5 +232,6 @@ public class MTSimpleFieldView extends RelativeLayout {
         final IconDrawable customErrorDrawable = new IconDrawable(MilwaukeeToolApplication.getAppContext(), Iconify.IconValue.fa_exclamation_circle).colorRes(R.color.mt_white).sizeDp(20);
         customErrorDrawable.setBounds(0, 0, customErrorDrawable.getIntrinsicWidth(), customErrorDrawable.getIntrinsicHeight());
         mEditText.setError(errorMessage, customErrorDrawable);
+        updateFocus();
     }
 }

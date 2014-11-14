@@ -18,13 +18,16 @@
     <TextView
         android:id="@+id/loginText"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="55dp"
         android:layout_below="@+id/loginLogoImageView"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="@dimen/mt_margin_standard"
+        android:layout_marginBottom="@dimen/mt_margin_standard"
+        android:paddingBottom="@dimen/mt_padding_large"
         android:background="@null"
         android:gravity="center"
         android:text="@string/title_sign_in_my_milwaukee_account"
+        android:textSize="@dimen/mt_font_size_standard"
         android:textColor="@color/mt_white" />
 
 </RelativeLayout>

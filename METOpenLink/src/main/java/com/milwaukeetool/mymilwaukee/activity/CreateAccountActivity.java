@@ -2,17 +2,13 @@ package com.milwaukeetool.mymilwaukee.activity;
 
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.commonsware.cwac.sacklist.SackOfViewsAdapter;
-import com.joanzapata.android.iconify.IconDrawable;
-import com.joanzapata.android.iconify.Iconify;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.config.MTConfig;
 import com.milwaukeetool.mymilwaukee.config.MTConstants;
@@ -23,7 +19,6 @@ import com.milwaukeetool.mymilwaukee.model.event.MTimeActionEvent;
 import com.milwaukeetool.mymilwaukee.model.request.MTUserRegistrationRequest;
 import com.milwaukeetool.mymilwaukee.model.response.MTLogInResponse;
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
-import com.milwaukeetool.mymilwaukee.util.MTTouchListener;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.NetworkUtil;
@@ -67,7 +62,7 @@ public class CreateAccountActivity extends MTActivity implements Postable {
     private MTSimpleFieldView mLastNameFieldView;
     private MTSelectableFieldView mTradeOccupationFieldView;
     private MTProgressView mProgressView;
-    private ImageButton mCloseButton;
+//    private ImageButton mCloseButton;
     private MTTextView mNoNetworkConnectivity;
 
     @Override
@@ -95,7 +90,7 @@ public class CreateAccountActivity extends MTActivity implements Postable {
         mListView.addHeaderView(mHeaderView, null, false);
 
         mEmailFieldView = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.create_account_field_email))
-                .setFieldType(MTSimpleFieldView.FieldType.EMAIL).setRequired(true);//.updateFocus();
+                .setFieldType(MTSimpleFieldView.FieldType.EMAIL).setRequired(true).updateFocus();
         views.add(mEmailFieldView);
 
         mPasswordFieldView = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.create_account_field_password))
@@ -122,14 +117,14 @@ public class CreateAccountActivity extends MTActivity implements Postable {
 
         mCreateAccountAdapter = new CreateAccountAdapter(views);
 
-        mCloseButton = (ImageButton)findViewById(R.id.closeButton);
-        mCloseButton.setImageDrawable(new IconDrawable(this, Iconify.IconValue.fa_times_circle).colorRes(R.color.mt_white));
-        mCloseButton.setOnTouchListener(new MTTouchListener(this) {
-            @Override
-            public void didTapView(MotionEvent event) {
-                finish();
-            }
-        });
+//        mCloseButton = (ImageButton)findViewById(R.id.closeButton);
+//        mCloseButton.setImageDrawable(new IconDrawable(this, Iconify.IconValue.fa_times_circle).colorRes(R.color.mt_white));
+//        mCloseButton.setOnTouchListener(new MTTouchListener(this) {
+//            @Override
+//            public void didTapView(MotionEvent event) {
+//                finish();
+//            }
+//        });
 
         if (mListView != null) {
             mListView.setAdapter(mCreateAccountAdapter);

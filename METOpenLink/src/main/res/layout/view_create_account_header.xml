@@ -13,7 +13,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
         android:src="@drawable/ic_mtsm" />
 
     <TextView
@@ -22,10 +21,12 @@
         android:layout_height="30dp"
         android:layout_below="@+id/logoImageView"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/mt_margin_standard"
+        android:layout_marginBottom="@dimen/mt_margin_standard"
         android:background="@null"
         android:gravity="center"
         android:text="@string/title_create_my_milwaukee_account"
+        android:textSize="@dimen/mt_font_size_standard"
         android:textColor="@color/mt_white" />
 
 </RelativeLayout>
