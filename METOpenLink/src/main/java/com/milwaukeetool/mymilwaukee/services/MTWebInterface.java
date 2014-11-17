@@ -1,11 +1,13 @@
 package com.milwaukeetool.mymilwaukee.services;
 
+import com.google.gson.Gson;
 import com.milwaukeetool.mymilwaukee.config.MTConfig;
 import com.milwaukeetool.mymilwaukee.model.response.MTCreateAccountErrorResponse;
 import com.milwaukeetool.mymilwaukee.model.response.MTErrorResponse;
 
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
+import retrofit.mime.TypedByteArray;
 
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 
@@ -53,7 +55,7 @@ public class MTWebInterface {
 
     public static String getCreateAccountErrorMessage(RetrofitError retrofitError) {
         if (retrofitError.getResponse() != null) {
-            if (isValidJSON(retrofitError.getResponse().getBody().toString())) {
+            if (isJSONValid((TypedByteArray)retrofitError.getResponse().getBody())) {
                 MTCreateAccountErrorResponse body = (MTCreateAccountErrorResponse) retrofitError.getBodyAs(MTCreateAccountErrorResponse.class);
                 return body.errorMessage;
             } else {
@@ -65,7 +67,7 @@ public class MTWebInterface {
 
     public static String getErrorMessage(RetrofitError retrofitError) {
         if (retrofitError.getResponse() != null) {
-            if (isValidJSON(retrofitError.getResponse().getBody().toString())) {
+            if (isJSONValid((TypedByteArray)retrofitError.getResponse().getBody())) {
                 MTErrorResponse body = (MTErrorResponse) retrofitError.getBodyAs(MTErrorResponse.class);
                 return body.errorDescription;
             } else {
@@ -75,16 +77,15 @@ public class MTWebInterface {
         return "Unknown Error";
     }
 
-    private static boolean isValidJSON(String responseString) {
-//        try {
-//            new JSONObject(responseString);
-//        } catch (JSONException ex) {
-//            try {
-//                new JSONArray(responseString);
-//            } catch (JSONException ex1) {
-//                return false;
-//            }
-//        }
-        return true;
+    private static final Gson gson = new Gson();
+
+    public static boolean isJSONValid(TypedByteArray byteArray) {
+        String json =  new String(byteArray.getBytes());
+        try {
+            gson.fromJson(json, Object.class);
+            return true;
+        } catch(com.google.gson.JsonSyntaxException ex) {
+            return false;
+        }
     }
 }
