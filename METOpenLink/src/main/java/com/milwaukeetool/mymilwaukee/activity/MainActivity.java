@@ -51,7 +51,7 @@ public class MainActivity extends MTActivity {
 
         if (MTConfig.isExternalRelease()) {
             // Hide the version label
-            mVersionTypeDistributionTextView.setVisibility(View.GONE);
+            mVersionTypeDistributionTextView.setVisibility(View.INVISIBLE);
         } else {
             mVersionTypeDistributionTextView.setVisibility(View.VISIBLE);
             mVersionTypeDistributionTextView.setText(MTConfig.getDistributionTypeVersionString());
