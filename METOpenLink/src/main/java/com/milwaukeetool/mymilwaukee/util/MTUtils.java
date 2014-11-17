@@ -49,12 +49,14 @@ public class MTUtils {
     }
 
     public static void displayErrorMessage(Activity activity, String errorTitle, String errorMessage) {
-        PostOffice.newMail(activity)
-                .setTitle(errorTitle)
-                .setMessage(errorMessage)
-                .setThemeColor(MiscUtils.getAppResources().getColor(R.color.mt_red))
-                .setDesign(Design.HOLO_LIGHT)
-                .show(activity.getFragmentManager());
+        if (activity != null) {
+            PostOffice.newMail(activity)
+                    .setTitle(errorTitle)
+                    .setMessage(errorMessage)
+                    .setThemeColor(MiscUtils.getAppResources().getColor(R.color.mt_red))
+                    .setDesign(Design.HOLO_LIGHT)
+                    .show(activity.getFragmentManager());
+        }
     }
 
     public static void handleRetrofitError(RetrofitError retrofitError, Activity activity, String errorTitle) {
