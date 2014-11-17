@@ -163,10 +163,7 @@ public class MTSimpleFieldView extends RelativeLayout {
 
                 break;
             case PASSWORD:
-
-                mEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
                 mEditText.setTransformationMethod(new PasswordTransformationMethod());
-
                 this.mFieldType = fieldType;
                 break;
             default:
