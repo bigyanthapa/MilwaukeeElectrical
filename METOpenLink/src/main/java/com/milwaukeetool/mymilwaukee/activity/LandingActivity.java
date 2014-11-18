@@ -117,12 +117,6 @@ public class LandingActivity extends MTActivity {
         return super.onOptionsItemSelected(item);
     }
 
-//    @Override
-//    public void finishFromChild(Activity child) {
-//        super.finishFromChild(child);
-//        finish();
-//    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

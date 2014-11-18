@@ -103,7 +103,6 @@ public class MTUtils {
         } else {
             activity.getParent().setResult(Activity.RESULT_OK);
         }
-
         activity.finish();
     }
 }

@@ -69,7 +69,7 @@ public class LogInActivity extends MTActivity {
         LinkedList<View> views = new LinkedList<View>();
 
         mHeaderView = new MTLoginHeaderView(this);
-        mListView.addHeaderView(mHeaderView);
+        mListView.addHeaderView(mHeaderView, null, false);
 
         mEmailFieldView = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.sign_in_field_title_email))
                 .setFieldType(MTSimpleFieldView.FieldType.EMAIL).setRequired(true).updateFocus();
@@ -81,7 +81,7 @@ public class LogInActivity extends MTActivity {
         mPasswordFieldView.setNextActionGo();
 
         mFooterView = new MTLoginFooterView(this);
-        mListView.addFooterView(mFooterView);
+        mListView.addFooterView(mFooterView, null, false);
 
         mLoginAdapter = new LogInAdapter(views);
 
