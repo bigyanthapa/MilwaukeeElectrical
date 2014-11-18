@@ -70,7 +70,7 @@ public class MainActivity extends MTActivity {
             }
         });
 
-        this.mNoNetworkView = (MTNoNetworkView) this.findViewById(R.id.noNetworkView);
+        this.mNoNetworkView = (MTNoNetworkView) this.findViewById(R.id.noNetworkConnectivityTextView);
         this.mNoNetworkView.setVisibility(View.GONE);
     }
 

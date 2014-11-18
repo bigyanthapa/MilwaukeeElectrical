@@ -69,7 +69,7 @@ public class LandingActivity extends MTActivity {
 
         if (MTConfig.isExternalRelease()) {
             // Hide the version label
-            mVersionTypeDistributionTextView.setVisibility(View.INVISIBLE);
+            mVersionTypeDistributionTextView.setVisibility(View.GONE);
         } else {
             mVersionTypeDistributionTextView.setVisibility(View.VISIBLE);
             mVersionTypeDistributionTextView.setText(MTConfig.getDistributionTypeVersionString());

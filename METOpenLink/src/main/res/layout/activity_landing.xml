@@ -66,32 +66,39 @@
 
             </RelativeLayout>
 
-            <com.milwaukeetool.mymilwaukee.view.MTTextView
-                android:id="@+id/noNetworkConnectivityTextView"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="45dp"
-                android:background="@drawable/medium_shaded_background"
-                android:layout_above="@+id/versionTypeDistributionTextView"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="@dimen/mt_margin_standard"
-                android:padding="@dimen/mt_padding_standard"
-                android:text="@string/dialog_title_no_network_connection"
-                android:gravity="center"
-                android:textSize="@dimen/mt_font_size_large"
-                android:textColor="@color/mt_white"
-                android:visibility="invisible"/>
-
-            <com.milwaukeetool.mymilwaukee.view.MTTextView
-                android:id="@+id/versionTypeDistributionTextView"
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:background="@null"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:layout_alignParentBottom="true"
-                android:text="QA : v.0.1.2.1 (3)"
-                android:textSize="@dimen/mt_font_size_standard"
-                android:gravity="center"
-                android:textColor="@color/mt_white"
-                android:visibility="invisible"/>
+                android:layout_centerHorizontal="true">
+
+                <com.milwaukeetool.mymilwaukee.view.MTTextView
+                    android:id="@+id/noNetworkConnectivityTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:background="@drawable/medium_shaded_background"
+                    android:layout_marginBottom="@dimen/mt_margin_standard"
+                    android:padding="@dimen/mt_padding_standard"
+                    android:text="@string/dialog_title_no_network_connection"
+                    android:gravity="center"
+                    android:textSize="@dimen/mt_font_size_large"
+                    android:textColor="@color/mt_white"
+                    android:visibility="invisible"/>
+
+                <com.milwaukeetool.mymilwaukee.view.MTTextView
+                    android:id="@+id/versionTypeDistributionTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:background="@null"
+                    android:text="QA : v.0.1.2.1 (3)"
+                    android:textSize="@dimen/mt_font_size_standard"
+                    android:gravity="center"
+                    android:textColor="@color/mt_white"
+                    android:visibility="invisible"/>
+
+            </LinearLayout>
+
 
         </RelativeLayout>
 
