@@ -21,7 +21,6 @@ import com.milwaukeetool.mymilwaukee.util.NetworkUtil;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
 import com.milwaukeetool.mymilwaukee.view.MTLoginFooterView;
 import com.milwaukeetool.mymilwaukee.view.MTLoginHeaderView;
-import com.milwaukeetool.mymilwaukee.view.MTProgressView;
 import com.milwaukeetool.mymilwaukee.view.MTSimpleFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTTextView;
 
@@ -51,20 +50,16 @@ public class LogInActivity extends MTActivity {
     private MTSimpleFieldView mEmailFieldView;
     private MTSimpleFieldView mPasswordFieldView;
 
-    private MTProgressView mProgressView;
-//    private ImageButton mCloseButton;
     private MTTextView mNoNetworkConnectivityTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mEnabledNoNetworkView = false;
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_log_in);
         this.setupViews();
     }
 
     protected void setupViews() {
-
-        mNoNetworkConnectivityTextView = (MTTextView)findViewById(R.id.noNetworkConnectivityTextView);
 
         mListView = (ListView)findViewById(R.id.login_header);
         mListView.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
@@ -72,9 +67,6 @@ public class LogInActivity extends MTActivity {
         mListView.setStackFromBottom(true);
 
         LinkedList<View> views = new LinkedList<View>();
-
-        mProgressView = (MTProgressView)findViewById(R.id.progressIndicatorView);
-        mProgressView.setVisibility(View.GONE);
 
         mHeaderView = new MTLoginHeaderView(this);
         mListView.addHeaderView(mHeaderView);
@@ -98,14 +90,12 @@ public class LogInActivity extends MTActivity {
             mListView.setFocusable(true);
         }
 
-//        mCloseButton = (ImageButton)findViewById(R.id.closeButton);
-//        mCloseButton.setImageDrawable(new IconDrawable(this, Iconify.IconValue.fa_times_circle).colorRes(R.color.mt_white));
-//        mCloseButton.setOnTouchListener(new MTTouchListener(this) {
-//            @Override
-//            public void didTapView(MotionEvent event) {
-//                finish();
-//            }
-//        });
+        mNoNetworkConnectivityTextView = (MTTextView)findViewById(R.id.noNetworkConnectivityTextView);
+    }
+
+    @Override
+    protected void setupActivityView() {
+        setContentView(R.layout.activity_log_in);
     }
 
     @Override
@@ -116,7 +106,6 @@ public class LogInActivity extends MTActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        NetworkUtil.checkNetworkConnectivity(this);
     }
 
     @Override
@@ -180,8 +169,7 @@ public class LogInActivity extends MTActivity {
 
                 LOGD(TAG, "Successfully logged in for user with token: " + result.token);
 
-                MTUtils.launchMainActivity(LogInActivity.this);
-                finish();
+                MTUtils.launchMainActivityAndFinishCurrent(LogInActivity.this);
             }
 
             @Override

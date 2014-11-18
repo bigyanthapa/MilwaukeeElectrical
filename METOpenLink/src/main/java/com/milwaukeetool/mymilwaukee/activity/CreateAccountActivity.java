@@ -25,7 +25,6 @@ import com.milwaukeetool.mymilwaukee.util.NetworkUtil;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
 import com.milwaukeetool.mymilwaukee.view.MTCreateAccountFooterView;
 import com.milwaukeetool.mymilwaukee.view.MTCreateAccountHeaderView;
-import com.milwaukeetool.mymilwaukee.view.MTProgressView;
 import com.milwaukeetool.mymilwaukee.view.MTSelectableFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTSimpleFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTTextView;
@@ -61,14 +60,13 @@ public class CreateAccountActivity extends MTActivity implements Postable {
     private MTSimpleFieldView mFirstNameFieldView;
     private MTSimpleFieldView mLastNameFieldView;
     private MTSelectableFieldView mTradeOccupationFieldView;
-    private MTProgressView mProgressView;
-//    private ImageButton mCloseButton;
+
     private MTTextView mNoNetworkConnectivityTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mEnabledNoNetworkView = false;
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_account);
         this.setupViews();
     }
 
@@ -82,9 +80,6 @@ public class CreateAccountActivity extends MTActivity implements Postable {
         mListView.setStackFromBottom(true);
 
         LinkedList<View> views = new LinkedList<View>();
-
-        mProgressView = (MTProgressView)findViewById(R.id.progressIndicatorView);
-        mProgressView.setVisibility(View.GONE);
 
         mHeaderView = new MTCreateAccountHeaderView(this);
         mListView.addHeaderView(mHeaderView, null, false);
@@ -124,6 +119,11 @@ public class CreateAccountActivity extends MTActivity implements Postable {
     }
 
     @Override
+    protected void setupActivityView() {
+        setContentView(R.layout.activity_create_account);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
     }
@@ -131,7 +131,6 @@ public class CreateAccountActivity extends MTActivity implements Postable {
     @Override
     protected void onResume() {
         super.onResume();
-        NetworkUtil.checkNetworkConnectivity(this);
     }
 
     @Override
@@ -287,8 +286,7 @@ public class CreateAccountActivity extends MTActivity implements Postable {
 
                 LOGD(TAG, "Successfully logged in for user with token: " + result.token);
 
-                MTUtils.launchMainActivity(CreateAccountActivity.this);
-                finish();
+                MTUtils.launchMainActivityAndFinishCurrent(CreateAccountActivity.this);
             }
 
             @Override

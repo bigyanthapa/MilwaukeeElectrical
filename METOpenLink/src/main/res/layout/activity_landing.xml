@@ -1,108 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-    <com.milwaukeetool.mymilwaukee.view.MTLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+<com.milwaukeetool.mymilwaukee.view.MTLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/backgroundImageView"
-            android:src="@drawable/background"
-            android:padding="0dp"
-            android:layout_margin="0dp"
-            android:scaleType="fitXY"/>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/backgroundImageView"
+        android:src="@drawable/background"
+        android:padding="0dp"
+        android:layout_margin="0dp"
+        android:scaleType="fitXY"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@null">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:layout_centerVertical="true"
+            tools:context=".MainActivity"
             android:background="@null">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingTop="@dimen/activity_vertical_margin"
-                android:layout_centerVertical="true"
-                tools:context=".MainActivity"
-                android:background="@null">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/logoImageView"
-                    android:src="@drawable/ic_mtlrg"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true" />
-
-                <com.milwaukeetool.mymilwaukee.view.MTButton
-                    android:id="@+id/createAccountButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"
-                    android:text="@string/btn_title_create_account"
-                    android:layout_below="@+id/logoImageView"
-                    android:layout_marginTop="82dp"
-                    android:textColor="@color/mt_white"
-                    android:background="@drawable/black_button_selector"
-                    android:layout_centerHorizontal="true" />
-
-                <com.milwaukeetool.mymilwaukee.view.MTButton
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"
-                    android:text="@string/btn_title_log_in"
-                    android:id="@+id/logInButton"
-                    android:layout_below="@id/createAccountButton"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/outline_button_selector"
-                    android:textColor="@color/mt_white"
-                    android:layout_centerHorizontal="true" />
-
-            </RelativeLayout>
-
-            <LinearLayout
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true">
+                android:id="@+id/logoImageView"
+                android:src="@drawable/ic_mtlrg"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
 
-                <com.milwaukeetool.mymilwaukee.view.MTTextView
-                    android:id="@+id/noNetworkConnectivityTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="45dp"
-                    android:background="@drawable/medium_shaded_background"
-                    android:layout_marginBottom="@dimen/mt_margin_standard"
-                    android:padding="@dimen/mt_padding_standard"
-                    android:text="@string/dialog_title_no_network_connection"
-                    android:gravity="center"
-                    android:textSize="@dimen/mt_font_size_large"
-                    android:textColor="@color/mt_white"
-                    android:visibility="invisible"/>
+            <com.milwaukeetool.mymilwaukee.view.MTButton
+                android:id="@+id/createAccountButton"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:text="@string/btn_title_create_account"
+                android:layout_below="@+id/logoImageView"
+                android:layout_marginTop="82dp"
+                android:textColor="@color/mt_white"
+                android:background="@drawable/black_button_selector"
+                android:layout_centerHorizontal="true" />
 
-                <com.milwaukeetool.mymilwaukee.view.MTTextView
-                    android:id="@+id/versionTypeDistributionTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:background="@null"
-                    android:text="QA : v.0.1.2.1 (3)"
-                    android:textSize="@dimen/mt_font_size_standard"
-                    android:gravity="center"
-                    android:textColor="@color/mt_white"
-                    android:visibility="invisible"/>
-
-            </LinearLayout>
-
+            <com.milwaukeetool.mymilwaukee.view.MTButton
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:text="@string/btn_title_log_in"
+                android:id="@+id/logInButton"
+                android:layout_below="@id/createAccountButton"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/outline_button_selector"
+                android:textColor="@color/mt_white"
+                android:layout_centerHorizontal="true" />
 
         </RelativeLayout>
 
-    </com.milwaukeetool.mymilwaukee.view.MTLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true">
+
+            <com.milwaukeetool.mymilwaukee.view.MTTextView
+                android:id="@+id/noNetworkConnectivityTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:background="@drawable/medium_shaded_background"
+                android:layout_marginBottom="@dimen/mt_margin_standard"
+                android:padding="@dimen/mt_padding_standard"
+                android:text="@string/dialog_title_no_network_connection"
+                android:gravity="center"
+                android:textSize="@dimen/mt_font_size_large"
+                android:textColor="@color/mt_white"
+                android:visibility="invisible"/>
+
+            <com.milwaukeetool.mymilwaukee.view.MTTextView
+                android:id="@+id/versionTypeDistributionTextView"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:background="@null"
+                android:text="QA : v.0.1.2.1 (3)"
+                android:textSize="@dimen/mt_font_size_standard"
+                android:gravity="center"
+                android:textColor="@color/mt_white"
+                android:visibility="invisible"/>
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</com.milwaukeetool.mymilwaukee.view.MTLayout>
 
 
 

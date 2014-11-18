@@ -74,7 +74,7 @@
             android:name=".activity.MainActivity"
             android:label="@null"
             android:screenOrientation="sensorPortrait"
-            android:launchMode="singleTop">
+            android:launchMode="singleTask">
         </activity>
         <activity android:name="net.hockeyapp.android.UpdateActivity" />
     </application>

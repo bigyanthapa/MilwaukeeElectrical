@@ -57,10 +57,4 @@
 
     </RelativeLayout>
 
-    <com.milwaukeetool.mymilwaukee.view.MTProgressView
-        android:id="@+id/progressIndicatorView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"/>
-
 </com.milwaukeetool.mymilwaukee.view.MTLayout>
