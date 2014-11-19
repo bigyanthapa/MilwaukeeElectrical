@@ -27,6 +27,7 @@ public class MainActivity extends MTActivity {
 
     private MTTextView mVersionTypeDistributionTextView;
     private MTButton mLogOutButton;
+    private MTButton mUpdateProfileButton;
     private MTNoNetworkView mNoNetworkView;
 
     @Override
@@ -70,7 +71,18 @@ public class MainActivity extends MTActivity {
             }
         });
 
-        this.mNoNetworkView = (MTNoNetworkView) this.findViewById(R.id.noNetworkConnectivityTextView);
+        mUpdateProfileButton = (MTButton) this.findViewById(R.id.updateProfileButton);
+        mUpdateProfileButton.setOnTouchListener(new MTTouchListener(this) {
+            @Override
+            public void didTapView(MotionEvent event) {
+                Intent intent = new Intent(MainActivity.this, MyProfileActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        this.mNoNetworkView = (MTNoNetworkView) this.findViewById(R.id.noNetworkView);
         this.mNoNetworkView.setVisibility(View.GONE);
     }
 

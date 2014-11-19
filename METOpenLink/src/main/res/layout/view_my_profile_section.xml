@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@null">
+
+    <com.milwaukeetool.mymilwaukee.view.MTTextView
+        android:id="@+id/my_profile_section_header"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/mt_very_light_gray"
+        android:gravity="center_vertical"
+        android:padding="@dimen/mt_padding_standard"
+        android:textSize="@dimen/mt_font_size_standard"
+        android:textStyle="bold"
+        android:textColor="@color/mt_black">
+    </com.milwaukeetool.mymilwaukee.view.MTTextView>
+
+</RelativeLayout>

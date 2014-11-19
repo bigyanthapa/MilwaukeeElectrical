@@ -7,6 +7,7 @@
     <!-- Landing Page -->
     <string name="title_create_account">Create Account</string>
     <string name="title_log_in">Log In</string>
+    <string name="title_update_profile">Update Profile</string>
     <string name="btn_title_create_account">CREATE ACCOUNT</string>
     <string name="btn_title_log_in">LOG IN</string>
 
@@ -21,6 +22,25 @@
     <string name="create_account_field_first_name">First Name</string>
     <string name="create_account_field_last_name">Last Name</string>
     <string name="create_account_field_trade">Trade/Occupation</string>
+
+    <!-- My Profile -->
+    <string name="update_profile_title">Title</string>
+    <string name="update_profile_company_name">Company Name</string>
+    <string name="update_profile_address_1">Address</string>
+    <string name="update_profile_address_2">Address 2</string>
+    <string name="update_profile_city">City</string>
+    <string name="update_profile_state_province">State/Province</string>
+    <string name="update_profile_zip_code">Zip Code</string>
+    <string name="update_profile_country">Country</string>
+
+    <string name="update_profile_phone">Phone</string>
+    <string name="update_profile_cell_phone">Cell Phone</string>
+    <string name="update_profile_fax">Fax</string>
+    <string name="update_profile_email">Email Communications</string>
+
+    <string name="user_information">User Information</string>
+    <string name="company_information">Company Information</string>
+    <string name="contact_information">Contact Information</string>
 
     <!-- Progress Indicator -->
     <string name="progress_bar_default_message">Loading...</string>

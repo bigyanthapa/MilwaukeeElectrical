@@ -50,6 +50,18 @@
                 android:textSize="@dimen/mt_font_size_large"
                 android:layout_below="@id/logoImageView"/>
 
+            <com.milwaukeetool.mymilwaukee.view.MTButton
+                android:id="@+id/updateProfileButton"
+                android:layout_width="250dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="20dp"
+                android:layout_centerHorizontal="true"
+                android:text="Update Profile"
+                android:gravity="center"
+                android:padding="@dimen/mt_padding_small"
+                android:textSize="@dimen/mt_font_size_large"
+                android:layout_below="@+id/logOutButton"/>
+
         </RelativeLayout>
 
         <com.milwaukeetool.mymilwaukee.view.MTTextView
