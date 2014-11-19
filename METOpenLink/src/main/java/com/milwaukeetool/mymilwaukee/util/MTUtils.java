@@ -93,9 +93,16 @@ public class MTUtils {
         MTUtils.displayErrorMessage(activity, errorTitle, errorMessage);
     }
 
-    public static void launchMainActivity(Activity activity) {
+    public static void launchMainActivityAndFinishCurrent(Activity activity) {
+
         Intent mainIntent = new Intent(activity, MainActivity.class);
-        mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.startActivity(mainIntent);
+
+        if (activity.getParent() == null) {
+            activity.setResult(Activity.RESULT_OK);
+        } else {
+            activity.getParent().setResult(Activity.RESULT_OK);
+        }
+        activity.finish();
     }
 }

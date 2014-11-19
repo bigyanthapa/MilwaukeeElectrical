@@ -1,6 +1,5 @@
 package com.milwaukeetool.mymilwaukee.view;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -39,6 +38,7 @@ public class MTNoNetworkView extends RelativeLayout {
 
     protected void init(Context context) {
         LayoutInflater.from(context).inflate(R.layout.view_no_network, this);
+        this.setId(R.id.mtBaseLayout);
 
         this.noNetworkMessageTextView = (MTTextView) this.findViewById(R.id.noNetworkConnectivityTextView);
 
@@ -61,5 +61,8 @@ public class MTNoNetworkView extends RelativeLayout {
 
     public void showMessage() {
         UIUtils.showView(this, 500);
+    }
+    public void hideMessage() {
+        UIUtils.hideView(this, 500);
     }
 }

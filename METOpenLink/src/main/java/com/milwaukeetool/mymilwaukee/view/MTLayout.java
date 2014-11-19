@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
+import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.model.event.MTKeyboardEvent;
 
 import de.greenrobot.event.EventBus;
@@ -41,6 +42,9 @@ public class MTLayout extends FrameLayout {
 
     private void init(Context context) {
         mContext = context;
+
+        this.setId(R.id.mtBaseLayout);
+
         mKeyboardVisible = false;
         setListenerToRootView();
     }

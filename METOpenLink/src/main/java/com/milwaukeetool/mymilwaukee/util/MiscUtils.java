@@ -1,8 +1,18 @@
 package com.milwaukeetool.mymilwaukee.util;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources;
 
 import com.milwaukeetool.mymilwaukee.MilwaukeeToolApplication;
+import com.milwaukeetool.mymilwaukee.config.MTConfig;
+
+import net.hockeyapp.android.CrashManager;
+import net.hockeyapp.android.CrashManagerListener;
+import net.hockeyapp.android.UpdateManager;
+import net.hockeyapp.android.UpdateManagerListener;
+
+import static com.milwaukeetool.mymilwaukee.util.LogUtils.LOGD;
 
 /**
  * Created by cent146 on 11/11/14.
@@ -33,4 +43,34 @@ public class MiscUtils {
         return getAppResources().getString(id);
     }
 
+
+    public static void checkForCrashes(Context context) {
+
+        LOGD("MiscUtils","Checking for HockeyApp Crashes...");
+
+        CrashManager.register(context, MTConfig.getHockeyAppID(), new CrashManagerListener() {
+            public boolean shouldAutoUploadCrashes() {
+                // Always upload automatically for ALL release builds
+                return MTConfig.isExternalRelease();
+            }
+        });
+    }
+
+    public static void checkForUpdates(final Activity activity) {
+        if (!MTConfig.isProduction() && !MTConfig.isBeta()) {
+
+            LOGD("MiscUtils","Checking for HockeyApp Updates...");
+
+            // Include for hockey app builds
+            UpdateManager.register(activity, MTConfig.getHockeyAppID(), new UpdateManagerListener() {
+//                public void onUpdateAvailable() {
+//                    Toast.makeText(activity, "Update is available!", Toast.LENGTH_SHORT).show();
+//                    super.onUpdateAvailable();
+//                }
+//                public void onNoUpdateAvailable() {
+//                    Toast.makeText(activity, "No updates found.", Toast.LENGTH_SHORT).show();
+//                }
+            });
+        }
+    }
 }

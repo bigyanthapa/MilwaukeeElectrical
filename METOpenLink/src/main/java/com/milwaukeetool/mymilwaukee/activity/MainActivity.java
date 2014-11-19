@@ -8,12 +8,9 @@ import android.view.View;
 
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.config.MTConfig;
-import com.milwaukeetool.mymilwaukee.model.event.MTNetworkAvailabilityEvent;
 import com.milwaukeetool.mymilwaukee.util.MTTouchListener;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
-import com.milwaukeetool.mymilwaukee.util.NetworkUtil;
 import com.milwaukeetool.mymilwaukee.view.MTButton;
-import com.milwaukeetool.mymilwaukee.view.MTNoNetworkView;
 import com.milwaukeetool.mymilwaukee.view.MTTextView;
 
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
@@ -28,7 +25,6 @@ public class MainActivity extends MTActivity {
     private MTTextView mVersionTypeDistributionTextView;
     private MTButton mLogOutButton;
     private MTButton mUpdateProfileButton;
-    private MTNoNetworkView mNoNetworkView;
 
     @Override
     protected String getLogTag() {
@@ -43,11 +39,16 @@ public class MainActivity extends MTActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        this.setupViews();
+
     }
 
-    protected void setupViews() {
+    @Override
+    protected void setupActivityView() {
+        setContentView(R.layout.activity_main);
+        this.setupView();
+    }
+
+    protected void setupView() {
         mVersionTypeDistributionTextView = (MTTextView) findViewById(R.id.versionTypeDistributionTextView);
 
         if (MTConfig.isExternalRelease()) {
@@ -65,12 +66,11 @@ public class MainActivity extends MTActivity {
                 MTUtils.clearLoginInfo();
 
                 Intent intent = new Intent(MainActivity.this, LandingActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
             }
         });
-
+        
         mUpdateProfileButton = (MTButton) this.findViewById(R.id.updateProfileButton);
         mUpdateProfileButton.setOnTouchListener(new MTTouchListener(this) {
             @Override
@@ -81,16 +81,8 @@ public class MainActivity extends MTActivity {
                 finish();
             }
         });
-
-        this.mNoNetworkView = (MTNoNetworkView) this.findViewById(R.id.noNetworkView);
-        this.mNoNetworkView.setVisibility(View.GONE);
     }
 
-    public void onEvent(MTNetworkAvailabilityEvent event) {
-        if (!event.isNetworkAvailable) {
-            this.mNoNetworkView.showMessage();
-        }
-    }
 
     @Override
     protected void onDestroy() {
@@ -100,7 +92,6 @@ public class MainActivity extends MTActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        NetworkUtil.checkNetworkConnectivity(this);
     }
 
     @Override
