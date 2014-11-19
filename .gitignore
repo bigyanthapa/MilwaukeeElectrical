@@ -29,3 +29,4 @@ proguard/
 *.log
 
 .idea/workspace.xml
+.idea/libraries

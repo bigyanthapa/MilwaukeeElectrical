@@ -1,6 +1,8 @@
 package com.milwaukeetool.mymilwaukee.fragment;
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.ListView;
 
 import com.commonsware.cwac.sacklist.SackOfViewsAdapter;
 import com.milwaukeetool.mymilwaukee.R;
+import com.milwaukeetool.mymilwaukee.activity.MyProfileActivity;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
 import com.milwaukeetool.mymilwaukee.view.MTSelectableItemView;
@@ -84,7 +87,9 @@ public class SettingsFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 LOGD(TAG, "Clicked list item at position: " + position);
                 if (position == 1) {
-
+                    Activity activity = SettingsFragment.this.getActivity();
+                    Intent intent = new Intent(activity, MyProfileActivity.class);
+                    startActivity(intent);
                 }
             }
         });

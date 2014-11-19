@@ -64,7 +64,7 @@ public class MTSimpleFieldView extends RelativeLayout {
         this.mResetField = false;
 
         mEditText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS|InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
-
+        mEditText.setTextColor(this.getResources().getColor(R.color.mt_white));
         mEditText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId,
@@ -102,6 +102,10 @@ public class MTSimpleFieldView extends RelativeLayout {
                 }
             }
         });
+    }
+
+    public void setTextColor(int resourceId) {
+        this.mEditText.setTextColor(resourceId);
     }
 
     public void fieldRequiresReset(boolean requiresReset) {
