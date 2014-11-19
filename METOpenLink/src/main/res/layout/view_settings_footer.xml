@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerVertical="true"
+    android:background="@null"
+    android:descendantFocusability="afterDescendants">
+
+    <com.milwaukeetool.mymilwaukee.view.MTButton
+        android:id="@+id/settingsFooterLogOutButton"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/black_button_selector"
+        android:text="@string/btn_title_log_out"
+        android:textColor="@color/mt_white" />
+
+</RelativeLayout>
