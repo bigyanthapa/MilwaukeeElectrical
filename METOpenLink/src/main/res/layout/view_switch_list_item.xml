@@ -3,21 +3,21 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <Switch
+    <com.milwaukeetool.mymilwaukee.view.MTSwitch
         android:id="@+id/emailCommunicationSwitch"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
+        android:layout_marginLeft="@dimen/mt_margin_large"
+        android:layout_marginRight="@dimen/mt_margin_large"
         android:layout_centerHorizontal="true"
         android:text="@string/email_communications"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+        android:paddingLeft="@dimen/mt_padding_standard"
+        android:paddingRight="@dimen/mt_padding_standard"
         android:gravity="center_vertical"
         android:singleLine="true"
         android:maxLines="1"
         android:scrollHorizontally="true"
         android:lines="1"
-        android:textSize="16sp" />
+        android:textSize="@dimen/mt_font_size_standard" />
 
 </RelativeLayout>
