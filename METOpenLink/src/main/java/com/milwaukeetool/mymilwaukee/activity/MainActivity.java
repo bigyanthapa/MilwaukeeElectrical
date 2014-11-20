@@ -70,7 +70,7 @@ public class MainActivity extends MTActivity {
                 finish();
             }
         });
-        
+
         mUpdateProfileButton = (MTButton) this.findViewById(R.id.updateProfileButton);
         mUpdateProfileButton.setOnTouchListener(new MTTouchListener(this) {
             @Override

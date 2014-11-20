@@ -32,7 +32,7 @@
     <string name="update_profile_address_2">Address 2</string>
     <string name="update_profile_city">City</string>
     <string name="update_profile_state_province">State/Province</string>
-    <string name="update_profile_zip_code">Zip Code</string>
+    <string name="update_profile_zip_code">Zip/Postal Code</string>
     <string name="update_profile_country">Country</string>
 
     <string name="update_profile_phone">Phone</string>
