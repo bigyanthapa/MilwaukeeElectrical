@@ -6,6 +6,11 @@
 
     <string name="title_my_milwaukee">My Milwaukee</string>
 
+    <!-- Main -->
+    <string name="main_title_inventory">Inventory</string>
+    <string name="main_title_nearby">Nearby</string>
+    <string name="main_title_settings">Settings</string>
+    
     <!-- Landing Page -->
     <string name="title_create_account">Create Account</string>
     <string name="title_log_in">Log In</string>

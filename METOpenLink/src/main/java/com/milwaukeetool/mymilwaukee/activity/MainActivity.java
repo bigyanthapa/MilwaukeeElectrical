@@ -9,10 +9,10 @@ import android.view.MenuItem;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.milwaukeetool.mymilwaukee.R;
+import com.milwaukeetool.mymilwaukee.fragment.InventoryFragment;
+import com.milwaukeetool.mymilwaukee.fragment.NearbyFragment;
 import com.milwaukeetool.mymilwaukee.fragment.SettingsFragment;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
-import com.milwaukeetool.mymilwaukee.view.MTButton;
-import com.milwaukeetool.mymilwaukee.view.MTTextView;
 
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 
@@ -22,9 +22,6 @@ import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 public class MainActivity extends MTActivity {
 
     private static final String TAG = makeLogTag(CreateAccountActivity.class);
-
-    private MTTextView mVersionTypeDistributionTextView;
-    private MTButton mLogOutButton;
 
     @Override
     protected String getLogTag() {
@@ -49,27 +46,6 @@ public class MainActivity extends MTActivity {
     }
 
     protected void setupView() {
-//        mVersionTypeDistributionTextView = (MTTextView) findViewById(R.id.versionTypeDistributionTextView);
-//
-//        if (MTConfig.isExternalRelease()) {
-//            // Hide the version label
-//            mVersionTypeDistributionTextView.setVisibility(View.INVISIBLE);
-//        } else {
-//            mVersionTypeDistributionTextView.setVisibility(View.VISIBLE);
-//            mVersionTypeDistributionTextView.setText(MTConfig.getDistributionTypeVersionString());
-//        }
-//
-//        mLogOutButton = (MTButton) findViewById(R.id.logOutButton);
-//        mLogOutButton.setOnTouchListener(new MTTouchListener(this) {
-//            @Override
-//            public void didTapView(MotionEvent event) {
-//                MTUtils.clearLoginInfo();
-//
-//                Intent intent = new Intent(MainActivity.this, LandingActivity.class);
-//                startActivity(intent);
-//                finish();
-//            }
-//        });
 
         // Initialize the ViewPager and set an adapter
         ViewPager pager = (ViewPager) findViewById(R.id.mainActivityPager);
@@ -82,6 +58,10 @@ public class MainActivity extends MTActivity {
 
         // Bind the tabs to the ViewPager
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.mainActivityTabs);
+
+        // Must set before setting view pager
+        tabs.setShouldExpand(true);
+
         tabs.setViewPager(pager);
         tabs.setUnderlineColorResource(R.color.mt_red);
         tabs.setIndicatorColorResource(R.color.mt_red);
@@ -121,7 +101,11 @@ public class MainActivity extends MTActivity {
 
     public class MainTabAdapter extends android.support.v13.app.FragmentPagerAdapter {
 
-        private final String[] TITLES = { "Inventory", "Nearby Devices", "Settings" };
+        private final String[] TITLES = {
+                MiscUtils.getString(R.string.main_title_inventory),
+                MiscUtils.getString(R.string.main_title_nearby),
+                MiscUtils.getString(R.string.main_title_settings)
+        };
 
         public MainTabAdapter(FragmentManager fm) {
             super(fm);
@@ -142,11 +126,11 @@ public class MainActivity extends MTActivity {
             Fragment fragment = null;
             switch (position) {
                 case 0:
-                    fragment = new Fragment();
+                    fragment = InventoryFragment.newInstance(position);
                     break;
 
                 case 1:
-                    fragment = new Fragment();
+                    fragment = NearbyFragment.newInstance(position);
                     break;
 
                 case 2:
@@ -158,6 +142,5 @@ public class MainActivity extends MTActivity {
             }
             return fragment;
         }
-
     }
 }

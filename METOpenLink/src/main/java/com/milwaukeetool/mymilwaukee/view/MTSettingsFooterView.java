@@ -9,6 +9,7 @@ import android.widget.RelativeLayout;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.LandingActivity;
 import com.milwaukeetool.mymilwaukee.activity.MainActivity;
+import com.milwaukeetool.mymilwaukee.config.MTConfig;
 import com.milwaukeetool.mymilwaukee.fragment.SettingsFragment;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
 
@@ -20,7 +21,7 @@ public class MTSettingsFooterView extends RelativeLayout {
     private SettingsFragment mSettingsFragment;
     private MainActivity mMainActivity = null;
     private MTButton mLogOutButton;
-
+    private MTTextView mVersionTypeDistributionTextView;
 
     public MTSettingsFooterView(Fragment fragment) {
         super(fragment.getActivity());
@@ -34,20 +35,17 @@ public class MTSettingsFooterView extends RelativeLayout {
             mMainActivity = (MainActivity)fragment.getActivity();
         }
 
+        mVersionTypeDistributionTextView = (MTTextView) findViewById(R.id.versionTypeDistributionTextView);
+
+        if (MTConfig.isExternalRelease()) {
+            // Hide the version label
+            mVersionTypeDistributionTextView.setVisibility(View.INVISIBLE);
+        } else {
+            mVersionTypeDistributionTextView.setVisibility(View.VISIBLE);
+            mVersionTypeDistributionTextView.setText(MTConfig.getDistributionTypeVersionString());
+        }
+
         mLogOutButton = (MTButton) findViewById(R.id.settingsFooterLogOutButton);
-//        mLogOutButton.setOnTouchListener(new MTTouchListener(mMainActivity) {
-//            @Override
-//            public void didTapView(MotionEvent event) {
-//
-//                MTUtils.clearLoginInfo();
-//
-//                if (mMainActivity != null) {
-//                    Intent intent = new Intent(mMainActivity, LandingActivity.class);
-//                    mMainActivity.startActivity(intent);
-//                    mMainActivity.finish();
-//                }
-//            }
-//        });
         mLogOutButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
