@@ -14,7 +14,7 @@
     <!-- Landing Page -->
     <string name="title_create_account">Create Account</string>
     <string name="title_log_in">Log In</string>
-    <string name="title_update_profile">Update Profile</string>
+    <string name="title_update_profile">My Profile</string>
     <string name="btn_title_create_account">CREATE ACCOUNT</string>
     <string name="btn_title_log_in">LOG IN</string>
 
@@ -52,6 +52,7 @@
     <string name="user_information">User Information</string>
     <string name="company_information">Company Information</string>
     <string name="contact_information">Contact Information</string>
+    <string name="email_communications">Email Communications</string>
 
     <!-- Progress Indicator -->
     <string name="progress_bar_default_message">Loading...</string>

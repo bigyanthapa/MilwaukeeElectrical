@@ -47,6 +47,7 @@ public class MTSimpleFieldView extends RelativeLayout {
         STANDARD,
         SELECTABLE,
         PASSWORD,
+        PHONE,
         EMAIL
     }
 
@@ -172,6 +173,9 @@ public class MTSimpleFieldView extends RelativeLayout {
                 mEditText.setTransformationMethod(new PasswordTransformationMethod());
                 this.mFieldType = fieldType;
                 break;
+            case PHONE:
+                mEditText.setInputType(InputType.TYPE_CLASS_PHONE);
+                this.mFieldType = fieldType;
             default:
                 this.mFieldType = FieldType.STANDARD;
         }
@@ -227,9 +231,6 @@ public class MTSimpleFieldView extends RelativeLayout {
                     showError("The " + mFieldName + " is invalid");
                     return false;
                 }
-                break;
-            case PASSWORD:
-
                 break;
             default:
                 // Standard validation?
