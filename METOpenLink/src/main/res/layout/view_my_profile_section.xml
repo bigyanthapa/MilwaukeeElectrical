@@ -13,6 +13,8 @@
         android:background="@color/mt_very_light_gray"
         android:gravity="center_vertical"
         android:padding="@dimen/mt_padding_standard"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:textSize="@dimen/mt_font_size_standard"
         android:textStyle="bold"
         android:textColor="@color/mt_black" />

@@ -108,6 +108,8 @@ public class MTSimpleFieldView extends RelativeLayout {
         this.mEditText.setTextColor(resourceId);
     }
 
+    public void setHintColorText(int resourceId) { this.mEditText.setHintTextColor(resourceId); }
+
     public void fieldRequiresReset(boolean requiresReset) {
         mResetField = requiresReset;
     }
