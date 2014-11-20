@@ -14,7 +14,10 @@ import android.widget.ListView;
 
 import com.commonsware.cwac.sacklist.SackOfViewsAdapter;
 import com.milwaukeetool.mymilwaukee.R;
+import com.milwaukeetool.mymilwaukee.activity.LandingActivity;
 import com.milwaukeetool.mymilwaukee.activity.MyProfileActivity;
+import com.milwaukeetool.mymilwaukee.interfaces.ClickListener;
+import com.milwaukeetool.mymilwaukee.util.MTUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
 import com.milwaukeetool.mymilwaukee.view.MTSelectableItemView;
@@ -80,6 +83,20 @@ public class SettingsFragment extends Fragment {
 
         // Add footer
         MTSettingsFooterView footerView = new MTSettingsFooterView(this);
+        footerView.setLogoutListener(new ClickListener() {
+            @Override
+            public void didClickItem(Object object) {
+                MTUtils.clearLoginInfo();
+
+                Activity activity = SettingsFragment.this.getActivity();
+
+                if (activity != null) {
+                    Intent intent = new Intent(activity, LandingActivity.class);
+                    activity.startActivity(intent);
+                    activity.finish();
+                }
+            }
+        });
         mListView.addFooterView(footerView, null, true);
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

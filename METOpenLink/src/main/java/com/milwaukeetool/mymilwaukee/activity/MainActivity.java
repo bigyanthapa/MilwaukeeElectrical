@@ -59,7 +59,7 @@ public class MainActivity extends MTActivity {
         // Bind the tabs to the ViewPager
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.mainActivityTabs);
 
-        // Must set before setting view pager
+        // Must set before setting view pager, expand to fill
         tabs.setShouldExpand(true);
 
         tabs.setViewPager(pager);
