@@ -21,6 +21,7 @@ import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.config.MTConstants;
 import com.milwaukeetool.mymilwaukee.model.event.MTimeActionEvent;
 import com.milwaukeetool.mymilwaukee.util.StringHelper;
+import com.milwaukeetool.mymilwaukee.util.UIUtils;
 
 import de.greenrobot.event.EventBus;
 
@@ -213,7 +214,6 @@ public class MTSimpleFieldView extends RelativeLayout {
             }
         }
 
-
         if (mMinLength > 0) {
             if (this.getFieldValue().length() < mMinLength) {
                 showError(mFieldName + " must be at least " + mMinLength + " characters");
@@ -246,5 +246,15 @@ public class MTSimpleFieldView extends RelativeLayout {
         customErrorDrawable.setBounds(0, 0, customErrorDrawable.getIntrinsicWidth(), customErrorDrawable.getIntrinsicHeight());
         mEditText.setError(errorMessage, customErrorDrawable);
         updateFocus();
+    }
+
+    public void setLastGroupItem() {
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)this.mEditText.getLayoutParams();
+        layoutParams.setMargins(
+                UIUtils.getPixels(25),
+                0,
+                UIUtils.getPixels(25),
+                UIUtils.getPixels(10)
+        );
     }
 }
