@@ -16,13 +16,13 @@ import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 public class MTMyProfileSectionView extends RelativeLayout {
     private static final String TAG = makeLogTag(MTMyProfileSectionView.class);
 
-    private MTTextView mtTextView;
+    private MTHeaderTextView mtTextView;
 
     public MTMyProfileSectionView(Activity activity) {
         super(activity);
         LayoutInflater.from(activity).inflate(R.layout.view_my_profile_section, this);
 
-        mtTextView = (MTTextView) this.findViewById(R.id.my_profile_section_header);
+        mtTextView = (MTHeaderTextView) this.findViewById(R.id.my_profile_section_header);
     }
 
     public void setHeader(String value) {

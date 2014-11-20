@@ -19,7 +19,7 @@
         android:layout_height="match_parent">
 
         <ListView
-            android:id="@+id/header_stuff"
+            android:id="@+id/createAccountListView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
@@ -29,15 +29,6 @@
             android:divider="@android:color/transparent"
             android:dividerHeight="0dp"
             android:descendantFocusability="afterDescendants"/>
-
-        <!--<ImageButton-->
-            <!--android:id="@+id/closeButton"-->
-            <!--android:background="@android:color/transparent"-->
-            <!--android:layout_width="40dp"-->
-            <!--android:layout_height="40dp"-->
-            <!--android:layout_alignParentEnd="true"-->
-            <!--android:layout_alignParentTop="true"-->
-            <!--android:layout_margin="10dp"/>-->
 
         <com.milwaukeetool.mymilwaukee.view.MTTextView
             android:id="@+id/noNetworkConnectivityTextView"

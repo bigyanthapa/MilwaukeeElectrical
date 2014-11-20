@@ -6,12 +6,21 @@
 
     <string name="title_my_milwaukee">My Milwaukee</string>
 
+    <!-- Main -->
+    <string name="main_title_inventory">Inventory</string>
+    <string name="main_title_nearby">Nearby</string>
+    <string name="main_title_settings">Settings</string>
+    
     <!-- Landing Page -->
     <string name="title_create_account">Create Account</string>
     <string name="title_log_in">Log In</string>
     <string name="title_update_profile">Update Profile</string>
     <string name="btn_title_create_account">CREATE ACCOUNT</string>
     <string name="btn_title_log_in">LOG IN</string>
+
+    <!-- Settings -->
+    <string name="btn_title_log_out">LOG OUT</string>
+    <string name="settings_my_profile">My Profile</string>
 
     <!-- Create Account -->
     <string name="title_privacy_policy"><a href="http://www.milwaukeetool.com/privacy">Privacy Policy</a></string>

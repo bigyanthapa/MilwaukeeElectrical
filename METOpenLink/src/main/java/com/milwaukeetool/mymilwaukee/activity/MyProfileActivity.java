@@ -11,13 +11,9 @@ import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.interfaces.Postable;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.NetworkUtil;
-import com.milwaukeetool.mymilwaukee.view.MTCreateAccountFooterView;
-import com.milwaukeetool.mymilwaukee.view.MTCreateAccountHeaderView;
 import com.milwaukeetool.mymilwaukee.view.MTMyProfileSectionView;
-import com.milwaukeetool.mymilwaukee.view.MTProgressView;
 import com.milwaukeetool.mymilwaukee.view.MTSelectableFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTSimpleFieldView;
-import com.milwaukeetool.mymilwaukee.view.MTTextView;
 
 import java.util.LinkedList;
 import java.util.List;

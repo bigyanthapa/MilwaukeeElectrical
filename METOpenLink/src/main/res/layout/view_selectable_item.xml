@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="@drawable/list_bg"
+    android:descendantFocusability="blocksDescendants">
+
+    <com.milwaukeetool.mymilwaukee.view.MTTextView
+        android:id="@+id/selectableItemTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:singleLine="true"
+        android:textSize="@dimen/mt_font_size_large"
+        android:textColor="@color/mt_black"
+        android:text="@string/app_name"
+        android:gravity="center"
+        android:paddingStart="@dimen/mt_padding_large"
+        android:paddingEnd="@dimen/mt_padding_large"
+        android:paddingTop="@dimen/mt_padding_standard"
+        android:paddingBottom="@dimen/mt_padding_standard"
+        />
+    
+    <ImageView
+        android:id="@+id/selectableItemImageView"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@android:color/transparent"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="10dp"
+        />
+
+</RelativeLayout>

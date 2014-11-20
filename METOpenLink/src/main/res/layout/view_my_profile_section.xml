@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:background="@null">
 
-    <com.milwaukeetool.mymilwaukee.view.MTTextView
+    <com.milwaukeetool.mymilwaukee.view.MTHeaderTextView
         android:id="@+id/my_profile_section_header"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -17,7 +17,6 @@
         android:layout_marginBottom="5dp"
         android:textSize="@dimen/mt_font_size_standard"
         android:textStyle="bold"
-        android:textColor="@color/mt_black">
-    </com.milwaukeetool.mymilwaukee.view.MTTextView>
+        android:textColor="@color/mt_black" />
 
 </RelativeLayout>

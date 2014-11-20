@@ -74,7 +74,7 @@ public class CreateAccountActivity extends MTActivity implements Postable {
 
         mNoNetworkConnectivityTextView = (MTTextView)findViewById(R.id.noNetworkConnectivityTextView);
 
-        mListView = (ListView)findViewById(R.id.header_stuff);
+        mListView = (ListView)findViewById(R.id.createAccountListView);
         mListView.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
         mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
         mListView.setStackFromBottom(true);
