@@ -11,6 +11,7 @@ import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.interfaces.Postable;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.NetworkUtil;
+import com.milwaukeetool.mymilwaukee.util.UIUtils;
 import com.milwaukeetool.mymilwaukee.view.MTMyProfileSectionView;
 import com.milwaukeetool.mymilwaukee.view.MTSelectableFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTSimpleFieldView;
@@ -51,6 +52,8 @@ public class MyProfileActivity extends MTActivity implements Postable {
     private MTSimpleFieldView cellPhone;
     private MTSimpleFieldView fax;
 
+    private LinkedList<View> mViews;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,12 +72,12 @@ public class MyProfileActivity extends MTActivity implements Postable {
         mListView.setStackFromBottom(true);
         mListView.setSelectionAfterHeaderView();
 
-        LinkedList<View> views = new LinkedList<View>();
-        this.setupUserInformation(views);
-        this.setupCompanyInformation(views);
-        this.setupContactInformation(views);
+        mViews = new LinkedList<View>();
+        this.setupUserInformation(mViews);
+        this.setupCompanyInformation(mViews);
+        this.setupContactInformation(mViews);
 
-        mMyProfileAdapter = new MyProfileAdapter(views);
+        mMyProfileAdapter = new MyProfileAdapter(mViews);
 
         if (mListView != null) {
             mListView.setAdapter(mMyProfileAdapter);
@@ -125,6 +128,7 @@ public class MyProfileActivity extends MTActivity implements Postable {
         this.country = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.update_profile_country));
         this.country.setTextColor(this.getResources().getColor(R.color.mt_black));
         this.country.setHintColorText(this.getResources().getColor(R.color.mt_common_gray));
+        this.country.setLastGroupItem();
         views.add(this.country);
     }
 
@@ -148,13 +152,14 @@ public class MyProfileActivity extends MTActivity implements Postable {
         this.fax = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.update_profile_fax));
         this.fax.setTextColor(this.getResources().getColor(R.color.mt_black));
         this.fax.setHintColorText(this.getResources().getColor(R.color.mt_common_gray));
+        this.fax.setLastGroupItem();
         views.add(this.fax);
     }
 
     protected void setupUserInformation(LinkedList<View> views) {
         this.userInformation = new MTMyProfileSectionView(this);
         this.userInformation.setHeader("User Information");
-        this.userInformation.setMargins(0, 0, 0, 5);
+        this.userInformation.setMargins(0, 0, 0, UIUtils.getPixels(5));
         views.add(userInformation);
 
         mEmailFieldView = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.create_account_field_email))
@@ -182,7 +187,9 @@ public class MyProfileActivity extends MTActivity implements Postable {
         mTradeOccupationFieldView.setHintColorText(this.getResources().getColor(R.color.mt_common_gray));
         mTradeOccupationFieldView.setNextActionDone();
         mTradeOccupationFieldView.setRequired(true);
+        mTradeOccupationFieldView.setLastGroupItem();
         views.add(mTradeOccupationFieldView);
+
 
         mMyProfileAdapter = new MyProfileAdapter(views);
 
@@ -240,6 +247,14 @@ public class MyProfileActivity extends MTActivity implements Postable {
 
         @Override
         public boolean isEnabled(int position) {
+
+            // Get the view at position
+            View view = mViews.get(position);
+
+            if (view != null && view instanceof MTMyProfileSectionView) {
+                return false;
+            }
+
             return true;
         }
     }

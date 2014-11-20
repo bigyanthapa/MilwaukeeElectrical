@@ -9,12 +9,13 @@
     <com.milwaukeetool.mymilwaukee.view.MTHeaderTextView
         android:id="@+id/my_profile_section_header"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:background="@color/mt_very_light_gray"
         android:gravity="center_vertical"
-        android:padding="@dimen/mt_padding_standard"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
+        android:paddingLeft="@dimen/mt_padding_standard"
+        android:paddingRight="@dimen/mt_padding_standard"
+        android:layout_marginTop="@dimen/mt_margin_small"
+        android:layout_marginBottom="@dimen/mt_margin_small"
         android:textSize="@dimen/mt_font_size_standard"
         android:textStyle="bold"
         android:textColor="@color/mt_black" />

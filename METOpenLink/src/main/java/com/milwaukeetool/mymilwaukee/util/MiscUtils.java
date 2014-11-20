@@ -43,6 +43,10 @@ public class MiscUtils {
         return getAppResources().getString(id);
     }
 
+    public static float getDimension(int id) {
+        return getAppResources().getDimension(id);
+    }
+
 
     public static void checkForCrashes(Context context) {
 

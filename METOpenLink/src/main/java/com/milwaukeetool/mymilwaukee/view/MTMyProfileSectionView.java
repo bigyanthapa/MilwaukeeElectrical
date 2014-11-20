@@ -2,9 +2,7 @@ package com.milwaukeetool.mymilwaukee.view;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.milwaukeetool.mymilwaukee.R;
 
