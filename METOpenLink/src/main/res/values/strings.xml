@@ -76,7 +76,7 @@
     <string name="dialog_title_sign_in_failure">Error Signing In</string>
     <string name="dialog_title_no_network_connection">No Network Connection</string>
     <string name="dialog_title_get_profile_failure">Error Getting User Details</string>
-    <string name="dialog_title_update_profile_failure">Error Updating User Profile</string>
+    <string name="dialog_title_update_profile_failure">Error Updating User Details</string>
 
     <string name="error_text_offline">The Internet connection appears to be offline.</string>
 

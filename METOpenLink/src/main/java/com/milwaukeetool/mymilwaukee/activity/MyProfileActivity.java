@@ -179,9 +179,8 @@ public class MyProfileActivity extends MTActivity implements Postable {
 
                 LOGD(TAG, "Saving MyProfile updates...");
 
+                // Always hide the keyboard
                 UIUtils.hideKeyboard(this);
-                mProgressView.updateMessage(MiscUtils.getString(R.string.progress_bar_saving_user_details));
-                mProgressView.startProgress();
 
                 Callback<MTUserProfile> responseCallback = new Callback<MTUserProfile>() {
                     @Override
@@ -202,21 +201,22 @@ public class MyProfileActivity extends MTActivity implements Postable {
                 };
 
                 if (this.isTextFieldsValid()) {
+
+                    mProgressView.updateMessage(MiscUtils.getString(R.string.progress_bar_saving_user_details));
+                    mProgressView.startProgress();
+
                     MTUserProfile userProfile = this.constructMTUserProfile();
 
                     MTWebInterface.sharedInstance().getUserService().updateProfile(MTUtils.getAuthHeaderForBearerToken(),
                             userProfile,
                             responseCallback);
-
-                    return true;
                 }
 
-                break;
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
-
-        return false;
     }
 
     protected void setupViews() {
