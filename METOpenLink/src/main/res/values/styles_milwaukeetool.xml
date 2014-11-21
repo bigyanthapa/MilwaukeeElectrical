@@ -32,10 +32,21 @@
         <item name="android:editTextStyle">@style/EditText.MilwaukeeTool</item>
         <item name="android:checkboxStyle">@style/CheckBox.MilwaukeeTool</item>
         <item name="android:radioButtonStyle">@style/RadioButton.MilwaukeeTool</item>
+        <item name="android:actionMenuTextAppearance">@style/ActionMenuTextAppearance.Milwaukeetool</item>
 
                 <!-- Light.DarkActionBar specific -->
         <item name="android:actionBarWidgetTheme">@style/Theme.Milwaukeetool.Widget</item>
 
+    </style>
+
+    <style name="MyTheme" parent="android:Theme.Holo">
+
+    </style>
+    <style name="ActionMenuTextAppearance.Milwaukeetool" parent="android:TextAppearance.Holo.Widget.ActionBar.Menu">
+        <!--<item name="android:textAllCaps">false</item>-->
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">Arial</item>
+        <item name="android:textStyle">normal</item>
     </style>
 
     <style name="ActionBar.Solid.Milwaukeetool" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">

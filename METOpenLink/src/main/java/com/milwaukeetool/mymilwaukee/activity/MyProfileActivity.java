@@ -6,6 +6,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -18,12 +19,14 @@ import com.milwaukeetool.mymilwaukee.model.response.MTLogInResponse;
 import com.milwaukeetool.mymilwaukee.model.response.MTUserProfileResponse;
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
+import com.milwaukeetool.mymilwaukee.model.event.MTimeActionEvent;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
 import com.milwaukeetool.mymilwaukee.view.MTMyProfileSectionView;
 import com.milwaukeetool.mymilwaukee.view.MTSelectableFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTSimpleFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTSwitchListItemView;
+import com.milwaukeetool.mymilwaukee.view.RitalinLayout;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -42,6 +45,7 @@ public class MyProfileActivity extends MTActivity implements Postable {
 
     private static final String TAG = makeLogTag(MyProfileActivity.class);
 
+    private RitalinLayout mListViewContainerLayout;
     private ListView mListView;
     private MyProfileAdapter mMyProfileAdapter;
 
@@ -68,6 +72,8 @@ public class MyProfileActivity extends MTActivity implements Postable {
     private MTSwitchListItemView emailCommunications;
 
     private LinkedList<View> mViews;
+
+    private boolean mSaveInProgress = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,10 +170,15 @@ public class MyProfileActivity extends MTActivity implements Postable {
     }
 
     protected void setupViews() {
+
+        mListViewContainerLayout = (RitalinLayout)findViewById(R.id.myProfileListViewContainer);
+
         mListView = (ListView)findViewById(R.id.my_profile_list_view);
-        mListView.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
-        mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
-        mListView.setStackFromBottom(true);
+//        mListView.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
+//        mListView.setItemsCanFocus(true);
+//        mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+//        mListView.setStackFromBottom(true);
+
 
         Callback<MTUserProfileResponse> responseCallback = new Callback<MTUserProfileResponse>() {
             @Override
@@ -197,58 +208,59 @@ public class MyProfileActivity extends MTActivity implements Postable {
             mListView.setAdapter(mMyProfileAdapter);
             mListView.setFocusable(true);
         }
+
+        mListViewContainerLayout.requestFocus();
     }
 
     protected void setupCompanyInformation(LinkedList<View> views, MTUserProfileResponse response) {
         this.companyInformation = new MTMyProfileSectionView(this);
-        this.companyInformation.setHeader("Company Information");
+        this.companyInformation.setHeader(MiscUtils.getString(R.string.company_information));
         views.add(this.companyInformation);
 
-        this.title = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.update_profile_title));
-        this.title.setTextColor(this.getResources().getColor(R.color.mt_black));
-        this.title.setHintColorText(this.getResources().getColor(R.color.mt_common_gray));
+        this.title.setTextColorResource(R.color.mt_black);
+        this.title.setHintColorTextResource(R.color.mt_common_gray);
         this.title.setFieldValue(response != null ? response.getTitle() : null);
         views.add(this.title);
 
         this.companyName = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.update_profile_company_name));
-        this.companyName.setTextColor(this.getResources().getColor(R.color.mt_black));
-        this.companyName.setHintColorText(this.getResources().getColor(R.color.mt_common_gray));
+        this.companyName.setTextColorResource(R.color.mt_black);
+        this.companyName.setHintColorTextResource(R.color.mt_common_gray);
         this.companyName.setFieldValue(response != null ? response.getCompanyName() : null);
         views.add(this.companyName);
 
         this.address1 = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.update_profile_address_1));
-        this.address1.setTextColor(this.getResources().getColor(R.color.mt_black));
-        this.address1.setHintColorText(this.getResources().getColor(R.color.mt_common_gray));
+        this.address1.setTextColorResource(R.color.mt_black);
+        this.address1.setHintColorTextResource(R.color.mt_common_gray);
         this.address1.setFieldValue(response != null ? response.getAddress() : null);
         views.add(this.address1);
 
         this.address2 = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.update_profile_address_2));
-        this.address2.setTextColor(this.getResources().getColor(R.color.mt_black));
-        this.address2.setHintColorText(this.getResources().getColor(R.color.mt_common_gray));
+        this.address2.setTextColorResource(R.color.mt_black);
+        this.address2.setHintColorTextResource(R.color.mt_common_gray);
         this.address2.setFieldValue(response != null ? response.getAddress2() : null);
         views.add(address2);
 
         this.city = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.update_profile_city));
-        this.city.setTextColor(this.getResources().getColor(R.color.mt_black));
-        this.city.setHintColorText(this.getResources().getColor(R.color.mt_common_gray));
+        this.city.setTextColorResource(R.color.mt_black);
+        this.city.setHintColorTextResource(R.color.mt_common_gray);
         this.city.setFieldValue(response != null ? response.getCity() : null);
         views.add(city);
 
         this.stateProvince = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.update_profile_state_province));
-        this.stateProvince.setTextColor(this.getResources().getColor(R.color.mt_black));
-        this.stateProvince.setHintColorText(this.getResources().getColor(R.color.mt_common_gray));
+        this.stateProvince.setTextColorResource(R.color.mt_black);
+        this.stateProvince.setHintColorTextResource(R.color.mt_common_gray);
         this.stateProvince.setFieldValue(response != null ? response.getState() : null);
         views.add(this.stateProvince);
 
         this.zipcode = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.update_profile_zip_code));
-        this.zipcode.setTextColor(this.getResources().getColor(R.color.mt_black));
-        this.zipcode.setHintColorText(this.getResources().getColor(R.color.mt_common_gray));
+        this.zipcode.setTextColorResource(R.color.mt_black);
+        this.zipcode.setHintColorTextResource(R.color.mt_common_gray);
         this.zipcode.setFieldValue(response != null ? response.getZip() : null);
         views.add(this.zipcode);
 
         this.country = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.update_profile_country));
-        this.country.setTextColor(this.getResources().getColor(R.color.mt_black));
-        this.country.setHintColorText(this.getResources().getColor(R.color.mt_common_gray));
+        this.country.setTextColorResource(R.color.mt_black);
+        this.country.setHintColorTextResource(R.color.mt_common_gray);
         this.country.setLastGroupItem();
         this.country.setFieldValue(response != null ? response.getCountry() : null);
         views.add(this.country);
@@ -256,26 +268,27 @@ public class MyProfileActivity extends MTActivity implements Postable {
 
     protected void setupContactInformation(LinkedList<View> views, MTUserProfileResponse response) {
         this.contactInformation = new MTMyProfileSectionView(this);
-        this.contactInformation.setHeader("Contact Information");
+        this.contactInformation.setHeader(MiscUtils.getString(R.string.contact_information));
         views.add(contactInformation);
 
         this.phone = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.update_profile_phone));
-        this.phone.setTextColor(this.getResources().getColor(R.color.mt_black));
-        this.phone.setHintColorText(this.getResources().getColor(R.color.mt_common_gray));
+        this.phone.setTextColorResource(R.color.mt_black);
+        this.phone.setHintColorTextResource(R.color.mt_common_gray);
         this.phone.setFieldType(MTSimpleFieldView.FieldType.PHONE);
         this.phone.setFieldValue(response != null ? response.getPhone() : null);
         views.add(this.phone);
 
         this.cellPhone = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.update_profile_cell_phone));
-        this.cellPhone.setTextColor(this.getResources().getColor(R.color.mt_black));
-        this.cellPhone.setHintColorText(this.getResources().getColor(R.color.mt_common_gray));
+        this.cellPhone.setTextColorResource(R.color.mt_black);
+        this.cellPhone.setHintColorTextResource(R.color.mt_common_gray);
         this.cellPhone.setFieldType(MTSimpleFieldView.FieldType.PHONE);
         this.cellPhone.setFieldValue(response != null ? response.getCellPhone() : null);
         views.add(this.cellPhone);
 
         this.fax = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.update_profile_fax));
-        this.fax.setTextColor(this.getResources().getColor(R.color.mt_black));
-        this.fax.setHintColorText(this.getResources().getColor(R.color.mt_common_gray));
+        this.fax.setTextColorResource(R.color.mt_black);
+        this.fax.setHintColorTextResource(R.color.mt_common_gray);
+        this.fax.setFieldType(MTSimpleFieldView.FieldType.PHONE);
         this.fax.setFieldValue(response != null ? response.getFax() : null);
         views.add(this.fax);
 
@@ -293,36 +306,36 @@ public class MyProfileActivity extends MTActivity implements Postable {
 
     protected void setupUserInformation(LinkedList<View> views, MTUserProfileResponse response) {
         this.userInformation = new MTMyProfileSectionView(this);
-        this.userInformation.setHeader("User Information");
+        this.userInformation.setHeader(MiscUtils.getString(R.string.user_information));
         this.userInformation.setMargins(0, 0, 0, UIUtils.getPixels(5));
         views.add(userInformation);
 
         mEmailFieldView = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.create_account_field_email))
                 .setFieldType(MTSimpleFieldView.FieldType.EMAIL);
-        mEmailFieldView.setTextColor(this.getResources().getColor(R.color.mt_black));
+        mEmailFieldView.setTextColorResource(R.color.mt_black);
         mEmailFieldView.setRequired(true);
-        mEmailFieldView.setHintColorText(this.getResources().getColor(R.color.mt_common_gray));
+        mEmailFieldView.setHintColorTextResource(R.color.mt_common_gray);
         mEmailFieldView.setFieldValue(response != null ? response.getEmail() : null);
         views.add(mEmailFieldView);
 
         mFirstNameFieldView = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.create_account_field_first_name));
-        mFirstNameFieldView.setTextColor(this.getResources().getColor(R.color.mt_black));
-        mFirstNameFieldView.setHintColorText(this.getResources().getColor(R.color.mt_common_gray));
+        mFirstNameFieldView.setTextColorResource(R.color.mt_black);
+        mFirstNameFieldView.setHintColorTextResource(R.color.mt_common_gray);
         mFirstNameFieldView.setRequired(true);
         mFirstNameFieldView.setFieldValue(response != null ? response.getFirstName() : null);
         views.add(mFirstNameFieldView);
 
         mLastNameFieldView = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.create_account_field_last_name));
-        mLastNameFieldView.setTextColor(this.getResources().getColor(R.color.mt_black));
-        mLastNameFieldView.setHintColorText(this.getResources().getColor(R.color.mt_common_gray));
+        mLastNameFieldView.setTextColorResource(R.color.mt_black);
+        mLastNameFieldView.setHintColorTextResource(R.color.mt_common_gray);
         mLastNameFieldView.setRequired(true);
         mLastNameFieldView.setFieldValue(response != null ? response.getLastName() : null);
         views.add(mLastNameFieldView);
 
         String[] selectableOptionArray = this.getResources().getStringArray(R.array.trade_occupation_array);
         mTradeOccupationFieldView = MTSelectableFieldView.createSelectableFieldView(this, MiscUtils.getString(R.string.create_account_field_trade),selectableOptionArray);
-        mTradeOccupationFieldView.setTextColor(this.getResources().getColor(R.color.mt_black));
-        mTradeOccupationFieldView.setHintColorText(this.getResources().getColor(R.color.mt_common_gray));
+        mTradeOccupationFieldView.setTextColorResource(R.color.mt_black);
+        mTradeOccupationFieldView.setHintColorTextResource(R.color.mt_common_gray);
         mTradeOccupationFieldView.setNextActionDone();
         mTradeOccupationFieldView.setRequired(true);
         mTradeOccupationFieldView.setLastGroupItem();
@@ -339,6 +352,14 @@ public class MyProfileActivity extends MTActivity implements Postable {
     @Override
     public void post(CharSequence option) {
         mTradeOccupationFieldView.setFieldValue(option.toString());
+    }
+
+    public void onEvent(MTimeActionEvent event) {
+        if (event.callingActivity == this) {
+            if (event.action == EditorInfo.IME_ACTION_NEXT && event.fieldName.equalsIgnoreCase(mLastNameFieldView.getFieldName())) {
+                mTradeOccupationFieldView.showSelectableOptions();
+            }
+        }
     }
 
     private class MyProfileAdapter extends SackOfViewsAdapter {

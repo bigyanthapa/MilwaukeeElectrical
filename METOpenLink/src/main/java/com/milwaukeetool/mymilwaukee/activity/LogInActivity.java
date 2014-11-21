@@ -73,11 +73,15 @@ public class LogInActivity extends MTActivity {
 
         mEmailFieldView = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.sign_in_field_title_email))
                 .setFieldType(MTSimpleFieldView.FieldType.EMAIL).setRequired(true).updateFocus();
+        mEmailFieldView.setTextColorResource(R.color.mt_white);
+        mEmailFieldView.setHintColorTextResource(R.color.mt_very_light_gray);
         views.add(mEmailFieldView);
 
         mPasswordFieldView = MTSimpleFieldView.createSimpleFieldView(this,MiscUtils.getString(R.string.sign_in_field_title_password))
                 .setFieldType(MTSimpleFieldView.FieldType.PASSWORD).setRequired(true).setMaxLength(1024);
         views.add(mPasswordFieldView);
+        mPasswordFieldView.setTextColorResource(R.color.mt_white);
+        mPasswordFieldView.setHintColorTextResource(R.color.mt_very_light_gray);
         mPasswordFieldView.setNextActionGo();
 
         mFooterView = new MTLoginFooterView(this);

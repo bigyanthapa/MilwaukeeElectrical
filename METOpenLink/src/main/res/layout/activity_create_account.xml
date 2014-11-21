@@ -14,9 +14,11 @@
         android:scaleType="fitXY"
         android:src="@drawable/background" />
 
-    <RelativeLayout
+    <com.milwaukeetool.mymilwaukee.view.RitalinLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:focusableInTouchMode="true"
+        android:descendantFocusability="afterDescendants">
 
         <ListView
             android:id="@+id/createAccountListView"
@@ -45,6 +47,6 @@
             android:textColor="@color/mt_white"
             android:visibility="invisible"/>
 
-    </RelativeLayout>
+    </com.milwaukeetool.mymilwaukee.view.RitalinLayout>
 
 </com.milwaukeetool.mymilwaukee.view.MTLayout>
