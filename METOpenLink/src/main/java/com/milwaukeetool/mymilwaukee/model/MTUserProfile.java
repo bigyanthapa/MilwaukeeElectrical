@@ -1,11 +1,11 @@
-package com.milwaukeetool.mymilwaukee.model.response;
+package com.milwaukeetool.mymilwaukee.model;
 
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by scott.hopfensperger on 11/20/2014.
  */
-public class MTUserProfileResponse {
+public class MTUserProfile {
 
     @SerializedName("email")
     private String email;

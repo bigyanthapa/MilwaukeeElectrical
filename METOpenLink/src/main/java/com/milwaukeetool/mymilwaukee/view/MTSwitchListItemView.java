@@ -32,6 +32,10 @@ public class MTSwitchListItemView extends RelativeLayout {
         mSwitch.setChecked(switchOn);
     }
 
+    public boolean isSwitchOn() {
+        return mSwitch.isChecked();
+    }
+
     public void setLastGroupItem() {
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)this.mSwitch.getLayoutParams();
         layoutParams.setMargins(

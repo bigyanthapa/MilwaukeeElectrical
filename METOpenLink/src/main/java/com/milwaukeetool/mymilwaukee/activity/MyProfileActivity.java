@@ -13,8 +13,8 @@ import android.widget.ListView;
 import com.commonsware.cwac.sacklist.SackOfViewsAdapter;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.interfaces.Postable;
+import com.milwaukeetool.mymilwaukee.model.MTUserProfile;
 import com.milwaukeetool.mymilwaukee.model.event.MTimeActionEvent;
-import com.milwaukeetool.mymilwaukee.model.response.MTUserProfileResponse;
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
@@ -91,9 +91,9 @@ public class MyProfileActivity extends MTActivity implements Postable {
         if (!mEditInProgress) {
             mProgressView.updateMessage(MiscUtils.getString(R.string.progress_bar_getting_user_details));
 
-            Callback<MTUserProfileResponse> responseCallback = new Callback<MTUserProfileResponse>() {
+            Callback<MTUserProfile> responseCallback = new Callback<MTUserProfile>() {
                 @Override
-                public void success(MTUserProfileResponse result, Response response) {
+                public void success(MTUserProfile result, Response response) {
 
                     mEditInProgress = true;
 
@@ -157,6 +157,19 @@ public class MyProfileActivity extends MTActivity implements Postable {
         return super.onCreateOptionsMenu(menu);
     }
 
+    protected boolean isTextFieldsValid() {
+        boolean valid = true;
+
+        for (View view : this.mViews) {
+            if (view instanceof MTSimpleFieldView && !((MTSimpleFieldView) view).isValid()) {
+                valid = false;
+                break;
+            }
+        }
+
+        return valid;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
@@ -169,26 +182,40 @@ public class MyProfileActivity extends MTActivity implements Postable {
                 mProgressView.updateMessage(MiscUtils.getString(R.string.progress_bar_saving_user_details));
                 mProgressView.startProgress();
 
-                // TODO:Validate user information, looping through all fields
-
-                // TODO:If validated, write out to server (Replace fake call)
-
-                MiscUtils.runDelayed(2000,new MiscUtils.RunDelayedCallback() {
+                Callback<MTUserProfile> responseCallback = new Callback<MTUserProfile>() {
                     @Override
-                    public void onFinished() {
+                    public void success(MTUserProfile result, Response response) {
                         mProgressView.stopProgress();
-
-                        // TODO: if saved successfully
                         finish();
-
-                        // TODO: if error show error to user, allow corrections
                     }
-                });
 
-                return true;
+                    @Override
+                    public void failure(RetrofitError retrofitError) {
+                        LOGD(TAG, "Failed to update my profile");
+
+                        // Hide progress indicator
+                        mProgressView.stopProgress();
+                        MTUtils.handleRetrofitError(retrofitError, MyProfileActivity.this,
+                                MiscUtils.getString(R.string.dialog_title_update_profile_failure));
+                    }
+                };
+
+                if (this.isTextFieldsValid()) {
+                    MTUserProfile userProfile = this.constructMTUserProfile();
+
+                    MTWebInterface.sharedInstance().getUserService().updateProfile(MTUtils.getAuthHeaderForBearerToken(),
+                            userProfile,
+                            responseCallback);
+
+                    return true;
+                }
+
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
+
+        return false;
     }
 
     protected void setupViews() {
@@ -217,20 +244,20 @@ public class MyProfileActivity extends MTActivity implements Postable {
         mListViewContainerLayout.requestFocus();
     }
 
-    protected void populateView(MTUserProfileResponse response) {
+    protected void populateView(MTUserProfile response) {
         populateUserInformation(response);
         populateContactInformation(response);
         populateCompanyInformation(response);
     }
 
-    private void populateUserInformation(MTUserProfileResponse response) {
+    private void populateUserInformation(MTUserProfile response) {
         mEmailFieldView.setFieldValue(response != null ? response.getEmail() : null);
         mFirstNameFieldView.setFieldValue(response != null ? response.getFirstName() : null);
         mLastNameFieldView.setFieldValue(response != null ? response.getLastName() : null);
         mTradeOccupationFieldView.setFieldValue(response != null ? response.getOccupation() : null);
     }
 
-    private void populateContactInformation(MTUserProfileResponse response) {
+    private void populateContactInformation(MTUserProfile response) {
         this.phone.setFieldValue(response != null ? response.getPhone() : null);
         this.cellPhone.setFieldValue(response != null ? response.getCellPhone() : null);
         this.fax.setFieldValue(response != null ? response.getFax() : null);
@@ -239,7 +266,7 @@ public class MyProfileActivity extends MTActivity implements Postable {
         }
     }
 
-    private void populateCompanyInformation(MTUserProfileResponse response) {
+    private void populateCompanyInformation(MTUserProfile response) {
         this.title.setFieldValue(response != null ? response.getTitle() : null);
         this.companyName.setFieldValue(response != null ? response.getCompanyName() : null);
         this.address1.setFieldValue(response != null ? response.getAddress() : null);
@@ -248,6 +275,28 @@ public class MyProfileActivity extends MTActivity implements Postable {
         this.stateProvince.setFieldValue(response != null ? response.getState() : null);
         this.zipcode.setFieldValue(response != null ? response.getZip() : null);
         this.country.setFieldValue(response != null ? response.getCountry() : null);
+    }
+
+    private MTUserProfile constructMTUserProfile() {
+        MTUserProfile userProfile = new MTUserProfile();
+        userProfile.setAddress(this.address1.getFieldValue());
+        userProfile.setAddress2(this.address2.getFieldValue());
+        userProfile.setCellPhone(this.cellPhone.getFieldValue());
+        userProfile.setCity(this.city.getFieldValue());
+        userProfile.setCompanyName(this.companyName.getFieldValue());
+        userProfile.setCountry(this.country.getFieldValue());
+        userProfile.setEmail(this.mEmailFieldView.getFieldValue());
+        userProfile.setFax(this.fax.getFieldValue());
+        userProfile.setFirstName(this.mFirstNameFieldView.getFieldValue());
+        userProfile.setLastName(this.mLastNameFieldView.getFieldValue());
+        userProfile.setOccupation(this.mTradeOccupationFieldView.getFieldValue());
+        userProfile.setPhone(this.phone.getFieldValue());
+        userProfile.setOptInForCommunication(this.emailCommunications.isSwitchOn());
+        userProfile.setState(this.stateProvince.getFieldValue());
+        userProfile.setTitle(this.title.getFieldValue());
+        userProfile.setZip(this.zipcode.getFieldValue());
+
+        return userProfile;
     }
 
     protected void setupCompanyInformation(LinkedList<View> views) {
