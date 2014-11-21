@@ -53,7 +53,7 @@ public class MTWebInterface {
         return mUserService;
     }
 
-    public static String getCreateAccountErrorMessage(RetrofitError retrofitError) {
+    public static String getErrorMessage(RetrofitError retrofitError) {
         if (retrofitError.getResponse() != null) {
             if (isJSONValid((TypedByteArray)retrofitError.getResponse().getBody())) {
                 MTCreateAccountErrorResponse body = (MTCreateAccountErrorResponse) retrofitError.getBodyAs(MTCreateAccountErrorResponse.class);
@@ -65,7 +65,7 @@ public class MTWebInterface {
         return "Unknown Error";
     }
 
-    public static String getErrorMessage(RetrofitError retrofitError) {
+    public static String getLogInErrorMessage(RetrofitError retrofitError) {
         if (retrofitError.getResponse() != null) {
             if (isJSONValid((TypedByteArray)retrofitError.getResponse().getBody())) {
                 MTErrorResponse body = (MTErrorResponse) retrofitError.getBodyAs(MTErrorResponse.class);

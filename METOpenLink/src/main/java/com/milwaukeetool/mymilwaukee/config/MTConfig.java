@@ -38,7 +38,7 @@ public class MTConfig {
     public static String MT_API_SECRET_BETA = "bWlsd2F1a2VlX2lvczpiMGI4OTdlZDMxYmM2OGNhNjRiZDY4ZmU3NzcxZDkwMzQ1ODkzZTc4";
     public static String MT_API_SERVER_TOKEN_BETA = MT_API_SERVER_TOKEN_QA;
 
-    public static String MT_BEARER = "Bearer";
+    public static String MT_BEARER = "Bearer ";
     // JSON
 
     // Build info

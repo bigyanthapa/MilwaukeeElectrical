@@ -6,7 +6,7 @@ import android.text.TextUtils;
 
 import com.milwaukeetool.mymilwaukee.MilwaukeeToolApplication;
 import com.milwaukeetool.mymilwaukee.R;
-import com.milwaukeetool.mymilwaukee.activity.CreateAccountActivity;
+import com.milwaukeetool.mymilwaukee.activity.LogInActivity;
 import com.milwaukeetool.mymilwaukee.activity.MainActivity;
 import com.milwaukeetool.mymilwaukee.config.MTConfig;
 import com.milwaukeetool.mymilwaukee.model.event.MTNetworkAvailabilityEvent;
@@ -95,8 +95,8 @@ public class MTUtils {
 
         String errorMessage = "";
 
-        if (activity instanceof CreateAccountActivity) {
-            errorMessage = MTWebInterface.getCreateAccountErrorMessage(retrofitError);
+        if (activity instanceof LogInActivity) {
+            errorMessage = MTWebInterface.getLogInErrorMessage(retrofitError);
         } else {
             errorMessage = MTWebInterface.getErrorMessage(retrofitError);
         }
