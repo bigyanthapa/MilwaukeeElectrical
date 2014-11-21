@@ -7,7 +7,7 @@ import android.widget.RelativeLayout;
 
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.config.MTConfig;
-import com.milwaukeetool.mymilwaukee.interfaces.ClickListener;
+import com.milwaukeetool.mymilwaukee.interfaces.MTClickListener;
 
 /**
  * Created by cent146 on 11/19/14.
@@ -19,7 +19,7 @@ public class MTSettingsFooterView extends RelativeLayout {
     private MTButton mLogOutButton;
     private MTTextView mVersionTypeDistributionTextView;
 
-    private ClickListener mLogoutListener = null;
+    private MTClickListener mLogoutListener = null;
 
     public MTSettingsFooterView(Fragment fragment) {
         super(fragment.getActivity());
@@ -54,7 +54,7 @@ public class MTSettingsFooterView extends RelativeLayout {
         });
     }
 
-    public void setLogoutListener(ClickListener logoutListener) {
+    public void setLogoutListener(MTClickListener logoutListener) {
         mLogoutListener = logoutListener;
     }
 }

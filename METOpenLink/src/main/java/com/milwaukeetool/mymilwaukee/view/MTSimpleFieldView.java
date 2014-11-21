@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -20,6 +21,7 @@ import com.joanzapata.android.iconify.Iconify;
 import com.milwaukeetool.mymilwaukee.MilwaukeeToolApplication;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.config.MTConstants;
+import com.milwaukeetool.mymilwaukee.interfaces.MTFocusListener;
 import com.milwaukeetool.mymilwaukee.model.event.MTimeActionEvent;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.StringHelper;
@@ -45,13 +47,29 @@ public class MTSimpleFieldView extends RelativeLayout {
     protected int mMaxLength;
     protected String mFieldName;
     protected boolean mResetField;
+    protected MTFocusListener mFocusListener;
+
+    protected int mListItemNumber = 0;
 
     public enum FieldType {
         STANDARD,
         SELECTABLE,
         PASSWORD,
         PHONE,
-        EMAIL
+        EMAIL,
+        ZIP_POSTAL_CODE
+    }
+
+    public void setListItemNumber(int listItemNumber) {
+        mListItemNumber = listItemNumber;
+    }
+
+    public int getListItemNumber() {
+        return mListItemNumber;
+    }
+
+    public void setFocusListener(MTFocusListener listener) {
+        mFocusListener = listener;
     }
 
     public MTSimpleFieldView(Activity activity) {
@@ -117,6 +135,15 @@ public class MTSimpleFieldView extends RelativeLayout {
                 }
             }
         });
+
+        mEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (mFocusListener != null) {
+                    mFocusListener.didChangeFocus(hasFocus, MTSimpleFieldView.this.mEditText, mListItemNumber);
+                }
+            }
+        });
     }
 
     public void setTextColorResource(int resourceId) {
@@ -174,6 +201,9 @@ public class MTSimpleFieldView extends RelativeLayout {
     }
 
     public MTSimpleFieldView setFieldType(FieldType fieldType) {
+
+        this.mFieldType = fieldType;
+
         switch (fieldType) {
             case EMAIL:
                 String mfr = Build.MANUFACTURER;
@@ -181,7 +211,6 @@ public class MTSimpleFieldView extends RelativeLayout {
                     mEditText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
                 } else {
                     mEditText.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS|InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-                    this.mFieldType = fieldType;
                 }
                 break;
             case PASSWORD:
@@ -191,13 +220,16 @@ public class MTSimpleFieldView extends RelativeLayout {
                 // Set the typeface after applying inputType since it changes the font
                 mEditText.setTypeface(currentTypeface);
                 mEditText.setTransformationMethod(new PasswordTransformationMethod());
-                this.mFieldType = fieldType;
                 break;
             case PHONE:
-                mEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_PHONE);
-                this.mFieldType = fieldType;
+                mEditText.setInputType(InputType.TYPE_CLASS_PHONE);
+                break;
+            case ZIP_POSTAL_CODE:
+                mEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                break;
             default:
                 this.mFieldType = FieldType.STANDARD;
+                break;
         }
 
         return this;
@@ -220,6 +252,10 @@ public class MTSimpleFieldView extends RelativeLayout {
 
     public void setNextActionGo() {
         mEditText.setImeOptions(EditorInfo.IME_ACTION_GO);
+    }
+
+    public void setIMEAction(int imeOptions) {
+        mEditText.setImeOptions(imeOptions);
     }
 
     public boolean isValid() {
