@@ -5,7 +5,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import com.commonsware.cwac.sacklist.SackOfViewsAdapter;
@@ -85,7 +84,7 @@ public class CreateAccountActivity extends MTActivity implements Postable {
         mListView.addHeaderView(mHeaderView, null, false);
 
         mEmailFieldView = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.create_account_field_email))
-                .setFieldType(MTSimpleFieldView.FieldType.EMAIL).setRequired(true).updateFocus();
+                .setFieldType(MTSimpleFieldView.FieldType.EMAIL).setRequired(true);
         views.add(mEmailFieldView);
 
         mPasswordFieldView = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.create_account_field_password))
@@ -213,14 +212,6 @@ public class CreateAccountActivity extends MTActivity implements Postable {
         request.userConfirmPassword = mConfirmPasswordFieldView.getFieldValue();
         request.userOptIn = mFooterView.userOptedIn();
 
-//        // Test
-//        MiscUtils.runDelayed(5000,new MiscUtils.RunDelayedCallback() {
-//            @Override
-//            public void onFinished() {
-//                // Do something
-//            }
-//        });
-
         Callback<Response> responseCallback = new Callback<Response>() {
 
             @Override
@@ -326,12 +317,8 @@ public class CreateAccountActivity extends MTActivity implements Postable {
 
     private class CreateAccountAdapter extends SackOfViewsAdapter {
 
-        private EditText mText = null;
-        private long mTextLostFocusTimestamp;
-
         public CreateAccountAdapter(List<View> views) {
             super(views);
-            mTextLostFocusTimestamp = -1;
         }
 
         @Override
@@ -345,34 +332,5 @@ public class CreateAccountActivity extends MTActivity implements Postable {
             return true;
         }
 
-// implements View.OnFocusChangeListener
-//        @Override
-//        public View getView(int position, View convertView, ViewGroup parent) {
-//
-//            View view = super.getView(position, convertView, parent);
-//
-//            EditText newText = (EditText)view.findViewById(R.id.editTextField);
-//            if (mText != null)
-//                newText.setText(mText.getText());
-//            mText = newText;
-//            mText.setOnFocusChangeListener(this);
-//            reclaimFocus(mText, mTextLostFocusTimestamp);
-//
-//            return view;
-//        }
-//
-//
-//        private void reclaimFocus(View v, long timestamp) {
-//            if (timestamp == -1)
-//                return;
-//            if ((System.currentTimeMillis() - timestamp) < 250)
-//                v.requestFocus();
-//        }
-//
-//        @Override
-//        public void onFocusChange(View v, boolean hasFocus) {
-//            if ((v == mText) && !hasFocus)
-//                mTextLostFocusTimestamp = System.currentTimeMillis();
-//        }
     }
 }

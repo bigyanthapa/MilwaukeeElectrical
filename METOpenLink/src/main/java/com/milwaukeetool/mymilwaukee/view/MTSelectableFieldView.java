@@ -3,10 +3,15 @@ package com.milwaukeetool.mymilwaukee.view;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 
+import com.joanzapata.android.iconify.IconDrawable;
+import com.joanzapata.android.iconify.Iconify;
+import com.milwaukeetool.mymilwaukee.MilwaukeeToolApplication;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.interfaces.Postable;
 import com.milwaukeetool.mymilwaukee.util.MTTouchListener;
@@ -26,10 +31,32 @@ public class MTSelectableFieldView extends MTSimpleFieldView {
     private static final String TAG = makeLogTag(MTSelectableFieldView.class);
     private String[] mSelectableOptionArray;
 
+    private ImageView mIconView;
+
     public MTSelectableFieldView(Activity activity, String[] selectableOptionArray) {
+
         super(activity);
 
-        this.mSelectableOptionArray = selectableOptionArray;
+        mSelectableOptionArray = selectableOptionArray;
+
+    }
+
+    @Override
+    protected void inflateView(Activity activity) {
+        // Don't call super, just override
+        LayoutInflater.from(activity).inflate(R.layout.view_selectable_field, this);
+    }
+
+    @Override
+    protected void setupView() {
+
+        // Setup parent first
+        super.setupView();
+
+        // Continue with additional view setup
+        mIconView = (ImageView)this.findViewById(R.id.selectableFieldIconView);
+        final IconDrawable arrowDrawable = new IconDrawable(MilwaukeeToolApplication.getAppContext(), Iconify.IconValue.fa_angle_right).colorRes(R.color.mt_common_gray).sizeDp(20);
+        mIconView.setImageDrawable(arrowDrawable);
 
         mEditText.setFocusable(false);
         mEditText.setFocusableInTouchMode(true);
@@ -53,22 +80,6 @@ public class MTSelectableFieldView extends MTSimpleFieldView {
                 showSelectableOptions();
             }
         });
-//        mEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
-//            @Override
-//            public void onFocusChange(View v, boolean hasFocus) {
-//                LOGD(TAG, "Has focus: " + hasFocus);
-//                if (hasFocus) {
-//                    //mEditText.clearFocus();
-//                }
-//            }
-//        });
-//        mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//            @Override
-//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                // Do some stuff
-//                return false;
-//            }
-//        });
     }
 
     public void showSelectableOptions() {

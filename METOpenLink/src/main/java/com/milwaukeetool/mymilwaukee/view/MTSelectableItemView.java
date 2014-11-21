@@ -35,7 +35,7 @@ public class MTSelectableItemView extends RelativeLayout {
         mSelectableItemTextView = (MTTextView)findViewById(R.id.selectableItemTextView);
 
         final IconDrawable arrowDrawable = new IconDrawable(MilwaukeeToolApplication.getAppContext(), Iconify.IconValue.fa_angle_right).colorRes(R.color.mt_common_gray).sizeDp(30);
-        mSelectableItemImageView.setBackground(arrowDrawable);
+        mSelectableItemImageView.setImageDrawable(arrowDrawable);
     }
 
     public void setItemText(String text) {

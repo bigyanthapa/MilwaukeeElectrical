@@ -1,6 +1,7 @@
 package com.milwaukeetool.mymilwaukee.view;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.text.Editable;
 import android.text.InputType;
@@ -57,13 +58,24 @@ public class MTSimpleFieldView extends RelativeLayout {
 
         mCallingActivity = activity;
 
-        LayoutInflater.from(activity).inflate(R.layout.view_simple_field, this);
-        this.mEditText = (MTEditText) this.findViewById(R.id.editTextField);
+        this.inflateView(activity);
+
         this.mFieldType = FieldType.STANDARD;
         this.mRequired = false;
         this.mMinLength = 0;
         this.mMaxLength = 0;
         this.mResetField = false;
+
+        this.setupView();
+    }
+
+    protected void inflateView(Activity activity) {
+        LayoutInflater.from(activity).inflate(R.layout.view_simple_field, this);
+    }
+
+    protected void setupView() {
+
+        this.mEditText = (MTEditText) this.findViewById(R.id.editTextField);
 
         mEditText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS|InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         mEditText.setTextColor(this.getResources().getColor(R.color.mt_white));
@@ -168,14 +180,18 @@ public class MTSimpleFieldView extends RelativeLayout {
                     mEditText.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS|InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
                     this.mFieldType = fieldType;
                 }
-
                 break;
             case PASSWORD:
+                // Copy off the typeface
+                Typeface currentTypeface = mEditText.getTypeface();
+                mEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                // Set the typeface after applying inputType since it changes the font
+                mEditText.setTypeface(currentTypeface);
                 mEditText.setTransformationMethod(new PasswordTransformationMethod());
                 this.mFieldType = fieldType;
                 break;
             case PHONE:
-                mEditText.setInputType(InputType.TYPE_CLASS_PHONE);
+                mEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_PHONE);
                 this.mFieldType = fieldType;
             default:
                 this.mFieldType = FieldType.STANDARD;

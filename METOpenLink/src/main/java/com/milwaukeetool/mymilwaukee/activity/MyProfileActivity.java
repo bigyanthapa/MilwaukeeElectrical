@@ -6,18 +6,21 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ListView;
 
 import com.commonsware.cwac.sacklist.SackOfViewsAdapter;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.interfaces.Postable;
+import com.milwaukeetool.mymilwaukee.model.event.MTimeActionEvent;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
 import com.milwaukeetool.mymilwaukee.view.MTMyProfileSectionView;
 import com.milwaukeetool.mymilwaukee.view.MTSelectableFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTSimpleFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTSwitchListItemView;
+import com.milwaukeetool.mymilwaukee.view.RitalinLayout;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -32,6 +35,7 @@ public class MyProfileActivity extends MTActivity implements Postable {
 
     private static final String TAG = makeLogTag(MyProfileActivity.class);
 
+    private RitalinLayout mListViewContainerLayout;
     private ListView mListView;
     private MyProfileAdapter mMyProfileAdapter;
 
@@ -154,10 +158,15 @@ public class MyProfileActivity extends MTActivity implements Postable {
     }
 
     protected void setupViews() {
+
+        mListViewContainerLayout = (RitalinLayout)findViewById(R.id.myProfileListViewContainer);
+
         mListView = (ListView)findViewById(R.id.my_profile_list_view);
-        mListView.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
-        mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
-        mListView.setStackFromBottom(true);
+//        mListView.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
+//        mListView.setItemsCanFocus(true);
+//        mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+//        mListView.setStackFromBottom(true);
+
 
         mViews = new LinkedList<View>();
         this.setupUserInformation(mViews);
@@ -170,11 +179,13 @@ public class MyProfileActivity extends MTActivity implements Postable {
             mListView.setAdapter(mMyProfileAdapter);
             mListView.setFocusable(true);
         }
+
+        mListViewContainerLayout.requestFocus();
     }
 
     protected void setupCompanyInformation(LinkedList<View> views) {
         this.companyInformation = new MTMyProfileSectionView(this);
-        this.companyInformation.setHeader("Company Information");
+        this.companyInformation.setHeader(MiscUtils.getString(R.string.company_information));
         views.add(this.companyInformation);
 
         this.title = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.update_profile_title));
@@ -221,7 +232,7 @@ public class MyProfileActivity extends MTActivity implements Postable {
 
     protected void setupContactInformation(LinkedList<View> views) {
         this.contactInformation = new MTMyProfileSectionView(this);
-        this.contactInformation.setHeader("Contact Information");
+        this.contactInformation.setHeader(MiscUtils.getString(R.string.contact_information));
         views.add(contactInformation);
 
         this.phone = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.update_profile_phone));
@@ -239,6 +250,7 @@ public class MyProfileActivity extends MTActivity implements Postable {
         this.fax = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.update_profile_fax));
         this.fax.setTextColor(this.getResources().getColor(R.color.mt_black));
         this.fax.setHintColorText(this.getResources().getColor(R.color.mt_common_gray));
+        this.fax.setFieldType(MTSimpleFieldView.FieldType.PHONE);
         views.add(this.fax);
 
         this.emailCommunications = new MTSwitchListItemView(this);
@@ -250,7 +262,7 @@ public class MyProfileActivity extends MTActivity implements Postable {
 
     protected void setupUserInformation(LinkedList<View> views) {
         this.userInformation = new MTMyProfileSectionView(this);
-        this.userInformation.setHeader("User Information");
+        this.userInformation.setHeader(MiscUtils.getString(R.string.user_information));
         this.userInformation.setMargins(0, 0, 0, UIUtils.getPixels(5));
         views.add(userInformation);
 
@@ -293,6 +305,14 @@ public class MyProfileActivity extends MTActivity implements Postable {
     @Override
     public void post(CharSequence option) {
         mTradeOccupationFieldView.setFieldValue(option.toString());
+    }
+
+    public void onEvent(MTimeActionEvent event) {
+        if (event.callingActivity == this) {
+            if (event.action == EditorInfo.IME_ACTION_NEXT && event.fieldName.equalsIgnoreCase(mLastNameFieldView.getFieldName())) {
+                mTradeOccupationFieldView.showSelectableOptions();
+            }
+        }
     }
 
     private class MyProfileAdapter extends SackOfViewsAdapter {

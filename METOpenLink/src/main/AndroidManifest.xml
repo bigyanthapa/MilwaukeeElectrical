@@ -53,7 +53,7 @@
             android:launchMode="singleTop"
             android:theme="@android:style/Theme.DeviceDefault.NoActionBar"
             android:parentActivityName=".activity.LandingActivity"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustResize|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.LandingActivity" />
@@ -77,7 +77,7 @@
             android:launchMode="singleTop"
             android:parentActivityName=".activity.MainActivity"
             android:theme="@style/Theme.Milwaukeetool"
-            android:windowSoftInputMode="adjustResize|stateAlwaysVisible">
+            android:windowSoftInputMode="stateHidden|adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity" />
