@@ -16,7 +16,7 @@ import com.commonsware.cwac.sacklist.SackOfViewsAdapter;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.LandingActivity;
 import com.milwaukeetool.mymilwaukee.activity.MyProfileActivity;
-import com.milwaukeetool.mymilwaukee.interfaces.ClickListener;
+import com.milwaukeetool.mymilwaukee.interfaces.MTClickListener;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
@@ -83,7 +83,7 @@ public class SettingsFragment extends Fragment {
 
         // Add footer
         MTSettingsFooterView footerView = new MTSettingsFooterView(this);
-        footerView.setLogoutListener(new ClickListener() {
+        footerView.setLogoutListener(new MTClickListener() {
             @Override
             public void didClickItem(Object object) {
                 MTUtils.clearLoginInfo();
