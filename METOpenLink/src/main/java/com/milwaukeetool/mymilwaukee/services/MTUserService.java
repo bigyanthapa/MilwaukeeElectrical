@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.milwaukeetool.mymilwaukee.config.MTConfig;
 import com.milwaukeetool.mymilwaukee.model.request.MTUserRegistrationRequest;
 import com.milwaukeetool.mymilwaukee.model.response.MTLogInResponse;
+import com.milwaukeetool.mymilwaukee.model.response.MTUserProfileResponse;
 
 import retrofit.Callback;
 import retrofit.client.Response;
@@ -12,6 +13,7 @@ import retrofit.converter.GsonConverter;
 import retrofit.http.Body;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
+import retrofit.http.GET;
 import retrofit.http.Header;
 import retrofit.http.POST;
 
@@ -31,6 +33,9 @@ public interface MTUserService {
     void login(@Header("Authorization") String authorization,
                @Field("username") String username, @Field("password") String password, @Field("grant_type") String grantType,
                Callback<MTLogInResponse> callback);
+
+    @GET("/accounts/me")
+    void  getProfile(@Header("Authorization") String authorization, Callback<MTUserProfileResponse> callback);
 
 //    @GET("/api/v1/user")
 //    void logIn(@Query("name") String name, Callback callback);

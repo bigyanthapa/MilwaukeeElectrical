@@ -8,6 +8,7 @@ import com.milwaukeetool.mymilwaukee.MilwaukeeToolApplication;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.CreateAccountActivity;
 import com.milwaukeetool.mymilwaukee.activity.MainActivity;
+import com.milwaukeetool.mymilwaukee.config.MTConfig;
 import com.milwaukeetool.mymilwaukee.model.event.MTNetworkAvailabilityEvent;
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
 import com.r0adkll.postoffice.PostOffice;
@@ -37,6 +38,17 @@ public class MTUtils {
         PrefUtils.setLoginDone(MilwaukeeToolApplication.getAppContext(),false);
         PrefUtils.setTokenExpiration(MilwaukeeToolApplication.getAppContext(), 0);
         PrefUtils.setTokenType(MilwaukeeToolApplication.getAppContext(), "");
+    }
+
+    public static String getAuthHeaderForBearerToken() {
+        StringBuilder header = new StringBuilder(100);
+
+        if (MTUtils.isLoggedIn()) {
+            header.append(MTConfig.MT_BEARER);
+            header.append(PrefUtils.getAuthToken(MilwaukeeToolApplication.getAppContext()));
+        }
+
+        return header.toString();
     }
 
     public static boolean isLoggedIn() {
