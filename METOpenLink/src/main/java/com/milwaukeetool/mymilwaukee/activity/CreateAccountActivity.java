@@ -74,9 +74,9 @@ public class CreateAccountActivity extends MTActivity implements Postable {
         mNoNetworkConnectivityTextView = (MTTextView)findViewById(R.id.noNetworkConnectivityTextView);
 
         mListView = (ListView)findViewById(R.id.createAccountListView);
-        mListView.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
-        mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
-        mListView.setStackFromBottom(true);
+//        mListView.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
+//        mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
+//        mListView.setStackFromBottom(true);
 
         LinkedList<View> views = new LinkedList<View>();
 
@@ -85,25 +85,37 @@ public class CreateAccountActivity extends MTActivity implements Postable {
 
         mEmailFieldView = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.create_account_field_email))
                 .setFieldType(MTSimpleFieldView.FieldType.EMAIL).setRequired(true);
+        mEmailFieldView.setTextColorResource(R.color.mt_white);
+        mEmailFieldView.setHintColorTextResource(R.color.mt_very_light_gray);
         views.add(mEmailFieldView);
 
         mPasswordFieldView = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.create_account_field_password))
                 .setFieldType(MTSimpleFieldView.FieldType.PASSWORD).setRequired(true).setMinLength(8).setMaxLength(1024);
+        mPasswordFieldView.setTextColorResource(R.color.mt_white);
+        mPasswordFieldView.setHintColorTextResource(R.color.mt_very_light_gray);
         views.add(mPasswordFieldView);
 
         mConfirmPasswordFieldView = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.create_account_field_confirm_password))
                 .setFieldType(MTSimpleFieldView.FieldType.PASSWORD).setRequired(true).setMinLength(8).setMaxLength(1024);
+        mConfirmPasswordFieldView.setTextColorResource(R.color.mt_white);
+        mConfirmPasswordFieldView.setHintColorTextResource(R.color.mt_very_light_gray);
         views.add(mConfirmPasswordFieldView);
 
         mFirstNameFieldView = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.create_account_field_first_name)).setRequired(true);
+        mFirstNameFieldView.setTextColorResource(R.color.mt_white);
+        mFirstNameFieldView.setHintColorTextResource(R.color.mt_very_light_gray);
         views.add(mFirstNameFieldView);
 
         mLastNameFieldView = MTSimpleFieldView.createSimpleFieldView(this, MiscUtils.getString(R.string.create_account_field_last_name)).setRequired(true);
+        mLastNameFieldView.setTextColorResource(R.color.mt_white);
+        mLastNameFieldView.setHintColorTextResource(R.color.mt_very_light_gray);
         views.add(mLastNameFieldView);
 
         String[] selectableOptionArray = this.getResources().getStringArray(R.array.trade_occupation_array);
         mTradeOccupationFieldView = MTSelectableFieldView.createSelectableFieldView(this, MiscUtils.getString(R.string.create_account_field_trade),selectableOptionArray).setRequired(true);
         mTradeOccupationFieldView.setNextActionDone();
+        mTradeOccupationFieldView.setTextColorResource(R.color.mt_white);
+        mTradeOccupationFieldView.setHintColorTextResource(R.color.mt_very_light_gray);
         views.add(mTradeOccupationFieldView);
 
         mFooterView = new MTCreateAccountFooterView(this);

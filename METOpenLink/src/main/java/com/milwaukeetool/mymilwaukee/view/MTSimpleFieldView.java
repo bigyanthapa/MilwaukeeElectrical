@@ -21,6 +21,7 @@ import com.milwaukeetool.mymilwaukee.MilwaukeeToolApplication;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.config.MTConstants;
 import com.milwaukeetool.mymilwaukee.model.event.MTimeActionEvent;
+import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.StringHelper;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
 
@@ -118,11 +119,13 @@ public class MTSimpleFieldView extends RelativeLayout {
         });
     }
 
-    public void setTextColor(int resourceId) {
-        this.mEditText.setTextColor(resourceId);
+    public void setTextColorResource(int resourceId) {
+        this.mEditText.setTextColor(MiscUtils.getAppResources().getColor(resourceId));
     }
 
-    public void setHintColorText(int resourceId) { this.mEditText.setHintTextColor(resourceId); }
+    public void setHintColorTextResource(int resourceId) {
+        this.mEditText.setHintTextColor(MiscUtils.getAppResources().getColor(resourceId));
+    }
 
     public void fieldRequiresReset(boolean requiresReset) {
         mResetField = requiresReset;

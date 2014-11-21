@@ -55,8 +55,7 @@ public class MTSelectableFieldView extends MTSimpleFieldView {
 
         // Continue with additional view setup
         mIconView = (ImageView)this.findViewById(R.id.selectableFieldIconView);
-        final IconDrawable arrowDrawable = new IconDrawable(MilwaukeeToolApplication.getAppContext(), Iconify.IconValue.fa_angle_right).colorRes(R.color.mt_common_gray).sizeDp(20);
-        mIconView.setImageDrawable(arrowDrawable);
+        setIndicatorIcon(R.color.mt_common_gray);
 
         mEditText.setFocusable(false);
         mEditText.setFocusableInTouchMode(true);
@@ -147,5 +146,17 @@ public class MTSelectableFieldView extends MTSimpleFieldView {
     public MTSelectableFieldView updateFocus() {
         super.updateFocus();
         return this;
+    }
+
+    public void setTextColorResource(int resourceId) {
+        super.setTextColorResource(resourceId);
+
+        // Also set the icon
+        setIndicatorIcon(resourceId);
+    }
+
+    private void setIndicatorIcon(int colorResId) {
+        final IconDrawable arrowDrawable = new IconDrawable(MilwaukeeToolApplication.getAppContext(), Iconify.IconValue.fa_angle_right).colorRes(colorResId).sizeDp(20);
+        mIconView.setImageDrawable(arrowDrawable);
     }
 }
