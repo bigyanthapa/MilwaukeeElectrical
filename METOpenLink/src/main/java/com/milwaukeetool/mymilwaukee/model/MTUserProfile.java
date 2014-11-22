@@ -19,7 +19,7 @@ public class MTUserProfile {
     @SerializedName("occupation")
     private String occupation;
 
-    @SerializedName("optInForCommunication")
+    @SerializedName("optInForCommunications")
     private boolean optInForCommunication;
 
     @SerializedName("title")
