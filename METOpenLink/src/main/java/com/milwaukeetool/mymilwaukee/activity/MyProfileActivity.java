@@ -11,7 +11,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.commonsware.cwac.sacklist.SackOfViewsAdapter;
+import com.joanzapata.android.iconify.IconDrawable;
+import com.joanzapata.android.iconify.Iconify;
+import com.milwaukeetool.mymilwaukee.MilwaukeeToolApplication;
 import com.milwaukeetool.mymilwaukee.R;
+import com.milwaukeetool.mymilwaukee.interfaces.MTFinishedListener;
 import com.milwaukeetool.mymilwaukee.interfaces.MTFocusListener;
 import com.milwaukeetool.mymilwaukee.interfaces.Postable;
 import com.milwaukeetool.mymilwaukee.model.MTUserProfile;
@@ -24,6 +28,7 @@ import com.milwaukeetool.mymilwaukee.view.MTMyProfileSectionView;
 import com.milwaukeetool.mymilwaukee.view.MTSelectableFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTSimpleFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTSwitchListItemView;
+import com.milwaukeetool.mymilwaukee.view.MTToastView;
 import com.milwaukeetool.mymilwaukee.view.RitalinLayout;
 
 import java.util.LinkedList;
@@ -202,7 +207,20 @@ public class MyProfileActivity extends MTActivity implements Postable {
                         public void success(MTUserProfile result, Response response) {
                             mSaveInProgress = false;
                             mProgressView.stopProgress();
-                            finish();
+
+                            final IconDrawable successDrawable = new IconDrawable(MilwaukeeToolApplication.getAppContext(),
+                                    Iconify.IconValue.fa_check_circle).colorRes(R.color.mt_black).sizeDp(40);
+
+                            MTToastView.showMessage(MyProfileActivity.this,
+                                    MiscUtils.getString(R.string.message_success_updated_profile),
+                                    MTToastView.getShortDuration(),
+                                    successDrawable,
+                                    new MTFinishedListener() {
+                                @Override
+                                public void didFinish() {
+                                    finish();
+                                }
+                            });
                         }
 
                         @Override

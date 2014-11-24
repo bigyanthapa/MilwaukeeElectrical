@@ -144,6 +144,9 @@ dependencies {
     // Pager Sliding Tab Strip
     compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
 
+    // Sweet alert
+    compile 'cn.pedant.sweetalert:library:1.1'
+
 //    // Styled dialogs
 //    compile 'eu.inmite.android.lib:android-styled-dialogs:1.2.0'
 
