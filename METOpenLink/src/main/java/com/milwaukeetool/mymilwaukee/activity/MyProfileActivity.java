@@ -160,6 +160,14 @@ public class MyProfileActivity extends MTActivity implements Postable {
         return super.onCreateOptionsMenu(menu);
     }
 
+    @Override
+    public void onBackPressed() {
+        if (mSaveInProgress) {
+            return;
+        }
+        super.onBackPressed();
+    }
+
     protected boolean isTextFieldsValid() {
         boolean valid = true;
 
@@ -177,41 +185,54 @@ public class MyProfileActivity extends MTActivity implements Postable {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
+            case android.R.id.home:
+                if (!mSaveInProgress) {
+                    finish();
+                }
+                return true;
             case R.id.profileActionSave:
 
-                LOGD(TAG, "Saving MyProfile updates...");
+                if (mEditInProgress) {
 
-                // Always hide the keyboard
-                UIUtils.hideKeyboard(this);
+                    LOGD(TAG, "Saving MyProfile updates...");
 
-                Callback<MTUserProfile> responseCallback = new Callback<MTUserProfile>() {
-                    @Override
-                    public void success(MTUserProfile result, Response response) {
-                        mProgressView.stopProgress();
-                        finish();
+                    // Always hide the keyboard
+                    UIUtils.hideKeyboard(this);
+
+                    Callback<MTUserProfile> responseCallback = new Callback<MTUserProfile>() {
+                        @Override
+                        public void success(MTUserProfile result, Response response) {
+                            mSaveInProgress = false;
+                            mProgressView.stopProgress();
+                            finish();
+                        }
+
+                        @Override
+                        public void failure(RetrofitError retrofitError) {
+                            LOGD(TAG, "Failed to update my profile");
+
+                            mSaveInProgress = false;
+
+                            // Hide progress indicator
+                            mProgressView.stopProgress();
+                            MTUtils.handleRetrofitError(retrofitError, MyProfileActivity.this,
+                                    MiscUtils.getString(R.string.dialog_title_update_profile_failure));
+                        }
+                    };
+
+                    if (this.isTextFieldsValid()) {
+
+                        mSaveInProgress = true;
+
+                        mProgressView.updateMessage(MiscUtils.getString(R.string.progress_bar_saving_user_details));
+                        mProgressView.startProgress();
+
+                        MTUserProfile userProfile = this.constructMTUserProfile();
+
+                        MTWebInterface.sharedInstance().getUserService().updateProfile(MTUtils.getAuthHeaderForBearerToken(),
+                                userProfile,
+                                responseCallback);
                     }
-
-                    @Override
-                    public void failure(RetrofitError retrofitError) {
-                        LOGD(TAG, "Failed to update my profile");
-
-                        // Hide progress indicator
-                        mProgressView.stopProgress();
-                        MTUtils.handleRetrofitError(retrofitError, MyProfileActivity.this,
-                                MiscUtils.getString(R.string.dialog_title_update_profile_failure));
-                    }
-                };
-
-                if (this.isTextFieldsValid()) {
-
-                    mProgressView.updateMessage(MiscUtils.getString(R.string.progress_bar_saving_user_details));
-                    mProgressView.startProgress();
-
-                    MTUserProfile userProfile = this.constructMTUserProfile();
-
-                    MTWebInterface.sharedInstance().getUserService().updateProfile(MTUtils.getAuthHeaderForBearerToken(),
-                            userProfile,
-                            responseCallback);
                 }
 
                 return true;
@@ -226,10 +247,6 @@ public class MyProfileActivity extends MTActivity implements Postable {
         mListViewContainerLayout = (RitalinLayout)findViewById(R.id.myProfileListViewContainer);
 
         mListView = (ListView)findViewById(R.id.my_profile_list_view);
-//        mListView.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
-//        mListView.setItemsCanFocus(true);
-//        mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
-//        mListView.setStackFromBottom(true);
 
         mViews = new LinkedList<View>();
 
@@ -265,9 +282,7 @@ public class MyProfileActivity extends MTActivity implements Postable {
         this.phone.setFieldValue(response != null ? response.getPhone() : null);
         this.cellPhone.setFieldValue(response != null ? response.getCellPhone() : null);
         this.fax.setFieldValue(response != null ? response.getFax() : null);
-        if (response.isOptInForCommunication()) {
-            this.emailCommunications.setSwitchOn(true);
-        }
+        this.emailCommunications.setSwitchOn(response.isOptInForCommunication());
     }
 
     private void populateCompanyInformation(MTUserProfile response) {
