@@ -8,6 +8,8 @@
 
     <!-- Actions -->
     <string name="action_save">Save</string>
+    <string name="action_change">Change</string>
+    <string name="action_cancel">Cancel</string>
 
     <!-- Main -->
     <string name="main_title_inventory">Inventory</string>
@@ -56,6 +58,7 @@
     <string name="company_information">Company Information</string>
     <string name="contact_information">Contact Information</string>
     <string name="email_communications">Email Communications</string>
+    <string name="change_password">Change Password</string>
 
     <!-- Progress Indicator -->
     <string name="progress_bar_default_message">Loading...</string>
