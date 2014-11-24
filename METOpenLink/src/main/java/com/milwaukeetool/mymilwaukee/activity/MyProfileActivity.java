@@ -1,6 +1,9 @@
 package com.milwaukeetool.mymilwaukee.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,10 +25,12 @@ import com.milwaukeetool.mymilwaukee.interfaces.Postable;
 import com.milwaukeetool.mymilwaukee.model.MTUserProfile;
 import com.milwaukeetool.mymilwaukee.model.event.MTLaunchEvent;
 import com.milwaukeetool.mymilwaukee.model.event.MTimeActionEvent;
+import com.milwaukeetool.mymilwaukee.model.request.MTPasswordRequest;
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
+import com.milwaukeetool.mymilwaukee.view.MTChangePasswordPopupView;
 import com.milwaukeetool.mymilwaukee.view.MTLaunchableFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTMyProfileSectionView;
 import com.milwaukeetool.mymilwaukee.view.MTSelectableFieldView;
@@ -493,6 +498,33 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
     }
 
     public void launched(MTLaunchEvent launchEvent) {
+        LayoutInflater inflater = this.getLayoutInflater();
+        final MTChangePasswordPopupView view = new MTChangePasswordPopupView(this);
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setPositiveButton(this.getResources().getString(R.string.action_change), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                MTSimpleFieldView current = view.getCurrent();
+                MTSimpleFieldView update = view.getUpdate();
+                MTSimpleFieldView confirm = view.getConfirm();
+
+                if (update.isValid() && confirm.isValid()) {
+                    if (!update.getFieldValue().equals(confirm.getFieldValue())) {
+                        MTPasswordRequest request = new MTPasswordRequest();
+                        request.setCurrent(current.getFieldValue());
+                        request.setUpdated(update.getFieldValue());
+                        request.setConfirm(confirm.getFieldValue());
+
+                        //MTWebInterface.sharedInstance().getUserService().updatePassword(MTUtils.getAuthHeaderForBearerToken(), request);
+                    }
+                }
+            }
+        });
+
+        builder.setView(view);
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }
