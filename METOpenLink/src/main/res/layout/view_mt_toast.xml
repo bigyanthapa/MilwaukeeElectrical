@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mtToastLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mt_black_mask">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="120dp"
+        android:background="@drawable/white_rounded"
+        android:layout_centerInParent="true">
+
+        <ImageView
+            android:id="@+id/mtToastImageView"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"/>
+
+        <com.milwaukeetool.mymilwaukee.view.MTTextView
+            android:id="@+id/mtToastTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:background="@null"
+            android:paddingLeft="@dimen/mt_padding_large"
+            android:paddingRight="@dimen/mt_padding_large"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dp"
+            android:gravity="center"
+            android:text="Profile Updated"
+            android:textSize="@dimen/mt_font_size_large"
+            android:textColor="@color/mt_black" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

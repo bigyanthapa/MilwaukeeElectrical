@@ -59,13 +59,14 @@
     <string name="contact_information">Contact Information</string>
     <string name="email_communications">Email Communications</string>
     <string name="change_password">Change Password</string>
+    <string name="message_success_updated_profile">Profile Updated</string>
 
     <!-- Progress Indicator -->
     <string name="progress_bar_default_message">Loading...</string>
     <string name="progress_bar_registering">Registering...</string>
     <string name="progress_bar_logging_in">Signing In...</string>
     <string name="progress_bar_getting_user_details">Getting User Details...</string>
-    <string name="progress_bar_saving_user_details">Saving User Details...</string>
+    <string name="progress_bar_saving_user_details">Updating Profile...</string>
 
     <!-- Sign In -->
     <string name="title_sign_in_my_milwaukee_account">Sign in with My Milwaukee&#174; account</string>
@@ -79,7 +80,7 @@
     <string name="dialog_title_sign_in_failure">Error Signing In</string>
     <string name="dialog_title_no_network_connection">No Network Connection</string>
     <string name="dialog_title_get_profile_failure">Error Getting User Details</string>
-    <string name="dialog_title_update_profile_failure">Error Updating User Details</string>
+    <string name="dialog_title_update_profile_failure">Error Updating Profile</string>
 
     <string name="error_text_offline">The Internet connection appears to be offline.</string>
 

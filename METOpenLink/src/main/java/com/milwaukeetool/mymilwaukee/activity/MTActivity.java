@@ -124,4 +124,8 @@ public abstract class MTActivity extends Activity {
             }
         }
     }
+
+    public MTLayout getRootLayout() {
+        return mRootLayout;
+    }
 }
