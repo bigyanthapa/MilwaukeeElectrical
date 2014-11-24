@@ -20,6 +20,7 @@ import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
+import com.milwaukeetool.mymilwaukee.view.MTLaunchableFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTMyProfileSectionView;
 import com.milwaukeetool.mymilwaukee.view.MTSelectableFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTSimpleFieldView;
@@ -52,6 +53,7 @@ public class MyProfileActivity extends MTActivity implements Postable {
     private MTSimpleFieldView mFirstNameFieldView;
     private MTSimpleFieldView mLastNameFieldView;
     private MTSelectableFieldView mTradeOccupationFieldView;
+    private MTLaunchableFieldView mPassword;
 
     private MTMyProfileSectionView companyInformation;
     private MTSimpleFieldView title;
@@ -256,6 +258,7 @@ public class MyProfileActivity extends MTActivity implements Postable {
         mFirstNameFieldView.setFieldValue(response != null ? response.getFirstName() : null);
         mLastNameFieldView.setFieldValue(response != null ? response.getLastName() : null);
         mTradeOccupationFieldView.setFieldValue(response != null ? response.getOccupation() : null);
+        mPassword.setFieldValue(response != null ? response.);
     }
 
     private void populateContactInformation(MTUserProfile response) {

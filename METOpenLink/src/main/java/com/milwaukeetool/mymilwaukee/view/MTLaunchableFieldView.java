@@ -24,41 +24,32 @@ import static com.milwaukeetool.mymilwaukee.util.LogUtils.LOGD;
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 
 /**
- * Created by cent146 on 11/8/14.
+ * Created by scott.hopfensperger on 11/21/2014.
  */
-public class MTSelectableFieldView extends MTSimpleFieldView {
+public class MTLaunchableFieldView extends MTSimpleFieldView {
 
-    private static final String TAG = makeLogTag(MTSelectableFieldView.class);
-    private String[] mSelectableOptionArray;
-
+    private static final String TAG = makeLogTag(MTLaunchableFieldView.class);
     private ImageView mIconView;
 
-    public MTSelectableFieldView(Activity activity, String[] selectableOptionArray) {
+    public MTLaunchableFieldView(Activity activity) {
         super(activity);
-        mSelectableOptionArray = selectableOptionArray;
     }
 
     @Override
     protected void inflateView(Activity activity) {
-        // Don't call super, just override
         LayoutInflater.from(activity).inflate(R.layout.view_selectable_field, this);
     }
 
     @Override
     protected void setupView() {
-
         // Setup parent first
         super.setupView();
-
-        // Continue with additional view setup
-        mIconView = (ImageView)this.findViewById(R.id.selectableFieldIconView);
-        setIndicatorIcon(R.color.mt_common_gray);
 
         mEditText.setFocusable(false);
         mEditText.setFocusableInTouchMode(true);
         mEditText.setKeyListener(null);
 
-        this.mFieldType = FieldType.SELECTABLE;
+        this.mFieldType = MTSimpleFieldView.FieldType.SELECTABLE;
 
         this.setOnTouchListener(new MTTouchListener(mCallingActivity) {
             @Override
@@ -89,8 +80,8 @@ public class MTSelectableFieldView extends MTSimpleFieldView {
         imm.hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
 
         // Create the adapter
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(mCallingActivity, R.layout.view_popup_list_item, mSelectableOptionArray);
-        
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(mCallingActivity, R.layout.view_popup_list_item);
+
         // Create list popup
         Delivery delivery = PostOffice.newMail(mCallingActivity)
                 .setTitle(this.getFieldName())
@@ -120,27 +111,27 @@ public class MTSelectableFieldView extends MTSimpleFieldView {
         return selectableFieldView;
     }
 
-    public MTSelectableFieldView setRequired(boolean isRequired) {
+    public MTLaunchableFieldView setRequired(boolean isRequired) {
         super.setRequired(isRequired());
         return this;
     }
 
-    public MTSelectableFieldView setMinLength(int minLength) {
+    public MTLaunchableFieldView setMinLength(int minLength) {
         super.setMinLength(minLength);
         return this;
     }
 
-    public MTSelectableFieldView setMaxLength(int maxLength) {
+    public MTLaunchableFieldView setMaxLength(int maxLength) {
         super.setMaxLength(maxLength);
         return this;
     }
 
-    public MTSelectableFieldView setFieldType(FieldType fieldType) {
+    public MTLaunchableFieldView setFieldType(MTSimpleFieldView.FieldType fieldType) {
         super.setFieldType(fieldType);
         return this;
     }
 
-    public MTSelectableFieldView updateFocus() {
+    public MTLaunchableFieldView updateFocus() {
         super.updateFocus();
         return this;
     }
