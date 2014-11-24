@@ -102,6 +102,8 @@ dependencies {
 
     compile 'com.google.android.gms:play-services:6.1.+'
 
+    compile 'com.nineoldandroids:library:2.4.0'
+
     // CommonsWare SackOfViewAdapter
     compile 'com.commonsware.cwac:sacklist:1.0.0'
 

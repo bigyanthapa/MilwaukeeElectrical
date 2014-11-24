@@ -435,7 +435,7 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
         mTradeOccupationFieldView.setRequired(true);
         views.add(mTradeOccupationFieldView);
 
-        this.mPassword = MTLaunchableFieldView.createLaunchableFieldView(this, MiscUtils.getString(R.string.create_account_field_password));
+        this.mPassword = MTLaunchableFieldView.createLaunchableFieldView(this, MiscUtils.getString(R.string.update_profile_change_password));
         this.mPassword.setTextColorResource(R.color.mt_black);
         this.mPassword.setHintColorTextResource(R.color.mt_black);
         this.mPassword.setLastGroupItem();

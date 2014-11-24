@@ -46,6 +46,7 @@
     <string name="update_profile_state_province">State/Province</string>
     <string name="update_profile_zip_code">Zip/Postal Code</string>
     <string name="update_profile_country">Country</string>
+    <string name="update_profile_change_password">Password</string>
 
     <string name="update_profile_phone">Phone</string>
     <string name="update_profile_cell_phone">Cell Phone</string>

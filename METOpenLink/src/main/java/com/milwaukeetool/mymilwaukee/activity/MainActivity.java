@@ -13,6 +13,7 @@ import com.milwaukeetool.mymilwaukee.fragment.InventoryFragment;
 import com.milwaukeetool.mymilwaukee.fragment.NearbyFragment;
 import com.milwaukeetool.mymilwaukee.fragment.SettingsFragment;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
+import com.milwaukeetool.mymilwaukee.util.ZoomOutPageTransformer;
 
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 
@@ -50,7 +51,7 @@ public class MainActivity extends MTActivity {
         // Initialize the ViewPager and set an adapter
         ViewPager pager = (ViewPager) findViewById(R.id.mainActivityPager);
         pager.setAdapter(new MainTabAdapter(getFragmentManager()));
-
+        pager.setPageTransformer(true, new ZoomOutPageTransformer());
 
         final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
                 .getDisplayMetrics());
