@@ -13,8 +13,10 @@ import android.widget.ListView;
 import com.commonsware.cwac.sacklist.SackOfViewsAdapter;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.interfaces.MTFocusListener;
+import com.milwaukeetool.mymilwaukee.interfaces.MTLaunchListener;
 import com.milwaukeetool.mymilwaukee.interfaces.Postable;
 import com.milwaukeetool.mymilwaukee.model.MTUserProfile;
+import com.milwaukeetool.mymilwaukee.model.event.MTLaunchEvent;
 import com.milwaukeetool.mymilwaukee.model.event.MTimeActionEvent;
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
@@ -40,7 +42,7 @@ import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 /**
  * Created by scott.hopfensperger on 11/18/2014.
  */
-public class MyProfileActivity extends MTActivity implements Postable {
+public class MyProfileActivity extends MTActivity implements Postable, MTLaunchListener {
 
     private static final String TAG = makeLogTag(MyProfileActivity.class);
 
@@ -275,7 +277,7 @@ public class MyProfileActivity extends MTActivity implements Postable {
         mFirstNameFieldView.setFieldValue(response != null ? response.getFirstName() : null);
         mLastNameFieldView.setFieldValue(response != null ? response.getLastName() : null);
         mTradeOccupationFieldView.setFieldValue(response != null ? response.getOccupation() : null);
-        mPassword.setFieldValue(response != null ? response.);
+        //mPassword.setFieldValue(response != null ? response);
     }
 
     private void populateContactInformation(MTUserProfile response) {
@@ -413,8 +415,13 @@ public class MyProfileActivity extends MTActivity implements Postable {
         mTradeOccupationFieldView.setHintColorTextResource(R.color.mt_common_gray);
         mTradeOccupationFieldView.setNextActionDone();
         mTradeOccupationFieldView.setRequired(true);
-        mTradeOccupationFieldView.setLastGroupItem();
         views.add(mTradeOccupationFieldView);
+
+        this.mPassword = MTLaunchableFieldView.createLaunchableFieldView(this, MiscUtils.getString(R.string.create_account_field_password));
+        this.mPassword.setTextColorResource(R.color.mt_black);
+        this.mPassword.setHintColorTextResource(R.color.mt_black);
+        this.mPassword.setLastGroupItem();
+        views.add(this.mPassword);
 
         mMyProfileAdapter = new MyProfileAdapter(views);
 
@@ -465,5 +472,9 @@ public class MyProfileActivity extends MTActivity implements Postable {
 
             return true;
         }
+    }
+
+    public void launched(MTLaunchEvent launchEvent) {
+        int i = 4;
     }
 }

@@ -13,12 +13,16 @@ import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
 import com.milwaukeetool.mymilwaukee.MilwaukeeToolApplication;
 import com.milwaukeetool.mymilwaukee.R;
+import com.milwaukeetool.mymilwaukee.interfaces.MTLaunchListener;
 import com.milwaukeetool.mymilwaukee.interfaces.Postable;
+import com.milwaukeetool.mymilwaukee.model.event.MTLaunchEvent;
 import com.milwaukeetool.mymilwaukee.util.MTTouchListener;
 import com.r0adkll.postoffice.PostOffice;
 import com.r0adkll.postoffice.model.Delivery;
 import com.r0adkll.postoffice.model.Design;
 import com.r0adkll.postoffice.styles.ListStyle;
+
+import java.util.EventObject;
 
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.LOGD;
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
@@ -45,6 +49,9 @@ public class MTLaunchableFieldView extends MTSimpleFieldView {
         // Setup parent first
         super.setupView();
 
+        mIconView = (ImageView)this.findViewById(R.id.selectableFieldIconView);
+        setIndicatorIcon(R.color.mt_common_gray);
+
         mEditText.setFocusable(false);
         mEditText.setFocusableInTouchMode(true);
         mEditText.setKeyListener(null);
@@ -56,59 +63,32 @@ public class MTLaunchableFieldView extends MTSimpleFieldView {
             public void didTapView(MotionEvent event) {
                 // Launch post office selector
                 LOGD(TAG, "Touched selectable field view");
-                showSelectableOptions();
+
+                MTLaunchEvent launchEvent = new MTLaunchEvent(MTLaunchableFieldView.this);
+                if (mCallingActivity instanceof MTLaunchListener) {
+                    ((MTLaunchListener) mCallingActivity).launched(launchEvent);
+                }
             }
         });
+
         mEditText.setOnTouchListener(new MTTouchListener(mCallingActivity) {
             @Override
             public void didTapView(MotionEvent event) {
                 // Launch post office selector
                 LOGD(TAG, "Touched selectable field view - edittext");
-                showSelectableOptions();
+                MTLaunchEvent launchEvent = new MTLaunchEvent(MTLaunchableFieldView.this);
+
+                if (mCallingActivity instanceof MTLaunchListener) {
+                    ((MTLaunchListener) mCallingActivity).launched(launchEvent);
+                }
             }
         });
     }
 
-    public void showSelectableOptions() {
-
-        // Request focus
-        updateFocus();
-
-        // Hide the keyboard
-        InputMethodManager imm = (InputMethodManager)mCallingActivity.getSystemService(
-                Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
-
-        // Create the adapter
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(mCallingActivity, R.layout.view_popup_list_item);
-
-        // Create list popup
-        Delivery delivery = PostOffice.newMail(mCallingActivity)
-                .setTitle(this.getFieldName())
-                .setThemeColorFromResource(R.color.mt_red)
-                .setDesign(Design.HOLO_LIGHT)
-                .setCanceledOnTouchOutside(true)
-                .setCancelable(true)
-                .setStyle(new ListStyle.Builder(mCallingActivity)
-                        .setOnItemAcceptedListener(new ListStyle.OnItemAcceptedListener<CharSequence>() {
-                            @Override
-                            public void onItemAccepted(CharSequence item, int position) {
-                                Postable postable = (Postable) mCallingActivity;
-                                postable.post(item);
-                            }
-                        })
-                        .setDividerHeight(1)
-                        .setDivider(new ColorDrawable(mCallingActivity.getResources().getColor(R.color.mt_common_gray)))
-                        .build(adapter))
-                .build();
-
-        delivery.show(mCallingActivity.getFragmentManager());
-    }
-
-    public static MTSelectableFieldView createSelectableFieldView(Activity activity, String fieldName, String[] selectableOptionArray) {
-        MTSelectableFieldView selectableFieldView = new MTSelectableFieldView(activity, selectableOptionArray);
-        selectableFieldView.setFieldName(fieldName);
-        return selectableFieldView;
+    public static MTLaunchableFieldView createLaunchableFieldView(Activity activity, String fieldName) {
+        MTLaunchableFieldView launchableFieldView = new MTLaunchableFieldView(activity);
+        launchableFieldView.setFieldName(fieldName);
+        return launchableFieldView;
     }
 
     public MTLaunchableFieldView setRequired(boolean isRequired) {
