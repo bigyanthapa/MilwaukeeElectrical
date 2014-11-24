@@ -475,6 +475,6 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
     }
 
     public void launched(MTLaunchEvent launchEvent) {
-        int i = 4;
+
     }
 }
