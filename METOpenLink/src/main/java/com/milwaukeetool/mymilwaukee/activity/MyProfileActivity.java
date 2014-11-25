@@ -505,6 +505,10 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
         builder.setNegativeButton(MiscUtils.getString(R.string.action_cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                UIUtils.hideKeyboard(MyProfileActivity.this, changePasswordPopupView.getCurrent());
+                UIUtils.hideKeyboard(MyProfileActivity.this, changePasswordPopupView.getUpdate());
+                UIUtils.hideKeyboard(MyProfileActivity.this, changePasswordPopupView.getConfirm());
+                UIUtils.hideKeyboard(MyProfileActivity.this, changePasswordPopupView);
                 UIUtils.hideKeyboard(MyProfileActivity.this);
             }
         });
@@ -524,7 +528,11 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
                     @Override
                     public void onClick(View v)
                     {
-                        UIUtils.hideKeyboard(MyProfileActivity.this);
+                        UIUtils.hideKeyboard(MyProfileActivity.this, changePasswordPopupView.getCurrent());
+                        UIUtils.hideKeyboard(MyProfileActivity.this, changePasswordPopupView.getUpdate());
+                        UIUtils.hideKeyboard(MyProfileActivity.this, changePasswordPopupView.getConfirm());
+                        UIUtils.hideKeyboard(MyProfileActivity.this, changePasswordPopupView);
+
 
                         MTSimpleFieldView current = changePasswordPopupView.getCurrent();
                         MTSimpleFieldView update = changePasswordPopupView.getUpdate();

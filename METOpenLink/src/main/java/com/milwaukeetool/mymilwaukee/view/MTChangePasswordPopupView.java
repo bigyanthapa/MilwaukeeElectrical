@@ -48,6 +48,7 @@ public class MTChangePasswordPopupView extends LinearLayout {
         mUpdate.setLayoutParams(layoutParams);
         mConfirm.setLayoutParams(layoutParams);
         mConfirm.setLastGroupItem();
+        mConfirm.setNextActionGo();
 
         mLayout.addView(mCurrent);
 

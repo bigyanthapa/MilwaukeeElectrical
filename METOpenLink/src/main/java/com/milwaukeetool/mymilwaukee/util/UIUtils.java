@@ -432,8 +432,22 @@ public class UIUtils {
     }
 
     public static void hideKeyboard(Activity activity) {
-        // Hide the keyboard, if shown
-        InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+
+        // Check if no view has focus
+        View view = activity.getCurrentFocus();
+        if (view != null) {
+            // Hide the keyboard, if shown
+            InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    public static void hideKeyboard(Activity activity, View view) {
+
+        if (view != null) {
+            // Hide the keyboard, if shown
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 }

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -24,6 +26,7 @@ public class MTToastView extends RelativeLayout {
     public static int MT_TOAST_SHORT = 2000;
 
     private Activity mCallingActivity;
+    private MTFinishedListener mFinishedListener;
 
     private ImageView mImageView;
     private MTTextView mTextView;
@@ -46,9 +49,22 @@ public class MTToastView extends RelativeLayout {
     private void init(Context context) {
         LayoutInflater.from(context).inflate(R.layout.view_mt_toast, this);
 
-        this.setOnTouchListener(new MTTouchListener(mCallingActivity) {
-            // Nothing to do, just override touches
-        });
+        if (mCallingActivity instanceof MTActivity) {
+
+            this.setOnTouchListener( new MTTouchListener(mCallingActivity) {
+
+                @Override
+                public void didTapView(MotionEvent event) {
+                    ((ViewGroup)MTToastView.this.getParent()).removeView(MTToastView.this);
+
+                    if (mFinishedListener != null) {
+                        mFinishedListener.didFinish();
+                    }
+                }
+            });
+        } else {
+            this.setOnTouchListener(new MTTouchListener(mCallingActivity) {});
+        }
 
         mImageView = (ImageView)findViewById(R.id.mtToastImageView);
         mTextView = (MTTextView)findViewById(R.id.mtToastTextView);
@@ -59,19 +75,20 @@ public class MTToastView extends RelativeLayout {
         final MTLayout rootLayout = activity.getRootLayout();
 
         // create this
-        MTToastView toastView = new MTToastView(activity);
+        final MTToastView toastView = new MTToastView(activity);
+        toastView.mCallingActivity = activity;
+        toastView.mFinishedListener = listener;
         toastView.mTextView.setText(message);
         toastView.mImageView.setImageDrawable(iconDrawable);
 
         // show this
-        //View.inflate(activity, R.layout.view_mt_toast, rootLayout);
         rootLayout.addView(toastView, rootLayout.getChildCount());
 
         MiscUtils.runDelayed(duration, new MiscUtils.RunDelayedCallback() {
             @Override
             public void onFinished() {
                 // hide this
-                activity.getRootLayout().removeView(rootLayout.findViewById(R.id.mtToastLayout));
+                ((ViewGroup)toastView.getParent()).removeView(toastView);
 
                 if (listener != null) {
                     listener.didFinish();
