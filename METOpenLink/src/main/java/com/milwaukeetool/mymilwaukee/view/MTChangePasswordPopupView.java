@@ -51,7 +51,7 @@ public class MTChangePasswordPopupView extends LinearLayout {
 
         mLayout.addView(mCurrent);
 
-        layoutParams = new LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, UIUtils.getPixels(30));
+        layoutParams = new LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, UIUtils.getPixels(15));
         View view = new View(activity);
         view.setLayoutParams(layoutParams);
         mLayout.addView(view);

@@ -52,6 +52,11 @@ public class MTProgressView extends RelativeLayout {
         mProgressMessageTextView.setText(message);
     }
 
+    public void updateMessageAndStart(String message) {
+        updateMessage(message);
+        startProgress();
+    }
+
     public void startProgress() {
         UIUtils.showView(this, 500);
         mProgressBar.progressiveStart();

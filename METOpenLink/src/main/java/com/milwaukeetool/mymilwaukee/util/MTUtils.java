@@ -117,4 +117,13 @@ public class MTUtils {
         }
         activity.finish();
     }
+
+    public static void showDialogMessage(Activity activity, String title, String message) {
+        PostOffice.newMail(activity)
+                .setTitle(title)
+                .setMessage(message)
+                .setThemeColor(MiscUtils.getAppResources().getColor(R.color.mt_red))
+                .setDesign(Design.HOLO_LIGHT)
+                .show(activity.getFragmentManager());
+    }
 }

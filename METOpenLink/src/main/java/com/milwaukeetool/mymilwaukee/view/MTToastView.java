@@ -19,13 +19,9 @@ import com.milwaukeetool.mymilwaukee.util.MiscUtils;
  */
 public class MTToastView extends RelativeLayout {
 
-    public static int getLongDuration() {
-        return 5000;
-    }
+    public static int MT_TOAST_LONG = 5000;
 
-    public static int getShortDuration() {
-        return 2000;
-    }
+    public static int MT_TOAST_SHORT = 2000;
 
     private Activity mCallingActivity;
 

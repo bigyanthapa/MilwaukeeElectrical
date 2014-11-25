@@ -39,8 +39,6 @@ import com.milwaukeetool.mymilwaukee.view.MTSimpleFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTSwitchListItemView;
 import com.milwaukeetool.mymilwaukee.view.MTToastView;
 import com.milwaukeetool.mymilwaukee.view.RitalinLayout;
-import com.r0adkll.postoffice.PostOffice;
-import com.r0adkll.postoffice.model.Design;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -225,7 +223,7 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
 
                             MTToastView.showMessage(MyProfileActivity.this,
                                     MiscUtils.getString(R.string.message_success_updated_profile),
-                                    MTToastView.getShortDuration(),
+                                    MTToastView.MT_TOAST_SHORT,
                                     successDrawable,
                                     new MTFinishedListener() {
                                 @Override
@@ -252,8 +250,7 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
 
                         mSaveInProgress = true;
 
-                        mProgressView.updateMessage(MiscUtils.getString(R.string.progress_bar_saving_user_details));
-                        mProgressView.startProgress();
+                        mProgressView.updateMessageAndStart(MiscUtils.getString(R.string.progress_bar_saving_user_details));
 
                         MTUserProfile userProfile = this.constructMTUserProfile();
 
@@ -552,7 +549,7 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
                                         // Show success
                                         MTToastView.showMessage(MyProfileActivity.this,
                                                 MiscUtils.getString(R.string.change_password_success),
-                                                MTToastView.getShortDuration(),
+                                                MTToastView.MT_TOAST_SHORT,
                                                 successDrawable,
                                                 new MTFinishedListener() {
                                                     @Override
@@ -580,19 +577,15 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
                                 request.setUpdated(update.getFieldValue());
                                 request.setConfirm(confirm.getFieldValue());
 
-                                mProgressView.updateMessage(MiscUtils.getString(R.string.progress_bar_registering));
-                                mProgressView.startProgress();
+                                mProgressView.updateMessageAndStart(MiscUtils.getString(R.string.progress_bar_registering));
 
                                 MTWebInterface.sharedInstance().getUserService().updatePassword(MTUtils.getAuthHeaderForBearerToken(),
                                         request,responseCallback);
                             } else {
                                 // Show error
-                                PostOffice.newMail(MyProfileActivity.this)
-                                        .setTitle(MiscUtils.getString(R.string.change_password_error))
-                                        .setMessage(MiscUtils.getString(R.string.create_account_no_password_match))
-                                        .setThemeColor(MiscUtils.getAppResources().getColor(R.color.mt_red))
-                                        .setDesign(Design.HOLO_LIGHT)
-                                        .show(getFragmentManager());
+                                MTUtils.showDialogMessage(MyProfileActivity.this,
+                                        MiscUtils.getString(R.string.change_password_error),
+                                        MiscUtils.getString(R.string.create_account_no_password_match));
                             }
                         }
                     }
