@@ -130,7 +130,6 @@ dependencies {
 //    compile 'com.loopeer.android:bootstrap:2.0.2'
 //
 //    // Animations
-//    compile 'com.nineoldandroids:library:2.4.0'
 //    compile 'com.daimajia.easing:library:1.0.0@aar'
 //    compile 'com.daimajia.androidanimations:library:1.1.2@aar'
 

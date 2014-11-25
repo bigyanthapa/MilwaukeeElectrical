@@ -71,10 +71,20 @@
 
     <!-- Sign In -->
     <string name="title_sign_in_my_milwaukee_account">Sign in with My Milwaukee&#174; account</string>
-
     <string name="sign_in_field_title_email">Email Address</string>
     <string name="sign_in_field_title_password">Password</string>
     <string name="text_sign_in_failure">The Email Address field or Password field is incorrect.</string>
+
+
+    <!-- Change Password -->
+    <string name="change_password_title">Change Password</string>
+    <string name="change_password_current">Current Password</string>
+    <string name="change_password_new">New Password</string>
+    <string name="change_password_confirm">Confirm New Password</string>
+    <string name="change_password_success">Password Updated</string>
+    <string name="change_password_error">Unable to Change Password</string>
+    <string name="change_password_saving">Saving Password</string>
+
 
     <!-- Error Dialogs -->
     <string name="dialog_title_register_failure">Error Registering</string>

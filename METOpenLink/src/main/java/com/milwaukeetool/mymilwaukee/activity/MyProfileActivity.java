@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -38,6 +39,8 @@ import com.milwaukeetool.mymilwaukee.view.MTSimpleFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTSwitchListItemView;
 import com.milwaukeetool.mymilwaukee.view.MTToastView;
 import com.milwaukeetool.mymilwaukee.view.RitalinLayout;
+import com.r0adkll.postoffice.PostOffice;
+import com.r0adkll.postoffice.model.Design;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -499,32 +502,102 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
 
     public void launched(MTLaunchEvent launchEvent) {
         LayoutInflater inflater = this.getLayoutInflater();
-        final MTChangePasswordPopupView view = new MTChangePasswordPopupView(this);
+        final MTChangePasswordPopupView changePasswordPopupView = new MTChangePasswordPopupView(this);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setPositiveButton(this.getResources().getString(R.string.action_change), new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(MiscUtils.getString(R.string.action_cancel), new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                MTSimpleFieldView current = view.getCurrent();
-                MTSimpleFieldView update = view.getUpdate();
-                MTSimpleFieldView confirm = view.getConfirm();
-
-                if (update.isValid() && confirm.isValid()) {
-                    if (!update.getFieldValue().equals(confirm.getFieldValue())) {
-                        MTPasswordRequest request = new MTPasswordRequest();
-                        request.setCurrent(current.getFieldValue());
-                        request.setUpdated(update.getFieldValue());
-                        request.setConfirm(confirm.getFieldValue());
-
-                        //MTWebInterface.sharedInstance().getUserService().updatePassword(MTUtils.getAuthHeaderForBearerToken(), request);
-                    }
-                }
+            public void onClick(DialogInterface dialog, int which) {
+                UIUtils.hideKeyboard(MyProfileActivity.this);
             }
         });
+        builder.setPositiveButton(MiscUtils.getString(R.string.action_change),null);
+        builder.setView(changePasswordPopupView);
 
-        builder.setView(view);
+        final AlertDialog alertDialog = builder.create();
 
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
+        if (alertDialog != null) {
+
+            alertDialog.show();
+
+            Button changeButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            if (changeButton != null) {
+                changeButton.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        UIUtils.hideKeyboard(MyProfileActivity.this);
+
+                        MTSimpleFieldView current = changePasswordPopupView.getCurrent();
+                        MTSimpleFieldView update = changePasswordPopupView.getUpdate();
+                        MTSimpleFieldView confirm = changePasswordPopupView.getConfirm();
+
+                        if (current.isValid() && update.isValid() && confirm.isValid()) {
+                            if (update.getFieldValue().equals(confirm.getFieldValue())) {
+
+                                Callback<Response> responseCallback = new Callback<Response>() {
+
+                                    @Override
+                                    public void success(Response result, Response response) {
+
+                                        // Hide progress indicator
+                                        mProgressView.stopProgress();
+
+                                        alertDialog.dismiss();
+
+                                        final IconDrawable successDrawable = new IconDrawable(MilwaukeeToolApplication.getAppContext(),
+                                                Iconify.IconValue.fa_check_circle).colorRes(R.color.mt_black).sizeDp(40);
+
+                                        // Show success
+                                        MTToastView.showMessage(MyProfileActivity.this,
+                                                MiscUtils.getString(R.string.change_password_success),
+                                                MTToastView.getShortDuration(),
+                                                successDrawable,
+                                                new MTFinishedListener() {
+                                                    @Override
+                                                    public void didFinish() {
+
+                                                    }
+                                                });
+                                    }
+
+                                    @Override
+                                    public void failure(RetrofitError retrofitError) {
+
+                                        LOGD(TAG, "Failed to change password");
+
+                                        // Hide progress indicator
+                                        mProgressView.stopProgress();
+
+                                        MTUtils.handleRetrofitError(retrofitError, MyProfileActivity.this,
+                                                MiscUtils.getString(R.string.change_password_error));
+                                    }
+                                };
+
+                                MTPasswordRequest request = new MTPasswordRequest();
+                                request.setCurrent(current.getFieldValue());
+                                request.setUpdated(update.getFieldValue());
+                                request.setConfirm(confirm.getFieldValue());
+
+                                mProgressView.updateMessage(MiscUtils.getString(R.string.progress_bar_registering));
+                                mProgressView.startProgress();
+
+                                MTWebInterface.sharedInstance().getUserService().updatePassword(MTUtils.getAuthHeaderForBearerToken(),
+                                        request,responseCallback);
+                            } else {
+                                // Show error
+                                PostOffice.newMail(MyProfileActivity.this)
+                                        .setTitle(MiscUtils.getString(R.string.change_password_error))
+                                        .setMessage(MiscUtils.getString(R.string.create_account_no_password_match))
+                                        .setThemeColor(MiscUtils.getAppResources().getColor(R.color.mt_red))
+                                        .setDesign(Design.HOLO_LIGHT)
+                                        .show(getFragmentManager());
+                            }
+                        }
+                    }
+                });
+            }
+        }
     }
 }

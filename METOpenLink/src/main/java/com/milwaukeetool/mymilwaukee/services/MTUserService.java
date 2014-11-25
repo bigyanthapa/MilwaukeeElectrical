@@ -43,7 +43,7 @@ public interface MTUserService {
     void updateProfile(@Header("Authorization") String authorization, @Body MTUserProfile userProfile, Callback<MTUserProfile> callback);
 
     @PUT("/accounts/me/password")
-    void updatePassword(@Header("Authorization") String authorization, @Body MTPasswordRequest passwordRequest, Callback<MTUserProfile> callback);
+    void updatePassword(@Header("Authorization") String authorization, @Body MTPasswordRequest passwordRequest, Callback<Response> callback);
 
 //    @GET("/api/v1/user")
 //    void logIn(@Query("name") String name, Callback callback);
