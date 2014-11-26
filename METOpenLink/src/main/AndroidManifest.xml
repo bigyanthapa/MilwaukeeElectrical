@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.milwaukeetool.mymilwaukee" >
+    package="com.milwaukeetool.mymilwaukee">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <meta-data android:name="com.google.android.gms.version"
+    <meta-data
+        android:name="com.google.android.gms.version"
         android:value="@integer/google_play_services_version" />
 
     <application
@@ -14,14 +15,15 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.Milwaukeetool" >
+        android:theme="@style/Theme.Milwaukeetool">
 
-        <meta-data android:name="com.google.android.gms.analytics.globalConfigResource"
-        android:resource="@xml/global_tracker" />
+        <meta-data
+            android:name="com.google.android.gms.analytics.globalConfigResource"
+            android:resource="@xml/global_tracker" />
 
         <receiver
             android:name=".receiver.NetworkChangeReceiver"
-            android:label="NetworkChangeReceiver" >
+            android:label="NetworkChangeReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
                 <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
@@ -42,17 +44,16 @@
         <activity
             android:name=".activity.LandingActivity"
             android:label="@string/app_name"
-            android:screenOrientation="sensorPortrait"
             android:launchMode="singleTop"
-            android:theme="@android:style/Theme.DeviceDefault.NoActionBar">
-        </activity>
+            android:screenOrientation="sensorPortrait"
+            android:theme="@android:style/Theme.DeviceDefault.NoActionBar"></activity>
         <activity
             android:name=".activity.CreateAccountActivity"
             android:label="@string/title_create_account"
-            android:screenOrientation="sensorPortrait"
             android:launchMode="singleTop"
-            android:theme="@android:style/Theme.DeviceDefault.NoActionBar"
             android:parentActivityName=".activity.LandingActivity"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@android:style/Theme.DeviceDefault.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -61,9 +62,9 @@
         <activity
             android:name=".activity.LogInActivity"
             android:label="@string/title_log_in"
-            android:screenOrientation="sensorPortrait"
             android:launchMode="singleTop"
             android:parentActivityName=".activity.LandingActivity"
+            android:screenOrientation="sensorPortrait"
             android:theme="@android:style/Theme.DeviceDefault.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateAlwaysVisible">
             <meta-data
@@ -73,9 +74,9 @@
         <activity
             android:name=".activity.MyProfileActivity"
             android:label="@string/title_update_profile"
-            android:screenOrientation="sensorPortrait"
             android:launchMode="singleTop"
             android:parentActivityName=".activity.MainActivity"
+            android:screenOrientation="sensorPortrait"
             android:theme="@style/Theme.Milwaukeetool"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <meta-data
@@ -85,8 +86,19 @@
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/title_my_milwaukee"
+            android:launchMode="singleTop"
+            android:screenOrientation="sensorPortrait"></activity>
+        <activity
+            android:name=".activity.AddItemActivity"
+            android:label="@string/main_add_item_title"
+            android:launchMode="singleTop"
+            android:parentActivityName=".activity.MainActivity"
             android:screenOrientation="sensorPortrait"
-            android:launchMode="singleTop">
+            android:theme="@style/Theme.Milwaukeetool"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
         </activity>
         <activity android:name="net.hockeyapp.android.UpdateActivity" />
     </application>

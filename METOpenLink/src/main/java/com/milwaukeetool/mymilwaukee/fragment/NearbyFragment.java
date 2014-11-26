@@ -1,8 +1,11 @@
 package com.milwaukeetool.mymilwaukee.fragment;
 
+import android.app.ActionBar;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -32,7 +35,7 @@ public class NearbyFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        this.setHasOptionsMenu(true);
         position = getArguments().getInt(ARG_POSITION);
     }
 
@@ -44,4 +47,9 @@ public class NearbyFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        ActionBar actionBar = this.getActivity().getActionBar();
+        actionBar.setTitle(this.getResources().getString(R.string.main_title_nearby_title));
+    }
 }

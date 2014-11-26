@@ -10,11 +10,19 @@
     <string name="action_save">Save</string>
     <string name="action_change">Change</string>
     <string name="action_cancel">Cancel</string>
+    <string name="action_add_item">Add Item</string>
+    <string name="action_search_item">Search Item</string>
 
     <!-- Main -->
     <string name="main_title_inventory">Inventory</string>
+    <string name="main_title_inventory_title">My Inventory</string>
     <string name="main_title_nearby">Nearby</string>
+    <string name="main_title_nearby_title">My Nearby</string>
     <string name="main_title_settings">Settings</string>
+    <string name="main_title_settings_title">My Settings</string>
+    <string name="main_title_milwaukee_item_title">Milwaukee</string>
+    <string name="main_title_other_item_title">Other</string>
+    <string name="main_add_item_title">Add Item</string>
     
     <!-- Landing Page -->
     <string name="title_create_account">Create Account</string>
@@ -61,6 +69,9 @@
     <string name="email_communications">Email Communications</string>
     <string name="change_password">Change Password</string>
     <string name="message_success_updated_profile">Profile Updated</string>
+
+    <!-- Inventory Fragment -->
+    <string name="add_inventory_item">Search for a model number using the @style/ icon above.</string>
 
     <!-- Progress Indicator -->
     <string name="progress_bar_default_message">Loading...</string>

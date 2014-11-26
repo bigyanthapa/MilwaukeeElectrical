@@ -1,12 +1,21 @@
 package com.milwaukeetool.mymilwaukee.fragment;
 
+import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.milwaukeetool.mymilwaukee.R;
+import com.milwaukeetool.mymilwaukee.activity.AddItemActivity;
+import com.milwaukeetool.mymilwaukee.activity.LandingActivity;
+import com.milwaukeetool.mymilwaukee.activity.MainActivity;
+import com.milwaukeetool.mymilwaukee.util.MTUtils;
 
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 
@@ -16,7 +25,7 @@ import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 public class InventoryFragment extends Fragment {
 
     private static final String TAG = makeLogTag(NearbyFragment.class);
-
+    public static final String ADD_ITEM = "Add Item";
     private static final String ARG_POSITION = "position";
 
     private int position;
@@ -32,16 +41,33 @@ public class InventoryFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        this.setHasOptionsMenu(true);
         position = getArguments().getInt(ARG_POSITION);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         View rootView = inflater.inflate(R.layout.fragment_inventory, container, false);
 
         return rootView;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent = new Intent(this.getActivity(), AddItemActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+        startActivity(intent);
+        return true;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(
+            Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.inventory_menu, menu);
+
+        ActionBar actionBar = this.getActivity().getActionBar();
+        actionBar.setTitle(this.getResources().getString(R.string.main_title_inventory_title));
     }
 
 }
