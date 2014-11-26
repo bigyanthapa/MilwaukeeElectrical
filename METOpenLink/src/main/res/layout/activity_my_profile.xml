@@ -6,26 +6,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/myProfileListViewContainer"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:focusableInTouchMode="true"
-        android:descendantFocusability="afterDescendants">
-
-        <ScrollView
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/myProfileLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <LinearLayout
-                android:id="@+id/myProfileLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_gravity="start"
-                android:layout_centerVertical="true"
-                android:background="@color/mt_white" />
-        </ScrollView>
-
-    </RelativeLayout>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="start"
+            android:background="@color/mt_white" />
+    </ScrollView>
 
 </com.milwaukeetool.mymilwaukee.view.MTLayout>

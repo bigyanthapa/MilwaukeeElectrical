@@ -13,7 +13,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
@@ -52,10 +51,9 @@ import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
  */
 public class MyProfileActivity extends MTActivity implements Postable, MTLaunchListener {
 
-    private static final String TAG = makeLogTag(MyProfileActivity.class);
-
-    private RelativeLayout mListViewContainerLayout;
     private LinearLayout mMyProfileLayout;
+
+    private static final String TAG = makeLogTag(MyProfileActivity.class);
 
     private MTMyProfileSectionView userInformation;
     private MTSimpleFieldView mEmailFieldView;
@@ -266,8 +264,6 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
 
     private void setupViews() {
 
-        mListViewContainerLayout = (RelativeLayout)findViewById(R.id.myProfileListViewContainer);
-
         mViews = new LinkedList<View>();
 
         this.setupUserInformation(mViews);
@@ -286,8 +282,6 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
             }
             mMyProfileLayout.addView(view);
         }
-
-        mListViewContainerLayout.requestFocus();
     }
 
     private LinearLayout.LayoutParams getStandardLayoutParams() {
@@ -305,7 +299,6 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
         mFirstNameFieldView.setFieldValue(response != null ? response.getFirstName() : null);
         mLastNameFieldView.setFieldValue(response != null ? response.getLastName() : null);
         mTradeOccupationFieldView.setFieldValue(response != null ? response.getOccupation() : null);
-        //mPassword.setFieldValue(response != null ? response);
     }
 
     private void populateContactInformation(MTUserProfile response) {
@@ -448,6 +441,11 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
     }
 
     public void launched(MTLaunchEvent launchEvent) {
+
+        if (launchEvent.getSource() == mPassword) {
+
+        }
+
         LayoutInflater inflater = this.getLayoutInflater();
         mChangePasswordPopupView = new MTChangePasswordPopupView(this);
 
