@@ -2,13 +2,18 @@ package com.milwaukeetool.mymilwaukee.fragment;
 
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.view.MTTextView;
@@ -47,7 +52,17 @@ public class MilwaukeeItemFragment extends Fragment {
         MTTextView milwaukeeModelText = (MTTextView) rootView.findViewById(R.id.searchMilwaukeeModelText);
         MTTextView otherModelText = (MTTextView) rootView.findViewById(R.id.searchOtherModelText);
 
-        milwaukeeModelText.setText("Search for a Milwaukee model number using the icon above.");
+        String string = "Search for a Milwaukee model number using the * icon above.";
+        int index = string.indexOf("*");
+
+        Drawable drawable = this.getResources().getDrawable(R.drawable.ic_searchgrey);
+        drawable.setBounds(0,0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        ImageSpan imageSpan = new ImageSpan(drawable);
+
+        SpannableString spannableString = new SpannableString(string);
+        spannableString.setSpan(imageSpan, index, index+1, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE);
+        milwaukeeModelText.setText(spannableString, TextView.BufferType.SPANNABLE);
+
         otherModelText.setText(Html.fromHtml("Select <strong>OTHER</strong> to enter an item from a different manufacturer"));
         return rootView;
     }

@@ -5,30 +5,49 @@
     android:layout_height="match_parent"
     android:background="@color/mt_white">
 
-    <com.milwaukeetool.mymilwaukee.view.MTTextView
-        android:id="@+id/searchMilwaukeeModelText"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:gravity="center"
-        android:background="@color/mt_white"
-        android:textColor="@color/mt_common_gray"
-        android:textSize="@dimen/mt_font_size_large" />
+        android:orientation="vertical"
+        android:layout_centerInParent="true">
 
-    <com.milwaukeetool.mymilwaukee.view.MTTextView
-        android:id="@+id/searchOtherModelText"
-        android:layout_below="@+id/searchMilwaukeeModelText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:background="@color/mt_white"
-        android:textColor="@color/mt_common_gray"
-        android:textSize="@dimen/mt_font_size_large" />
+        <ImageView
+            android:id="@+id/searchMilwaukeeModelImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="0dp"
+            android:layout_gravity="center"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_mtred" />
 
+        <com.milwaukeetool.mymilwaukee.view.MTTextView
+            android:id="@+id/searchMilwaukeeModelText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="@dimen/mt_margin_large"
+            android:layout_marginLeft="@dimen/mt_margin_xl"
+            android:layout_marginRight="@dimen/mt_margin_xl"
+            android:padding="0dp"
+            android:gravity="center"
+            android:background="@color/mt_white"
+            android:textColor="@color/mt_common_gray"
+            android:textSize="@dimen/mt_font_size_large" />
+
+        <com.milwaukeetool.mymilwaukee.view.MTTextView
+            android:id="@+id/searchOtherModelText"
+            android:layout_below="@+id/searchMilwaukeeModelText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="@dimen/mt_margin_large"
+            android:layout_marginLeft="@dimen/mt_margin_xl"
+            android:layout_marginRight="@dimen/mt_margin_xl"
+            android:padding="0dp"
+            android:background="@color/mt_white"
+            android:textColor="@color/mt_common_gray"
+            android:textSize="@dimen/mt_font_size_large" />
+
+    </LinearLayout>
 </RelativeLayout>
