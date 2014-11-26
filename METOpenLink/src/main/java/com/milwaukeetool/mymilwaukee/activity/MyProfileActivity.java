@@ -9,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -83,6 +84,9 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
     private MTSimpleFieldView cellPhone;
     private MTSimpleFieldView fax;
     private MTSwitchListItemView emailCommunications;
+
+    private AlertDialog mChangePasswordDialog;
+    private MTChangePasswordPopupView mChangePasswordPopupView;
 
     private LinkedList<View> mViews;
 
@@ -348,24 +352,31 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
         fieldView.setHintColorTextResource(R.color.mt_common_gray);
     }
 
-    private MTSimpleFieldView addDefaultFieldView(MTSimpleFieldView fieldView) {
+    private MTSimpleFieldView addDefaultFieldView(final MTSimpleFieldView fieldView) {
         setupDefaultView(fieldView);
         mViews.add(fieldView);
         fieldView.setListItemNumber(mViews.size());
+        fieldView.setListItemId(fieldView.getListItemNumber());
+        //fieldView.setNextFocusDownId(fieldView.getListItemNumber() + 1);
         fieldView.setFocusListener(new MTFocusListener() {
+
             @Override
             public void didChangeFocus(boolean hasFocus, EditText editText, int listItemNumber) {
+
+                LOGD(TAG, "Focused on field: " + listItemNumber + "=" + fieldView.getId() + " => " + (hasFocus ? "Yes" : "No") );
+
                 if (hasFocus && listItemNumber != 0 && listItemNumber < mViews.size()) {
                     mListView.smoothScrollToPosition(listItemNumber);
 
                     // Check that its not the last
-                    if (listItemNumber >= 1 && mViews.size() > (listItemNumber - 1) &&
-                            listItemNumber != fax.getListItemNumber()) {
+                    if ((listItemNumber >= 1) && (mViews.size() > (listItemNumber - 1)) &&
+                            (listItemNumber != fax.getListItemNumber())) {
 
                         View view = mViews.get((listItemNumber - 1));
                         if (view instanceof MTSimpleFieldView) {
                             MTSimpleFieldView simpleFieldView = (MTSimpleFieldView)view;
                             simpleFieldView.setIMEAction(EditorInfo.IME_ACTION_NEXT);
+                            editText.setNextFocusDownId(listItemNumber + 1);
                         }
                     }
                 }
@@ -463,6 +474,8 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
         if (event.callingActivity == this) {
             if (event.action == EditorInfo.IME_ACTION_NEXT && event.fieldName.equalsIgnoreCase(mLastNameFieldView.getFieldName())) {
                 mTradeOccupationFieldView.showSelectableOptions();
+            } else if (event.action == EditorInfo.IME_ACTION_GO) {
+                changePassword();
             }
         }
     }
@@ -499,105 +512,116 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
 
     public void launched(MTLaunchEvent launchEvent) {
         LayoutInflater inflater = this.getLayoutInflater();
-        final MTChangePasswordPopupView changePasswordPopupView = new MTChangePasswordPopupView(this);
+        mChangePasswordPopupView = new MTChangePasswordPopupView(this);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setNegativeButton(MiscUtils.getString(R.string.action_cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                UIUtils.hideKeyboard(MyProfileActivity.this, changePasswordPopupView.getCurrent());
-                UIUtils.hideKeyboard(MyProfileActivity.this, changePasswordPopupView.getUpdate());
-                UIUtils.hideKeyboard(MyProfileActivity.this, changePasswordPopupView.getConfirm());
-                UIUtils.hideKeyboard(MyProfileActivity.this, changePasswordPopupView);
-                UIUtils.hideKeyboard(MyProfileActivity.this);
+                UIUtils.hideKeyboard(MyProfileActivity.this, mChangePasswordPopupView.getCurrent());
+                UIUtils.hideKeyboard(MyProfileActivity.this, mChangePasswordPopupView.getUpdate());
+                UIUtils.hideKeyboard(MyProfileActivity.this, mChangePasswordPopupView.getConfirm());
             }
         });
-        builder.setPositiveButton(MiscUtils.getString(R.string.action_change),null);
-        builder.setView(changePasswordPopupView);
+        builder.setPositiveButton(MiscUtils.getString(R.string.action_save),null);
+        builder.setView(mChangePasswordPopupView);
 
-        final AlertDialog alertDialog = builder.create();
+        mChangePasswordDialog = builder.create();
 
-        if (alertDialog != null) {
+        if (mChangePasswordDialog != null) {
 
-            alertDialog.show();
+            // Change the soft input mode to make sure the keyboard is visible for the popup
+            mChangePasswordDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
-            Button changeButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            mChangePasswordDialog.show();
+
+            Button changeButton = mChangePasswordDialog.getButton(AlertDialog.BUTTON_POSITIVE);
             if (changeButton != null) {
                 changeButton.setOnClickListener(new View.OnClickListener()
                 {
                     @Override
                     public void onClick(View v)
                     {
-                        UIUtils.hideKeyboard(MyProfileActivity.this, changePasswordPopupView.getCurrent());
-                        UIUtils.hideKeyboard(MyProfileActivity.this, changePasswordPopupView.getUpdate());
-                        UIUtils.hideKeyboard(MyProfileActivity.this, changePasswordPopupView.getConfirm());
-                        UIUtils.hideKeyboard(MyProfileActivity.this, changePasswordPopupView);
-
-
-                        MTSimpleFieldView current = changePasswordPopupView.getCurrent();
-                        MTSimpleFieldView update = changePasswordPopupView.getUpdate();
-                        MTSimpleFieldView confirm = changePasswordPopupView.getConfirm();
-
-                        if (current.isValid() && update.isValid() && confirm.isValid()) {
-                            if (update.getFieldValue().equals(confirm.getFieldValue())) {
-
-                                Callback<Response> responseCallback = new Callback<Response>() {
-
-                                    @Override
-                                    public void success(Response result, Response response) {
-
-                                        // Hide progress indicator
-                                        mProgressView.stopProgress();
-
-                                        alertDialog.dismiss();
-
-                                        final IconDrawable successDrawable = new IconDrawable(MilwaukeeToolApplication.getAppContext(),
-                                                Iconify.IconValue.fa_check_circle).colorRes(R.color.mt_black).sizeDp(40);
-
-                                        // Show success
-                                        MTToastView.showMessage(MyProfileActivity.this,
-                                                MiscUtils.getString(R.string.change_password_success),
-                                                MTToastView.MT_TOAST_SHORT,
-                                                successDrawable,
-                                                new MTFinishedListener() {
-                                                    @Override
-                                                    public void didFinish() {
-
-                                                    }
-                                                });
-                                    }
-
-                                    @Override
-                                    public void failure(RetrofitError retrofitError) {
-
-                                        LOGD(TAG, "Failed to change password");
-
-                                        // Hide progress indicator
-                                        mProgressView.stopProgress();
-
-                                        MTUtils.handleRetrofitError(retrofitError, MyProfileActivity.this,
-                                                MiscUtils.getString(R.string.change_password_error));
-                                    }
-                                };
-
-                                MTPasswordRequest request = new MTPasswordRequest();
-                                request.setCurrent(current.getFieldValue());
-                                request.setUpdated(update.getFieldValue());
-                                request.setConfirm(confirm.getFieldValue());
-
-                                mProgressView.updateMessageAndStart(MiscUtils.getString(R.string.progress_bar_registering));
-
-                                MTWebInterface.sharedInstance().getUserService().updatePassword(MTUtils.getAuthHeaderForBearerToken(),
-                                        request,responseCallback);
-                            } else {
-                                // Show error
-                                MTUtils.showDialogMessage(MyProfileActivity.this,
-                                        MiscUtils.getString(R.string.change_password_error),
-                                        MiscUtils.getString(R.string.create_account_no_password_match));
-                            }
-                        }
+                        MyProfileActivity.this.changePassword();
                     }
                 });
+            }
+        }
+    }
+
+
+    public void changePassword() {
+
+        // Check to see if we have a dialog
+        if (mChangePasswordPopupView == null || mChangePasswordDialog == null)
+            return;
+
+        // Hide the keyboard for any of the edit text items
+        UIUtils.hideKeyboard(MyProfileActivity.this, mChangePasswordPopupView.getCurrent());
+        UIUtils.hideKeyboard(MyProfileActivity.this, mChangePasswordPopupView.getUpdate());
+        UIUtils.hideKeyboard(MyProfileActivity.this, mChangePasswordPopupView.getConfirm());
+
+        MTSimpleFieldView current = mChangePasswordPopupView.getCurrent();
+        MTSimpleFieldView update = mChangePasswordPopupView.getUpdate();
+        MTSimpleFieldView confirm = mChangePasswordPopupView.getConfirm();
+
+        if (current.isValid() && update.isValid() && confirm.isValid()) {
+            if (update.getFieldValue().equals(confirm.getFieldValue())) {
+
+                Callback<Response> responseCallback = new Callback<Response>() {
+
+                    @Override
+                    public void success(Response result, Response response) {
+
+                        // Hide progress indicator
+                        mProgressView.stopProgress();
+
+                        mChangePasswordDialog.dismiss();
+                        mChangePasswordDialog = null;
+
+                        final IconDrawable successDrawable = new IconDrawable(MilwaukeeToolApplication.getAppContext(),
+                                Iconify.IconValue.fa_check_circle).colorRes(R.color.mt_black).sizeDp(40);
+
+                        // Show success
+                        MTToastView.showMessage(MyProfileActivity.this,
+                                MiscUtils.getString(R.string.change_password_success),
+                                MTToastView.MT_TOAST_SHORT,
+                                successDrawable,
+                                new MTFinishedListener() {
+                                    @Override
+                                    public void didFinish() {
+
+                                    }
+                                });
+                    }
+
+                    @Override
+                    public void failure(RetrofitError retrofitError) {
+
+                        LOGD(TAG, "Failed to change password");
+
+                        // Hide progress indicator
+                        mProgressView.stopProgress();
+
+                        MTUtils.handleRetrofitError(retrofitError, MyProfileActivity.this,
+                                MiscUtils.getString(R.string.change_password_error));
+                    }
+                };
+
+                MTPasswordRequest request = new MTPasswordRequest();
+                request.setCurrent(current.getFieldValue());
+                request.setUpdated(update.getFieldValue());
+                request.setConfirm(confirm.getFieldValue());
+
+                mProgressView.updateMessageAndStart(MiscUtils.getString(R.string.progress_bar_registering));
+
+                MTWebInterface.sharedInstance().getUserService().updatePassword(MTUtils.getAuthHeaderForBearerToken(),
+                        request,responseCallback);
+            } else {
+                // Show error
+                MTUtils.showDialogMessage(MyProfileActivity.this,
+                        MiscUtils.getString(R.string.change_password_error),
+                        MiscUtils.getString(R.string.create_account_no_password_match));
             }
         }
     }

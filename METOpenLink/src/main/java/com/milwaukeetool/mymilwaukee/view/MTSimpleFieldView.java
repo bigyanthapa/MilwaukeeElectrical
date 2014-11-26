@@ -313,4 +313,8 @@ public class MTSimpleFieldView extends RelativeLayout {
                 UIUtils.getPixels(10)
         );
     }
+
+    public void setListItemId(int id) {
+        mEditText.setId(id);
+    }
 }

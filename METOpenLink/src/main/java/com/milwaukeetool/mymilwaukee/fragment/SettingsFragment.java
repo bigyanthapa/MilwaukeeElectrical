@@ -1,7 +1,6 @@
 package com.milwaukeetool.mymilwaukee.fragment;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -32,7 +31,7 @@ import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 /**
  * Created by cent146 on 11/18/14.
  */
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends MTFragment {
 
     private static final String TAG = makeLogTag(SettingsFragment.class);
 

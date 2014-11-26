@@ -1,6 +1,5 @@
 package com.milwaukeetool.mymilwaukee.fragment;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,7 @@ import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 /**
  * Created by cent146 on 11/19/14.
  */
-public class NearbyFragment extends Fragment {
+public class NearbyFragment extends MTFragment {
 
     private static final String TAG = makeLogTag(NearbyFragment.class);
 

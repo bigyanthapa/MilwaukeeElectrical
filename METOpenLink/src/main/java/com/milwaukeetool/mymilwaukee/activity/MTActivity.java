@@ -3,7 +3,6 @@ package com.milwaukeetool.mymilwaukee.activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
@@ -11,6 +10,7 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.model.event.MTNetworkAvailabilityEvent;
 import com.milwaukeetool.mymilwaukee.util.AnalyticUtils;
+import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.NetworkUtil;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
 import com.milwaukeetool.mymilwaukee.view.MTLayout;
@@ -35,8 +35,7 @@ public abstract class MTActivity extends Activity {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
 
-        // Clear the keep screen on flag
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        MiscUtils.disableKeepScreenOn(this);
 
         performSetup();
     }

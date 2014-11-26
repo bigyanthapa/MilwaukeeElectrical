@@ -71,7 +71,6 @@ public class MainActivity extends MTActivity {
         tabs.setTabBackground(MiscUtils.getAppResources().getColor(R.color.mt_white));
     }
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();

@@ -3,6 +3,7 @@ package com.milwaukeetool.mymilwaukee.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.view.WindowManager;
 
 import com.milwaukeetool.mymilwaukee.MilwaukeeToolApplication;
 import com.milwaukeetool.mymilwaukee.config.MTConfig;
@@ -76,5 +77,10 @@ public class MiscUtils {
 //                }
             });
         }
+    }
+
+    public static void disableKeepScreenOn(Activity activity) {
+        // Clear the keep screen on flag
+        activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 }
