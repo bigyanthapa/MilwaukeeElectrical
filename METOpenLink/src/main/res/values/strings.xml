@@ -96,4 +96,9 @@
 
     <string name="error_text_offline">The Internet connection appears to be offline.</string>
 
+    <!-- Add Item -->
+    <string name="add_item_milwaukee_search_message">Search for a Milwaukee model\n number using the * icon above.</string>
+    <string name="search_replace_wildcard_string">*</string>
+    <string name="add_item_milwaukee_select_other_message">Select <![CDATA[<strong>OTHER</strong>]]> to enter an item<![CDATA[<br />]]> from a different manufacturer.</string>
+
 </resources>

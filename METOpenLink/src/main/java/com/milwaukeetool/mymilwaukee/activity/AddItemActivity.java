@@ -1,13 +1,10 @@
 package com.milwaukeetool.mymilwaukee.activity;
 
-import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.TypedValue;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.astuetz.PagerSlidingTabStrip;
@@ -129,10 +126,6 @@ public class AddItemActivity extends MTActivity {
                     break;
 
                 case 1:
-                    fragment = new Fragment();
-                    break;
-
-                case 2:
                     fragment = new Fragment();
                     break;
 
