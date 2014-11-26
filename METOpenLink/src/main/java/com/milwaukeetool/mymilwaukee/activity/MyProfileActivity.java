@@ -12,16 +12,14 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
-import com.commonsware.cwac.sacklist.SackOfViewsAdapter;
 import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
 import com.milwaukeetool.mymilwaukee.MilwaukeeToolApplication;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.interfaces.MTFinishedListener;
-import com.milwaukeetool.mymilwaukee.interfaces.MTFocusListener;
 import com.milwaukeetool.mymilwaukee.interfaces.MTLaunchListener;
 import com.milwaukeetool.mymilwaukee.interfaces.Postable;
 import com.milwaukeetool.mymilwaukee.model.MTUserProfile;
@@ -39,10 +37,8 @@ import com.milwaukeetool.mymilwaukee.view.MTSelectableFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTSimpleFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTSwitchListItemView;
 import com.milwaukeetool.mymilwaukee.view.MTToastView;
-import com.milwaukeetool.mymilwaukee.view.RitalinLayout;
 
 import java.util.LinkedList;
-import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -58,9 +54,8 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
 
     private static final String TAG = makeLogTag(MyProfileActivity.class);
 
-    private RitalinLayout mListViewContainerLayout;
-    private ListView mListView;
-    private MyProfileAdapter mMyProfileAdapter;
+    private RelativeLayout mListViewContainerLayout;
+    private LinearLayout mMyProfileLayout;
 
     private MTMyProfileSectionView userInformation;
     private MTSimpleFieldView mEmailFieldView;
@@ -121,8 +116,6 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
 
                     // Update fields to reflect server data
                     populateView(result);
-
-                    //mListView.setSelectionAfterHeaderView();
                 }
 
                 @Override
@@ -185,7 +178,7 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
         super.onBackPressed();
     }
 
-    protected boolean isTextFieldsValid() {
+    private boolean isTextFieldsValid() {
         boolean valid = true;
 
         for (View view : this.mViews) {
@@ -271,11 +264,9 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
         }
     }
 
-    protected void setupViews() {
+    private void setupViews() {
 
-        mListViewContainerLayout = (RitalinLayout)findViewById(R.id.myProfileListViewContainer);
-
-        mListView = (ListView)findViewById(R.id.my_profile_list_view);
+        mListViewContainerLayout = (RelativeLayout)findViewById(R.id.myProfileListViewContainer);
 
         mViews = new LinkedList<View>();
 
@@ -283,17 +274,27 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
         this.setupCompanyInformation(mViews);
         this.setupContactInformation(mViews);
 
-        mMyProfileAdapter = new MyProfileAdapter(mViews);
+        mMyProfileLayout = (LinearLayout)findViewById(R.id.myProfileLayout);
 
-        if (mListView != null) {
-            mListView.setAdapter(mMyProfileAdapter);
-            mListView.setFocusable(true);
+        for(View view : mViews) {
+            if (view instanceof MTMyProfileSectionView) {
+                view.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, UIUtils.getPixels(50)));
+            } else if (view == mPassword || view == country || view == emailCommunications) {
+                view.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, UIUtils.getPixels(55)));
+            } else if (view instanceof MTSimpleFieldView || view instanceof MTSelectableFieldView || view instanceof MTLaunchableFieldView || view instanceof MTSwitchListItemView) {
+                view.setLayoutParams(getStandardLayoutParams());
+            }
+            mMyProfileLayout.addView(view);
         }
 
         mListViewContainerLayout.requestFocus();
     }
 
-    protected void populateView(MTUserProfile response) {
+    private LinearLayout.LayoutParams getStandardLayoutParams() {
+        return new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, UIUtils.getPixels(45));
+    }
+
+    private void populateView(MTUserProfile response) {
         populateUserInformation(response);
         populateContactInformation(response);
         populateCompanyInformation(response);
@@ -355,33 +356,6 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
     private MTSimpleFieldView addDefaultFieldView(final MTSimpleFieldView fieldView) {
         setupDefaultView(fieldView);
         mViews.add(fieldView);
-        fieldView.setListItemNumber(mViews.size());
-        fieldView.setListItemId(fieldView.getListItemNumber());
-        //fieldView.setNextFocusDownId(fieldView.getListItemNumber() + 1);
-        fieldView.setFocusListener(new MTFocusListener() {
-
-            @Override
-            public void didChangeFocus(boolean hasFocus, EditText editText, int listItemNumber) {
-
-                LOGD(TAG, "Focused on field: " + listItemNumber + "=" + fieldView.getId() + " => " + (hasFocus ? "Yes" : "No") );
-
-                if (hasFocus && listItemNumber != 0 && listItemNumber < mViews.size()) {
-                    mListView.smoothScrollToPosition(listItemNumber);
-
-                    // Check that its not the last
-                    if ((listItemNumber >= 1) && (mViews.size() > (listItemNumber - 1)) &&
-                            (listItemNumber != fax.getListItemNumber())) {
-
-                        View view = mViews.get((listItemNumber - 1));
-                        if (view instanceof MTSimpleFieldView) {
-                            MTSimpleFieldView simpleFieldView = (MTSimpleFieldView)view;
-                            simpleFieldView.setIMEAction(EditorInfo.IME_ACTION_NEXT);
-                            editText.setNextFocusDownId(listItemNumber + 1);
-                        }
-                    }
-                }
-            }
-        });
         return fieldView;
     }
 
@@ -456,13 +430,6 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
         this.mPassword.setHintColorTextResource(R.color.mt_black);
         this.mPassword.setLastGroupItem();
         views.add(this.mPassword);
-
-        mMyProfileAdapter = new MyProfileAdapter(views);
-
-        if (mListView != null) {
-            mListView.setAdapter(mMyProfileAdapter);
-            mListView.setFocusable(true);
-        }
     }
 
     @Override
@@ -477,36 +444,6 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
             } else if (event.action == EditorInfo.IME_ACTION_GO) {
                 changePassword();
             }
-        }
-    }
-
-    private class MyProfileAdapter extends SackOfViewsAdapter {
-
-        private EditText mText = null;
-        private long mTextLostFocusTimestamp;
-
-        public MyProfileAdapter(List<View> views) {
-            super(views);
-            mTextLostFocusTimestamp = -1;
-        }
-
-        @Override
-        protected View newView(int position, ViewGroup parent) {
-            View view = super.newView(position, parent);
-            return view;
-        }
-
-        @Override
-        public boolean isEnabled(int position) {
-
-            // Get the view at position
-            View view = mViews.get(position);
-
-            if (view != null && view instanceof MTMyProfileSectionView) {
-                return false;
-            }
-
-            return true;
         }
     }
 
