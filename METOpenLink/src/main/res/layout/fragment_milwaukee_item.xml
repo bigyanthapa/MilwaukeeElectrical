@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mt_white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true">
+
+        <ImageView
+            android:id="@+id/searchMilwaukeeModelImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="0dp"
+            android:layout_gravity="center"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_mtred" />
+
+        <com.milwaukeetool.mymilwaukee.view.MTTextView
+            android:id="@+id/searchMilwaukeeModelText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/mt_margin_large"
+            android:layout_marginLeft="@dimen/mt_margin_standard"
+            android:layout_marginRight="@dimen/mt_margin_standard"
+            android:padding="0dp"
+            android:gravity="center"
+            android:background="@color/mt_white"
+            android:singleLine="false"
+            android:textColor="@color/mt_common_gray"
+            android:textSize="@dimen/mt_font_size_large" />
+
+        <com.milwaukeetool.mymilwaukee.view.MTTextView
+            android:id="@+id/searchOtherModelText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/mt_margin_large"
+            android:layout_marginLeft="@dimen/mt_margin_standard"
+            android:layout_marginRight="@dimen/mt_margin_standard"
+            android:padding="0dp"
+            android:background="@color/mt_white"
+            android:singleLine="false"
+            android:lineSpacingExtra="@dimen/mt_padding_standard"
+            android:textColor="@color/mt_common_gray"
+            android:textSize="@dimen/mt_font_size_large" />
+
+    </LinearLayout>
+</RelativeLayout>
