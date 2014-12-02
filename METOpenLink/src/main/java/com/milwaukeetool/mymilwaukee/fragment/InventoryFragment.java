@@ -13,9 +13,6 @@ import android.view.ViewGroup;
 
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.AddItemActivity;
-import com.milwaukeetool.mymilwaukee.activity.LandingActivity;
-import com.milwaukeetool.mymilwaukee.activity.MainActivity;
-import com.milwaukeetool.mymilwaukee.util.MTUtils;
 
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 
@@ -55,8 +52,6 @@ public class InventoryFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent = new Intent(this.getActivity(), AddItemActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-
         startActivity(intent);
         return true;
     }
