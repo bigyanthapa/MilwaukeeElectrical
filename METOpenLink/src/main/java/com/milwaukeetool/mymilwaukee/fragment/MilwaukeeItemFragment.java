@@ -2,6 +2,9 @@ package com.milwaukeetool.mymilwaukee.fragment;
 
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.app.SearchManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Html;
@@ -12,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.milwaukeetool.mymilwaukee.R;
@@ -74,5 +78,30 @@ public class MilwaukeeItemFragment extends Fragment {
 
         ActionBar actionBar = this.getActivity().getActionBar();
         actionBar.setTitle(this.getResources().getString(R.string.main_add_item_title));
+
+        SearchManager searchManager =
+                (SearchManager) this.getActivity().getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.inventory_search).getActionView();
+        ComponentName a = this.getActivity().getComponentName();
+
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(this.getActivity().getComponentName()));
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+
+                return true;
+
+            }
+
+        });
     }
 }
