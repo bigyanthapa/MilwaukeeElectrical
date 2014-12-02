@@ -113,7 +113,6 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
     compile 'com.squareup.okhttp:okhttp:2.0.0'
     compile 'com.squareup.okio:okio:1.0.1'
-    compile 'com.hannesdorfmann.smoothprogressbar:library:1.0.0'
 
     // Green Robot EventBus
     compile 'de.greenrobot:eventbus:2.2.1'
@@ -144,12 +143,6 @@ dependencies {
 
     // Pager Sliding Tab Strip
     compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
-
-    // Sweet alert
-    compile 'cn.pedant.sweetalert:library:1.1'
-
-//    // Styled dialogs
-//    compile 'eu.inmite.android.lib:android-styled-dialogs:1.2.0'
 
     monkeytalkCompile fileTree(dir: 'monkey-libs', include: ['*.jar'])
 }
