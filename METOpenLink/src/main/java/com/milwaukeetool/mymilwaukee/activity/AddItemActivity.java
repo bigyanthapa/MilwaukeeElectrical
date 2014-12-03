@@ -24,8 +24,6 @@ import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 public class AddItemActivity extends MTActivity {
     private static final String TAG = makeLogTag(CreateAccountActivity.class);
 
-    //private Fragment mMilwaukeeFragment = null;
-    //private Fragment mItemSearchResultsFragment = null;
     private Fragment mOtherFragment = null;
 
     private ViewPager mPager = null;

@@ -10,24 +10,31 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.SearchView;
 
+import com.commonsware.cwac.sacklist.SackOfViewsAdapter;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.AddItemActivity;
 import com.milwaukeetool.mymilwaukee.interfaces.FirstPageFragmentListener;
 import com.milwaukeetool.mymilwaukee.model.event.MTSearchResultEvent;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
+import com.milwaukeetool.mymilwaukee.view.MTInventoryResultItem;
+
+import java.util.LinkedList;
+import java.util.List;
 
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.LOGD;
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 
 /**
- * Created by cent146 on 12/2/14.
+ * Created by scott.hopfensperger on 12/2/2014.
  */
 public class ItemSearchResultsFragment extends MTFragment {
     private static final String TAG = makeLogTag(ItemSearchResultsFragment.class);
 
     private static final String ARG_POSITION = "position";
+    private ListView mListView;
 
     private int position;
 
@@ -36,6 +43,14 @@ public class ItemSearchResultsFragment extends MTFragment {
     private MenuItem mSearchMenuItem;
 
     private AddItemActivity mAddItemActivity;
+
+    public static ItemSearchResultsFragment newInstance(int position, FirstPageFragmentListener listener) {
+        ItemSearchResultsFragment f = new ItemSearchResultsFragment(listener);
+        Bundle b = new Bundle();
+        b.putInt(ARG_POSITION, position);
+        f.setArguments(b);
+        return f;
+    }
 
     public ItemSearchResultsFragment(FirstPageFragmentListener listener) {
         mFirstPageListener = listener;
@@ -50,13 +65,6 @@ public class ItemSearchResultsFragment extends MTFragment {
         }
     }
 
-    public static ItemSearchResultsFragment newInstance(int position, FirstPageFragmentListener listener) {
-        ItemSearchResultsFragment f = new ItemSearchResultsFragment(listener);
-        Bundle b = new Bundle();
-        b.putInt(ARG_POSITION, position);
-        f.setArguments(b);
-        return f;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,9 +75,42 @@ public class ItemSearchResultsFragment extends MTFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_inventory_results, container, false);
 
-        View rootView = inflater.inflate(R.layout.fragment_nearby, container, false);
+        mListView = (ListView)rootView.findViewById(R.id.inventory_results);
+        LinkedList<View> views = new LinkedList<View>();
+
+        MTInventoryResultItem item = new MTInventoryResultItem(this.getActivity());
+        item.setDescription("Scott kjdsfl s;df jsf lksajflksjflksa fsa fsa flksa jfsf jlksaf");
+        item.setModelNumber("1234-26");
+//        item.setToolIcon(R.drawable.tool);
+        views.add(item);
+
+        InventoryResultsAdapter mInventoryResultsAdapter = new InventoryResultsAdapter(views);
+
+        if (mListView != null) {
+            mListView.setAdapter(mInventoryResultsAdapter);
+        }
+
         return rootView;
+    }
+
+    private class InventoryResultsAdapter extends SackOfViewsAdapter {
+
+        public InventoryResultsAdapter(List<View> views) {
+            super(views);
+        }
+
+        @Override
+        protected View newView(int position, ViewGroup parent) {
+            View view = super.newView(position, parent);
+            return view;
+        }
+
+        @Override
+        public boolean isEnabled(int position) {
+            return true;
+        }
 
     }
 
