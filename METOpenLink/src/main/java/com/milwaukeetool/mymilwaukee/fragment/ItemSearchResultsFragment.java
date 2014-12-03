@@ -2,12 +2,8 @@ package com.milwaukeetool.mymilwaukee.fragment;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.SpannableString;
 import android.text.TextUtils;
-import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,46 +11,34 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
-import android.widget.TextView;
 
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.AddItemActivity;
 import com.milwaukeetool.mymilwaukee.interfaces.FirstPageFragmentListener;
-import com.milwaukeetool.mymilwaukee.util.MiscUtils;
+import com.milwaukeetool.mymilwaukee.model.event.MTSearchResultEvent;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
-import com.milwaukeetool.mymilwaukee.view.MTTextView;
 
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.LOGD;
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 
 /**
- * Created by scott.hopfensperger on 11/25/2014.
+ * Created by cent146 on 12/2/14.
  */
-public class MilwaukeeItemFragment extends MTFragment {
-    private static final String TAG = makeLogTag(MilwaukeeItemFragment.class);
+public class ItemSearchResultsFragment extends MTFragment {
+    private static final String TAG = makeLogTag(ItemSearchResultsFragment.class);
 
     private static final String ARG_POSITION = "position";
 
     private int position;
 
-    private MenuItem mSearchMenuItem;
-
     static FirstPageFragmentListener mFirstPageListener;
 
-    private AddItemActivity mAddItemActivity = null;
+    private MenuItem mSearchMenuItem;
 
-    public static MilwaukeeItemFragment newInstance(int position, FirstPageFragmentListener listener) {
-        MilwaukeeItemFragment f = new MilwaukeeItemFragment(listener);
-        Bundle b = new Bundle();
-        b.putInt(ARG_POSITION, position);
-        f.setArguments(b);
-        return f;
-    }
+    private AddItemActivity mAddItemActivity;
 
-    public MilwaukeeItemFragment(FirstPageFragmentListener listener) {
-
+    public ItemSearchResultsFragment(FirstPageFragmentListener listener) {
         mFirstPageListener = listener;
-
     }
 
     @Override
@@ -66,6 +50,14 @@ public class MilwaukeeItemFragment extends MTFragment {
         }
     }
 
+    public static ItemSearchResultsFragment newInstance(int position, FirstPageFragmentListener listener) {
+        ItemSearchResultsFragment f = new ItemSearchResultsFragment(listener);
+        Bundle b = new Bundle();
+        b.putInt(ARG_POSITION, position);
+        f.setArguments(b);
+        return f;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,24 +67,10 @@ public class MilwaukeeItemFragment extends MTFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_milwaukee_item, container, false);
 
-        MTTextView milwaukeeModelText = (MTTextView) rootView.findViewById(R.id.searchMilwaukeeModelText);
-        MTTextView otherModelText = (MTTextView) rootView.findViewById(R.id.searchOtherModelText);
-
-        String string = MiscUtils.getString(R.string.add_item_milwaukee_search_message);
-        int index = string.indexOf(MiscUtils.getString(R.string.search_replace_wildcard_string));
-
-        Drawable drawable = this.getResources().getDrawable(R.drawable.ic_searchgrey);
-        drawable.setBounds(0,0, UIUtils.getPixels(25), UIUtils.getPixels(25));
-        ImageSpan imageSpan = new ImageSpan(drawable);
-
-        SpannableString spannableString = new SpannableString(string);
-        spannableString.setSpan(imageSpan, index, index+1, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE);
-        milwaukeeModelText.setText(spannableString, TextView.BufferType.SPANNABLE);
-
-        otherModelText.setText(Html.fromHtml(MiscUtils.getString(R.string.add_item_milwaukee_select_other_message)));
+        View rootView = inflater.inflate(R.layout.fragment_nearby, container, false);
         return rootView;
+
     }
 
     @Override
@@ -114,13 +92,10 @@ public class MilwaukeeItemFragment extends MTFragment {
                 LOGD(TAG, "Submitting search query: " + s);
 
                 // Hide the keyboard
-                UIUtils.hideKeyboard(MilwaukeeItemFragment.this.getActivity());
+                UIUtils.hideKeyboard(ItemSearchResultsFragment.this.getActivity());
 
                 // Remove the search from actionbar
                 mSearchMenuItem.collapseActionView();
-
-                // Replace the fragment
-                mFirstPageListener.onSwitchToNextFragment();
 
                 // Make request to server
                 if (mAddItemActivity != null && !TextUtils.isEmpty(s)) {
@@ -165,4 +140,13 @@ public class MilwaukeeItemFragment extends MTFragment {
     }
 
 
+    public void onEvent(MTSearchResultEvent event) {
+        if (event != null) {
+            if (event.getSearchResults() == null) {
+                LOGD(TAG, "No search results");
+            } else {
+                LOGD(TAG, "Search Result Count:" + event.getSearchResults().size());
+            }
+        }
+    }
 }
