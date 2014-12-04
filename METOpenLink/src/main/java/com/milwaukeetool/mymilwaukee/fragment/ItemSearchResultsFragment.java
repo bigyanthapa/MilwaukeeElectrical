@@ -41,23 +41,19 @@ public class ItemSearchResultsFragment extends MTFragment {
 
     private int position;
 
-    static FirstPageFragmentListener mFirstPageListener;
-    private MenuItem mSearchMenuItem;
-
     private static final String ARG_POSITION = "position";
 
-    private ListView mListView;
+    static FirstPageFragmentListener mFirstPageListener;
 
+    private MenuItem mSearchMenuItem;
     private AddItemActivity mAddItemActivity;
-
+    private ListView mListView;
     private ItemSearchResultsAdapter mAdapter;
-
-    private int visibleThreshold = MTInventoryHelper.INVENTORY_REQUEST_BUFFER;
-    private int currentPage = 0;
-    private int previousTotal = 0;
-    private boolean loading = true;
-
     private MTSearchResultEvent mLastSearchResultEvent = null;
+
+    private int mVisibleThreshold = 5;
+    private int mPreviousTotal = 0;
+    private boolean mLoading = true;
 
     public static ItemSearchResultsFragment newInstance(int position, FirstPageFragmentListener listener) {
         ItemSearchResultsFragment f = new ItemSearchResultsFragment(listener);
@@ -80,7 +76,6 @@ public class ItemSearchResultsFragment extends MTFragment {
         }
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,14 +93,13 @@ public class ItemSearchResultsFragment extends MTFragment {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem,
                                  int visibleItemCount, int totalItemCount) {
-                if (loading) {
-                    if (totalItemCount > previousTotal) {
-                        loading = false;
-                        previousTotal = totalItemCount;
-                        currentPage++;
+                if (mLoading) {
+                    if (totalItemCount > mPreviousTotal) {
+                        mLoading = false;
+                        mPreviousTotal = totalItemCount;
                     }
                 }
-                if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
+                if (!mLoading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + mVisibleThreshold)) {
                     // I load the next page of gigs using a background task,
                     // but you can call any function here.
                     if (mLastSearchResultEvent != null) {
@@ -117,7 +111,7 @@ public class ItemSearchResultsFragment extends MTFragment {
                                     newSkipCount, false, (AddItemActivity)ItemSearchResultsFragment.this.getActivity());
                         }
                     }
-                    loading = true;
+                    mLoading = true;
                 }
             }
 
@@ -133,6 +127,15 @@ public class ItemSearchResultsFragment extends MTFragment {
         }
 
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        mVisibleThreshold = determineNumberOfItemsToDisplay();
+
+        LOGD(TAG, "Number of items in threshold: " + mVisibleThreshold);
     }
 
     private class ItemSearchResultsAdapter extends BaseAdapter {
@@ -236,6 +239,9 @@ public class ItemSearchResultsFragment extends MTFragment {
                 // Remove the search from actionbar
                 mSearchMenuItem.collapseActionView();
 
+                // Clear previous search results
+                mAdapter.clearSearchResults();
+
                 // Make request to server
                 if (mAddItemActivity != null && !TextUtils.isEmpty(s)) {
                     mAddItemActivity.performSearchRequest(s, 0);
@@ -309,6 +315,4 @@ public class ItemSearchResultsFragment extends MTFragment {
 
         return numberOfListItems;
     }
-
-
 }
