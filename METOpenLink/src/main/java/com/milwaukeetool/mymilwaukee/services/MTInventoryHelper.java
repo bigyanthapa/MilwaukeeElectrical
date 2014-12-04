@@ -21,9 +21,9 @@ import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
  */
 public class MTInventoryHelper {
 
-    private static final int INVENTORY_REQUEST_BUFFER = 3;
-    private static final int INVENTORY_ITEM_REQUEST_COUNT = 10;
-    private static final int INVENTORY_INITIAL_SKIP_INDEX = 0;
+    public static final int INVENTORY_REQUEST_BUFFER = 3;
+    public static final int INVENTORY_ITEM_REQUEST_COUNT = 10;
+    public static final int INVENTORY_INITIAL_SKIP_INDEX = 0;
 
     private static final String TAG = makeLogTag(MTInventoryHelper.class);
 
@@ -46,7 +46,7 @@ public class MTInventoryHelper {
         return instance;
     }
 
-    public void searchForResults(String searchTerm, int skipCount, final boolean showProgress, final MTActivity activity) {
+    public void searchForResults(final String searchTerm, final int skipCount, final boolean showProgress, final MTActivity activity) {
 
         Callback<MTItemSearchResponse> responseCallback = new Callback<MTItemSearchResponse>() {
             @Override
@@ -56,9 +56,13 @@ public class MTInventoryHelper {
                     activity.getProgressView().stopProgress();
                 }
 
-                LOGD(TAG, "Successfully ");
+                LOGD(TAG, "Successfully retrieved search item results");
 
-                EventBus.getDefault().post(new MTSearchResultEvent(activity,result.getItemSearchResults()));
+                MTSearchResultEvent event = new MTSearchResultEvent(activity,result.getItemSearchResults());
+                event.setLastSearchResultCount(result.getItemSearchResults().size());
+                event.setLastSearchTerm(searchTerm);
+                event.setLastSkipCount(skipCount);
+                EventBus.getDefault().post(event);
             }
 
             @Override
@@ -68,7 +72,7 @@ public class MTInventoryHelper {
                     activity.getProgressView().stopProgress();
                 }
 
-                LOGD(TAG, "Failed to ");
+                LOGD(TAG, "Failed to retrieve search item results");
 
                 MTUtils.handleRetrofitError(retrofitError, activity,
                         MiscUtils.getString(R.string.add_item_search_error));
