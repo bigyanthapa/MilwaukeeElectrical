@@ -105,6 +105,7 @@
     <orderEntry type="library" exported="" name="android-support-v4" level="project" />
     <orderEntry type="library" exported="" name="HockeySDK-3.0.2" level="project" />
     <orderEntry type="library" exported="" name="fontloader-1.0.1" level="project" />
+    <orderEntry type="library" exported="" name="picasso-2.3.4" level="project" />
     <orderEntry type="library" exported="" name="pagerslidingtabstrip-1.0.1" level="project" />
     <orderEntry type="library" exported="" name="support-v4-21.0.0" level="project" />
     <orderEntry type="library" exported="" name="android-iconify-1.0.8" level="project" />

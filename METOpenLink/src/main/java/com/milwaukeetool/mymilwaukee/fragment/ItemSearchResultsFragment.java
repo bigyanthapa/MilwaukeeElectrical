@@ -2,6 +2,7 @@ package com.milwaukeetool.mymilwaukee.fragment;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -10,19 +11,21 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 
-import com.commonsware.cwac.sacklist.SackOfViewsAdapter;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.AddItemActivity;
 import com.milwaukeetool.mymilwaukee.interfaces.FirstPageFragmentListener;
+import com.milwaukeetool.mymilwaukee.model.MTItemSearchResult;
 import com.milwaukeetool.mymilwaukee.model.event.MTSearchResultEvent;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
-import com.milwaukeetool.mymilwaukee.view.MTInventoryResultItem;
+import com.squareup.picasso.Picasso;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.ArrayList;
 
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.LOGD;
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
@@ -33,16 +36,18 @@ import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 public class ItemSearchResultsFragment extends MTFragment {
     private static final String TAG = makeLogTag(ItemSearchResultsFragment.class);
 
-    private static final String ARG_POSITION = "position";
-    private ListView mListView;
-
     private int position;
 
     static FirstPageFragmentListener mFirstPageListener;
-
     private MenuItem mSearchMenuItem;
 
+    private static final String ARG_POSITION = "position";
+
+    private ListView mListView;
+
     private AddItemActivity mAddItemActivity;
+
+    private ItemSearchResultsAdapter mAdapter;
 
     public static ItemSearchResultsFragment newInstance(int position, FirstPageFragmentListener listener) {
         ItemSearchResultsFragment f = new ItemSearchResultsFragment(listener);
@@ -78,40 +83,98 @@ public class ItemSearchResultsFragment extends MTFragment {
         View rootView = inflater.inflate(R.layout.fragment_inventory_results, container, false);
 
         mListView = (ListView)rootView.findViewById(R.id.inventory_results);
-        LinkedList<View> views = new LinkedList<View>();
+//        LinkedList<View> views = new LinkedList<View>();
 
-        MTInventoryResultItem item = new MTInventoryResultItem(this.getActivity());
-        item.setDescription("Scott kjdsfl s;df jsf lksajflksjflksa fsa fsa flksa jfsf jlksaf");
-        item.setModelNumber("1234-26");
-//        item.setToolIcon(R.drawable.tool);
-        views.add(item);
+//        MTInventoryResultItem item = new MTInventoryResultItem(this.getActivity());
+//        item.setDescription("Scott kjdsfl s;df jsf lksajflksjflksa fsa fsa flksa jfsf jlksaf");
+//        item.setModelNumber("1234-26");
+////        item.setToolIcon(R.drawable.tool);
+//        views.add(item);
 
-        InventoryResultsAdapter mInventoryResultsAdapter = new InventoryResultsAdapter(views);
+        mAdapter = new ItemSearchResultsAdapter(this.getActivity(), null);
 
         if (mListView != null) {
-            mListView.setAdapter(mInventoryResultsAdapter);
+            mListView.setAdapter(mAdapter);
         }
 
         return rootView;
     }
 
-    private class InventoryResultsAdapter extends SackOfViewsAdapter {
+    private class ItemSearchResultsAdapter extends BaseAdapter {
 
-        public InventoryResultsAdapter(List<View> views) {
-            super(views);
+        private LayoutInflater mInflater;
+        private ArrayList<MTItemSearchResult> mSearchResults;
+
+        public ItemSearchResultsAdapter(Context context, ArrayList<MTItemSearchResult> searchResults) {
+            mInflater = LayoutInflater.from(context);
+
+            if (searchResults != null) {
+                mSearchResults = searchResults;
+            } else {
+                mSearchResults = new ArrayList<MTItemSearchResult>();
+            }
         }
 
         @Override
-        protected View newView(int position, ViewGroup parent) {
-            View view = super.newView(position, parent);
+        public int getCount() {
+            return mSearchResults.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mSearchResults.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View view;
+            ViewHolder holder;
+            if(convertView == null) {
+                view = mInflater.inflate(R.layout.view_item_search_result_list_item, parent, false);
+                holder = new ViewHolder();
+                holder.thumbnail = (ImageView)view.findViewById(R.id.itemImageView);
+                holder.description = (TextView)view.findViewById(R.id.itemDescriptionTextView);
+                holder.modelNumber = (TextView)view.findViewById(R.id.itemModelNumberTextView);
+                view.setTag(holder);
+            } else {
+                view = convertView;
+                holder = (ViewHolder)view.getTag();
+            }
+
+            MTItemSearchResult searchResult = mSearchResults.get(position);
+
+            Picasso.with(ItemSearchResultsFragment.this.getActivity())
+                    .load("http:" + searchResult.getImageUrl())
+                    //.placeholder(R.drawable.user_placeholder)
+                    //.error(R.drawable.user_placeholder_error)
+                    .into(holder.thumbnail);
+
+            holder.description.setText(searchResult.getItemDescription());
+            holder.modelNumber.setText(searchResult.getModelNumber());
+
             return view;
         }
 
-        @Override
-        public boolean isEnabled(int position) {
-            return true;
+        private class ViewHolder {
+            public ImageView thumbnail;
+            public TextView description;
+            public TextView modelNumber;
         }
 
+        public void clearSearchResults() {
+            mSearchResults.clear();
+            notifyDataSetChanged();
+        }
+
+        public void appendSearchResults(ArrayList<MTItemSearchResult> searchResults) {
+            mSearchResults.addAll(searchResults);
+            notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -148,9 +211,7 @@ public class ItemSearchResultsFragment extends MTFragment {
 
             @Override
             public boolean onQueryTextChange(String query) {
-
                 return true;
-
             }
 
         });
@@ -187,6 +248,7 @@ public class ItemSearchResultsFragment extends MTFragment {
                 LOGD(TAG, "No search results");
             } else {
                 LOGD(TAG, "Search Result Count:" + event.getSearchResults().size());
+                mAdapter.appendSearchResults(event.getSearchResults());
             }
         }
     }

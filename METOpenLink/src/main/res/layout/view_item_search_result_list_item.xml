@@ -5,7 +5,7 @@
     android:layout_height="80dp">
 
     <ImageView
-        android:id="@+id/toolImageView"
+        android:id="@+id/itemImageView"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_centerVertical="true"
@@ -17,14 +17,14 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/toolImageView"
+        android:layout_toRightOf="@+id/itemImageView"
         android:layout_toLeftOf="@+id/addToolImageView"
         android:layout_marginStart="@dimen/mt_margin_small"
         android:layout_centerVertical="true"
         android:orientation="vertical">
 
         <com.milwaukeetool.mymilwaukee.view.MTTextView
-            android:id="@+id/toolDescriptionTextView"
+            android:id="@+id/itemDescriptionTextView"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:textSize="@dimen/mt_font_size_large"
@@ -35,7 +35,7 @@
             android:textColor="@color/mt_black"/>
 
         <com.milwaukeetool.mymilwaukee.view.MTTextView
-            android:id="@+id/toolModelNumberTextView"
+            android:id="@+id/itemModelNumberTextView"
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:gravity="center_vertical"
@@ -46,11 +46,12 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/addToolImageView"
+        android:id="@+id/addItemImageView"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_centerVertical="true"
         android:layout_margin="10dp"
         android:layout_alignParentEnd="true"
         android:background="@android:color/transparent" />
+
 </RelativeLayout>
