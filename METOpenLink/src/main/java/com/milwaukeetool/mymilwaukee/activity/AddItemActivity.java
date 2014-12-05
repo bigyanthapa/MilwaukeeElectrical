@@ -9,7 +9,10 @@ import android.view.MenuItem;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.milwaukeetool.mymilwaukee.R;
+import com.milwaukeetool.mymilwaukee.fragment.ItemSearchResultsFragment;
 import com.milwaukeetool.mymilwaukee.fragment.MilwaukeeItemFragment;
+import com.milwaukeetool.mymilwaukee.interfaces.FirstPageFragmentListener;
+import com.milwaukeetool.mymilwaukee.services.MTInventoryHelper;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.ZoomOutPageTransformer;
 
@@ -20,6 +23,11 @@ import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
  */
 public class AddItemActivity extends MTActivity {
     private static final String TAG = makeLogTag(CreateAccountActivity.class);
+
+    private Fragment mOtherFragment = null;
+
+    private ViewPager mPager = null;
+    private AddItemTabAdapter mAdapter = null;
 
     @Override
     protected String getLogTag() {
@@ -44,14 +52,17 @@ public class AddItemActivity extends MTActivity {
     }
 
     protected void setupView() {
+
+        mAdapter = new AddItemTabAdapter(getFragmentManager());
+
         // Initialize the ViewPager and set an adapter
-        ViewPager pager = (ViewPager) findViewById(R.id.mainActivityPager);
-        pager.setAdapter(new AddItemTabAdapter(getFragmentManager()));
-        pager.setPageTransformer(true, new ZoomOutPageTransformer());
+        mPager = (ViewPager) findViewById(R.id.mainActivityPager);
+        mPager.setAdapter(mAdapter);
+        mPager.setPageTransformer(true, new ZoomOutPageTransformer());
 
         final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
                 .getDisplayMetrics());
-        pager.setPageMargin(pageMargin);
+        mPager.setPageMargin(pageMargin);
 
         // Bind the tabs to the ViewPager
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.mainActivityTabs);
@@ -59,7 +70,7 @@ public class AddItemActivity extends MTActivity {
         // Must set before setting view pager, expand to fill
         tabs.setShouldExpand(true);
 
-        tabs.setViewPager(pager);
+        tabs.setViewPager(mPager);
         tabs.setUnderlineColorResource(R.color.mt_red);
         tabs.setIndicatorColorResource(R.color.mt_red);
         tabs.setTextColorResource(R.color.mt_black);
@@ -98,6 +109,25 @@ public class AddItemActivity extends MTActivity {
 
     public class AddItemTabAdapter extends android.support.v13.app.FragmentPagerAdapter {
 
+        private final class FirstPageListener implements
+                FirstPageFragmentListener {
+            public void onSwitchToNextFragment() {
+                mFragmentManager.beginTransaction().remove(mFragmentAtPos0)
+                        .commit();
+                if (mFragmentAtPos0 instanceof MilwaukeeItemFragment){
+                    mFragmentAtPos0 = ItemSearchResultsFragment.newInstance(0, listener);
+                }else{ // Instance of NextFragment
+                    mFragmentAtPos0 = MilwaukeeItemFragment.newInstance(0, listener);
+                }
+                notifyDataSetChanged();
+            }
+        }
+
+        private final FragmentManager mFragmentManager;
+        public Fragment mFragmentAtPos0 = null;
+//        private Context context;
+        FirstPageListener listener = new FirstPageListener();
+
         private final String[] TITLES = {
                 MiscUtils.getString(R.string.main_title_milwaukee_item_title),
                 MiscUtils.getString(R.string.main_title_other_item_title)
@@ -105,6 +135,7 @@ public class AddItemActivity extends MTActivity {
 
         public AddItemTabAdapter(FragmentManager fm) {
             super(fm);
+            mFragmentManager = fm;
         }
 
         @Override
@@ -119,21 +150,51 @@ public class AddItemActivity extends MTActivity {
 
         @Override
         public Fragment getItem(int position) {
-            Fragment fragment = null;
             switch (position) {
                 case 0:
-                    fragment = MilwaukeeItemFragment.newInstance(position);
-                    break;
+
+                    if (mFragmentAtPos0 == null)
+                    {
+                        mFragmentAtPos0 = MilwaukeeItemFragment.newInstance(position, listener);
+                    }
+                    return mFragmentAtPos0;
 
                 case 1:
-                    fragment = new Fragment();
-                    break;
+                    mOtherFragment = new Fragment();
+                    return mOtherFragment;
 
                 default:
-                    fragment = new Fragment();
-                    break;
+                    return new Fragment();
             }
-            return fragment;
         }
+
+        @Override
+        public int getItemPosition(Object object)
+        {
+            if (object instanceof MilwaukeeItemFragment &&
+                    mFragmentAtPos0 instanceof ItemSearchResultsFragment) {
+                return POSITION_NONE;
+            }
+            if (object instanceof ItemSearchResultsFragment &&
+                    mFragmentAtPos0 instanceof MilwaukeeItemFragment) {
+                return POSITION_NONE;
+            }
+            return POSITION_UNCHANGED;
+        }
+    }
+
+    public void onBackPressed() {
+        if(mPager.getCurrentItem() == 0) {
+            if (mAdapter.getItem(0) instanceof ItemSearchResultsFragment) {
+                ((ItemSearchResultsFragment) mAdapter.getItem(0)).backPressed();
+            }
+            else if (mAdapter.getItem(0) instanceof MilwaukeeItemFragment) {
+                super.onBackPressed();
+            }
+        }
+    }
+
+    public void performSearchRequest(String searchTerm, int skipCount) {
+        MTInventoryHelper.sharedInstance().searchForResults(searchTerm, skipCount, true, this);
     }
 }

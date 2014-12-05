@@ -127,4 +127,8 @@ public abstract class MTActivity extends Activity {
     public MTLayout getRootLayout() {
         return mRootLayout;
     }
+
+    public MTProgressView getProgressView() {
+        return mProgressView;
+    }
 }
