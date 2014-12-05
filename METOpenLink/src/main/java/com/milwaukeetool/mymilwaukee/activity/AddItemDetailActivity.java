@@ -1,10 +1,12 @@
 package com.milwaukeetool.mymilwaukee.activity;
 
+import android.app.ActionBar;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.joanzapata.android.iconify.IconDrawable;
@@ -46,6 +48,9 @@ public class AddItemDetailActivity extends MTActivity {
     private MTLaunchableFieldView notes;
     private MTLaunchableFieldView proof;
 
+    private View mSpacer;
+    private View mFooter;
+
     private LinearLayout mProductDetailLayout;
 
     private boolean mSaveInProgress = false;
@@ -54,6 +59,13 @@ public class AddItemDetailActivity extends MTActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mSpacer = new View(this);
+        mSpacer.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                UIUtils.getPixels(25)));
+
+        mFooter = new View(this);
+        mFooter.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                UIUtils.getPixels(20)));
 
         this.description = this.createSimpleFieldView(R.string.tool_detail_description,
                 R.color.mt_red,
@@ -212,12 +224,14 @@ public class AddItemDetailActivity extends MTActivity {
         this.mProductDetailLayout = (LinearLayout) this.findViewById(R.id.productDetailLayout);
         this.mProductDetailLayout.addView(this.description);
         this.mProductDetailLayout.addView(this.modelNumber);
+        this.mProductDetailLayout.addView(mSpacer);
         this.mProductDetailLayout.addView(this.category);
         this.mProductDetailLayout.addView(this.name);
         this.mProductDetailLayout.addView(this.serialNumber);
         this.mProductDetailLayout.addView(this.purchaseLocation);
         this.mProductDetailLayout.addView(this.notes);
         this.mProductDetailLayout.addView(this.proof);
+        this.mProductDetailLayout.addView(mFooter);
     }
 
     protected MTLaunchableFieldView createLaunchableFieldView(int name,
@@ -237,6 +251,12 @@ public class AddItemDetailActivity extends MTActivity {
                                                       boolean editable) {
         String nameStr = this.getResources().getString(name);
         MTSimpleFieldView view = MTSimpleFieldView.createSimpleFieldView(this, nameStr);
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                UIUtils.getPixels(45));
+        layoutParams.setMargins(0, UIUtils.getPixels(5), 0, 0);
+        view.setLayoutParams(layoutParams);
+
         this.configureFieldView(view, color, maxLength, required, editable);
         return view;
     }
@@ -247,7 +267,7 @@ public class AddItemDetailActivity extends MTActivity {
                                                    boolean required,
                                                    boolean editable) {
         view.setTextColorResource(color);
-        view.setHintColorTextResource(color);
+        view.setHintColorTextResource(R.color.mt_common_gray);
         view.setRequired(required);
         view.setMaxLength(maxLength);
 
