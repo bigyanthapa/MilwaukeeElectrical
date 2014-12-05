@@ -7,6 +7,8 @@ import com.milwaukeetool.mymilwaukee.model.response.MTErrorResponse;
 
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
+import retrofit.converter.Converter;
+import retrofit.converter.GsonConverter;
 import retrofit.mime.TypedByteArray;
 
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
@@ -24,13 +26,18 @@ public class MTWebInterface {
 
     private MTUserService mUserService = null;
 
+    private MTInventoryService mInventoryService = null;
+
+    Converter DATA_CONVERTER = new GsonConverter(new Gson());
+    String SERVICE_ENDPOINT = MTConfig.getWebServicesBaseURL();
+
     //private ArrayList<Class> mWebServices = new ArrayList<>();
 
     // MTWebInterface prevents any other class from instantiating
     private MTWebInterface() {
         mRestAdapter = new RestAdapter.Builder()
-                .setConverter(MTUserService.DATA_CONVERTER)
-                .setEndpoint(MTUserService.SERVICE_ENDPOINT)
+                .setConverter(DATA_CONVERTER)
+                .setEndpoint(SERVICE_ENDPOINT)
                 .setLogLevel(MTConfig.isExternalRelease() ? RestAdapter.LogLevel.NONE : RestAdapter.LogLevel.FULL)
                 .build();
     }
@@ -51,6 +58,15 @@ public class MTWebInterface {
             mUserService = mRestAdapter.create(MTUserService.class);
         }
         return mUserService;
+    }
+
+    public MTInventoryService getInventoryService() {
+
+        if (mInventoryService == null) {
+            // Create the user service
+            mInventoryService = mRestAdapter.create(MTInventoryService.class);
+        }
+        return mInventoryService;
     }
 
     public static String getErrorMessage(RetrofitError retrofitError) {
