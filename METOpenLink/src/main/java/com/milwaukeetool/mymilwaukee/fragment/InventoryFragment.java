@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.milwaukeetool.mymilwaukee.R;
-import com.milwaukeetool.mymilwaukee.activity.AddItemDetailActivity;
+import com.milwaukeetool.mymilwaukee.activity.AddItemActivity;
 
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 
@@ -50,7 +50,7 @@ public class InventoryFragment extends MTFragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent = new Intent(this.getActivity(), AddItemDetailActivity.class);
+        Intent intent = new Intent(this.getActivity(), AddItemActivity.class);
         startActivity(intent);
         return true;
     }
