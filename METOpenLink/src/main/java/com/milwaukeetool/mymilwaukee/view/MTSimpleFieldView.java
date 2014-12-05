@@ -185,6 +185,14 @@ public class MTSimpleFieldView extends RelativeLayout {
         return mRequired;
     }
 
+    public void setUneditable() {
+        this.mEditText.setFocusable(false);
+        this.mEditText.setFocusableInTouchMode(false);
+        this.mEditText.setClickable(false);
+        this.mEditText.setCursorVisible(false);
+        this.mEditText.setKeyListener(null);
+    }
+
     public MTSimpleFieldView setRequired(boolean isRequired) {
         this.mRequired = isRequired;
         return this;

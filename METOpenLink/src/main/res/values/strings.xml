@@ -68,6 +68,17 @@
     <string name="email_communications">Email Communications</string>
     <string name="change_password">Change Password</string>
     <string name="message_success_updated_profile">Profile Updated</string>
+    <string name="message_success_add_item">Item Saved</string>
+
+    <!-- Tool Detail -->
+    <string name="tool_detail_description">Description</string>
+    <string name="tool_detail_model_number">Model Number</string>
+    <string name="tool_detail_name">Custom ID/Name</string>
+    <string name="tool_detail_serial_number">Serial Number</string>
+    <string name="tool_detail_purchase_location">Purchase Location</string>
+    <string name="tool_detail_category">Category</string>
+    <string name="tool_detail_notes">Notes</string>
+    <string name="tool_detail_proof">Proof of Purchase</string>
 
     <!-- Inventory Fragment -->
     <string name="add_inventory_item">Search for a model number using the @style/ icon above.</string>
@@ -78,6 +89,7 @@
     <string name="progress_bar_logging_in">Signing In...</string>
     <string name="progress_bar_getting_user_details">Getting User Details...</string>
     <string name="progress_bar_saving_user_details">Updating Profile...</string>
+    <string name="progress_bar_saving_item_details">Saving...</string>
     <string name="progress_bar_searching">Searching...</string>
 
     <!-- Sign In -->
@@ -103,6 +115,7 @@
     <string name="dialog_title_no_network_connection">No Network Connection</string>
     <string name="dialog_title_get_profile_failure">Error Getting User Details</string>
     <string name="dialog_title_update_profile_failure">Error Updating Profile</string>
+    <string name="dialog_title_add_item_failure">Error Saving Item</string>
 
     <string name="error_text_offline">The Internet connection appears to be offline.</string>
 

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/loadItemFooterLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerVertical="true"
+    android:background="@null">
+
+    <com.milwaukeetool.mymilwaukee.view.MTTextView
+        android:id="@+id/loadItemMessageTextView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:gravity="center"
+        android:text="Loading Inventory"
+        android:layout_centerVertical="true"
+        android:textColor="@color/mt_black"
+        android:textSize="@dimen/mt_font_size_large"
+        android:textCursorDrawable="@null"/>
+
+
+</RelativeLayout>

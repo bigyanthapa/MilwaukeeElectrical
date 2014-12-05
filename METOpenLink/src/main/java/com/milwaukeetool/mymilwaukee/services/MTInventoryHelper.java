@@ -2,11 +2,15 @@ package com.milwaukeetool.mymilwaukee.services;
 
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.MTActivity;
+import com.milwaukeetool.mymilwaukee.model.MTItemSearchResult;
 import com.milwaukeetool.mymilwaukee.model.event.MTSearchResultEvent;
 import com.milwaukeetool.mymilwaukee.model.request.MTItemSearchRequest;
 import com.milwaukeetool.mymilwaukee.model.response.MTItemSearchResponse;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import de.greenrobot.event.EventBus;
 import retrofit.Callback;
@@ -21,7 +25,6 @@ import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
  */
 public class MTInventoryHelper {
 
-    public static final int INVENTORY_REQUEST_BUFFER = 3;
     public static final int INVENTORY_ITEM_REQUEST_COUNT = 10;
     public static final int INVENTORY_INITIAL_SKIP_INDEX = 0;
 
@@ -81,6 +84,8 @@ public class MTInventoryHelper {
             }
         };
 
+        LOGD(TAG, "Skip: " + skipCount + " Take: " + INVENTORY_ITEM_REQUEST_COUNT);
+
         MTItemSearchRequest request = new MTItemSearchRequest();
         request.setSearchTerm(searchTerm);
         request.setSkipCount(skipCount);
@@ -92,6 +97,23 @@ public class MTInventoryHelper {
 
         MTWebInterface.sharedInstance().getInventoryService().getItems(MTUtils.getAuthHeaderForBearerToken(),
                 request.getAsQueryParameters(), responseCallback);
+    }
+
+    public static ArrayList<MTItemSearchResult> getSearchResultsWithoutKits(final ArrayList<MTItemSearchResult> searchResults) {
+
+        ArrayList<MTItemSearchResult> modifiedSearchResults = new ArrayList<>(searchResults);
+
+        for(Iterator<MTItemSearchResult> it = searchResults.iterator(); it.hasNext();) {
+            MTItemSearchResult result = it.next();
+            if (isKitSearchResultItem(result)) {
+                modifiedSearchResults.remove(result);
+            }
+        }
+        return modifiedSearchResults;
+    }
+
+    public static boolean isKitSearchResultItem(MTItemSearchResult result) {
+        return (result.getChildren() != null && result.getChildren().size() > 0);
     }
 
 }

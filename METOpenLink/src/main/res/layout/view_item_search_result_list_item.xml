@@ -11,14 +11,15 @@
         android:layout_centerVertical="true"
         android:layout_margin="@dimen/mt_margin_small"
         android:layout_marginLeft="@dimen/mt_margin_standard"
+        android:padding="1dp"
         android:layout_alignParentStart="true"
-        android:background="@android:color/transparent" />
+        android:background="@drawable/gray_image_outline" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/itemImageView"
-        android:layout_toLeftOf="@+id/addToolImageView"
+        android:layout_toLeftOf="@+id/addItemImageView"
         android:layout_marginStart="@dimen/mt_margin_small"
         android:layout_centerVertical="true"
         android:orientation="vertical">
@@ -26,8 +27,8 @@
         <com.milwaukeetool.mymilwaukee.view.MTTextView
             android:id="@+id/itemDescriptionTextView"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:textSize="@dimen/mt_font_size_large"
+            android:layout_height="40dp"
+            android:textSize="@dimen/mt_font_size_standard"
             android:gravity="center_vertical"
             android:singleLine="false"
             android:maxLines="2"
@@ -40,18 +41,19 @@
             android:layout_height="20dp"
             android:gravity="center_vertical"
             android:textSize="@dimen/mt_font_size_medium"
-            android:layout_marginTop="@dimen/mt_margin_small"
+            android:layout_marginTop="@dimen/mt_margin_tiny"
             android:textColor="@color/mt_common_gray"/>
 
     </LinearLayout>
 
     <ImageView
         android:id="@+id/addItemImageView"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_centerVertical="true"
         android:layout_margin="10dp"
         android:layout_alignParentEnd="true"
-        android:background="@android:color/transparent" />
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_plus_grey"/>
 
 </RelativeLayout>

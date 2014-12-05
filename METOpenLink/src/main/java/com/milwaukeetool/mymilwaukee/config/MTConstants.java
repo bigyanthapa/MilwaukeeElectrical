@@ -10,6 +10,8 @@ public class MTConstants {
     public static final String LOG_IN_GRANT_TYPE_PASSWORD = "password";
     public static final String TOKEN_TYPE_BEARER = "Bearer";
     public static final String DEVICE_MFR_SAMSUNG = "samsung";
+    public static final String HTTP_PREFIX = "http:";
+
 
     public static final int CREATE_ACCOUNT_REQUEST = 1000;
     public static final int LOGIN_REQUEST = 1001;
