@@ -125,32 +125,6 @@ public class ItemSearchResultsFragment extends MTFragment {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem,
                                  int visibleItemCount, int totalItemCount) {
-//                if (mLoading) {
-//
-//                    LOGD(TAG, ">>>>Loading items: " + totalItemCount + " > " + mPreviousTotal);
-//
-//                    if (totalItemCount > mPreviousTotal) {
-//                        mLoading = false;
-//                        mPreviousTotal = totalItemCount;
-//                        LOGD(TAG, ">>>>Done loading setting previous: " + mPreviousTotal);
-//                    }
-//                }
-//
-////                int lastPos = mListView.getLastVisiblePosition();
-////
-////                int numResultsReturned = 0;
-////
-////                if (mAdapter != null && mAdapter.getSearchResults() != null) {
-////                    numResultsReturned = mAdapter.getSearchResults().size();
-////                }
-//
-//                //if (!mLoading && (lastPos + MTInventoryHelper.INVENTORY_REQUEST_BUFFER) >= numResultsReturned) {
-//                int visibleThreshold = ItemSearchResultsFragment.this.determineNumberOfItemsToDisplay();
-//                if (!mLoading && (firstVisibleItem + mVisibleThreshold) + visibleThreshold < totalItemCount) {
-//                    LOGD(TAG, ">>>>Checking visibility " + (firstVisibleItem + mVisibleThreshold) + " + " + visibleThreshold + " < " + totalItemCount);
-//                }
-
-
             }
 
             @Override
@@ -166,7 +140,7 @@ public class ItemSearchResultsFragment extends MTFragment {
 
                 LOGD (TAG, "****CURRENT: " + (currentPosition + visibleThreshold) + " >= " + (totalItemCount - 1));
 
-                if ((currentPosition + visibleThreshold) >= (totalItemCount - 1)) {
+                if ((currentPosition + visibleThreshold) >= (totalItemCount - 1 - visibleThreshold)) {
                     if (mLastSearchResultEvent != null) {
 
                         LOGD(TAG, "****Last search result count: " + mLastSearchResultEvent.getLastSearchResultCount());
@@ -215,21 +189,6 @@ public class ItemSearchResultsFragment extends MTFragment {
         UIUtils.hideKeyboard(this.getActivity());
 
         setupSearchView();
-    }
-
-    private void setupSearchView() {
-        if (mSearchView != null) {
-            LOGD(TAG, "Configuring search view");
-            int searchSrcTextId = getResources().getIdentifier("android:id/search_src_text", null, null);
-            EditText searchEditText = (EditText) mSearchView.findViewById(searchSrcTextId);
-
-            searchEditText.setText(mAddItemActivity.getLastSearchString());
-            searchEditText.setTextColor(MiscUtils.getAppResources().getColor(R.color.mt_white));
-//
-//            searchEditText.setHint("Search Model #");
-//            searchEditText.setHintTextColor(MiscUtils.getAppResources().getColor(R.color.mt_very_light_gray));
-            mSearchView.setQueryHint("Search Model #");
-        }
     }
 
     private class ItemSearchResultsAdapter extends BaseAdapter {
@@ -411,6 +370,21 @@ public class ItemSearchResultsFragment extends MTFragment {
         }
     }
 
+
+    private void setupSearchView() {
+        if (mSearchView != null) {
+            LOGD(TAG, "Configuring search view");
+            int searchSrcTextId = getResources().getIdentifier("android:id/search_src_text", null, null);
+            EditText searchEditText = (EditText) mSearchView.findViewById(searchSrcTextId);
+
+            searchEditText.setText(mAddItemActivity.getLastSearchString());
+            searchEditText.setTextColor(MiscUtils.getAppResources().getColor(R.color.mt_white));
+
+            //searchEditText.setHintTextColor(MiscUtils.getAppResources().getColor(R.color.mt_very_light_gray));
+            mSearchView.setQueryHint("Search Model #");
+        }
+    }
+
     private int determineNumberOfItemsToDisplay() {
 
         // Determine the height of the screen
@@ -461,7 +435,7 @@ public class ItemSearchResultsFragment extends MTFragment {
 
         if (isLoading && mListFooterView == null) {
             mListFooterView = mListFooterLoadingView;
-            listView.addFooterView(mListFooterView);
+            listView.addFooterView(mListFooterView, null, false);
         }
     }
 }
