@@ -3,6 +3,7 @@ package com.milwaukeetool.mymilwaukee.services;
 import com.google.gson.Gson;
 import com.milwaukeetool.mymilwaukee.config.MTConfig;
 import com.milwaukeetool.mymilwaukee.model.MTUserProfile;
+import com.milwaukeetool.mymilwaukee.model.request.MTItemDetailRequest;
 import com.milwaukeetool.mymilwaukee.model.request.MTPasswordRequest;
 import com.milwaukeetool.mymilwaukee.model.request.MTUserRegistrationRequest;
 import com.milwaukeetool.mymilwaukee.model.response.MTLogInResponse;
@@ -45,16 +46,6 @@ public interface MTUserService {
     @PUT("/accounts/me/password")
     void updatePassword(@Header("Authorization") String authorization, @Body MTPasswordRequest passwordRequest, Callback<Response> callback);
 
-//    @GET("/api/v1/user")
-//    void logIn(@Query("name") String name, Callback callback);
-//
-//    @POST("/api/v1/user/{id}/posts")
-//    void addPost(
-//            @Path("id") int id,
-//            @Body UserPostRequestBody request,
-//            Callback callback);
-//
-//    @DELETE("/api/v1/user/{id}")
-//    void deleteUser(@Path("id") int id, Callback callback);
-
+    @POST("/accounts/me/items")
+    void addItem(@Header("Authorization") String authorization, @Body MTItemDetailRequest request, Callback<Response> callback);
 }

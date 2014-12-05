@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.milwaukeetool.mymilwaukee.view.MTLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/mtdetails_background">
+
+            <ImageView
+                android:id="@+id/toolDetailImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/tool"/>
+        </FrameLayout>
+
+        <com.milwaukeetool.mymilwaukee.view.MTHeaderTextView
+            android:id="@+id/placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/mt_white"
+            android:paddingLeft="@dimen/mt_padding_large"
+            android:paddingRight="@dimen/mt_padding_large"
+            android:paddingTop="@dimen/mt_padding_standard"
+            android:paddingBottom="@dimen/mt_margin_standard"
+            android:text="PRODUCT INFORMATION"
+            android:background="@color/mt_red"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/productDetailLayout"
+                android:orientation="vertical">
+            </LinearLayout>
+    </LinearLayout>
+    </ScrollView>
+</com.milwaukeetool.mymilwaukee.view.MTLayout>

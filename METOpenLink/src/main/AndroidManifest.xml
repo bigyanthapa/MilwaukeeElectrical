@@ -92,6 +92,12 @@
             android:launchMode="singleTop"
             android:screenOrientation="sensorPortrait"></activity>
         <activity
+            android:name=".activity.AddItemDetailActivity"
+            android:label="@string/main_add_item_title"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.Milwaukeetool"
+            android:screenOrientation="sensorPortrait"></activity>
+        <activity
             android:name=".activity.AddItemActivity"
             android:label="@string/main_add_item_title"
             android:launchMode="singleTop"
