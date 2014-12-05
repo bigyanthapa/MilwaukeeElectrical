@@ -19,7 +19,7 @@
             android:background="@drawable/mtdetails_background">
 
             <ImageView
-                android:id="@+id/toolDetailImage"
+                android:id="@+id/addItemImageView"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:layout_gravity="center"
@@ -27,7 +27,7 @@
         </FrameLayout>
 
         <com.milwaukeetool.mymilwaukee.view.MTHeaderTextView
-            android:id="@+id/placeholder"
+            android:id="@+id/addItemDetailPlaceholder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/mt_white"
@@ -42,7 +42,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/productDetailLayout"
+                android:id="@+id/addItemDetailLayout"
                 android:orientation="vertical">
             </LinearLayout>
     </LinearLayout>

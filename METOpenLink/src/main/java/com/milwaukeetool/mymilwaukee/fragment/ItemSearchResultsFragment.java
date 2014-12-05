@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -25,6 +27,7 @@ import android.widget.TextView;
 
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.AddItemActivity;
+import com.milwaukeetool.mymilwaukee.activity.AddItemDetailActivity;
 import com.milwaukeetool.mymilwaukee.config.MTConstants;
 import com.milwaukeetool.mymilwaukee.interfaces.FirstPageFragmentListener;
 import com.milwaukeetool.mymilwaukee.model.MTItemSearchResult;
@@ -171,6 +174,26 @@ public class ItemSearchResultsFragment extends MTFragment {
         if (mListView != null) {
             mListView.setAdapter(mAdapter);
         }
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                LOGD(TAG, "Clicked list item at position: " + position);
+
+                ArrayList<MTItemSearchResult> searchResults = mAdapter.getSearchResults();
+                MTItemSearchResult result = null;
+                if (searchResults != null && position < searchResults.size()) {
+                    result = searchResults.get(position);
+                }
+
+                if (result != null) {
+                    Activity activity = ItemSearchResultsFragment.this.getActivity();
+                    Intent intent = new Intent(activity, AddItemDetailActivity.class);
+                    intent.putExtra(MTConstants.SEARCH_ITEM_RESULT, result);
+                    startActivity(intent);
+                }
+            }
+        });
 
         return rootView;
     }

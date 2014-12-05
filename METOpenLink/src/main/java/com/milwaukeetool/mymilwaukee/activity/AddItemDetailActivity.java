@@ -1,19 +1,20 @@
 package com.milwaukeetool.mymilwaukee.activity;
 
-import android.app.ActionBar;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
 import com.milwaukeetool.mymilwaukee.MilwaukeeToolApplication;
 import com.milwaukeetool.mymilwaukee.R;
+import com.milwaukeetool.mymilwaukee.config.MTConstants;
 import com.milwaukeetool.mymilwaukee.interfaces.MTFinishedListener;
+import com.milwaukeetool.mymilwaukee.model.MTItemSearchResult;
 import com.milwaukeetool.mymilwaukee.model.request.MTItemDetailRequest;
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
@@ -22,6 +23,7 @@ import com.milwaukeetool.mymilwaukee.util.UIUtils;
 import com.milwaukeetool.mymilwaukee.view.MTLaunchableFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTSimpleFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTToastView;
+import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 
@@ -56,9 +58,18 @@ public class AddItemDetailActivity extends MTActivity {
     private boolean mSaveInProgress = false;
     private boolean mEditInProgress = false;
 
+    private MTItemSearchResult mItemSearchResult;
+
+    private ImageView mItemImageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mItemSearchResult = (MTItemSearchResult)getIntent().getParcelableExtra(MTConstants.SEARCH_ITEM_RESULT);
+
+        mItemImageView = (ImageView)this.findViewById(R.id.addItemImageView);
+
         mSpacer = new View(this);
         mSpacer.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 UIUtils.getPixels(25)));
@@ -108,6 +119,35 @@ public class AddItemDetailActivity extends MTActivity {
                 false);
 
         this.assembleLayout();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
+        if (mItemImageView != null && mItemSearchResult != null) {
+            Picasso.with(this)
+                    .load(MTConstants.HTTP_PREFIX + mItemSearchResult.getImageUrl())
+                    .placeholder(R.drawable.ic_mkeplaceholder)
+                    .error(R.drawable.ic_mkeplaceholder)
+                    .into(mItemImageView);
+        }
+    }
+
+    @Override
+    protected void setupActivityView() {
+        setContentView(R.layout.activity_add_item_detail);
+    }
+
+    @Override
+    protected String getLogTag() {
+        return AddItemDetailActivity.TAG;
+    }
+
+    @Override
+    protected String getScreenName() {
+        return null;
     }
 
     @Override
@@ -164,8 +204,6 @@ public class AddItemDetailActivity extends MTActivity {
                     }
                 };
 
-                hardcode();
-
                 if (this.isFieldsValid()) {
                     mSaveInProgress = true;
                     mProgressView.updateMessageAndStart(MiscUtils.getString(R.string.progress_bar_saving_item_details));
@@ -179,11 +217,6 @@ public class AddItemDetailActivity extends MTActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    public void hardcode() {
-        this.description.setFieldValue("description");
-        this.modelNumber.setFieldValue("model number");
     }
 
     protected boolean isFieldsValid() {
@@ -221,7 +254,7 @@ public class AddItemDetailActivity extends MTActivity {
     }
 
     protected void assembleLayout() {
-        this.mProductDetailLayout = (LinearLayout) this.findViewById(R.id.productDetailLayout);
+        this.mProductDetailLayout = (LinearLayout) this.findViewById(R.id.addItemDetailLayout);
         this.mProductDetailLayout.addView(this.description);
         this.mProductDetailLayout.addView(this.modelNumber);
         this.mProductDetailLayout.addView(mSpacer);
@@ -277,25 +310,11 @@ public class AddItemDetailActivity extends MTActivity {
         return view;
     }
 
-    protected void appendToLinearLayout(View view) {
-        if (this.mProductDetailLayout == null) {
-            mProductDetailLayout = (LinearLayout) this.findViewById(R.id.productDetailLayout);
-        }
-
-        this.mProductDetailLayout.addView(view);
-    }
-    @Override
-    protected void setupActivityView() {
-        setContentView(R.layout.activity_add_item_detail);
-    }
-
-    @Override
-    protected String getLogTag() {
-        return AddItemDetailActivity.TAG;
-    }
-
-    @Override
-    protected String getScreenName() {
-        return null;
-    }
+//    protected void appendToLinearLayout(View view) {
+//        if (this.mProductDetailLayout == null) {
+//            mProductDetailLayout = (LinearLayout) this.findViewById(R.id.addItemDetailLayout);
+//        }
+//
+//        this.mProductDetailLayout.addView(view);
+//    }
 }
