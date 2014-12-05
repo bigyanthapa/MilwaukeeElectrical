@@ -29,6 +29,8 @@ public class AddItemActivity extends MTActivity {
     private ViewPager mPager = null;
     private AddItemTabAdapter mAdapter = null;
 
+    private String mLastSearchString = null;
+
     @Override
     protected String getLogTag() {
         return TAG;
@@ -67,7 +69,12 @@ public class AddItemActivity extends MTActivity {
         // Bind the tabs to the ViewPager
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.mainActivityTabs);
 
-        // Must set before setting view pager, expand to fill
+//        Typeface arialBlackTypeface = Typefaces.get(this, "fonts/Arial Black.ttf");
+//
+//        // Must be set before remaining configuration!
+//        tabs.setTypeface(arialBlackTypeface, Typeface.NORMAL);
+
+        // Must set before setting view pager, expand to fill!
         tabs.setShouldExpand(true);
 
         tabs.setViewPager(mPager);
@@ -99,7 +106,6 @@ public class AddItemActivity extends MTActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                // Log analytics
                 finish();
                 return true;
         }
@@ -112,20 +118,20 @@ public class AddItemActivity extends MTActivity {
         private final class FirstPageListener implements
                 FirstPageFragmentListener {
             public void onSwitchToNextFragment() {
-                mFragmentManager.beginTransaction().remove(mFragmentAtPos0)
-                        .commit();
-                if (mFragmentAtPos0 instanceof MilwaukeeItemFragment){
-                    mFragmentAtPos0 = ItemSearchResultsFragment.newInstance(0, listener);
-                }else{ // Instance of NextFragment
-                    mFragmentAtPos0 = MilwaukeeItemFragment.newInstance(0, listener);
-                }
-                notifyDataSetChanged();
+//                mFragmentManager.beginTransaction().remove(mFragmentAtPos0)
+//                        .commit();
+//                if (mFragmentAtPos0 instanceof MilwaukeeItemFragment){
+//                    mFragmentAtPos0 = ItemSearchResultsFragment.newInstance(0, listener);
+//                } else { // Instance of NextFragment
+//                    mFragmentAtPos0 = MilwaukeeItemFragment.newInstance(0, listener);
+//                }
+//                notifyDataSetChanged();
             }
         }
 
         private final FragmentManager mFragmentManager;
         public Fragment mFragmentAtPos0 = null;
-//        private Context context;
+
         FirstPageListener listener = new FirstPageListener();
 
         private final String[] TITLES = {
@@ -155,7 +161,7 @@ public class AddItemActivity extends MTActivity {
 
                     if (mFragmentAtPos0 == null)
                     {
-                        mFragmentAtPos0 = MilwaukeeItemFragment.newInstance(position, listener);
+                        mFragmentAtPos0 = ItemSearchResultsFragment.newInstance(position, listener);
                     }
                     return mFragmentAtPos0;
 
@@ -171,14 +177,14 @@ public class AddItemActivity extends MTActivity {
         @Override
         public int getItemPosition(Object object)
         {
-            if (object instanceof MilwaukeeItemFragment &&
-                    mFragmentAtPos0 instanceof ItemSearchResultsFragment) {
-                return POSITION_NONE;
-            }
-            if (object instanceof ItemSearchResultsFragment &&
-                    mFragmentAtPos0 instanceof MilwaukeeItemFragment) {
-                return POSITION_NONE;
-            }
+//            if (object instanceof MilwaukeeItemFragment &&
+//                    mFragmentAtPos0 instanceof ItemSearchResultsFragment) {
+//                return POSITION_NONE;
+//            }
+//            if (object instanceof ItemSearchResultsFragment &&
+//                    mFragmentAtPos0 instanceof MilwaukeeItemFragment) {
+//                return POSITION_NONE;
+//            }
             return POSITION_UNCHANGED;
         }
     }
@@ -186,7 +192,8 @@ public class AddItemActivity extends MTActivity {
     public void onBackPressed() {
         if(mPager.getCurrentItem() == 0) {
             if (mAdapter.getItem(0) instanceof ItemSearchResultsFragment) {
-                ((ItemSearchResultsFragment) mAdapter.getItem(0)).backPressed();
+                //((ItemSearchResultsFragment) mAdapter.getItem(0)).backPressed();
+                super.onBackPressed();
             }
             else if (mAdapter.getItem(0) instanceof MilwaukeeItemFragment) {
                 super.onBackPressed();
@@ -196,5 +203,10 @@ public class AddItemActivity extends MTActivity {
 
     public void performSearchRequest(String searchTerm, int skipCount) {
         MTInventoryHelper.sharedInstance().searchForResults(searchTerm, skipCount, true, this);
+        mLastSearchString = searchTerm;
+    }
+
+    public String getLastSearchString () {
+        return mLastSearchString;
     }
 }

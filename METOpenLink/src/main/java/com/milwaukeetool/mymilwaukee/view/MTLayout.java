@@ -8,11 +8,7 @@ import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
 import com.milwaukeetool.mymilwaukee.R;
-import com.milwaukeetool.mymilwaukee.model.event.MTKeyboardEvent;
 
-import de.greenrobot.event.EventBus;
-
-import static com.milwaukeetool.mymilwaukee.util.LogUtils.LOGD;
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 
 /**
@@ -56,15 +52,15 @@ public class MTLayout extends FrameLayout {
     public void keyboardVisible() {
         // Keyboard is shown
         mKeyboardVisible = true;
-        LOGD(TAG, "Keyboard listener: Shown");
-        EventBus.getDefault().post(new MTKeyboardEvent(this,true));
+        //LOGD(TAG, "Keyboard listener: Shown");
+        //EventBus.getDefault().post(new MTKeyboardEvent(this,true));
     }
 
     public void keyboardHidden() {
         // Keyboard is hidden
         mKeyboardVisible = false;
-        LOGD(TAG, "Keyboard listener: Hidden");
-        EventBus.getDefault().post(new MTKeyboardEvent(this,false));
+        //LOGD(TAG, "Keyboard listener: Hidden");
+        //EventBus.getDefault().post(new MTKeyboardEvent(this,false));
     }
 
     public void setListenerToRootView(){

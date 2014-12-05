@@ -1,5 +1,6 @@
 package com.milwaukeetool.mymilwaukee.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
@@ -14,18 +15,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.AddItemActivity;
+import com.milwaukeetool.mymilwaukee.config.MTConstants;
 import com.milwaukeetool.mymilwaukee.interfaces.FirstPageFragmentListener;
 import com.milwaukeetool.mymilwaukee.model.MTItemSearchResult;
 import com.milwaukeetool.mymilwaukee.model.event.MTSearchResultEvent;
 import com.milwaukeetool.mymilwaukee.services.MTInventoryHelper;
+import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
+import com.milwaukeetool.mymilwaukee.view.MTMilwaukeeItemView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -36,6 +43,7 @@ import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 /**
  * Created by scott.hopfensperger on 12/2/2014.
  */
+@SuppressLint("ValidFragment")
 public class ItemSearchResultsFragment extends MTFragment {
     private static final String TAG = makeLogTag(ItemSearchResultsFragment.class);
 
@@ -50,10 +58,22 @@ public class ItemSearchResultsFragment extends MTFragment {
     private ListView mListView;
     private ItemSearchResultsAdapter mAdapter;
     private MTSearchResultEvent mLastSearchResultEvent = null;
+    private MTMilwaukeeItemView mMilwaukeeItemView = null;
+    private RelativeLayout mNoItemsLayout = null;
 
     private int mVisibleThreshold = 5;
     private int mPreviousTotal = 0;
     private boolean mLoading = true;
+
+    private boolean mLoadingSearchResults = false;
+
+    private SearchView mSearchView = null;
+
+    private View mListFooterView = null;
+    private View mListFooterLoadingView = null;
+    private View mListFooterEmptyView = null;
+    private LayoutInflater mInflater;
+
 
     public static ItemSearchResultsFragment newInstance(int position, FirstPageFragmentListener listener) {
         ItemSearchResultsFragment f = new ItemSearchResultsFragment(listener);
@@ -85,38 +105,90 @@ public class ItemSearchResultsFragment extends MTFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_inventory_results, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_item_search_results, container, false);
 
-        mListView = (ListView)rootView.findViewById(R.id.inventory_results);
+        mInflater = LayoutInflater.from(this.getActivity());
+
+        mMilwaukeeItemView = (MTMilwaukeeItemView)rootView.findViewById(R.id.itemSearchResultsMilwaukeeView);
+        mNoItemsLayout = (RelativeLayout)rootView.findViewById(R.id.itemSearchResultsNoItemsLayout);
+
+        mListView = (ListView)rootView.findViewById(R.id.itemSearchResultsListView);
+
+        // Preload the footer views for the list
+        mListFooterLoadingView = mInflater.inflate(R.layout.view_footer_load_item, null, false);
+
+        AbsListView.LayoutParams lp = new AbsListView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0);
+        mListFooterEmptyView = new View(this.getActivity());
+        mListFooterEmptyView.setLayoutParams(lp);
 
         mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem,
                                  int visibleItemCount, int totalItemCount) {
-                if (mLoading) {
-                    if (totalItemCount > mPreviousTotal) {
-                        mLoading = false;
-                        mPreviousTotal = totalItemCount;
-                    }
-                }
-                if (!mLoading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + mVisibleThreshold)) {
-                    // I load the next page of gigs using a background task,
-                    // but you can call any function here.
-                    if (mLastSearchResultEvent != null) {
+//                if (mLoading) {
+//
+//                    LOGD(TAG, ">>>>Loading items: " + totalItemCount + " > " + mPreviousTotal);
+//
+//                    if (totalItemCount > mPreviousTotal) {
+//                        mLoading = false;
+//                        mPreviousTotal = totalItemCount;
+//                        LOGD(TAG, ">>>>Done loading setting previous: " + mPreviousTotal);
+//                    }
+//                }
+//
+////                int lastPos = mListView.getLastVisiblePosition();
+////
+////                int numResultsReturned = 0;
+////
+////                if (mAdapter != null && mAdapter.getSearchResults() != null) {
+////                    numResultsReturned = mAdapter.getSearchResults().size();
+////                }
+//
+//                //if (!mLoading && (lastPos + MTInventoryHelper.INVENTORY_REQUEST_BUFFER) >= numResultsReturned) {
+//                int visibleThreshold = ItemSearchResultsFragment.this.determineNumberOfItemsToDisplay();
+//                if (!mLoading && (firstVisibleItem + mVisibleThreshold) + visibleThreshold < totalItemCount) {
+//                    LOGD(TAG, ">>>>Checking visibility " + (firstVisibleItem + mVisibleThreshold) + " + " + visibleThreshold + " < " + totalItemCount);
+//                }
 
-                        if (mLastSearchResultEvent.getLastSearchResultCount() == MTInventoryHelper.INVENTORY_ITEM_REQUEST_COUNT) {
-                            int newSkipCount = mLastSearchResultEvent.getLastSkipCount() + mLastSearchResultEvent.getLastSearchResultCount();
 
-                            MTInventoryHelper.sharedInstance().searchForResults(mLastSearchResultEvent.getLastSearchTerm(),
-                                    newSkipCount, false, (AddItemActivity)ItemSearchResultsFragment.this.getActivity());
-                        }
-                    }
-                    mLoading = true;
-                }
             }
 
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
+                LOGD(TAG, "****SCROLL CHANGED");
+                int currentPosition = mListView.getLastVisiblePosition();
+                int visibleThreshold = ItemSearchResultsFragment.this.determineNumberOfItemsToDisplay();
+
+                int totalItemCount = 0;
+                if (mAdapter.getSearchResults() != null) {
+                    totalItemCount = mAdapter.getSearchResults().size();
+                }
+
+                LOGD (TAG, "****CURRENT: " + (currentPosition + visibleThreshold) + " >= " + (totalItemCount - 1));
+
+                if ((currentPosition + visibleThreshold) >= (totalItemCount - 1)) {
+                    if (mLastSearchResultEvent != null) {
+
+                        LOGD(TAG, "****Last search result count: " + mLastSearchResultEvent.getLastSearchResultCount());
+
+                        if (mLastSearchResultEvent.getLastSearchResultCount() != 0) {
+                            int newSkipCount = (mAdapter.getSearchResults() != null) ? mAdapter.getSearchResults().size() : 0;
+                            LOGD(TAG, "****New skip count: " + newSkipCount + " for term: " + mLastSearchResultEvent.getLastSearchTerm());
+                            mLoadingSearchResults = true;
+                            MTInventoryHelper.sharedInstance().searchForResults(mLastSearchResultEvent.getLastSearchTerm(),
+                                    newSkipCount, false, (AddItemActivity)ItemSearchResultsFragment.this.getActivity());
+                            mLastSearchResultEvent = null;
+                            mLoading = true;
+                        } else {
+                            LOGD(TAG, "****Resetting for empty result");
+                            mLoadingSearchResults = false;
+                            mLastSearchResultEvent = null;
+                        }
+                    } else {
+                        LOGD(TAG, "****No last search result found");
+                    }
+                }
+                showLoadingFooterView(mListView, mLoadingSearchResults);
             }
         });
 
@@ -133,18 +205,38 @@ public class ItemSearchResultsFragment extends MTFragment {
     public void onResume() {
         super.onResume();
 
-        mVisibleThreshold = determineNumberOfItemsToDisplay();
+        // Determine if the results should be shown
+        showSearchResults(mAdapter.hasSearchResults() || mLastSearchResultEvent != null);
 
+        mVisibleThreshold = determineNumberOfItemsToDisplay();
         LOGD(TAG, "Number of items in threshold: " + mVisibleThreshold);
+
+        // Hide the keyboard
+        UIUtils.hideKeyboard(this.getActivity());
+
+        setupSearchView();
+    }
+
+    private void setupSearchView() {
+        if (mSearchView != null) {
+            LOGD(TAG, "Configuring search view");
+            int searchSrcTextId = getResources().getIdentifier("android:id/search_src_text", null, null);
+            EditText searchEditText = (EditText) mSearchView.findViewById(searchSrcTextId);
+
+            searchEditText.setText(mAddItemActivity.getLastSearchString());
+            searchEditText.setTextColor(MiscUtils.getAppResources().getColor(R.color.mt_white));
+//
+//            searchEditText.setHint("Search Model #");
+//            searchEditText.setHintTextColor(MiscUtils.getAppResources().getColor(R.color.mt_very_light_gray));
+            mSearchView.setQueryHint("Search Model #");
+        }
     }
 
     private class ItemSearchResultsAdapter extends BaseAdapter {
 
-        private LayoutInflater mInflater;
         private ArrayList<MTItemSearchResult> mSearchResults;
 
         public ItemSearchResultsAdapter(Context context, ArrayList<MTItemSearchResult> searchResults) {
-            mInflater = LayoutInflater.from(context);
 
             if (searchResults != null) {
                 mSearchResults = searchResults;
@@ -187,9 +279,9 @@ public class ItemSearchResultsFragment extends MTFragment {
             MTItemSearchResult searchResult = mSearchResults.get(position);
 
             Picasso.with(ItemSearchResultsFragment.this.getActivity())
-                    .load("http:" + searchResult.getImageUrl())
-                    //.placeholder(R.drawable.user_placeholder)
-                    //.error(R.drawable.user_placeholder_error)
+                    .load(MTConstants.HTTP_PREFIX + searchResult.getImageUrl())
+                    .placeholder(R.drawable.ic_mkeplaceholder)
+                    .error(R.drawable.ic_mkeplaceholder)
                     .into(holder.thumbnail);
 
             holder.description.setText(searchResult.getItemDescription());
@@ -213,6 +305,14 @@ public class ItemSearchResultsFragment extends MTFragment {
             mSearchResults.addAll(searchResults);
             notifyDataSetChanged();
         }
+
+        public ArrayList<MTItemSearchResult> getSearchResults() {
+            return mSearchResults;
+        }
+
+        public boolean hasSearchResults() {
+            return ((mSearchResults != null) && (mSearchResults.size() > 0));
+        }
     }
 
     @Override
@@ -225,25 +325,33 @@ public class ItemSearchResultsFragment extends MTFragment {
         final SearchView searchView =
                 (SearchView) menu.findItem(R.id.inventory_search).getActionView();
 
+        mSearchView = searchView;
+
         mSearchMenuItem = menu.findItem(R.id.inventory_search);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
             public boolean onQueryTextSubmit(String s) {
+
+//                if (mLoadingSearchResults) {
+//                    LOGD(TAG, "Already processing search request");
+//                    return false;
+//                }
                 LOGD(TAG, "Submitting search query: " + s);
 
                 // Hide the keyboard
                 UIUtils.hideKeyboard(ItemSearchResultsFragment.this.getActivity());
 
                 // Remove the search from actionbar
-                mSearchMenuItem.collapseActionView();
+                //mSearchMenuItem.collapseActionView();
 
                 // Clear previous search results
                 mAdapter.clearSearchResults();
 
                 // Make request to server
                 if (mAddItemActivity != null && !TextUtils.isEmpty(s)) {
+                    mLoadingSearchResults = true;
                     mAddItemActivity.performSearchRequest(s, 0);
                 }
 
@@ -267,6 +375,8 @@ public class ItemSearchResultsFragment extends MTFragment {
                 return false;
             }
         });
+
+        setupSearchView();
     }
 
     @Override
@@ -285,18 +395,23 @@ public class ItemSearchResultsFragment extends MTFragment {
 
     public void onEvent(MTSearchResultEvent event) {
         if (event != null) {
-            if (event.getSearchResults() == null) {
-                LOGD(TAG, "No search results");
+            mLoadingSearchResults = false;
+            showLoadingFooterView(mListView, mLoadingSearchResults);
+            ArrayList<MTItemSearchResult> searchResults = event.getSearchResults();
+            if (searchResults == null) {
+                LOGD(TAG, "No more search results");
                 mLastSearchResultEvent = null;
+                showSearchResults(false);
             } else {
-                LOGD(TAG, "Search Result Count:" + event.getSearchResults().size());
-                mAdapter.appendSearchResults(event.getSearchResults());
+                LOGD(TAG, "Search Result Count:" + searchResults.size());
+                mAdapter.appendSearchResults(searchResults);
                 mLastSearchResultEvent = event;
+                showSearchResults(true);
             }
         }
     }
 
-    public int determineNumberOfItemsToDisplay() {
+    private int determineNumberOfItemsToDisplay() {
 
         // Determine the height of the screen
         Point screenSize = UIUtils.getScreenSize(this.getActivity());
@@ -311,8 +426,42 @@ public class ItemSearchResultsFragment extends MTFragment {
         // Determine the number of list items that can fit on the screen
         int listItemHeight = UIUtils.getPixels(80);
 
-        int numberOfListItems = remainingHeight / listItemHeight + 1;
+        int numberOfListItems = (remainingHeight / listItemHeight) + 1;
+
+        LOGD(TAG, "Number of list items for search results: " + numberOfListItems);
 
         return numberOfListItems;
+    }
+
+    private void showSearchResults(boolean showSearchResults) {
+        mMilwaukeeItemView.setVisibility(showSearchResults ? View.INVISIBLE : View.VISIBLE);
+        if (mAdapter.getSearchResults() != null && mAdapter.getSearchResults().size() > 0) {
+            mListView.setVisibility(showSearchResults ? View.VISIBLE : View.INVISIBLE);
+            mNoItemsLayout.setVisibility(showSearchResults ? View.INVISIBLE : View.VISIBLE);
+        } else {
+            mNoItemsLayout.setVisibility(showSearchResults ? View.VISIBLE : View.INVISIBLE);
+            mListView.setVisibility(showSearchResults ? View.INVISIBLE : View.VISIBLE);
+        }
+    }
+
+    public void showLoadingFooterView(ListView listView, boolean isLoading) {
+
+        if (mListFooterView == mListFooterLoadingView && isLoading) {
+            return;
+        }
+
+        if (mListFooterView == null && !isLoading) {
+            return;
+        }
+
+        if (mListFooterView != null && !isLoading) {
+            listView.removeFooterView(mListFooterView);
+            mListFooterView = null;
+        }
+
+        if (isLoading && mListFooterView == null) {
+            mListFooterView = mListFooterLoadingView;
+            listView.addFooterView(mListFooterView);
+        }
     }
 }

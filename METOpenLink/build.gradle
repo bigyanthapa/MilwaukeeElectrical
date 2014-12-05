@@ -54,7 +54,7 @@ android {
         minSdkVersion 18
         targetSdkVersion 19
         versionCode 6
-        versionName '0.1.4.1'
+        versionName '0.1.4.2'
     }
 
     compileOptions {
@@ -114,6 +114,7 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.0.0'
     compile 'com.squareup.okio:okio:1.0.1'
 
+    // Picasso
     compile 'com.squareup.picasso:picasso:2.3.4'
 
     // Green Robot EventBus
@@ -127,9 +128,6 @@ dependencies {
 //        exclude group: 'com.google.android', module: 'support-v4'
 //    }
 
-//    // Android Bootstrap
-//    compile 'com.loopeer.android:bootstrap:2.0.2'
-//
 //    // Animations
 //    compile 'com.daimajia.easing:library:1.0.0@aar'
 //    compile 'com.daimajia.androidanimations:library:1.1.2@aar'

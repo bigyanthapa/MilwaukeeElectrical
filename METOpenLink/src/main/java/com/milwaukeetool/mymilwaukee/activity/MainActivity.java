@@ -63,6 +63,12 @@ public class MainActivity extends MTActivity {
         // Must set before setting view pager, expand to fill
         tabs.setShouldExpand(true);
 
+//        Typeface arialBlackTypeface = Typefaces.get(this, "fonts/Arial Black.ttf");
+
+        // Must be set before remaining configuration!
+//        tabs.setTypeface(arialBlackTypeface, Typeface.NORMAL);
+//        tabs.setTextSize(UIUtils.getPixels(11));
+
         tabs.setViewPager(pager);
         tabs.setUnderlineColorResource(R.color.mt_red);
         tabs.setIndicatorColorResource(R.color.mt_red);
