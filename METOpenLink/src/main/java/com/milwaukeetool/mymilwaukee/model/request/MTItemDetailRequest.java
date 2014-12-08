@@ -2,17 +2,15 @@ package com.milwaukeetool.mymilwaukee.model.request;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Date;
-
 /**
  * Created by scott.hopfensperger on 12/4/2014.
  */
 public class MTItemDetailRequest {
     @SerializedName("manufacturerId")
-    private Integer manufacturerId;
+    private Integer manufacturerId = -1;
 
     @SerializedName("categoryId")
-    private Integer categoryId;
+    private Integer categoryId = -1;
 
     @SerializedName("modelNumber")
     private String modelNumber;
@@ -40,9 +38,6 @@ public class MTItemDetailRequest {
 
     @SerializedName("itemizationImageUrl")
     private String itemizationImageUrl;
-
-    @SerializedName("dateAdded")
-    private Date dateAdded;
 
     public Integer getManufacturerId() {
         return manufacturerId;
@@ -130,13 +125,5 @@ public class MTItemDetailRequest {
 
     public void setItemizationImageUrl(String itemizationImageUrl) {
         this.itemizationImageUrl = itemizationImageUrl;
-    }
-
-    public Date getDateAdded() {
-        return dateAdded;
-    }
-
-    public void setDateAdded(Date dateAdded) {
-        this.dateAdded = dateAdded;
     }
 }

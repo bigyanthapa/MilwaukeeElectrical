@@ -8,13 +8,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.google.gson.annotations.SerializedName;
 import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
 import com.milwaukeetool.mymilwaukee.MilwaukeeToolApplication;
@@ -29,14 +27,11 @@ import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
-import com.milwaukeetool.mymilwaukee.view.MTChangePasswordPopupView;
 import com.milwaukeetool.mymilwaukee.view.MTLaunchableFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTNotesView;
 import com.milwaukeetool.mymilwaukee.view.MTSimpleFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTToastView;
 import com.squareup.picasso.Picasso;
-
-import java.util.Calendar;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -53,7 +48,7 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
 
     private MTSimpleFieldView description;
     private MTSimpleFieldView modelNumber;
-    private MTSimpleFieldView name;
+    private MTSimpleFieldView customIdName;
     private MTSimpleFieldView serialNumber;
     private MTSimpleFieldView purchaseLocation;
 
@@ -100,7 +95,7 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
                 true,
                 false);
 
-        this.name = this.createSimpleFieldView(R.string.tool_detail_name,
+        this.customIdName = this.createSimpleFieldView(R.string.tool_detail_name,
                 R.color.mt_black,
                 20,
                 false,
@@ -135,40 +130,46 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
     }
 
     public void launched(MTLaunchEvent launchEvent) {
-        LayoutInflater inflater = this.getLayoutInflater();
-        final MTNotesView notesView = new MTNotesView(this);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setNegativeButton(MiscUtils.getString(R.string.action_cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                UIUtils.hideKeyboard(AddItemDetailActivity.this, notesView.getNotes());
-            }
-        });
-        builder.setPositiveButton(MiscUtils.getString(R.string.action_save),null);
-        builder.setView(notesView);
 
-        notesDialog = builder.create();
+        if (launchEvent.getSource() == this.notes) {
+            LayoutInflater inflater = this.getLayoutInflater();
+            final MTNotesView notesView = new MTNotesView(this);
 
-        if (notesDialog != null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setNegativeButton(MiscUtils.getString(R.string.action_cancel), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    UIUtils.hideKeyboard(AddItemDetailActivity.this, notesView.getNotes());
+                }
+            });
+            builder.setPositiveButton(MiscUtils.getString(R.string.action_save),null);
+            builder.setView(notesView);
 
-            // Change the soft input mode to make sure the keyboard is visible for the popup
-            notesDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+            notesDialog = builder.create();
 
-            notesDialog.show();
+            if (notesDialog != null) {
 
-            Button changeButton = notesDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-            if (changeButton != null) {
-                changeButton.setOnClickListener(new View.OnClickListener()
-                {
-                    @Override
-                    public void onClick(View v)
+                // Change the soft input mode to make sure the keyboard is visible for the popup
+                notesDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+                notesDialog.show();
+
+                Button changeButton = notesDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                if (changeButton != null) {
+                    changeButton.setOnClickListener(new View.OnClickListener()
                     {
-                        int a = 4;
-                    }
-                });
+                        @Override
+                        public void onClick(View v)
+                        {
+                            int a = 4;
+                        }
+                    });
+                }
             }
         }
+
+
     }
 
     protected void mapSearchResults(MTItemSearchResult mtItemSearchResult) {
@@ -277,7 +278,7 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
     protected boolean isFieldsValid() {
         if (this.description.isValid() &&
                 this.modelNumber.isValid() &&
-                this.name.isValid() &&
+                this.customIdName.isValid() &&
                 this.serialNumber.isValid() &&
                 this.purchaseLocation.isValid() &&
                 this.category.isValid() &&
@@ -292,18 +293,20 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
     protected MTItemDetailRequest constructMTItemDetailRequest() {
         MTItemDetailRequest request = new MTItemDetailRequest();
 
-        request.setCategoryId(1);
-        request.setCustomIdentifier("Custom");
-        request.setDateAdded(Calendar.getInstance().getTime());
-        request.setImageUrl("Image");
-        request.setItemDescription("Description");
-        request.setItemizationImageUrl("Itemization URL");
-        request.setManufacturerId(1);
-        request.setModelNumber("Model Number");
-        request.setNotes("Notes");
-        request.setOrderInformationImageUrl("Order Information Image URL");
-        request.setPurchaseLocation("Purchase Location");
-        request.setSerialNumber("Serial Number");
+        request.setModelNumber(this.modelNumber.getFieldValue());
+        request.setItemDescription(this.description.getFieldValue());
+
+        request.setImageUrl(mItemSearchResult.getImageUrl());
+        request.setNotes(this.notes.getFieldValue());
+        request.setPurchaseLocation(this.purchaseLocation.getFieldValue());
+        request.setSerialNumber(this.serialNumber.getFieldValue());
+        request.setCustomIdentifier(this.customIdName.getFieldValue());
+
+//        request.setManufacturerId(-1);
+//        request.setCategoryId(-1);
+
+//        request.setItemizationImageUrl("Itemization URL");
+//        request.setOrderInformationImageUrl("Order Information Image URL");
 
         return request;
     }
@@ -314,7 +317,7 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
         this.mProductDetailLayout.addView(this.modelNumber);
         this.mProductDetailLayout.addView(mSpacer);
         this.mProductDetailLayout.addView(this.category);
-        this.mProductDetailLayout.addView(this.name);
+        this.mProductDetailLayout.addView(this.customIdName);
         this.mProductDetailLayout.addView(this.serialNumber);
         this.mProductDetailLayout.addView(this.purchaseLocation);
         this.mProductDetailLayout.addView(this.notes);

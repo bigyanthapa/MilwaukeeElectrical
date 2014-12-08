@@ -126,4 +126,6 @@
     <string name="add_item_search_error">Search Failed</string>
     <string name="add_item_notes_title">Notes</string>
 
+    <string name="item_detail_product_information">PRODUCT INFORMATION</string>
+
 </resources>
