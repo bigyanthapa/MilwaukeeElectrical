@@ -1,26 +1,37 @@
 package com.milwaukeetool.mymilwaukee.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.google.gson.annotations.SerializedName;
 import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
 import com.milwaukeetool.mymilwaukee.MilwaukeeToolApplication;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.config.MTConstants;
 import com.milwaukeetool.mymilwaukee.interfaces.MTFinishedListener;
+import com.milwaukeetool.mymilwaukee.interfaces.MTLaunchListener;
 import com.milwaukeetool.mymilwaukee.model.MTItemSearchResult;
+import com.milwaukeetool.mymilwaukee.model.event.MTLaunchEvent;
 import com.milwaukeetool.mymilwaukee.model.request.MTItemDetailRequest;
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
+import com.milwaukeetool.mymilwaukee.view.MTChangePasswordPopupView;
 import com.milwaukeetool.mymilwaukee.view.MTLaunchableFieldView;
+import com.milwaukeetool.mymilwaukee.view.MTNotesView;
 import com.milwaukeetool.mymilwaukee.view.MTSimpleFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTToastView;
 import com.squareup.picasso.Picasso;
@@ -37,7 +48,7 @@ import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 /**
  * Created by scott.hopfensperger on 12/3/2014.
  */
-public class AddItemDetailActivity extends MTActivity {
+public class AddItemDetailActivity extends MTActivity implements MTLaunchListener {
     private static final String TAG = makeLogTag(AddItemDetailActivity.class);
 
     private MTSimpleFieldView description;
@@ -54,9 +65,9 @@ public class AddItemDetailActivity extends MTActivity {
     private View mFooter;
 
     private LinearLayout mProductDetailLayout;
+    private AlertDialog notesDialog;
 
     private boolean mSaveInProgress = false;
-    private boolean mEditInProgress = false;
 
     private MTItemSearchResult mItemSearchResult;
 
@@ -118,7 +129,51 @@ public class AddItemDetailActivity extends MTActivity {
                 64,
                 false);
 
+        this.mapSearchResults(mItemSearchResult);
+
         this.assembleLayout();
+    }
+
+    public void launched(MTLaunchEvent launchEvent) {
+        LayoutInflater inflater = this.getLayoutInflater();
+        final MTNotesView notesView = new MTNotesView(this);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setNegativeButton(MiscUtils.getString(R.string.action_cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                UIUtils.hideKeyboard(AddItemDetailActivity.this, notesView.getNotes());
+            }
+        });
+        builder.setPositiveButton(MiscUtils.getString(R.string.action_save),null);
+        builder.setView(notesView);
+
+        notesDialog = builder.create();
+
+        if (notesDialog != null) {
+
+            // Change the soft input mode to make sure the keyboard is visible for the popup
+            notesDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+            notesDialog.show();
+
+            Button changeButton = notesDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            if (changeButton != null) {
+                changeButton.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        int a = 4;
+                    }
+                });
+            }
+        }
+    }
+
+    protected void mapSearchResults(MTItemSearchResult mtItemSearchResult) {
+        this.modelNumber.setFieldValue(mtItemSearchResult.getModelNumber());
+        this.description.setFieldValue(mtItemSearchResult.getItemDescription());
     }
 
     @Override
@@ -309,12 +364,4 @@ public class AddItemDetailActivity extends MTActivity {
         }
         return view;
     }
-
-//    protected void appendToLinearLayout(View view) {
-//        if (this.mProductDetailLayout == null) {
-//            mProductDetailLayout = (LinearLayout) this.findViewById(R.id.addItemDetailLayout);
-//        }
-//
-//        this.mProductDetailLayout.addView(view);
-//    }
 }
