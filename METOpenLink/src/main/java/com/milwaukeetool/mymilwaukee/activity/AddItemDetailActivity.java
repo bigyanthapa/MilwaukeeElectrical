@@ -1,29 +1,37 @@
 package com.milwaukeetool.mymilwaukee.activity;
 
-import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
 import com.milwaukeetool.mymilwaukee.MilwaukeeToolApplication;
 import com.milwaukeetool.mymilwaukee.R;
+import com.milwaukeetool.mymilwaukee.config.MTConstants;
 import com.milwaukeetool.mymilwaukee.interfaces.MTFinishedListener;
+import com.milwaukeetool.mymilwaukee.interfaces.MTLaunchListener;
+import com.milwaukeetool.mymilwaukee.model.MTItemSearchResult;
+import com.milwaukeetool.mymilwaukee.model.event.MTLaunchEvent;
 import com.milwaukeetool.mymilwaukee.model.request.MTItemDetailRequest;
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
 import com.milwaukeetool.mymilwaukee.view.MTLaunchableFieldView;
+import com.milwaukeetool.mymilwaukee.view.MTNotesView;
 import com.milwaukeetool.mymilwaukee.view.MTSimpleFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTToastView;
-
-import java.util.Calendar;
+import com.squareup.picasso.Picasso;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -35,12 +43,12 @@ import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 /**
  * Created by scott.hopfensperger on 12/3/2014.
  */
-public class AddItemDetailActivity extends MTActivity {
+public class AddItemDetailActivity extends MTActivity implements MTLaunchListener {
     private static final String TAG = makeLogTag(AddItemDetailActivity.class);
 
     private MTSimpleFieldView description;
     private MTSimpleFieldView modelNumber;
-    private MTSimpleFieldView name;
+    private MTSimpleFieldView customIdName;
     private MTSimpleFieldView serialNumber;
     private MTSimpleFieldView purchaseLocation;
 
@@ -52,13 +60,22 @@ public class AddItemDetailActivity extends MTActivity {
     private View mFooter;
 
     private LinearLayout mProductDetailLayout;
+    private AlertDialog notesDialog;
 
     private boolean mSaveInProgress = false;
-    private boolean mEditInProgress = false;
+
+    private MTItemSearchResult mItemSearchResult;
+
+    private ImageView mItemImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mItemSearchResult = (MTItemSearchResult)getIntent().getParcelableExtra(MTConstants.SEARCH_ITEM_RESULT);
+
+        mItemImageView = (ImageView)this.findViewById(R.id.addItemImageView);
+
         mSpacer = new View(this);
         mSpacer.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 UIUtils.getPixels(25)));
@@ -78,7 +95,7 @@ public class AddItemDetailActivity extends MTActivity {
                 true,
                 false);
 
-        this.name = this.createSimpleFieldView(R.string.tool_detail_name,
+        this.customIdName = this.createSimpleFieldView(R.string.tool_detail_name,
                 R.color.mt_black,
                 20,
                 false,
@@ -93,6 +110,7 @@ public class AddItemDetailActivity extends MTActivity {
                 64,
                 false,
                 true);
+        this.purchaseLocation.setNextActionDone();
 
         this.notes = this.createLaunchableFieldView(R.string.tool_detail_notes,
                 R.color.mt_black,
@@ -107,7 +125,98 @@ public class AddItemDetailActivity extends MTActivity {
                 64,
                 false);
 
+        this.mapSearchResults(mItemSearchResult);
+
         this.assembleLayout();
+    }
+
+    public void launched(MTLaunchEvent launchEvent) {
+
+        if (launchEvent.getSource() == this.notes) {
+
+
+
+            LayoutInflater inflater = this.getLayoutInflater();
+
+            final MTNotesView notesView = new MTNotesView(this);
+            notesView.setNotes(this.notes.getFieldValue());
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setNegativeButton(MiscUtils.getString(R.string.action_cancel), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    UIUtils.hideKeyboard(AddItemDetailActivity.this, notesView);
+                }
+            });
+            builder.setPositiveButton(MiscUtils.getString(R.string.action_save),null);
+            builder.setView(notesView);
+
+            notesDialog = builder.create();
+
+            if (notesDialog != null) {
+
+                // Change the soft input mode to make sure the keyboard is visible for the popup
+                notesDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+                notesDialog.show();
+
+                Button changeButton = notesDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                if (changeButton != null) {
+                    changeButton.setOnClickListener(new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            AddItemDetailActivity.this.handleNotes(notesView.getNotes());
+                        }
+                    });
+                }
+            }
+        }
+
+
+    }
+
+    public void handleNotes(String notes) {
+        if (notesDialog.isShowing()) {
+            notesDialog.dismiss();
+        }
+
+        this.notes.setFieldValue(notes);
+    }
+
+    protected void mapSearchResults(MTItemSearchResult mtItemSearchResult) {
+        this.modelNumber.setFieldValue(mtItemSearchResult.getModelNumber());
+        this.description.setFieldValue(mtItemSearchResult.getItemDescription());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
+        if (mItemImageView != null && mItemSearchResult != null) {
+            Picasso.with(this)
+                    .load(MTConstants.HTTP_PREFIX + mItemSearchResult.getImageUrl())
+                    .placeholder(R.drawable.ic_mkeplaceholder)
+                    .error(R.drawable.ic_mkeplaceholder)
+                    .into(mItemImageView);
+        }
+    }
+
+    @Override
+    protected void setupActivityView() {
+        setContentView(R.layout.activity_add_item_detail);
+    }
+
+    @Override
+    protected String getLogTag() {
+        return AddItemDetailActivity.TAG;
+    }
+
+    @Override
+    protected String getScreenName() {
+        return null;
     }
 
     @Override
@@ -164,8 +273,6 @@ public class AddItemDetailActivity extends MTActivity {
                     }
                 };
 
-                hardcode();
-
                 if (this.isFieldsValid()) {
                     mSaveInProgress = true;
                     mProgressView.updateMessageAndStart(MiscUtils.getString(R.string.progress_bar_saving_item_details));
@@ -181,15 +288,10 @@ public class AddItemDetailActivity extends MTActivity {
         }
     }
 
-    public void hardcode() {
-        this.description.setFieldValue("description");
-        this.modelNumber.setFieldValue("model number");
-    }
-
     protected boolean isFieldsValid() {
         if (this.description.isValid() &&
                 this.modelNumber.isValid() &&
-                this.name.isValid() &&
+                this.customIdName.isValid() &&
                 this.serialNumber.isValid() &&
                 this.purchaseLocation.isValid() &&
                 this.category.isValid() &&
@@ -204,29 +306,31 @@ public class AddItemDetailActivity extends MTActivity {
     protected MTItemDetailRequest constructMTItemDetailRequest() {
         MTItemDetailRequest request = new MTItemDetailRequest();
 
-        request.setCategoryId(1);
-        request.setCustomIdentifier("Custom");
-        request.setDateAdded(Calendar.getInstance().getTime());
-        request.setImageUrl("Image");
-        request.setItemDescription("Description");
-        request.setItemizationImageUrl("Itemization URL");
-        request.setManufacturerId(1);
-        request.setModelNumber("Model Number");
-        request.setNotes("Notes");
-        request.setOrderInformationImageUrl("Order Information Image URL");
-        request.setPurchaseLocation("Purchase Location");
-        request.setSerialNumber("Serial Number");
+        request.setModelNumber(this.modelNumber.getFieldValue());
+        request.setItemDescription(this.description.getFieldValue());
+
+        request.setImageUrl(mItemSearchResult.getImageUrl());
+        request.setNotes(this.notes.getFieldValue());
+        request.setPurchaseLocation(this.purchaseLocation.getFieldValue());
+        request.setSerialNumber(this.serialNumber.getFieldValue());
+        request.setCustomIdentifier(this.customIdName.getFieldValue());
+
+//        request.setManufacturerId(-1);
+//        request.setCategoryId(-1);
+
+//        request.setItemizationImageUrl("Itemization URL");
+//        request.setOrderInformationImageUrl("Order Information Image URL");
 
         return request;
     }
 
     protected void assembleLayout() {
-        this.mProductDetailLayout = (LinearLayout) this.findViewById(R.id.productDetailLayout);
+        this.mProductDetailLayout = (LinearLayout) this.findViewById(R.id.addItemDetailLayout);
         this.mProductDetailLayout.addView(this.description);
         this.mProductDetailLayout.addView(this.modelNumber);
         this.mProductDetailLayout.addView(mSpacer);
         this.mProductDetailLayout.addView(this.category);
-        this.mProductDetailLayout.addView(this.name);
+        this.mProductDetailLayout.addView(this.customIdName);
         this.mProductDetailLayout.addView(this.serialNumber);
         this.mProductDetailLayout.addView(this.purchaseLocation);
         this.mProductDetailLayout.addView(this.notes);
@@ -275,27 +379,5 @@ public class AddItemDetailActivity extends MTActivity {
             view.setUneditable();
         }
         return view;
-    }
-
-    protected void appendToLinearLayout(View view) {
-        if (this.mProductDetailLayout == null) {
-            mProductDetailLayout = (LinearLayout) this.findViewById(R.id.productDetailLayout);
-        }
-
-        this.mProductDetailLayout.addView(view);
-    }
-    @Override
-    protected void setupActivityView() {
-        setContentView(R.layout.activity_add_item_detail);
-    }
-
-    @Override
-    protected String getLogTag() {
-        return AddItemDetailActivity.TAG;
-    }
-
-    @Override
-    protected String getScreenName() {
-        return null;
     }
 }
