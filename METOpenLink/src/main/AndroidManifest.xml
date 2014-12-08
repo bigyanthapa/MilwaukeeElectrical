@@ -92,8 +92,13 @@
             android:name=".activity.AddItemDetailActivity"
             android:label="@string/main_add_item_title"
             android:launchMode="singleTop"
+            android:parentActivityName=".activity.AddItemActivity"
             android:theme="@style/Theme.Milwaukeetool"
-            android:screenOrientation="sensorPortrait"></activity>
+            android:screenOrientation="sensorPortrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.AddItemActivity" />
+        </activity>
         <activity
             android:name=".activity.AddItemActivity"
             android:label="@string/main_add_item_title"
