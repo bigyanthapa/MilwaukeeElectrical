@@ -148,7 +148,7 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
                     UIUtils.hideKeyboard(AddItemDetailActivity.this, notesView);
                 }
             });
-            builder.setPositiveButton(MiscUtils.getString(R.string.action_save),null);
+            builder.setPositiveButton(MiscUtils.getString(R.string.action_done),null);
             builder.setView(notesView);
 
             notesDialog = builder.create();
