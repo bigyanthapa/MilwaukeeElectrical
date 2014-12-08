@@ -26,10 +26,20 @@
                     android:scaleType="centerCrop"/>
 
                 <ImageView
+                    android:id="@+id/addItemBackgroundImageView"
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:src="@drawable/add_item_bg"/>
+
+
+                <ImageView
                     android:id="@+id/addItemImageView"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:layout_gravity="center"
+                    android:background="@null"
                     android:src="@drawable/tool"/>
 
             </FrameLayout>
