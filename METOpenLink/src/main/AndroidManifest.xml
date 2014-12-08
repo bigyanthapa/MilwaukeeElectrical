@@ -94,7 +94,8 @@
             android:launchMode="singleTop"
             android:parentActivityName=".activity.AddItemActivity"
             android:theme="@style/Theme.Milwaukeetool"
-            android:screenOrientation="sensorPortrait">
+            android:screenOrientation="sensorPortrait"
+            android:windowSoftInputMode="stateHidden|adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.AddItemActivity" />

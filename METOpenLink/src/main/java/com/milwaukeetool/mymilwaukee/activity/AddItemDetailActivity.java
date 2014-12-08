@@ -3,6 +3,7 @@ package com.milwaukeetool.mymilwaukee.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -56,6 +57,8 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
     private MTLaunchableFieldView notes;
     private MTLaunchableFieldView proof;
 
+    private String mNotesText = null;
+
     private View mSpacer;
     private View mFooter;
 
@@ -105,6 +108,7 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
                 64,
                 false,
                 true);
+
         this.purchaseLocation = this.createSimpleFieldView(R.string.tool_detail_purchase_location,
                 R.color.mt_black,
                 64,
@@ -116,30 +120,35 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
                 R.color.mt_black,
                 256,
                 false);
+        this.notes.setHintColorTextResource(R.color.mt_black);
+
         this.proof = this.createLaunchableFieldView(R.string.tool_detail_proof,
                 R.color.mt_black,
                 64,
                 false);
+        this.proof.setHintColorTextResource(R.color.mt_black);
+
         this.category = this.createLaunchableFieldView(R.string.tool_detail_category,
                 R.color.mt_black,
                 64,
                 false);
+        this.category.setHintColorTextResource(R.color.mt_black);
 
         this.mapSearchResults(mItemSearchResult);
 
         this.assembleLayout();
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
     public void launched(MTLaunchEvent launchEvent) {
 
         if (launchEvent.getSource() == this.notes) {
 
-
-
             LayoutInflater inflater = this.getLayoutInflater();
 
             final MTNotesView notesView = new MTNotesView(this);
-            notesView.setNotes(this.notes.getFieldValue());
+            notesView.setNotes(mNotesText);
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setNegativeButton(MiscUtils.getString(R.string.action_cancel), new DialogInterface.OnClickListener() {
@@ -152,6 +161,9 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
             builder.setView(notesView);
 
             notesDialog = builder.create();
+
+            // Don't allow user to cancel by tapping outside
+            notesDialog.setCanceledOnTouchOutside(false);
 
             if (notesDialog != null) {
 
@@ -167,6 +179,7 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
                         @Override
                         public void onClick(View v)
                         {
+                            UIUtils.hideKeyboard(AddItemDetailActivity.this, notesView);
                             AddItemDetailActivity.this.handleNotes(notesView.getNotes());
                         }
                     });
@@ -178,11 +191,12 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
     }
 
     public void handleNotes(String notes) {
+
+        mNotesText = notes;
+
         if (notesDialog.isShowing()) {
             notesDialog.dismiss();
         }
-
-        this.notes.setFieldValue(notes);
     }
 
     protected void mapSearchResults(MTItemSearchResult mtItemSearchResult) {
@@ -310,7 +324,9 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
         request.setItemDescription(this.description.getFieldValue());
 
         request.setImageUrl(mItemSearchResult.getImageUrl());
-        request.setNotes(this.notes.getFieldValue());
+        if (!TextUtils.isEmpty(mNotesText)) {
+            request.setNotes(mNotesText);
+        }
         request.setPurchaseLocation(this.purchaseLocation.getFieldValue());
         request.setSerialNumber(this.serialNumber.getFieldValue());
         request.setCustomIdentifier(this.customIdName.getFieldValue());
