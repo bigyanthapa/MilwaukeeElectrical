@@ -131,16 +131,20 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
 
     public void launched(MTLaunchEvent launchEvent) {
 
-
         if (launchEvent.getSource() == this.notes) {
+
+
+
             LayoutInflater inflater = this.getLayoutInflater();
+
             final MTNotesView notesView = new MTNotesView(this);
+            notesView.setNotes(this.notes.getFieldValue());
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setNegativeButton(MiscUtils.getString(R.string.action_cancel), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    UIUtils.hideKeyboard(AddItemDetailActivity.this, notesView.getNotes());
+                    UIUtils.hideKeyboard(AddItemDetailActivity.this, notesView);
                 }
             });
             builder.setPositiveButton(MiscUtils.getString(R.string.action_save),null);
@@ -162,7 +166,7 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
                         @Override
                         public void onClick(View v)
                         {
-                            int a = 4;
+                            AddItemDetailActivity.this.handleNotes(notesView.getNotes());
                         }
                     });
                 }
@@ -170,6 +174,14 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
         }
 
 
+    }
+
+    public void handleNotes(String notes) {
+        if (notesDialog.isShowing()) {
+            notesDialog.dismiss();
+        }
+
+        this.notes.setFieldValue(notes);
     }
 
     protected void mapSearchResults(MTItemSearchResult mtItemSearchResult) {

@@ -125,6 +125,7 @@
     <string name="add_item_milwaukee_select_other_message">Select <![CDATA[<strong>OTHER</strong>]]> to enter an item<![CDATA[<br />]]> from a different manufacturer.</string>
     <string name="add_item_search_error">Search Failed</string>
     <string name="add_item_notes_title">Notes</string>
+    <string name="add_item_notes_hint">Enter notes here.</string>
 
     <string name="item_detail_product_information">PRODUCT INFORMATION</string>
 

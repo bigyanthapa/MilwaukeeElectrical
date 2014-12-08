@@ -1,6 +1,7 @@
 package com.milwaukeetool.mymilwaukee.view;
 
 import android.app.Activity;
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 
@@ -20,7 +21,12 @@ public class MTNotesView extends LinearLayout {
         this.mNotes = (MTEditText) findViewById(R.id.itemDetailNotes);
     }
 
-    public MTEditText getNotes() {
-        return this.mNotes;
+    public String getNotes() {
+        Editable notes = this.mNotes.getText();
+        return notes.toString();
+    }
+
+    public void setNotes(String notes) {
+        this.mNotes.setText(notes);
     }
 }
