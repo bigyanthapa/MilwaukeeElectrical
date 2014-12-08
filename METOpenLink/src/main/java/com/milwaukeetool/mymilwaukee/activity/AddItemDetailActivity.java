@@ -110,6 +110,7 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
                 64,
                 false,
                 true);
+        this.purchaseLocation.setNextActionDone();
 
         this.notes = this.createLaunchableFieldView(R.string.tool_detail_notes,
                 R.color.mt_black,
