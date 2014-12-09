@@ -19,10 +19,12 @@ public class MTNotesView extends LinearLayout {
     public MTNotesView(Activity activity) {
         super(activity);
 
+        activity.setTheme(android.R.style.Theme_Holo_Light);
+
         LayoutInflater.from(activity).inflate(R.layout.view_notes, this);
 
         this.mNotes = (MTEditText) findViewById(R.id.itemDetailNotes);
-        this.mNotes.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+        this.mNotes.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES|InputType.TYPE_TEXT_FLAG_MULTI_LINE);
 
 //        this.mNotes.addTextChangedListener(new TextWatcher() {
 //
@@ -53,4 +55,5 @@ public class MTNotesView extends LinearLayout {
     public void setNotes(String notes) {
         this.mNotes.setText(notes);
     }
+
 }

@@ -156,6 +156,7 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
             builder.setNegativeButton(MiscUtils.getString(R.string.action_cancel), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    AddItemDetailActivity.this.setTheme(R.style.Theme_Milwaukeetool);
                     UIUtils.hideKeyboard(AddItemDetailActivity.this, notesView);
                 }
             });
@@ -181,6 +182,7 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
                         @Override
                         public void onClick(View v)
                         {
+                            AddItemDetailActivity.this.setTheme(R.style.Theme_Milwaukeetool);
                             UIUtils.hideKeyboard(AddItemDetailActivity.this, notesView);
                             AddItemDetailActivity.this.handleNotes(notesView.getNotes());
                         }
@@ -209,7 +211,6 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
     @Override
     protected void onResume() {
         super.onResume();
-
 
         if (mItemImageView != null && mItemSearchResult != null) {
             Picasso.with(this)

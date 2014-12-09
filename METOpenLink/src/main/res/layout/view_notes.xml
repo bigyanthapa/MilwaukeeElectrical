@@ -40,6 +40,7 @@
         android:textSize="@dimen/mt_font_size_standard"
         android:hint="@string/add_item_notes_hint"
         android:textColorHint="@color/mt_very_light_gray"
-        android:textCursorDrawable="@null"/>
+        android:textCursorDrawable="@null"
+        android:textIsSelectable="true"/>
 
 </LinearLayout>

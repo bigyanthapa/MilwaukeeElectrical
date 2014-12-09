@@ -26,13 +26,15 @@
         <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Milwaukeetool</item>
         <item name="android:actionDropDownStyle">@style/DropDownNav.Milwaukeetool</item>
         <item name="android:actionBarStyle">@style/ActionBar.Solid.Milwaukeetool</item>
-        <item name="android:actionModeBackground">@drawable/cab_background_top_milwaukeetool</item>
         <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_milwaukeetool</item>
         <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Milwaukeetool</item>
+        <item name="android:actionModeStyle">@style/ActionBar.Solid.Milwaukeetool</item>
+        <item name="android:actionModeBackground">@drawable/ab_solid_milwaukeetool</item>
         <item name="android:editTextStyle">@style/EditText.MilwaukeeTool</item>
         <item name="android:checkboxStyle">@style/CheckBox.MilwaukeeTool</item>
         <item name="android:radioButtonStyle">@style/RadioButton.MilwaukeeTool</item>
         <item name="android:actionMenuTextAppearance">@style/ActionMenuTextAppearance.Milwaukeetool</item>
+        <!--<item name="android:actionModeStyle">@style/ContextualMode.MilwaukeeTool</item>-->
 
                 <!-- Light.DarkActionBar specific -->
         <item name="android:actionBarWidgetTheme">@style/Theme.Milwaukeetool.Widget</item>
@@ -107,5 +109,9 @@
     <style name="RadioButton.MilwaukeeTool" parent="android:Widget.CompoundButton.RadioButton">
         <item name="android:button">@drawable/milwaukeetool_btn_radio_holo_light</item>
     </style>
+
+    <!--<style name="ContextualMode.MilwaukeeTool" parent="@drawable/ab_solid_milwaukeetool">-->
+        <!--<item name="android:background">@drawable/ab_solid_milwaukeetool</item>-->
+    <!--</style>-->
 
 </resources>
