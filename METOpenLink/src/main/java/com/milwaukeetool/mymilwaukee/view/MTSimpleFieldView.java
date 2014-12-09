@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -48,6 +49,7 @@ public class MTSimpleFieldView extends RelativeLayout {
     protected String mFieldName;
     protected boolean mResetField;
     protected MTFocusListener mFocusListener;
+    protected int mTextColorResId;
 
     protected int mListItemNumber = 0;
 
@@ -148,6 +150,7 @@ public class MTSimpleFieldView extends RelativeLayout {
 
     public void setTextColorResource(int resourceId) {
         this.mEditText.setTextColor(MiscUtils.getAppResources().getColor(resourceId));
+        mTextColorResId = resourceId;
     }
 
     public void setHintColorTextResource(int resourceId) {
@@ -205,6 +208,13 @@ public class MTSimpleFieldView extends RelativeLayout {
 
     public MTSimpleFieldView setMaxLength(int maxLength) {
         this.mMaxLength = maxLength;
+
+        if (this.mMaxLength > 0) {
+            InputFilter[] filters = mEditText.getFilters();
+            InputFilter[] updatedFilters = new InputFilter[filters.length + 1];
+            updatedFilters[filters.length] = new InputFilter.LengthFilter(maxLength);
+            mEditText.setFilters(updatedFilters);
+        }
         return this;
     }
 
@@ -278,6 +288,7 @@ public class MTSimpleFieldView extends RelativeLayout {
         if (mMaxLength > 0) {
             if (this.getFieldValue().length() > mMaxLength) {
                 showError(mFieldName + " exceeds " + mMaxLength + " character limit");
+                return false;
             }
         }
 
@@ -306,7 +317,7 @@ public class MTSimpleFieldView extends RelativeLayout {
     }
 
     public void showError(String errorMessage) {
-        final IconDrawable customErrorDrawable = new IconDrawable(MilwaukeeToolApplication.getAppContext(), Iconify.IconValue.fa_exclamation_circle).colorRes(R.color.mt_white).sizeDp(20);
+        final IconDrawable customErrorDrawable = new IconDrawable(MilwaukeeToolApplication.getAppContext(), Iconify.IconValue.fa_exclamation_circle).colorRes(mTextColorResId).sizeDp(20);
         customErrorDrawable.setBounds(0, 0, customErrorDrawable.getIntrinsicWidth(), customErrorDrawable.getIntrinsicHeight());
         mEditText.setError(errorMessage, customErrorDrawable);
         updateFocus();

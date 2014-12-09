@@ -92,6 +92,7 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
                 256,
                 true,
                 false);
+
         this.modelNumber = this.createSimpleFieldView(R.string.tool_detail_model_number,
                 R.color.mt_red,
                 32,
@@ -103,6 +104,7 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
                 20,
                 false,
                 true);
+
         this.serialNumber = this.createSimpleFieldView(R.string.tool_detail_serial_number,
                 R.color.mt_black,
                 64,
@@ -124,13 +126,13 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
 
         this.proof = this.createLaunchableFieldView(R.string.tool_detail_proof,
                 R.color.mt_black,
-                64,
+                0,
                 false);
         this.proof.setHintColorTextResource(R.color.mt_black);
 
         this.category = this.createLaunchableFieldView(R.string.tool_detail_category,
                 R.color.mt_black,
-                64,
+                0,
                 false);
         this.category.setHintColorTextResource(R.color.mt_black);
 
@@ -389,7 +391,10 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
         view.setTextColorResource(color);
         view.setHintColorTextResource(R.color.mt_common_gray);
         view.setRequired(required);
-        view.setMaxLength(maxLength);
+
+        if (maxLength > 0) {
+            view.setMaxLength(maxLength);
+        }
 
         if (!editable) {
             view.setUneditable();
