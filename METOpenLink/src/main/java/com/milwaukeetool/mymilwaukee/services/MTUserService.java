@@ -1,5 +1,6 @@
 package com.milwaukeetool.mymilwaukee.services;
 
+import com.milwaukeetool.mymilwaukee.model.response.MTUserItemResponse;
 import com.milwaukeetool.mymilwaukee.model.MTUserProfile;
 import com.milwaukeetool.mymilwaukee.model.request.MTItemDetailRequest;
 import com.milwaukeetool.mymilwaukee.model.request.MTPasswordRequest;
@@ -41,4 +42,7 @@ public interface MTUserService {
 
     @POST("/accounts/me/items")
     void addItem(@Header("Authorization") String authorization, @Body MTItemDetailRequest request, Callback<Response> callback);
+
+    @GET("/accounts/me/items")
+    void getItems(@Header("Authorization") String authorization, Callback<MTUserItemResponse> callback);
 }

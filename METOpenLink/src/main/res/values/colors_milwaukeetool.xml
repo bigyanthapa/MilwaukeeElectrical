@@ -2,6 +2,7 @@
 <resources>
 
     <color name="mt_red">#db011c</color>
+    <color name="mt_red_selected">#cc0025</color>
 
     <color name="mt_black_mask">#C7000000</color>
 
