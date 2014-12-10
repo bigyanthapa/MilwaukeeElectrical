@@ -9,10 +9,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.AddItemActivity;
 import com.milwaukeetool.mymilwaukee.activity.MTActivity;
+import com.milwaukeetool.mymilwaukee.model.MTSection;
 import com.milwaukeetool.mymilwaukee.model.response.MTUserItemResponse;
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
@@ -34,8 +37,10 @@ public class InventoryFragment extends MTFragment {
     private static final String ARG_POSITION = "position";
     private MTButton mAddInventoryBtn;
 
-    private View mNoInventoryView;
-    private View mInventoryView;
+    private LinearLayout mNoInventoryLayout;
+    private RelativeLayout mInventoryLayout;
+
+    private View mCurrentView;
 
     private int position;
 
@@ -58,9 +63,16 @@ public class InventoryFragment extends MTFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        this.mNoInventoryView = inflater.inflate(R.layout.fragment_no_inventory, container, false);
-        this.mInventoryView = inflater.inflate(R.layout.fragment_inventory, container, false);
-        return new View(this.getActivity());
+        View rootView = inflater.inflate(R.layout.fragment_inventory, container, false);
+
+        // Pull back layouts to set visibility
+        mNoInventoryLayout = (LinearLayout)rootView.findViewById(R.id.inventoryEmptyLayout);
+        mInventoryLayout = (RelativeLayout)rootView.findViewById(R.id.inventoryNormalLayout);
+
+        mInventoryLayout.setVisibility(View.VISIBLE);
+        mNoInventoryLayout.setVisibility(View.INVISIBLE);
+
+        return rootView;
     }
 
     @Override
@@ -83,31 +95,49 @@ public class InventoryFragment extends MTFragment {
 
             @Override
             public void failure(RetrofitError retrofitError) {
+
+                MTActivity activity = (MTActivity) InventoryFragment.this.getActivity();
+                activity.getProgressView().stopProgress();
+
+                // TODO:Need to do more here, see another implementation
+
                 int a = 3;
             }
         };
 
+        // Start progress before making web service call
+        MTActivity activity = (MTActivity) this.getActivity();
+        if (activity != null) {
+            // TODO:
+            activity.getProgressView().updateMessageAndStart("UPDATE THIS MESSAGE");
+        }
+
         MTWebInterface.sharedInstance().getUserService().getItems(
                 MTUtils.getAuthHeaderForBearerToken(),
                 responseCallback);
-
-        MTActivity activity = (MTActivity) this.getActivity();
-        if (activity != null) {
-            activity.getProgressView().startProgress();
-        }
     }
 
     public void updateView(MTUserItemResponse result) {
         MTActivity activity = (MTActivity) InventoryFragment.this.getActivity();
         activity.getProgressView().stopProgress();
 
-        this.getView().setVisibility(View.GONE);
-
-        if (result == null || result.isEmpty()) {
-            this.mNoInventoryView.setVisibility(View.VISIBLE);
-        } else {
-            this.mInventoryView.setVisibility(View.VISIBLE);
+        // TODO Add a helper function here to do this calculation, and clean it up, I just did this to show you idea
+        boolean hasResults = (result != null) && !result.isEmpty();
+        boolean hasItems = false;
+        if (hasResults && result.getSections() != null) {
+            for(MTSection section : result.getSections()) {
+                if (section != null) {
+                    if (section.getItems() != null && section.getItems().size() > 0) {
+                        hasItems = true;
+                        break;
+                    }
+                }
+            }
         }
+
+        // Update both layouts always
+        this.mNoInventoryLayout.setVisibility(hasItems ? View.INVISIBLE : View.VISIBLE);
+        this.mInventoryLayout.setVisibility(hasItems ? View.VISIBLE : View.INVISIBLE);
     }
 
     @Override

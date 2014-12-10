@@ -1,14 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="@color/mt_very_light_gray">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/main_title_inventory"
-        android:textSize="@dimen/mt_font_size_large"
-        android:layout_centerInParent="true"/>
+    <RelativeLayout
+        android:id="@+id/inventoryNormalLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/mt_very_light_gray"
+        android:visibility="visible">
 
-</RelativeLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/main_title_inventory"
+            android:textSize="@dimen/mt_font_size_large"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:id="@+id/inventoryEmptyLayout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible">
+
+        <com.milwaukeetool.mymilwaukee.view.MTTextView
+            android:id="@+id/noInventoryTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_inventory_message"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:paddingTop="@dimen/mt_padding_xl"
+            android:paddingBottom="@dimen/mt_padding_large"
+            android:background="@color/mt_white"
+            android:singleLine="false"
+            android:lineSpacingExtra="@dimen/mt_padding_standard"
+            android:textColor="@color/mt_common_gray"
+            android:textSize="@dimen/mt_font_size_large"/>
+
+        <com.milwaukeetool.mymilwaukee.view.MTButton
+            android:id="@+id/addInventoryBtn"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="@dimen/mt_margin_large"
+            android:layout_marginRight="@dimen/mt_margin_large"
+            android:layout_marginTop="@dimen/mt_margin_large"
+            android:background="@drawable/red_button_selector"
+            android:text="@string/btn_add_inventory"
+            android:textColor="@color/mt_white" />
+
+    </LinearLayout>
+
+</FrameLayout>
