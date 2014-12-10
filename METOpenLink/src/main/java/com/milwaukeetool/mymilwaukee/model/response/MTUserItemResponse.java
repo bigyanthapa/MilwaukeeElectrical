@@ -3,6 +3,7 @@ package com.milwaukeetool.mymilwaukee.model.response;
 import com.google.gson.annotations.SerializedName;
 import com.milwaukeetool.mymilwaukee.model.MTSection;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,13 +12,13 @@ import java.util.List;
 public class MTUserItemResponse {
 
     @SerializedName("sections")
-    private List<MTSection> sections;
+    private ArrayList<MTSection> sections;
 
-    public List<MTSection> getSections() {
+    public ArrayList<MTSection> getSections() {
         return sections;
     }
 
-    public void setSections(List<MTSection> sections) {
+    public void setSections(ArrayList<MTSection> sections) {
         this.sections = sections;
     }
 

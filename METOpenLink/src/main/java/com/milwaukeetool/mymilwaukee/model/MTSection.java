@@ -2,6 +2,7 @@ package com.milwaukeetool.mymilwaukee.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,19 +10,19 @@ import java.util.List;
  */
 public class MTSection {
     @SerializedName("sectionId")
-    private Integer id;
+    private String id;
 
     @SerializedName("title")
     private String title;
 
     @SerializedName("items")
-    private List<MTUserItem> items;
+    private ArrayList<MTUserItem> items;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -33,11 +34,11 @@ public class MTSection {
         this.title = title;
     }
 
-    public List<MTUserItem> getItems() {
+    public ArrayList<MTUserItem> getItems() {
         return items;
     }
 
-    public void setItem(List<MTUserItem> items) {
+    public void setItem(ArrayList<MTUserItem> items) {
         this.items = items;
     }
 }
