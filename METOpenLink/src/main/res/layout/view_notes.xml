@@ -33,14 +33,16 @@
         android:paddingBottom="@dimen/mt_padding_large"
         android:paddingLeft="@dimen/mt_padding_large"
         android:paddingRight="@dimen/mt_padding_large"
-        android:background="@null"
-        android:gravity="top|start"
+        android:background="@android:color/transparent"
+        android:gravity="top"
         android:lines="5"
+        android:singleLine="false"
+        android:maxLines="10"
         android:maxLength="256"
         android:textSize="@dimen/mt_font_size_standard"
         android:hint="@string/add_item_notes_hint"
         android:textColorHint="@color/mt_very_light_gray"
         android:textCursorDrawable="@null"
-        android:textIsSelectable="true"/>
+        android:textIsSelectable="true" />
 
 </LinearLayout>
