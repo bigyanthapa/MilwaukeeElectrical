@@ -10,9 +10,9 @@
     <com.milwaukeetool.mymilwaukee.view.MTTextView
         android:id="@+id/loadItemMessageTextView"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="100dp"
         android:gravity="center"
-        android:text="Loading Inventory"
+        android:text="@string/add_item_loading_inventory"
         android:layout_centerVertical="true"
         android:textColor="@color/mt_black"
         android:textSize="@dimen/mt_font_size_large"

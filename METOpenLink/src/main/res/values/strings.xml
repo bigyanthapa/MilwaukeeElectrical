@@ -2,11 +2,11 @@
 <resources>
 
     <string name="app_name">My Milwaukee</string>
-    <string name="action_settings">Settings</string>
-
     <string name="title_my_milwaukee">My Milwaukee</string>
+    <string name="error_text_offline">The Internet connection appears to be offline.</string>
 
     <!-- Actions -->
+    <string name="action_settings">Settings</string>
     <string name="action_save">Save</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_add_item">Add Item</string>
@@ -101,7 +101,6 @@
     <string name="sign_in_field_title_password">Password</string>
     <string name="text_sign_in_failure">The Email Address field or Password field is incorrect.</string>
 
-
     <!-- Change Password -->
     <string name="change_password_title">Change Password</string>
     <string name="change_password_current">Current Password</string>
@@ -111,7 +110,6 @@
     <string name="change_password_error">Unable to Change Password</string>
     <string name="change_password_saving">Saving Password</string>
 
-
     <!-- Error Dialogs -->
     <string name="dialog_title_register_failure">Error Registering</string>
     <string name="dialog_title_sign_in_failure">Error Signing In</string>
@@ -120,16 +118,16 @@
     <string name="dialog_title_update_profile_failure">Error Updating Profile</string>
     <string name="dialog_title_add_item_failure">Error Saving Item</string>
 
-    <string name="error_text_offline">The Internet connection appears to be offline.</string>
-
     <!-- Add Item -->
-    <string name="add_item_milwaukee_search_message">Search for a Milwaukee model\n number using the * icon above.</string>
     <string name="search_replace_wildcard_string">*</string>
+    <string name="add_item_milwaukee_search_message">Search for a Milwaukee model\n number using the * icon above.</string>
     <string name="add_item_milwaukee_select_other_message">Select <![CDATA[<strong>OTHER</strong>]]> to enter an item<![CDATA[<br />]]> from a different manufacturer.</string>
     <string name="add_item_search_error">Search Failed</string>
     <string name="add_item_notes_title">Notes</string>
     <string name="add_item_notes_hint">Enter notes here...</string>
+    <string name="add_item_loading_inventory">Loading Inventory...</string>
 
+    <!-- Add Item Details-->
     <string name="item_detail_product_information">PRODUCT INFORMATION</string>
 
 </resources>
