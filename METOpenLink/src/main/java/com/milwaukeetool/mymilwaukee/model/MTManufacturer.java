@@ -7,20 +7,23 @@ import com.google.gson.annotations.SerializedName;
  */
 public class MTManufacturer {
     @SerializedName("manufacturerId")
-    private Integer id;
+    private Integer manufacturerId;
 
     @SerializedName("isPrimary")
     private boolean primary;
 
     @SerializedName("manufacturerName")
-    private String name;
+    private String manufacturerName;
+
+    @SerializedName("itemCount")
+    private String itemCount;
 
     public Integer getId() {
-        return id;
+        return manufacturerId;
     }
 
     public void setId(Integer id) {
-        this.id = id;
+        manufacturerId = id;
     }
 
     public boolean isPrimary() {
@@ -32,10 +35,18 @@ public class MTManufacturer {
     }
 
     public String getName() {
-        return name;
+        return manufacturerName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.manufacturerName = name;
+    }
+
+    public String getItemCount() {
+        return itemCount;
+    }
+
+    public void setItemCount(String itemCount) {
+        this.itemCount = itemCount;
     }
 }

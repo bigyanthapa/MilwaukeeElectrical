@@ -28,6 +28,10 @@ public class MTWebInterface {
 
     private MTInventoryService mInventoryService = null;
 
+    private MTUserItemService mUserItemService = null;
+
+    private MTUserManufacturerService mUserManufacturerService = null;
+
     Converter DATA_CONVERTER = new GsonConverter(new Gson());
     String SERVICE_ENDPOINT = MTConfig.getWebServicesBaseURL();
 
@@ -67,6 +71,24 @@ public class MTWebInterface {
             mInventoryService = mRestAdapter.create(MTInventoryService.class);
         }
         return mInventoryService;
+    }
+
+    public MTUserItemService getUserItemService() {
+
+        if (mUserItemService == null) {
+            // Create the user service
+            mUserItemService = mRestAdapter.create(MTUserItemService.class);
+        }
+        return mUserItemService;
+    }
+
+    public MTUserManufacturerService geUserManufacturerService() {
+
+        if (mUserManufacturerService == null) {
+            // Create the user service
+            mUserManufacturerService = mRestAdapter.create(MTUserManufacturerService.class);
+        }
+        return mUserManufacturerService;
     }
 
     public static String getErrorMessage(RetrofitError retrofitError) {
