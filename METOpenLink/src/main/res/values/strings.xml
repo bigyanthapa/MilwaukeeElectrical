@@ -130,4 +130,8 @@
     <!-- Add Item Details-->
     <string name="item_detail_product_information">PRODUCT INFORMATION</string>
 
+    <!-- Add Other Item -->
+    <string name="add_other_item_add_manufacturer">Add Manufacturer</string>
+    <string name="add_other_item_manufacturer_name">Manufacturer Name</string>
+
 </resources>

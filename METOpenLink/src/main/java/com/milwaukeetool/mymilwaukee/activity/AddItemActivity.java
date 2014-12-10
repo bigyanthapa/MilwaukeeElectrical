@@ -11,6 +11,7 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.fragment.ItemSearchResultsFragment;
 import com.milwaukeetool.mymilwaukee.fragment.MilwaukeeItemFragment;
+import com.milwaukeetool.mymilwaukee.fragment.OtherItemFragment;
 import com.milwaukeetool.mymilwaukee.interfaces.FirstPageFragmentListener;
 import com.milwaukeetool.mymilwaukee.services.MTInventoryHelper;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
@@ -166,7 +167,7 @@ public class AddItemActivity extends MTActivity {
                     return mFragmentAtPos0;
 
                 case 1:
-                    mOtherFragment = new Fragment();
+                    mOtherFragment = OtherItemFragment.newInstance(position);
                     return mOtherFragment;
 
                 default:
