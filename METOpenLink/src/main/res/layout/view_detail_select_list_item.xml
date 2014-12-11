@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="45dp"
+    android:descendantFocusability="blocksDescendants">
+
+    <com.milwaukeetool.mymilwaukee.view.MTTextView
+        android:id="@+id/detailSelectListItemTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/mt_margin_large"
+        android:layout_marginEnd="@dimen/mt_margin_small"
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:textSize="@dimen/mt_font_size_standard"
+        android:focusable="false"/>
+
+    <RelativeLayout
+        android:id="@+id/detailSelectListItemExtraButton"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/mt_margin_large"
+        android:layout_marginStart="@dimen/mt_margin_small"
+        android:layout_alignParentEnd="true"
+        android:background="@android:color/transparent"
+        android:clickable="true">
+
+        <ImageView
+            android:id="@+id/detailSelectListItemImageView"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@android:color/transparent"
+            android:layout_centerInParent="true" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

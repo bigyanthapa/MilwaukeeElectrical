@@ -292,7 +292,7 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
 
                 if (this.isFieldsValid()) {
                     mSaveInProgress = true;
-                    mProgressView.updateMessageAndStart(MiscUtils.getString(R.string.progress_bar_saving_item_details));
+                    mProgressView.updateMessageAndStart(MiscUtils.getString(R.string.progress_bar_saving));
                     MTItemDetailRequest detailRequest = this.constructMTItemDetailRequest();
 
                     MTWebInterface.sharedInstance().getUserService().addItem(MTUtils.getAuthHeaderForBearerToken(),

@@ -9,15 +9,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.AddItemActivity;
-import com.milwaukeetool.mymilwaukee.activity.CreateAccountActivity;
 import com.milwaukeetool.mymilwaukee.activity.MTActivity;
-import com.milwaukeetool.mymilwaukee.config.MTConstants;
-import com.milwaukeetool.mymilwaukee.model.MTSection;
 import com.milwaukeetool.mymilwaukee.model.response.MTUserItemResponse;
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
@@ -40,7 +36,7 @@ public class InventoryFragment extends MTFragment {
     private static final String ARG_POSITION = "position";
     private MTButton mAddInventoryBtn;
 
-    private LinearLayout mNoInventoryLayout;
+    private RelativeLayout mNoInventoryLayout;
     private RelativeLayout mInventoryLayout;
 
     private View mCurrentView;
@@ -77,7 +73,7 @@ public class InventoryFragment extends MTFragment {
         });
 
         // Pull back layouts to set visibility
-        mNoInventoryLayout = (LinearLayout)rootView.findViewById(R.id.inventoryEmptyLayout);
+        mNoInventoryLayout = (RelativeLayout)rootView.findViewById(R.id.inventoryEmptyLayout);
         mInventoryLayout = (RelativeLayout)rootView.findViewById(R.id.inventoryNormalLayout);
 
         mInventoryLayout.setVisibility(View.VISIBLE);
@@ -124,7 +120,7 @@ public class InventoryFragment extends MTFragment {
         // Start progress before making web service call
         MTActivity activity = (MTActivity) this.getActivity();
         if (activity != null) {
-            activity.getProgressView().updateMessageAndStart(MiscUtils.getString(R.string.progress_bar_getting_inventory));
+            activity.getProgressView().updateMessageAndStart(MiscUtils.getString(R.string.progress_bar_default_message));
         }
 
         MTWebInterface.sharedInstance().getUserService().getItems(

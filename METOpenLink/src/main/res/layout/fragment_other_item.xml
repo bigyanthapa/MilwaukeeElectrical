@@ -1,26 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:id="@+id/otherItemLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mt_white">
 
-    <RelativeLayout
-        android:id="@+id/inventoryNormalLayout"
+    <ListView
+        android:id="@+id/otherItemManufacturerListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/mt_very_light_gray"
-        android:visibility="visible">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/main_title_inventory"
-            android:textSize="@dimen/mt_font_size_large"
-            android:layout_centerInParent="true"/>
-
-    </RelativeLayout>
+        android:choiceMode="singleChoice"
+        android:divider="@color/mt_divider_gray"
+        android:dividerHeight="1dp"
+        android:visibility="visible"/>
 
     <RelativeLayout
-        android:id="@+id/inventoryEmptyLayout"
+        android:id="@+id/otherItemNoManufacturerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -31,30 +27,30 @@
             android:layout_centerVertical="true">
 
             <com.milwaukeetool.mymilwaukee.view.MTTextView
-                android:id="@+id/noInventoryTextView"
+                android:id="@+id/otherItemNoManufacturerTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/no_inventory_message"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/mt_margin_xl"
-                android:layout_marginBottom="@dimen/mt_margin_small"
+                android:paddingBottom="@dimen/mt_padding_standard"
+                android:paddingTop="@dimen/mt_padding_standard"
                 android:background="@color/mt_white"
                 android:singleLine="false"
                 android:lineSpacingExtra="@dimen/mt_padding_standard"
                 android:textColor="@color/mt_common_gray"
-                android:textSize="@dimen/mt_font_size_large"/>
+                android:textSize="@dimen/mt_font_size_large"
+                android:text="@string/mfr_no_manufacturer_msg" />
 
             <com.milwaukeetool.mymilwaukee.view.MTButton
-                android:id="@+id/addInventoryBtn"
+                android:id="@+id/otherItemAddManufacturerButton"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginLeft="@dimen/mt_margin_large"
                 android:layout_marginRight="@dimen/mt_margin_large"
-                android:layout_marginTop="@dimen/mt_padding_small"
+                android:layout_marginTop="@dimen/mt_margin_standard"
                 android:background="@drawable/red_button_selector"
-                android:text="@string/btn_add_inventory"
-                android:textColor="@color/mt_white" />
+                android:textColor="@color/mt_white"
+                android:text="@string/mfr_add_other_item_add_manufacturer" />
 
             <View
                 android:layout_width="match_parent"
@@ -63,5 +59,7 @@
         </LinearLayout>
 
     </RelativeLayout>
+
+
 
 </FrameLayout>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="125dp"
+    android:background="@color/mt_white"
+    android:orientation="vertical">
+
+    <com.milwaukeetool.mymilwaukee.view.MTTextView
+        android:id="@+id/simpleDialogHeadingTextView"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="@dimen/mt_margin_standard"
+        android:layout_marginBottom="@dimen/mt_margin_standard"
+        android:layout_marginStart="@dimen/mt_margin_large"
+        android:background="@null"
+        android:gravity="center_vertical"
+        android:text="Heading"
+        android:textSize="21sp"
+        android:textColor="@color/mt_red" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/mt_red" />
+
+    <LinearLayout
+        android:id="@+id/simpleDialogContentLayout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
