@@ -82,7 +82,7 @@ public class MTWebInterface {
         return mUserItemService;
     }
 
-    public MTUserManufacturerService geUserManufacturerService() {
+    public MTUserManufacturerService getUserManufacturerService() {
 
         if (mUserManufacturerService == null) {
             // Create the user service

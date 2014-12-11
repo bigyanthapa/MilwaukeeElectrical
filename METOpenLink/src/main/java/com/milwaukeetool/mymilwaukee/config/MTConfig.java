@@ -13,27 +13,27 @@ public class MTConfig {
     // Intents
 
     // Server
-    public static String MT_API_END_POINT_QA = "http://openlink.qa12.centaredc.com/api";
+    public static String MT_API_END_POINT_QA = "http://openlink.qa14.centaredc.com/api";
     public static String MT_API_VERSION_QA = "v1";
     public static String MT_API_SECRET_QA = "bWlsd2F1a2VlX2lvczpiMGI4OTdlZDMxYmM2OGNhNjRiZDY4ZmU3NzcxZDkwMzQ1ODkzZTc4";
     public static String MT_API_SERVER_TOKEN_QA = "Basic bWlsd2F1a2VlX2FuZHJvaWQ6bmg1c2Z2dHgwcHF1bTM1cnpzNWdkNnJ4M3Q2bXQ1czN4d2JpaXRmeQ==";
 
-    public static String MT_API_END_POINT_UAT = "http://openlink.uat12.centaredc.com/api";
+    public static String MT_API_END_POINT_UAT = "http://openlink.uat14.centaredc.com/api";
     public static String MT_API_VERSION_UAT = "v1";
     public static String MT_API_SECRET_UAT = "bWlsd2F1a2VlX2lvczpiMGI4OTdlZDMxYmM2OGNhNjRiZDY4ZmU3NzcxZDkwMzQ1ODkzZTc4";
     public static String MT_API_SERVER_TOKEN_UAT = MT_API_SERVER_TOKEN_QA;
 
-    public static String MT_API_END_POINT_DEV = "http://openlink.dev12.centaredc.com/api";
+    public static String MT_API_END_POINT_DEV = "http://openlink.dev14.centaredc.com/api";
     public static String MT_API_VERSION_DEV = "v1";
     public static String MT_API_SECRET_DEV = "bWlsd2F1a2VlX2lvczpiMGI4OTdlZDMxYmM2OGNhNjRiZDY4ZmU3NzcxZDkwMzQ1ODkzZTc4";
     public static String MT_API_SERVER_TOKEN_DEV = MT_API_SERVER_TOKEN_QA;
 
-    public static String MT_API_END_POINT_PROD = "http://openlink.uat12.centaredc.com/api";
+    public static String MT_API_END_POINT_PROD = "http://openlink.uat14.centaredc.com/api";
     public static String MT_API_VERSION_PROD = "v1";
     public static String MT_API_SECRET_PROD = "bWlsd2F1a2VlX2lvczpiMGI4OTdlZDMxYmM2OGNhNjRiZDY4ZmU3NzcxZDkwMzQ1ODkzZTc4";
     public static String MT_API_SERVER_TOKEN_PROD = MT_API_SERVER_TOKEN_QA;
 
-    public static String MT_API_END_POINT_BETA = "http://openlink.uat12.centaredc.com/api";
+    public static String MT_API_END_POINT_BETA = "http://openlink.uat14.centaredc.com/api";
     public static String MT_API_VERSION_BETA = "v1";
     public static String MT_API_SECRET_BETA = "bWlsd2F1a2VlX2lvczpiMGI4OTdlZDMxYmM2OGNhNjRiZDY4ZmU3NzcxZDkwMzQ1ODkzZTc4";
     public static String MT_API_SERVER_TOKEN_BETA = MT_API_SERVER_TOKEN_QA;

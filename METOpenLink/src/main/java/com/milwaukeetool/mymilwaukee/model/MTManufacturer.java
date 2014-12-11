@@ -16,7 +16,7 @@ public class MTManufacturer {
     private String manufacturerName;
 
     @SerializedName("itemCount")
-    private String itemCount;
+    private int itemCount;
 
     public Integer getId() {
         return manufacturerId;
@@ -42,11 +42,11 @@ public class MTManufacturer {
         this.manufacturerName = name;
     }
 
-    public String getItemCount() {
+    public int getItemCount() {
         return itemCount;
     }
 
-    public void setItemCount(String itemCount) {
+    public void setItemCount(int itemCount) {
         this.itemCount = itemCount;
     }
 }
