@@ -14,7 +14,9 @@ import android.widget.RelativeLayout;
 
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.AddItemActivity;
+import com.milwaukeetool.mymilwaukee.activity.CreateAccountActivity;
 import com.milwaukeetool.mymilwaukee.activity.MTActivity;
+import com.milwaukeetool.mymilwaukee.config.MTConstants;
 import com.milwaukeetool.mymilwaukee.model.MTSection;
 import com.milwaukeetool.mymilwaukee.model.response.MTUserItemResponse;
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
@@ -66,6 +68,14 @@ public class InventoryFragment extends MTFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_inventory, container, false);
 
+        this.mAddInventoryBtn = (MTButton) rootView.findViewById(R.id.addInventoryBtn);
+        this.mAddInventoryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startAddItemActivity();
+            }
+        });
+
         // Pull back layouts to set visibility
         mNoInventoryLayout = (LinearLayout)rootView.findViewById(R.id.inventoryEmptyLayout);
         mInventoryLayout = (RelativeLayout)rootView.findViewById(R.id.inventoryNormalLayout);
@@ -78,7 +88,14 @@ public class InventoryFragment extends MTFragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        this.startAddItemActivity();
+        switch (item.getItemId()) {
+            case R.id.actionSearch:
+                this.startAddItemActivity();
+                break;
+            case R.id.actionRefresh:
+                this.checkInventory();
+                break;
+        }
         return true;
     }
 
