@@ -86,7 +86,7 @@ public class MTConfig {
             if (BuildConfig.MT_DISTRIBUTION_TYPE == MT_DISTRIBUTION_TYPE_QA) {
                 apiEndPoint = MT_API_END_POINT_QA;
             } else {
-                apiEndPoint = MT_API_END_POINT_DEV;
+                apiEndPoint = MT_API_END_POINT_QA;
             }
 
         } else if (BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_RELEASE)) {
@@ -104,7 +104,7 @@ public class MTConfig {
                     apiEndPoint = MT_API_END_POINT_BETA;
                     break;
                 default:
-                    apiEndPoint = MT_API_END_POINT_DEV;
+                    apiEndPoint = MT_API_END_POINT_QA;
             }
         }
 
@@ -118,7 +118,7 @@ public class MTConfig {
             if (BuildConfig.MT_DISTRIBUTION_TYPE == MT_DISTRIBUTION_TYPE_QA) {
                 apiEndPoint = MT_API_VERSION_QA;
             } else {
-                apiEndPoint = MT_API_VERSION_DEV;
+                apiEndPoint = MT_API_VERSION_QA;
             }
 
         } else if (BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_RELEASE)) {
@@ -136,7 +136,7 @@ public class MTConfig {
                     apiEndPoint = MT_API_VERSION_BETA;
                     break;
                 default:
-                    apiEndPoint = MT_API_VERSION_DEV;
+                    apiEndPoint = MT_API_VERSION_QA;
             }
         }
 
@@ -150,7 +150,7 @@ public class MTConfig {
             if (BuildConfig.MT_DISTRIBUTION_TYPE == MT_DISTRIBUTION_TYPE_QA) {
                 apiSecret = MT_API_SECRET_QA;
             } else {
-                apiSecret = MT_API_SECRET_DEV;
+                apiSecret = MT_API_SECRET_QA;
             }
         } else if (BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_RELEASE)) {
             switch (BuildConfig.MT_DISTRIBUTION_TYPE) {
@@ -167,7 +167,7 @@ public class MTConfig {
                     apiSecret = MT_API_SECRET_BETA;
                     break;
                 default:
-                    apiSecret = MT_API_SECRET_DEV;
+                    apiSecret = MT_API_SECRET_QA;
             }
         }
 
@@ -181,7 +181,7 @@ public class MTConfig {
             if (BuildConfig.MT_DISTRIBUTION_TYPE == MT_DISTRIBUTION_TYPE_QA) {
                 serverToken = MT_API_SERVER_TOKEN_QA;
             } else {
-                serverToken = MT_API_SERVER_TOKEN_DEV;
+                serverToken = MT_API_SERVER_TOKEN_QA;
             }
         } else if (BuildConfig.BUILD_TYPE.equalsIgnoreCase(MT_BUILD_TYPE_RELEASE)) {
             switch (BuildConfig.MT_DISTRIBUTION_TYPE) {
@@ -198,7 +198,7 @@ public class MTConfig {
                     serverToken = MT_API_SERVER_TOKEN_BETA;
                     break;
                 default:
-                    serverToken = MT_API_SERVER_TOKEN_DEV;
+                    serverToken = MT_API_SERVER_TOKEN_QA;
             }
         }
 

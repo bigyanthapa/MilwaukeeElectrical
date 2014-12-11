@@ -25,7 +25,7 @@ public class MTUserItem {
     private Integer serialNumber;
 
     @SerializedName("dateAdded")
-    private Date dateAdded;
+    private String dateAdded;
 
     @SerializedName("modelNumber")
     private String modelNumber;
@@ -88,11 +88,11 @@ public class MTUserItem {
         this.serialNumber = serialNumber;
     }
 
-    public Date getDateAdded() {
+    public String getDateAdded() {
         return dateAdded;
     }
 
-    public void setDateAdded(Date dateAdded) {
+    public void setDateAdded(String dateAdded) {
         this.dateAdded = dateAdded;
     }
 

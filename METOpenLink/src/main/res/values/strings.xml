@@ -94,6 +94,7 @@
     <string name="progress_bar_saving_user_details">Updating Profile...</string>
     <string name="progress_bar_saving_item_details">Saving...</string>
     <string name="progress_bar_searching">Searching...</string>
+    <string name="progress_bar_getting_inventory">Getting Inventory...</string>
 
     <!-- Sign In -->
     <string name="title_sign_in_my_milwaukee_account">Sign in with My Milwaukee&#174; account</string>
@@ -117,6 +118,7 @@
     <string name="dialog_title_get_profile_failure">Error Getting User Details</string>
     <string name="dialog_title_update_profile_failure">Error Updating Profile</string>
     <string name="dialog_title_add_item_failure">Error Saving Item</string>
+    <string name="dialog_title_retrieve_inventory_failure">Error Getting Inventory</string>
 
     <!-- Add Item -->
     <string name="search_replace_wildcard_string">*</string>
