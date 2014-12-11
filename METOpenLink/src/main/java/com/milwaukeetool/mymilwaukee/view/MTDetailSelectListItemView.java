@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.widget.ImageView;
+import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.joanzapata.android.iconify.IconDrawable;
@@ -24,7 +24,7 @@ public class MTDetailSelectListItemView extends RelativeLayout {
     private Activity mCallingActivity;
 
     private MTTextView mTextView;
-    private ImageView mImageView;
+    private MTButton mExtraButton;
 
     private String mItemText;
 
@@ -66,10 +66,17 @@ public class MTDetailSelectListItemView extends RelativeLayout {
     private void setupView() {
 
         mTextView = (MTTextView) this.findViewById(R.id.detailSelectListItemTextView);
-        mImageView = (ImageView) this.findViewById(R.id.detailSelectListItemImageView);
+        mExtraButton = (MTButton) this.findViewById(R.id.detailSelectListItemExtraButton);
 
         final IconDrawable ellipsis = new IconDrawable(MilwaukeeToolApplication.getAppContext(), Iconify.IconValue.fa_ellipsis_v).colorRes(R.color.mt_common_gray).sizeDp(20);
-        mImageView.setImageDrawable(ellipsis);
+        mExtraButton.setBackground(ellipsis);
+
+        mExtraButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     public String getItemText() {

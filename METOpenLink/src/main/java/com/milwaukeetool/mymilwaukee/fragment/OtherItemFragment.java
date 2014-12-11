@@ -15,6 +15,8 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupMenu;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.joanzapata.android.iconify.IconDrawable;
@@ -29,6 +31,8 @@ import com.milwaukeetool.mymilwaukee.model.response.MTUserManufacturerDetailsRes
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
+import com.milwaukeetool.mymilwaukee.util.UIUtils;
+import com.milwaukeetool.mymilwaukee.view.MTButton;
 import com.milwaukeetool.mymilwaukee.view.MTSimpleEntryDialog;
 
 import java.util.ArrayList;
@@ -58,6 +62,9 @@ public class OtherItemFragment extends Fragment {
     private OtherItemManufacturerAdapter mAdapter;
     private LayoutInflater mInflater;
     private MenuItem mOtherItemAddManufacturer;
+
+    private RelativeLayout mNoManufacturerLayout;
+    private MTButton mAddManufacturerButton;
 
     public static OtherItemFragment newInstance(int position) {
         OtherItemFragment f = new OtherItemFragment();
@@ -90,6 +97,18 @@ public class OtherItemFragment extends Fragment {
         mInflater = LayoutInflater.from(this.getActivity());
 
         mListView = (ListView)rootView.findViewById(R.id.otherItemManufacturerListView);
+        mListView.setVisibility(View.VISIBLE);
+
+        mNoManufacturerLayout = (RelativeLayout)rootView.findViewById(R.id.otherItemNoManufacturerLayout);
+        mNoManufacturerLayout.setVisibility(View.INVISIBLE);
+
+        mAddManufacturerButton = (MTButton)rootView.findViewById(R.id.otherItemAddManufacturerButton);
+        mAddManufacturerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAddManufacturerDialog();
+            }
+        });
 
         mAdapter = new OtherItemManufacturerAdapter(this.getActivity(), null);
 
@@ -101,7 +120,6 @@ public class OtherItemFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 LOGD(TAG, "Clicked list item at position: " + position);
-
 
             }
         });
@@ -127,62 +145,10 @@ public class OtherItemFragment extends Fragment {
             LOGD(TAG, "Adding a manufacturer");
 
             // Add manufacturer dialog
-            MTSimpleEntryDialog dialog = new MTSimpleEntryDialog(this.getActivity(),
-                    MiscUtils.getString(R.string.add_other_item_add_manufacturer),
-                    MiscUtils.getString(R.string.add_other_item_manufacturer_name), null, 64);
-
-            dialog.showDialog(new MTAlertDialogListener() {
-
-                @Override
-                public void didTapCancel() {
-
-                }
-
-                @Override
-                public void didTapOkWithResult(Object result) {
-
-                    if (result instanceof String) {
-
-                        LOGD(TAG, "Add Manufacturer: OK with RESULT: " + (String)result);
-
-                        Callback<Response> responseCallback = new Callback<Response>() {
-                            @Override
-                            public void success(Response result, Response response) {
-
-                                mAddItemActivity.getProgressView().stopProgress();
-
-                                LOGD(TAG, "Successfully added user manufacturer");
-
-                                loadManufacturers(true);
-                            }
-
-                            @Override
-                            public void failure(RetrofitError retrofitError) {
-
-                                mAddItemActivity.getProgressView().stopProgress();
-
-                                LOGD(TAG, "Failed to add user manufacturer");
-
-                                MTUtils.handleRetrofitError(retrofitError, mAddItemActivity, "Failed to Add Manufacturer");
-                            }
-                        };
-
-                        mAddItemActivity.getProgressView().updateMessageAndStart("Adding manufacturer...");
-
-                        MTUserManufacturerRequest request = new MTUserManufacturerRequest();
-                        request.setManufacturerName((String)result);
-
-                        MTWebInterface.sharedInstance().getUserManufacturerService().addManufacturer(
-                                MTUtils.getAuthHeaderForBearerToken(),
-                                request, responseCallback);
-
-                    }
-
-                }
-            });
+            showAddManufacturerDialog();
+            return true;
         }
-
-        return true;
+        return false;
     }
 
     @Override
@@ -230,12 +196,13 @@ public class OtherItemFragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            View view;
-            ViewHolder holder;
+            final View view;
+            final ViewHolder holder;
             if(convertView == null) {
 
                 view = mInflater.inflate(R.layout.view_detail_select_list_item, parent, false);
                 holder = new ViewHolder();
+                holder.detailSelectLayoutButton = (RelativeLayout)view.findViewById(R.id.detailSelectListItemExtraButton);
                 holder.detailSelectImageView = (ImageView)view.findViewById(R.id.detailSelectListItemImageView);
                 holder.detailSelectTextView = (TextView)view.findViewById(R.id.detailSelectListItemTextView);
                 view.setTag(holder);
@@ -247,13 +214,38 @@ public class OtherItemFragment extends Fragment {
             MTManufacturer otherItemManufacturer = mOtherItemManufacturers.get(position);
 
             final IconDrawable ellipsis = new IconDrawable(MilwaukeeToolApplication.getAppContext(), Iconify.IconValue.fa_ellipsis_v).colorRes(R.color.mt_common_gray).sizeDp(20);
-            holder.detailSelectImageView.setImageDrawable(ellipsis);
+            holder.detailSelectImageView.setBackground(ellipsis);
             holder.detailSelectTextView.setText(otherItemManufacturer.getName() + " (" + otherItemManufacturer.getItemCount() + ")");
+
+            holder.detailSelectLayoutButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    LOGD(TAG, "Tapped list item extra button!!!!");
+
+                    PopupMenu menu = new PopupMenu(OtherItemFragment.this.getActivity(), holder.detailSelectLayoutButton);
+
+                    menu.getMenuInflater().inflate(R.menu.manufacturer_options_menu, menu.getMenu());
+
+                    menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+
+                            LOGD(TAG, "Clicked item in popup menu");
+
+
+                            return false;
+                        }
+                    });
+
+                    menu.show();
+                }
+            });
 
             return view;
         }
 
         private class ViewHolder {
+            public RelativeLayout detailSelectLayoutButton;
             public ImageView detailSelectImageView;
             public TextView detailSelectTextView;
         }
@@ -265,7 +257,9 @@ public class OtherItemFragment extends Fragment {
 
         public void updateManufacturers(ArrayList<MTManufacturer> manufacturers) {
             clearManufacturers();
-            mOtherItemManufacturers.addAll(manufacturers);
+            if (manufacturers != null) {
+                mOtherItemManufacturers.addAll(manufacturers);
+            }
             notifyDataSetChanged();
         }
 
@@ -290,13 +284,7 @@ public class OtherItemFragment extends Fragment {
 
                 mAddItemActivity.getProgressView().stopProgress();
 
-                ArrayList<MTManufacturer> otherManufacturers = getOtherManufacturers(result.getItems());
-
-                LOGD(TAG, "Successfully retrieved user manufacturers: " + otherManufacturers.size());
-
-                mLoadedManufacturers = true;
-
-                mAdapter.updateManufacturers(otherManufacturers);
+                updateManufacturersWithResponse(result);
             }
 
             @Override
@@ -306,14 +294,17 @@ public class OtherItemFragment extends Fragment {
 
                 LOGD(TAG, "Failed to retrieve user manufacturers");
 
-                MTUtils.handleRetrofitError(retrofitError, mAddItemActivity, "ERROR Manufacturers");
+                MTUtils.handleRetrofitError(retrofitError, mAddItemActivity, MiscUtils.getString(R.string.mfr_dialog_title_get_manufacturers_failure));
+
+                mAdapter.updateManufacturers(null);
             }
         };
 
-        mAddItemActivity.getProgressView().updateMessageAndStart("Retrieving manufacturers...");
+        mAddItemActivity.getProgressView().updateMessageAndStart(MiscUtils.getString(R.string.progress_bar_default_message));
 
+        // Get non-Milwaukee manufacturers
         MTWebInterface.sharedInstance().getUserManufacturerService().getManufacturers(MTUtils.getAuthHeaderForBearerToken(),
-                true, responseCallback);
+                false, responseCallback);
     }
 
     public ArrayList<MTManufacturer> getOtherManufacturers(ArrayList<MTManufacturer> allManufacturers) {
@@ -327,6 +318,84 @@ public class OtherItemFragment extends Fragment {
             }
         }
         return otherManufacturers;
+    }
+
+    private void updateManufacturersWithResponse(MTUserManufacturerDetailsResponse response) {
+
+        if (response != null) {
+            ArrayList<MTManufacturer> otherManufacturers = response.getItems();
+
+            mLoadedManufacturers = true;
+
+            if (otherManufacturers != null && otherManufacturers.size() > 0) {
+                LOGD(TAG, "Successfully retrieved user manufacturers: " + otherManufacturers.size());
+                mAdapter.updateManufacturers(otherManufacturers);
+                mNoManufacturerLayout.setVisibility(View.INVISIBLE);
+                mListView.setVisibility(View.VISIBLE);
+            } else {
+                mNoManufacturerLayout.setVisibility(View.VISIBLE);
+                mListView.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
+
+    private void showAddManufacturerDialog() {
+        MTSimpleEntryDialog dialog = new MTSimpleEntryDialog(this.getActivity(),
+                MiscUtils.getString(R.string.mfr_add_other_item_add_manufacturer),
+                MiscUtils.getString(R.string.mfr_add_other_item_manufacturer_name), null, 64);
+
+        dialog.showDialog(new MTAlertDialogListener() {
+
+            @Override
+            public void didTapCancel() {
+
+            }
+
+            @Override
+            public void didTapOkWithResult(Object result) {
+
+                if (result instanceof String) {
+
+                    LOGD(TAG, "Add Manufacturer: OK with RESULT: " + (String)result);
+
+                    Callback<Response> responseCallback = new Callback<Response>() {
+                        @Override
+                        public void success(Response result, Response response) {
+
+                            mAddItemActivity.getProgressView().stopProgress();
+
+                            UIUtils.hideKeyboard(OtherItemFragment.this.getActivity());
+
+                            LOGD(TAG, "Successfully added user manufacturer");
+
+                            loadManufacturers(true);
+                        }
+
+                        @Override
+                        public void failure(RetrofitError retrofitError) {
+
+                            mAddItemActivity.getProgressView().stopProgress();
+
+                            UIUtils.hideKeyboard(OtherItemFragment.this.getActivity());
+
+                            LOGD(TAG, "Failed to add user manufacturer");
+
+                            MTUtils.handleRetrofitError(retrofitError, mAddItemActivity, MiscUtils.getString(R.string.mfr_dialog_title_add_manufacturer_failure));
+                        }
+                    };
+
+                    mAddItemActivity.getProgressView().updateMessageAndStart(MiscUtils.getString(R.string.progress_bar_saving));
+
+                    MTUserManufacturerRequest request = new MTUserManufacturerRequest();
+                    request.setManufacturerName((String)result);
+
+                    MTWebInterface.sharedInstance().getUserManufacturerService().addManufacturer(
+                            MTUtils.getAuthHeaderForBearerToken(),
+                            request, responseCallback);
+
+                }
+            }
+        });
     }
 
 }

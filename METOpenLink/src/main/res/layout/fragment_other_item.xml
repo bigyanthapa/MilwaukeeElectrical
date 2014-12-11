@@ -16,21 +16,50 @@
         android:visibility="visible"/>
 
     <RelativeLayout
-        android:id="@+id/itemSearchResultsNoItemsLayout"
+        android:id="@+id/otherItemNoManufacturerLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/mt_white"
-        android:visibility="invisible">
+        android:layout_height="match_parent">
 
-        <com.milwaukeetool.mymilwaukee.view.MTTextView
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:text="No Items Found"
-            android:textSize="@dimen/mt_font_size_standard"
-            android:textColorLink="@color/mt_common_gray" />
+            android:layout_centerVertical="true">
+
+            <com.milwaukeetool.mymilwaukee.view.MTTextView
+                android:id="@+id/otherItemNoManufacturerTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:paddingBottom="@dimen/mt_padding_standard"
+                android:paddingTop="@dimen/mt_padding_standard"
+                android:background="@color/mt_white"
+                android:singleLine="false"
+                android:lineSpacingExtra="@dimen/mt_padding_standard"
+                android:textColor="@color/mt_common_gray"
+                android:textSize="@dimen/mt_font_size_large"
+                android:text="@string/mfr_no_manufacturer_msg" />
+
+            <com.milwaukeetool.mymilwaukee.view.MTButton
+                android:id="@+id/otherItemAddManufacturerButton"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginLeft="@dimen/mt_margin_large"
+                android:layout_marginRight="@dimen/mt_margin_large"
+                android:layout_marginTop="@dimen/mt_margin_standard"
+                android:background="@drawable/red_button_selector"
+                android:textColor="@color/mt_white"
+                android:text="@string/mfr_add_other_item_add_manufacturer" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="100dp" />
+
+        </LinearLayout>
 
     </RelativeLayout>
+
+
 
 </FrameLayout>
