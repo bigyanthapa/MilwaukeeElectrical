@@ -23,6 +23,14 @@ public class MTUserItemResponse {
     }
 
     public boolean isEmpty() {
-        return this.sections.isEmpty();
+        if (this.sections != null && !this.sections.isEmpty()) {
+            for (MTSection section : this.sections) {
+                if (section.containsItems()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

@@ -19,6 +19,7 @@ import com.milwaukeetool.mymilwaukee.model.MTSection;
 import com.milwaukeetool.mymilwaukee.model.response.MTUserItemResponse;
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
+import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.view.MTButton;
 
 import retrofit.Callback;
@@ -95,21 +96,18 @@ public class InventoryFragment extends MTFragment {
 
             @Override
             public void failure(RetrofitError retrofitError) {
-
                 MTActivity activity = (MTActivity) InventoryFragment.this.getActivity();
                 activity.getProgressView().stopProgress();
 
-                // TODO:Need to do more here, see another implementation
-
-                int a = 3;
+                MTUtils.handleRetrofitError(retrofitError, InventoryFragment.this.getActivity(),
+                        MiscUtils.getString(R.string.dialog_title_retrieve_inventory_failure));
             }
         };
 
         // Start progress before making web service call
         MTActivity activity = (MTActivity) this.getActivity();
         if (activity != null) {
-            // TODO:
-            activity.getProgressView().updateMessageAndStart("UPDATE THIS MESSAGE");
+            activity.getProgressView().updateMessageAndStart(MiscUtils.getString(R.string.progress_bar_getting_inventory));
         }
 
         MTWebInterface.sharedInstance().getUserService().getItems(
@@ -121,19 +119,7 @@ public class InventoryFragment extends MTFragment {
         MTActivity activity = (MTActivity) InventoryFragment.this.getActivity();
         activity.getProgressView().stopProgress();
 
-        // TODO Add a helper function here to do this calculation, and clean it up, I just did this to show you idea
-        boolean hasResults = (result != null) && !result.isEmpty();
-        boolean hasItems = false;
-        if (hasResults && result.getSections() != null) {
-            for(MTSection section : result.getSections()) {
-                if (section != null) {
-                    if (section.getItems() != null && section.getItems().size() > 0) {
-                        hasItems = true;
-                        break;
-                    }
-                }
-            }
-        }
+        boolean hasItems = result.isEmpty();
 
         // Update both layouts always
         this.mNoInventoryLayout.setVisibility(hasItems ? View.INVISIBLE : View.VISIBLE);

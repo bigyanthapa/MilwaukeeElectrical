@@ -41,4 +41,12 @@ public class MTSection {
     public void setItem(ArrayList<MTUserItem> items) {
         this.items = items;
     }
+
+    public boolean containsItems() {
+        if (this.items != null && !this.items.isEmpty()) {
+            return true;
+        }
+
+        return false;
+    }
 }
