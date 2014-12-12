@@ -5,19 +5,16 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.interfaces.MTAlertDialogListener;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
-import com.milwaukeetool.mymilwaukee.util.UIUtils;
 
 /**
- * Created by cent146 on 12/9/14.
+ * Created by cent146 on 12/11/14.
  */
-public class MTSimpleEntryDialog {
-
+public class MTSimpleTextDialog {
     private Activity mCallingActivity;
 
     private MTAlertDialogListener mAlertDialogListener;
@@ -26,31 +23,34 @@ public class MTSimpleEntryDialog {
     private boolean mShowCancel = false;
     private boolean mAllowCancelOutside = true;
 
-    private String mActionText = MiscUtils.getString(R.string.action_done);
+    private String mActionText = "Done";
 
     private AlertDialog mDialog;
     private AlertDialog.Builder mBuilder;
 
-    private MTSimpleEntryDialogView mAlertView;
+    private MTSimpleTextDialogView mTextDialogView;
 
     private ViewGroup mParent;
 
-    public MTSimpleEntryDialog(Activity activity,
-                               String headingText,
-                               String entryPlaceholderText,
-                               String entryText,
-                               int entryMaxLength,
-                               String actionText) {
+    public MTSimpleTextDialog(Activity activity,
+                              String headingText,
+                              String descriptionText) {
 
-        this(activity, headingText, entryPlaceholderText, entryText, entryMaxLength, actionText, true, true, false);
+        this(activity, headingText, descriptionText, MiscUtils.getString(R.string.action_done), true, true, false);
+    }
+
+    public MTSimpleTextDialog(Activity activity,
+                              String headingText,
+                              String descriptionText,
+                              String actionText) {
+
+        this(activity, headingText, descriptionText, actionText, true, true, false);
     }
 
 
-    public MTSimpleEntryDialog(Activity activity,
+    public MTSimpleTextDialog(Activity activity,
                                String headingText,
-                               String entryPlaceholderText,
-                               String entryText,
-                               int entryMaxLength,
+                               String descriptionText,
                                String actionText,
                                boolean showOk,
                                boolean showCancel,
@@ -64,10 +64,10 @@ public class MTSimpleEntryDialog {
         mShowOk = showOk;
         mAllowCancelOutside = allowCancelOutside;
 
-        mAlertView = new MTSimpleEntryDialogView(mCallingActivity,headingText,
-                entryPlaceholderText, entryText, entryMaxLength);
+        mTextDialogView = new MTSimpleTextDialogView(mCallingActivity,headingText,
+                descriptionText);
 
-        buildDialog(activity, mAlertView);
+        buildDialog(activity, mTextDialogView);
     }
 
     private void buildDialog(final Activity activity, final View alertView) {
@@ -82,16 +82,13 @@ public class MTSimpleEntryDialog {
             mBuilder.setNegativeButton(MiscUtils.getString(R.string.action_cancel), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    activity.setTheme(R.style.Theme_Milwaukeetool);
-                    UIUtils.hideKeyboard(activity, mAlertView.getEntryFieldView());
-
                     mAlertDialogListener.didTapCancel();
                 }
             });
         }
 
         if (mShowOk) {
-            mBuilder.setPositiveButton(MiscUtils.getString(R.string.action_done), null);
+            mBuilder.setPositiveButton(mActionText, null);
         }
         mBuilder.setView(alertView);
     }
@@ -103,15 +100,13 @@ public class MTSimpleEntryDialog {
 
         if (mDialog != null) {
 
-            mCallingActivity.setTheme(android.R.style.Theme_Holo_Light);
-
             // Allow the user to cancel outside?
             mDialog.setCanceledOnTouchOutside(mAllowCancelOutside);
 
-            // Change the soft input mode to make sure the keyboard is visible for the popup
-            mDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-
             mDialog.show();
+//            Window window = mDialog.getWindow();
+//            window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
 
             if (mShowOk) {
                 Button okButton = mDialog.getButton(AlertDialog.BUTTON_POSITIVE);
@@ -122,25 +117,13 @@ public class MTSimpleEntryDialog {
                         @Override
                         public void onClick(View v) {
 
-                            // Validate the manufacturer
-                            if (mAlertView.getEntryFieldView().isValid()) {
-
-                                UIUtils.hideKeyboard(mCallingActivity, mAlertView.getEntryFieldView());
-
-                                // Dismiss the dialog
-                                if (mDialog.isShowing()) {
-                                    mDialog.dismiss();
-                                }
-
-                                // Return the theme and keyboard
-                                if (mCallingActivity != null) {
-                                    mCallingActivity.setTheme(R.style.Theme_Milwaukeetool);
-                                    UIUtils.hideKeyboard(mCallingActivity, mAlertView.getEntryFieldView());
-                                }
-
-                                // Call the listener for the caller
-                                mAlertDialogListener.didTapOkWithResult(mAlertView.getEntryFieldView().getFieldValue());
+                            // Dismiss the dialog
+                            if (mDialog.isShowing()) {
+                                mDialog.dismiss();
                             }
+
+                            // Call the listener for the caller
+                            mAlertDialogListener.didTapOkWithResult(null);
                         }
                     });
                 }
@@ -150,9 +133,5 @@ public class MTSimpleEntryDialog {
 
     public AlertDialog getDialog() {
         return mDialog;
-    }
-
-    public MTSimpleEntryDialogView getAlertView() {
-        return mAlertView;
     }
 }

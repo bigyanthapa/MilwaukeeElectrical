@@ -22,6 +22,8 @@ public class MTProgressView extends RelativeLayout {
     private SmoothProgressBar mProgressBar;
     private MTTextView mProgressMessageTextView;
 
+    private boolean mDisplayed = false;
+
     public MTProgressView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context);
@@ -59,11 +61,17 @@ public class MTProgressView extends RelativeLayout {
 
     public void startProgress() {
         UIUtils.showView(this, 500);
+        mDisplayed = true;
         mProgressBar.progressiveStart();
     }
 
     public void stopProgress() {
         mProgressBar.progressiveStop();
+        mDisplayed = false;
         UIUtils.hideView(this,500);
+    }
+
+    public boolean isDisplayed() {
+        return mDisplayed;
     }
 }

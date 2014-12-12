@@ -5,5 +5,7 @@
     <string name="mt_screen_name_landing">Sign Up / Log In</string>
     <string name="mt_screen_name_main">Main</string>
     <string name="mt_screen_name_add_item">Add Item</string>
+    <string name="mt_screen_name_add_item_details">Add Item Details</string>
+    <string name="mt_screen_name_my_profile">My Profile</string>
 
 </resources>

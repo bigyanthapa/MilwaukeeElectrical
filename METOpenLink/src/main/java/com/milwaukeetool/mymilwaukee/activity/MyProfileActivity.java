@@ -146,7 +146,7 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
 
     @Override
     protected String getScreenName() {
-        return getResources().getString(R.string.mt_screen_name_create_account);
+        return getResources().getString(R.string.mt_screen_name_my_profile);
     }
 
     @Override
@@ -191,6 +191,11 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (mProgressView.isDisplayed()) {
+            return super.onOptionsItemSelected(item);
+        }
+
         // Handle presses on the action bar items
         switch (item.getItemId()) {
             case android.R.id.home:

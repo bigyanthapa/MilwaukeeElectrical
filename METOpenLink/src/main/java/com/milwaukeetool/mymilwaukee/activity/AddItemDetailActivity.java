@@ -22,6 +22,7 @@ import com.milwaukeetool.mymilwaukee.config.MTConstants;
 import com.milwaukeetool.mymilwaukee.interfaces.MTFinishedListener;
 import com.milwaukeetool.mymilwaukee.interfaces.MTLaunchListener;
 import com.milwaukeetool.mymilwaukee.model.MTItemSearchResult;
+import com.milwaukeetool.mymilwaukee.model.event.MTAddItemEvent;
 import com.milwaukeetool.mymilwaukee.model.event.MTLaunchEvent;
 import com.milwaukeetool.mymilwaukee.model.request.MTItemDetailRequest;
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
@@ -34,6 +35,7 @@ import com.milwaukeetool.mymilwaukee.view.MTSimpleFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTToastView;
 import com.squareup.picasso.Picasso;
 
+import de.greenrobot.event.EventBus;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -233,7 +235,7 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
 
     @Override
     protected String getScreenName() {
-        return null;
+        return MiscUtils.getString(R.string.mt_screen_name_add_item_details);
     }
 
     @Override
@@ -245,6 +247,11 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (mProgressView.isDisplayed()) {
+            return super.onOptionsItemSelected(item);
+        }
+
         switch (item.getItemId()) {
             case android.R.id.home:
                 if (!mSaveInProgress) {
@@ -264,6 +271,8 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
 
                         final IconDrawable successDrawable = new IconDrawable(MilwaukeeToolApplication.getAppContext(),
                                 Iconify.IconValue.fa_check_circle).colorRes(R.color.mt_black).sizeDp(40);
+
+                        EventBus.getDefault().post(new MTAddItemEvent(AddItemDetailActivity.this));
 
                         MTToastView.showMessage(AddItemDetailActivity.this,
                                 MiscUtils.getString(R.string.message_success_add_item),

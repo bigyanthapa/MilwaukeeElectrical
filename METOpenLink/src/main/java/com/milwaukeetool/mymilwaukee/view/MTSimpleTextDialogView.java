@@ -2,62 +2,57 @@ package com.milwaukeetool.mymilwaukee.view;
 
 import android.app.Activity;
 import android.content.Context;
-import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import com.milwaukeetool.mymilwaukee.R;
+import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
 
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.LOGD;
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 
 /**
- * Created by cent146 on 12/10/14.
+ * Created by cent146 on 12/11/14.
  */
-public class MTSimpleEntryDialogView extends LinearLayout {
+public class MTSimpleTextDialogView extends LinearLayout {
 
     private static final String TAG = makeLogTag(MTSimpleEntryDialog.class);
-    private MTSimpleFieldView mEntryFieldView;
+    private MTTextView mDescriptionTextView;
     private MTTextView mHeadingTextView;
     private LinearLayout mContentLayout;
-    private String mEntryText = null;
+    private String mDescriptionText = null;
     private String mHeadingText = null;
-    private String mEntryPlaceholderText = null;
-    private int mEntryMaxLength = -1;
 
     private Activity mActivity = null;
 
-    public MTSimpleEntryDialogView(Context context) {
+    public MTSimpleTextDialogView(Context context) {
         super(context);
         init(context);
     }
 
-    public MTSimpleEntryDialogView(Context context, AttributeSet attrs) {
+    public MTSimpleTextDialogView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
-    public MTSimpleEntryDialogView(Context context, AttributeSet attrs, int defStyle) {
+    public MTSimpleTextDialogView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context);
     }
 
-    public MTSimpleEntryDialogView(Context context, String headingText, String entryPlaceholderText,
-                                   String entryText, int entryMaxLength) {
+    public MTSimpleTextDialogView(Context context, String headingText, String descriptionText) {
         super(context);
-        setupSimpleEntryDialogView(headingText, entryPlaceholderText, entryText, entryMaxLength);
+        setupSimpleEntryDialogView(headingText, descriptionText);
         init(context);
     }
 
-    public void setupSimpleEntryDialogView(String headingText, String entryPlaceholderText,
-                                           String entryText, int entryMaxLength) {
+    public void setupSimpleEntryDialogView(String headingText, String descriptionText) {
         mHeadingText = headingText;
-        mEntryPlaceholderText = entryPlaceholderText;
-        mEntryText = entryText;
-        mEntryMaxLength = entryMaxLength;
+        mDescriptionText = descriptionText;
     }
 
     public void init(Context context) {
@@ -75,33 +70,21 @@ public class MTSimpleEntryDialogView extends LinearLayout {
         mHeadingTextView = (MTTextView)root.findViewById(R.id.simpleDialogHeadingTextView);
         mHeadingTextView.setText(mHeadingText);
 
+        mDescriptionTextView = new MTTextView(mActivity);
+        mDescriptionTextView.setTextColor(MiscUtils.getAppResources().getColor(R.color.mt_black));
+        mDescriptionTextView.setText(mDescriptionText);
+        mDescriptionTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         int padding = UIUtils.getPixels(10);
-
-
-        mEntryFieldView = MTSimpleFieldView.createSimpleFieldView(mActivity, mEntryPlaceholderText)
-                .setRequired(true);
-        mEntryFieldView.setPadding(0,padding,0,0);
-
-        if (mEntryMaxLength > 0) {
-            mEntryFieldView.setMaxLength(mEntryMaxLength);
-        }
-
-        mEntryFieldView.setTextColorResource(R.color.mt_black);
-        mEntryFieldView.setHintColorTextResource(R.color.mt_common_gray);
+        mDescriptionTextView.setPadding(UIUtils.getPixels(20), padding, UIUtils.getPixels(20), padding);
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, UIUtils.getPixels(60));
+                LinearLayout.LayoutParams.MATCH_PARENT, UIUtils.getPixels(100));
 
-        mEntryFieldView.setLayoutParams(layoutParams);
-        mEntryFieldView.setNextActionGo();
-
-        if (!TextUtils.isEmpty(mEntryText)) {
-            mEntryFieldView.setFieldValue(mEntryText);
-        }
+        mDescriptionTextView.setLayoutParams(layoutParams);
 
         if (mContentLayout != null) {
-            LOGD(TAG, "Adding entry field view to layout");
-            mContentLayout.addView(mEntryFieldView, mContentLayout.getChildCount());
+            LOGD(TAG, "Adding text view to layout");
+            mContentLayout.addView(mDescriptionTextView, mContentLayout.getChildCount());
         }
 
         layoutParams = new LinearLayout.LayoutParams(
@@ -112,9 +95,5 @@ public class MTSimpleEntryDialogView extends LinearLayout {
             LOGD(TAG, "Adding blank view to layout");
             mContentLayout.addView(view, mContentLayout.getChildCount());
         }
-    }
-
-    public MTSimpleFieldView getEntryFieldView() {
-        return mEntryFieldView;
     }
 }

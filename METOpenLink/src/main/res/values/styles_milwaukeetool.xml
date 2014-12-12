@@ -38,6 +38,8 @@
 
                 <!-- Light.DarkActionBar specific -->
         <item name="android:actionBarWidgetTheme">@style/Theme.Milwaukeetool.Widget</item>
+        <item name="android:textAppearanceLargePopupMenu">@style/myPopupMenuTextAppearanceLarge</item>
+        <item name="android:textAppearanceSmallPopupMenu">@style/myPopupMenuTextAppearanceSmall</item>
 
     </style>
 
@@ -49,6 +51,7 @@
         <item name="android:textSize">16sp</item>
         <item name="android:fontFamily">Arial</item>
         <item name="android:textStyle">normal</item>
+        <item name="android:divider">@color/mt_white</item>
     </style>
 
     <style name="ActionBar.Solid.Milwaukeetool" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
@@ -56,6 +59,7 @@
         <item name="android:backgroundStacked">@drawable/ab_stacked_solid_milwaukeetool</item>
         <item name="android:backgroundSplit">@drawable/ab_bottom_solid_milwaukeetool</item>
         <item name="android:progressBarStyle">@style/ProgressBar.Milwaukeetool</item>
+        <item name="android:divider">@color/mt_white</item>
     </style>
 
     <style name="ActionBar.Transparent.Milwaukeetool" parent="@android:style/Widget.Holo.ActionBar">
@@ -64,7 +68,9 @@
     </style>
 
     <style name="PopupMenu.Milwaukeetool" parent="@android:style/Widget.Holo.ListPopupWindow">
-        <item name="android:popupBackground">@drawable/menu_dropdown_panel_milwaukeetool</item>	
+        <item name="android:popupBackground">@drawable/menu_dropdown_panel_milwaukeetool</item>
+        <item name="android:textColor">@color/mt_white</item>
+        <item name="android:divider">@color/mt_white</item>
     </style>
 
     <style name="DropDownListView.Milwaukeetool" parent="@android:style/Widget.Holo.ListView.DropDown">
@@ -79,6 +85,7 @@
         <item name="android:background">@drawable/spinner_background_ab_milwaukeetool</item>
         <item name="android:popupBackground">@drawable/menu_dropdown_panel_milwaukeetool</item>
         <item name="android:dropDownSelector">@drawable/selectable_background_milwaukeetool</item>
+        <item name="android:textColor">@color/mt_white</item>
     </style>
     
     <style name="ProgressBar.Milwaukeetool" parent="@android:style/Widget.Holo.ProgressBar.Horizontal">
@@ -110,8 +117,12 @@
         <item name="android:button">@drawable/milwaukeetool_btn_radio_holo_light</item>
     </style>
 
-    <!--<style name="ContextualMode.MilwaukeeTool" parent="@drawable/ab_solid_milwaukeetool">-->
-        <!--<item name="android:background">@drawable/ab_solid_milwaukeetool</item>-->
-    <!--</style>-->
+    <style name="myPopupMenuTextAppearanceSmall" parent="@style/TextAppearance.AppCompat.Base.Widget.PopupMenu.Small">
+        <item name="android:textColor">@color/mt_white</item>
+    </style>
+
+    <style name="myPopupMenuTextAppearanceLarge" parent="@style/TextAppearance.AppCompat.Base.Widget.PopupMenu.Large">
+        <item name="android:textColor">@color/mt_white</item>
+    </style>
 
 </resources>

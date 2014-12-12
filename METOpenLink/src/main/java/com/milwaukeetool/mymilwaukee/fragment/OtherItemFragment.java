@@ -34,6 +34,7 @@ import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
 import com.milwaukeetool.mymilwaukee.view.MTButton;
 import com.milwaukeetool.mymilwaukee.view.MTSimpleEntryDialog;
+import com.milwaukeetool.mymilwaukee.view.MTSimpleTextDialog;
 
 import java.util.ArrayList;
 
@@ -106,7 +107,7 @@ public class OtherItemFragment extends Fragment {
         mAddManufacturerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAddManufacturerDialog();
+                showManufacturerDialog(null);
             }
         });
 
@@ -140,15 +141,19 @@ public class OtherItemFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+        if (mAddItemActivity.getProgressView().isDisplayed()) {
+            return super.onOptionsItemSelected(item);
+        }
+
         if (mOtherItemAddManufacturer == item) {
 
             LOGD(TAG, "Adding a manufacturer");
 
             // Add manufacturer dialog
-            showAddManufacturerDialog();
+            showManufacturerDialog(null);
             return true;
         }
-        return false;
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -211,7 +216,7 @@ public class OtherItemFragment extends Fragment {
                 holder = (ViewHolder)view.getTag();
             }
 
-            MTManufacturer otherItemManufacturer = mOtherItemManufacturers.get(position);
+            final MTManufacturer otherItemManufacturer = mOtherItemManufacturers.get(position);
 
             final IconDrawable ellipsis = new IconDrawable(MilwaukeeToolApplication.getAppContext(), Iconify.IconValue.fa_ellipsis_v).colorRes(R.color.mt_common_gray).sizeDp(20);
             holder.detailSelectImageView.setBackground(ellipsis);
@@ -232,7 +237,17 @@ public class OtherItemFragment extends Fragment {
 
                             LOGD(TAG, "Clicked item in popup menu");
 
+                            switch (item.getItemId()) {
 
+                                case R.id.editManufacturerOptionItem:
+                                    showManufacturerDialog(otherItemManufacturer);
+                                    break;
+
+                                case R.id.deleteManufacturerOptionItem:
+                                    deleteManufacturer(otherItemManufacturer);
+                                    break;
+
+                            }
                             return false;
                         }
                     });
@@ -339,10 +354,126 @@ public class OtherItemFragment extends Fragment {
         }
     }
 
-    private void showAddManufacturerDialog() {
-        MTSimpleEntryDialog dialog = new MTSimpleEntryDialog(this.getActivity(),
-                MiscUtils.getString(R.string.mfr_add_other_item_add_manufacturer),
-                MiscUtils.getString(R.string.mfr_add_other_item_manufacturer_name), null, 64);
+    private void showManufacturerDialog(final MTManufacturer manufacturer) {
+
+        String title = null;
+        String name = null;
+
+        if (manufacturer == null) {
+            title = MiscUtils.getString(R.string.mfr_add_other_item_add_manufacturer);
+        } else {
+            title = MiscUtils.getString(R.string.mfr_add_other_item_edit_manufacturer);
+            name = manufacturer.getName();
+        }
+
+        final MTSimpleEntryDialog dialog = new MTSimpleEntryDialog(this.getActivity(),
+                title, MiscUtils.getString(R.string.mfr_add_other_item_manufacturer_name),
+                name, 64, MiscUtils.getString(R.string.action_save));
+
+        dialog.showDialog(new MTAlertDialogListener() {
+
+            @Override
+            public void didTapCancel() {
+                UIUtils.hideKeyboard(OtherItemFragment.this.getActivity());
+            }
+
+            @Override
+            public void didTapOkWithResult(Object result) {
+
+                if (result instanceof String) {
+
+                    if (manufacturer == null) {
+                        addManufacturer((String)result);
+                    } else {
+                        editManufacturer(manufacturer, (String)result);
+                    }
+                }
+            }
+        });
+    }
+
+    private void addManufacturer(String manufacturer) {
+        LOGD(TAG, "Add Manufacturer: OK with RESULT");
+
+        Callback<Response> responseCallback = new Callback<Response>() {
+            @Override
+            public void success(Response result, Response response) {
+
+                mAddItemActivity.getProgressView().stopProgress();
+
+                LOGD(TAG, "Successfully added user manufacturer");
+
+                loadManufacturers(true);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+
+                mAddItemActivity.getProgressView().stopProgress();
+
+                LOGD(TAG, "Failed to add user manufacturer");
+
+                MTUtils.handleRetrofitError(retrofitError, mAddItemActivity, MiscUtils.getString(R.string.mfr_dialog_title_add_manufacturer_failure));
+            }
+        };
+
+        mAddItemActivity.getProgressView().updateMessageAndStart(MiscUtils.getString(R.string.progress_bar_saving));
+
+        MTUserManufacturerRequest request = new MTUserManufacturerRequest();
+        request.setManufacturerName(manufacturer);
+
+        MTWebInterface.sharedInstance().getUserManufacturerService().addManufacturer(
+                MTUtils.getAuthHeaderForBearerToken(),
+                request, responseCallback);
+
+    }
+
+    private void editManufacturer(MTManufacturer manufacturer, String manufacturerName) {
+        LOGD(TAG, "Edit Manufacturer: OK with RESULT: " + manufacturer.getName());
+
+        Callback<Response> responseCallback = new Callback<Response>() {
+            @Override
+            public void success(Response result, Response response) {
+
+                mAddItemActivity.getProgressView().stopProgress();
+
+                LOGD(TAG, "Successfully edited user manufacturer");
+
+                loadManufacturers(true);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+
+                mAddItemActivity.getProgressView().stopProgress();
+
+                LOGD(TAG, "Failed to edit user manufacturer");
+
+                MTUtils.handleRetrofitError(retrofitError, mAddItemActivity, MiscUtils.getString(R.string.mfr_dialog_title_update_manufacturer_failure));
+            }
+        };
+
+        mAddItemActivity.getProgressView().updateMessageAndStart(MiscUtils.getString(R.string.progress_bar_saving));
+
+        MTUserManufacturerRequest request = new MTUserManufacturerRequest();
+        request.setManufacturerName(manufacturerName);
+
+        MTWebInterface.sharedInstance().getUserManufacturerService().updateManufacturer(
+                MTUtils.getAuthHeaderForBearerToken(),
+                manufacturer.getId(), request, responseCallback);
+
+    }
+
+    private void deleteManufacturer(final MTManufacturer manufacturer) {
+
+        LOGD(TAG, "Delete Manufacturer: " + manufacturer.getName());
+
+        String heading = MiscUtils.getString(R.string.mfr_dialog_title_delete_prefix) + " " + manufacturer.getName();
+
+        // Confirm deletion
+        MTSimpleTextDialog dialog = new MTSimpleTextDialog(this.getActivity(), heading,
+                MiscUtils.getString(R.string.mfr_delete_confirmation_msg),
+                MiscUtils.getString(R.string.action_delete));
 
         dialog.showDialog(new MTAlertDialogListener() {
 
@@ -353,47 +484,33 @@ public class OtherItemFragment extends Fragment {
 
             @Override
             public void didTapOkWithResult(Object result) {
+                Callback<Response> responseCallback = new Callback<Response>() {
+                    @Override
+                    public void success(Response result, Response response) {
 
-                if (result instanceof String) {
+                        mAddItemActivity.getProgressView().stopProgress();
 
-                    LOGD(TAG, "Add Manufacturer: OK with RESULT: " + (String)result);
+                        LOGD(TAG, "Successfully deleted user manufacturer");
 
-                    Callback<Response> responseCallback = new Callback<Response>() {
-                        @Override
-                        public void success(Response result, Response response) {
+                        loadManufacturers(true);
+                    }
 
-                            mAddItemActivity.getProgressView().stopProgress();
+                    @Override
+                    public void failure(RetrofitError retrofitError) {
 
-                            UIUtils.hideKeyboard(OtherItemFragment.this.getActivity());
+                        mAddItemActivity.getProgressView().stopProgress();
 
-                            LOGD(TAG, "Successfully added user manufacturer");
+                        LOGD(TAG, "Failed to delete user manufacturer");
 
-                            loadManufacturers(true);
-                        }
+                        MTUtils.handleRetrofitError(retrofitError, mAddItemActivity, MiscUtils.getString(R.string.mfr_dialog_title_update_manufacturer_failure));
+                    }
+                };
 
-                        @Override
-                        public void failure(RetrofitError retrofitError) {
+                mAddItemActivity.getProgressView().updateMessageAndStart(MiscUtils.getString(R.string.progress_bar_deleting));
 
-                            mAddItemActivity.getProgressView().stopProgress();
-
-                            UIUtils.hideKeyboard(OtherItemFragment.this.getActivity());
-
-                            LOGD(TAG, "Failed to add user manufacturer");
-
-                            MTUtils.handleRetrofitError(retrofitError, mAddItemActivity, MiscUtils.getString(R.string.mfr_dialog_title_add_manufacturer_failure));
-                        }
-                    };
-
-                    mAddItemActivity.getProgressView().updateMessageAndStart(MiscUtils.getString(R.string.progress_bar_saving));
-
-                    MTUserManufacturerRequest request = new MTUserManufacturerRequest();
-                    request.setManufacturerName((String)result);
-
-                    MTWebInterface.sharedInstance().getUserManufacturerService().addManufacturer(
-                            MTUtils.getAuthHeaderForBearerToken(),
-                            request, responseCallback);
-
-                }
+                MTWebInterface.sharedInstance().getUserManufacturerService().deleteManufacturer(
+                        MTUtils.getAuthHeaderForBearerToken(),
+                        manufacturer.getId(), responseCallback);
             }
         });
     }

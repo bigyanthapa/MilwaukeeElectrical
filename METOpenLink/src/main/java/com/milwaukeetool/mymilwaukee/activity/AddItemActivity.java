@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import com.astuetz.PagerSlidingTabStrip;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.fragment.ItemSearchResultsFragment;
-import com.milwaukeetool.mymilwaukee.fragment.MilwaukeeItemFragment;
 import com.milwaukeetool.mymilwaukee.fragment.OtherItemFragment;
 import com.milwaukeetool.mymilwaukee.interfaces.FirstPageFragmentListener;
 import com.milwaukeetool.mymilwaukee.services.MTInventoryHelper;
@@ -105,6 +104,11 @@ public class AddItemActivity extends MTActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (mProgressView.isDisplayed()) {
+            return super.onOptionsItemSelected(item);
+        }
+
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
@@ -190,16 +194,19 @@ public class AddItemActivity extends MTActivity {
         }
     }
 
+    @Override
     public void onBackPressed() {
-        if(mPager.getCurrentItem() == 0) {
-            if (mAdapter.getItem(0) instanceof ItemSearchResultsFragment) {
-                //((ItemSearchResultsFragment) mAdapter.getItem(0)).backPressed();
-                super.onBackPressed();
-            }
-            else if (mAdapter.getItem(0) instanceof MilwaukeeItemFragment) {
-                super.onBackPressed();
-            }
-        }
+        // TODO: Update all activities to handle
+        super.onBackPressed();
+//        if(mPager.getCurrentItem() == 0) {
+//            if (mAdapter.getItem(0) instanceof ItemSearchResultsFragment) {
+//                //((ItemSearchResultsFragment) mAdapter.getItem(0)).backPressed();
+//                super.onBackPressed();
+//            }
+//            else if (mAdapter.getItem(0) instanceof MilwaukeeItemFragment) {
+//                super.onBackPressed();
+//            }
+//        }
     }
 
     public void performSearchRequest(String searchTerm, int skipCount) {

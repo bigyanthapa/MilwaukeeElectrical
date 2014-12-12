@@ -33,4 +33,6 @@ public class MTFragment extends Fragment {
     public void onEvent(MTKeyboardEvent event) {
 
     }
+
+    // TODO: Add fragment analytics logging
 }

@@ -1,6 +1,7 @@
 package com.milwaukeetool.mymilwaukee.fragment;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,7 +14,9 @@ import android.widget.RelativeLayout;
 
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.AddItemActivity;
+import com.milwaukeetool.mymilwaukee.activity.AddItemDetailActivity;
 import com.milwaukeetool.mymilwaukee.activity.MTActivity;
+import com.milwaukeetool.mymilwaukee.model.event.MTAddItemEvent;
 import com.milwaukeetool.mymilwaukee.model.response.MTUserItemResponse;
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
@@ -24,6 +27,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+import static com.milwaukeetool.mymilwaukee.util.LogUtils.LOGD;
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 
 /**
@@ -32,8 +36,8 @@ import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 public class InventoryFragment extends MTFragment {
 
     private static final String TAG = makeLogTag(NearbyFragment.class);
-    public static final String ADD_ITEM = "Add Item";
     private static final String ARG_POSITION = "position";
+    private MTActivity mActivity = null;
     private MTButton mAddInventoryBtn;
 
     private RelativeLayout mNoInventoryLayout;
@@ -42,6 +46,9 @@ public class InventoryFragment extends MTFragment {
     private View mCurrentView;
 
     private int position;
+
+    private boolean mLoadedInventory = false;
+    private MTUserItemResponse mLastResponse = null;
 
     public static InventoryFragment newInstance(int position) {
         InventoryFragment f = new InventoryFragment();
@@ -52,12 +59,33 @@ public class InventoryFragment extends MTFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        if (activity instanceof MTActivity) {
+            mActivity = (MTActivity)activity;
+        }
+    }
+
+    @Override
+    public void setMenuVisibility(final boolean visible) {
+        super.setMenuVisibility(visible);
+        if (visible) {
+            LOGD(TAG, "Fragment menu is visible");
+            loadUserItems(false);
+        }
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setHasOptionsMenu(true);
         position = getArguments().getInt(ARG_POSITION);
-
-        this.checkInventory();
     }
 
     @Override
@@ -76,7 +104,7 @@ public class InventoryFragment extends MTFragment {
         mNoInventoryLayout = (RelativeLayout)rootView.findViewById(R.id.inventoryEmptyLayout);
         mInventoryLayout = (RelativeLayout)rootView.findViewById(R.id.inventoryNormalLayout);
 
-        mInventoryLayout.setVisibility(View.VISIBLE);
+        mInventoryLayout.setVisibility(View.INVISIBLE);
         mNoInventoryLayout.setVisibility(View.INVISIBLE);
 
         return rootView;
@@ -84,12 +112,17 @@ public class InventoryFragment extends MTFragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (mActivity != null && mActivity.getProgressView() != null && mActivity.getProgressView().isDisplayed()) {
+            return super.onOptionsItemSelected(item);
+        }
+
         switch (item.getItemId()) {
             case R.id.actionSearch:
                 this.startAddItemActivity();
                 break;
             case R.id.actionRefresh:
-                this.checkInventory();
+                this.loadUserItems(true);
                 break;
         }
         return true;
@@ -100,17 +133,25 @@ public class InventoryFragment extends MTFragment {
         startActivity(intent);
     }
 
-    protected void checkInventory() {
+    protected void loadUserItems(boolean refresh) {
+
+        if (mLoadedInventory && !refresh) {
+            updateView();
+            return;
+        }
+
         Callback<MTUserItemResponse> responseCallback = new Callback<MTUserItemResponse>() {
             @Override
             public void success(MTUserItemResponse result, Response response) {
-                InventoryFragment.this.updateView(result);
+                mLoadedInventory = true;
+                mLastResponse = result;
+                mActivity.getProgressView().stopProgress();
+                InventoryFragment.this.updateView();
             }
 
             @Override
             public void failure(RetrofitError retrofitError) {
-                MTActivity activity = (MTActivity) InventoryFragment.this.getActivity();
-                activity.getProgressView().stopProgress();
+                mActivity.getProgressView().stopProgress();
 
                 MTUtils.handleRetrofitError(retrofitError, InventoryFragment.this.getActivity(),
                         MiscUtils.getString(R.string.dialog_title_retrieve_inventory_failure));
@@ -118,9 +159,8 @@ public class InventoryFragment extends MTFragment {
         };
 
         // Start progress before making web service call
-        MTActivity activity = (MTActivity) this.getActivity();
-        if (activity != null) {
-            activity.getProgressView().updateMessageAndStart(MiscUtils.getString(R.string.progress_bar_default_message));
+        if (mActivity != null) {
+            mActivity.getProgressView().updateMessageAndStart(MiscUtils.getString(R.string.progress_bar_default_message));
         }
 
         MTWebInterface.sharedInstance().getUserService().getItems(
@@ -128,11 +168,9 @@ public class InventoryFragment extends MTFragment {
                 responseCallback);
     }
 
-    public void updateView(MTUserItemResponse result) {
-        MTActivity activity = (MTActivity) InventoryFragment.this.getActivity();
-        activity.getProgressView().stopProgress();
+    public void updateView() {
 
-        boolean hasItems = result.isEmpty();
+        boolean hasItems = mLastResponse.isEmpty();
 
         // Update both layouts always
         this.mNoInventoryLayout.setVisibility(hasItems ? View.INVISIBLE : View.VISIBLE);
@@ -148,4 +186,9 @@ public class InventoryFragment extends MTFragment {
         actionBar.setTitle(this.getResources().getString(R.string.main_title_inventory_title));
     }
 
+    public void onEvent(MTAddItemEvent event) {
+        if (event.originatedFrom instanceof AddItemDetailActivity) {
+            loadUserItems(true);
+        }
+    }
 }
