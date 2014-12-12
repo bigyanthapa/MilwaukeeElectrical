@@ -105,13 +105,13 @@ public class MTSimpleFieldView extends RelativeLayout {
             public boolean onEditorAction(TextView v, int actionId,
                                           KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    EventBus.getDefault().post(new MTimeActionEvent(this, EditorInfo.IME_ACTION_DONE, mCallingActivity, mFieldName));
+                    EventBus.getDefault().post(new MTimeActionEvent(this, EditorInfo.IME_ACTION_DONE, mCallingActivity, mFieldName, getFieldValue()));
                     return false;
                 } else if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                    EventBus.getDefault().post(new MTimeActionEvent(this, EditorInfo.IME_ACTION_NEXT, mCallingActivity, mFieldName));
+                    EventBus.getDefault().post(new MTimeActionEvent(this, EditorInfo.IME_ACTION_NEXT, mCallingActivity, mFieldName, getFieldValue()));
                     return false;
                 } else if (actionId == EditorInfo.IME_ACTION_GO) {
-                    EventBus.getDefault().post(new MTimeActionEvent(this, EditorInfo.IME_ACTION_GO, mCallingActivity, mFieldName));
+                    EventBus.getDefault().post(new MTimeActionEvent(this, EditorInfo.IME_ACTION_GO, mCallingActivity, mFieldName, getFieldValue()));
                     return true;
                 }
                 return false;

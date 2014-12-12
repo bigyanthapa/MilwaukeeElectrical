@@ -2,6 +2,7 @@ package com.milwaukeetool.mymilwaukee.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
@@ -96,7 +97,9 @@ public abstract class MTActivity extends Activity {
     protected void onResume() {
         super.onResume();
         GoogleAnalytics.getInstance(this).reportActivityStart(this);
-        AnalyticUtils.logScreenView(this, getScreenName());
+        if (!TextUtils.isEmpty(getScreenName())) {
+            AnalyticUtils.logScreenView(this, getScreenName());
+        }
         NetworkUtil.checkNetworkConnectivity(this);
     }
 

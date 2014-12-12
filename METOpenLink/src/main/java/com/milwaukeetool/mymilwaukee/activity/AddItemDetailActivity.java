@@ -145,6 +145,14 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
+    @Override
+    public void onBackPressed() {
+
+        if (mProgressView.isDisplayed()) {
+            return;
+        }
+    }
+
     public void launched(MTLaunchEvent launchEvent) {
 
         if (launchEvent.getSource() == this.notes) {

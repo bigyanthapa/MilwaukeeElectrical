@@ -121,30 +121,33 @@ public class MTSimpleEntryDialog {
                     okButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
-                            // Validate the manufacturer
-                            if (mAlertView.getEntryFieldView().isValid()) {
-
-                                UIUtils.hideKeyboard(mCallingActivity, mAlertView.getEntryFieldView());
-
-                                // Dismiss the dialog
-                                if (mDialog.isShowing()) {
-                                    mDialog.dismiss();
-                                }
-
-                                // Return the theme and keyboard
-                                if (mCallingActivity != null) {
-                                    mCallingActivity.setTheme(R.style.Theme_Milwaukeetool);
-                                    UIUtils.hideKeyboard(mCallingActivity, mAlertView.getEntryFieldView());
-                                }
-
-                                // Call the listener for the caller
-                                mAlertDialogListener.didTapOkWithResult(mAlertView.getEntryFieldView().getFieldValue());
-                            }
+                            completeDialog();
                         }
                     });
                 }
             }
+        }
+    }
+
+    public void completeDialog() {
+        // Validate the field
+        if (mAlertView.getEntryFieldView().isValid()) {
+
+            UIUtils.hideKeyboard(mCallingActivity, mAlertView.getEntryFieldView());
+
+            // Dismiss the dialog
+            if (mDialog.isShowing()) {
+                mDialog.dismiss();
+            }
+
+            // Return the theme and keyboard
+            if (mCallingActivity != null) {
+                mCallingActivity.setTheme(R.style.Theme_Milwaukeetool);
+                UIUtils.hideKeyboard(mCallingActivity, mAlertView.getEntryFieldView());
+            }
+
+            // Call the listener for the caller
+            mAlertDialogListener.didTapOkWithResult(mAlertView.getEntryFieldView().getFieldValue());
         }
     }
 

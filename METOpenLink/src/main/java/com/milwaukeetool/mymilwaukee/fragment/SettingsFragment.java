@@ -145,4 +145,14 @@ public class SettingsFragment extends MTFragment {
         ActionBar actionBar = this.getActivity().getActionBar();
         actionBar.setTitle(this.getResources().getString(R.string.main_title_settings_title));
     }
+
+    @Override
+    protected String getLogTag() {
+        return TAG;
+    }
+
+    @Override
+    protected String getScreenName() {
+        return MiscUtils.getString(R.string.mt_screen_name_settings);
+    }
 }

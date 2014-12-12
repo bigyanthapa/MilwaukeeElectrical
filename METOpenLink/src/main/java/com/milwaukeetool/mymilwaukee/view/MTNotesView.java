@@ -8,6 +8,8 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
 
 import com.milwaukeetool.mymilwaukee.R;
+import com.milwaukeetool.mymilwaukee.util.AnalyticUtils;
+import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 
 /**
  * Created by scott.hopfensperger on 12/7/2014.
@@ -17,6 +19,8 @@ public class MTNotesView extends LinearLayout {
 
     public MTNotesView(Activity activity) {
         super(activity);
+
+        AnalyticUtils.logScreenView(activity, MiscUtils.getString(R.string.mt_screen_name_add_notes));
 
         activity.setTheme(android.R.style.Theme_Holo_Light);
 

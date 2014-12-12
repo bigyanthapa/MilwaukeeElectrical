@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.milwaukeetool.mymilwaukee.R;
+import com.milwaukeetool.mymilwaukee.util.AnalyticUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
 
@@ -22,6 +23,8 @@ public class MTChangePasswordPopupView extends LinearLayout {
 
     public MTChangePasswordPopupView(Activity activity) {
         super(activity);
+
+        AnalyticUtils.logScreenView(activity, MiscUtils.getString(R.string.mt_screen_name_change_password));
 
         LayoutInflater.from(activity).inflate(R.layout.view_change_password, this);
 

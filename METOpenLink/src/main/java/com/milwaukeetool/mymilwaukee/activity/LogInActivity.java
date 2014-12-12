@@ -238,4 +238,11 @@ public class LogInActivity extends MTActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+
+        if (mProgressView.isDisplayed()) {
+            return;
+        }
+    }
 }

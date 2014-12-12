@@ -1,30 +1,14 @@
 package com.milwaukeetool.mymilwaukee.fragment;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.SpannableString;
-import android.text.TextUtils;
-import android.text.style.ImageSpan;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.SearchView;
-import android.widget.TextView;
 
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.AddItemActivity;
 import com.milwaukeetool.mymilwaukee.interfaces.FirstPageFragmentListener;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
-import com.milwaukeetool.mymilwaukee.util.UIUtils;
-import com.milwaukeetool.mymilwaukee.view.MTTextView;
 
-import static com.milwaukeetool.mymilwaukee.util.LogUtils.LOGD;
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 
 /**
@@ -71,6 +55,16 @@ public class MilwaukeeItemFragment extends MTFragment {
         super.onCreate(savedInstanceState);
         this.setHasOptionsMenu(true);
         position = getArguments().getInt(ARG_POSITION);
+    }
+
+    @Override
+    protected String getLogTag() {
+        return TAG;
+    }
+
+    @Override
+    protected String getScreenName() {
+        return MiscUtils.getString(R.string.mt_screen_name_add_milwaukee_item);
     }
 
 //    @Override

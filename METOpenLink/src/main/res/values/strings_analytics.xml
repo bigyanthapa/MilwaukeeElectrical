@@ -1,11 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Main -->
     <string name="mt_screen_name_create_account">Register</string>
     <string name="mt_screen_name_sign_in">Sign In</string>
     <string name="mt_screen_name_landing">Sign Up / Log In</string>
     <string name="mt_screen_name_main">Main</string>
-    <string name="mt_screen_name_add_item">Add Item</string>
-    <string name="mt_screen_name_add_item_details">Add Item Details</string>
     <string name="mt_screen_name_my_profile">My Profile</string>
+    <string name="mt_screen_name_settings">Settings</string>
+
+    <!-- Manufacturers -->
+    <string name="mt_screen_name_manufacturer_list">Manufacturer List</string>
+    <string name="mt_screen_name_add_edit_mfr">Add / Edit Manufacturer</string>
+    <string name="mt_screen_name_delete_mfr">Delete Manufacturer</string>
+    <string name="mt_screen_name_mfr_option_view">Manufacturer Option View</string>
+
+    <!-- Inventory -->
+    <string name="mt_screen_name_inventory">Inventory List</string>
+    <string name="mt_screen_name_item_search_results">Milwaukee Add Inventory Search</string>
+    <string name="mt_screen_name_add_milwaukee_item">Add Milwaukee Inventory</string>
+    <string name="mt_screen_name_edit_milwaukee_item">Edit Milwaukee Inventory</string>
+    <string name="mt_screen_name_add_other_mfr_item">Add Other Inventory</string>
+    <string name="mt_screen_name_edit_other_mfr_item">Edit Other Inventory</string>
+    <string name="mt_screen_name_add_item_details">Inventory Item Detail View</string>
+
+    <!-- Dialogs -->
+    <string name="mt_screen_name_add_notes">Add Notes</string>
+    <string name="mt_screen_name_change_password">Change Password</string>
+
+    <!-- Bluetooth -->
+    <string name="mt_screen_name_nearby_devices">Nearby Devices</string>
+
+    <!-- Future Screens -->
+    <string name="mt_screen_name_add_edit_category">Add / Edit Category</string>
+    <string name="mt_screen_name_select_category">Select Category</string>
+
+    <string name="mt_screen_name_add_kit_item">Milwaukee Add Kit Item Inventory</string>
+    <string name="mt_screen_name_manage_tool">Manage Tool</string>
+    <string name="mt_screen_name_model_group_detail">Model Group Detail View</string>
+    <string name="mt_screen_name_view_by_selection">View By Selection List</string>
 
 </resources>

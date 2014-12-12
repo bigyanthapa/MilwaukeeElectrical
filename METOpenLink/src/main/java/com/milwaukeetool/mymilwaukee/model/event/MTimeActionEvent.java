@@ -8,12 +8,14 @@ import android.app.Activity;
 public class MTimeActionEvent extends MTEvent {
     public Activity callingActivity = null;
     public String fieldName = null;
+    public String fieldValue = null;
     public int action = 0;
 
-    public MTimeActionEvent(Object _originatedFrom, int _action, Activity _callingActivity, String _fieldName) {
+    public MTimeActionEvent(Object _originatedFrom, int _action, Activity _callingActivity, String _fieldName, String _fieldValue) {
         super.MTEvent(_originatedFrom);
         this.fieldName = _fieldName;
         this.callingActivity = _callingActivity;
         this.action = _action;
+        this.fieldValue = _fieldValue;
     }
 }

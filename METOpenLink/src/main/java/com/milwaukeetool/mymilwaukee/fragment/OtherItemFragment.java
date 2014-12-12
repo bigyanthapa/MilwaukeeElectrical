@@ -2,7 +2,6 @@ package com.milwaukeetool.mymilwaukee.fragment;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -26,9 +26,11 @@ import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.AddItemActivity;
 import com.milwaukeetool.mymilwaukee.interfaces.MTAlertDialogListener;
 import com.milwaukeetool.mymilwaukee.model.MTManufacturer;
+import com.milwaukeetool.mymilwaukee.model.event.MTimeActionEvent;
 import com.milwaukeetool.mymilwaukee.model.request.MTUserManufacturerRequest;
 import com.milwaukeetool.mymilwaukee.model.response.MTUserManufacturerDetailsResponse;
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
+import com.milwaukeetool.mymilwaukee.util.AnalyticUtils;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
@@ -48,7 +50,7 @@ import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 /**
  * Created by cent146 on 12/9/14.
  */
-public class OtherItemFragment extends Fragment {
+public class OtherItemFragment extends MTFragment {
     private static final String TAG = makeLogTag(OtherItemFragment.class);
 
     private static final String ARG_POSITION = "position";
@@ -66,6 +68,9 @@ public class OtherItemFragment extends Fragment {
 
     private RelativeLayout mNoManufacturerLayout;
     private MTButton mAddManufacturerButton;
+
+    private MTManufacturer mCurrentEditManufacturer = null;
+    private MTSimpleEntryDialog mManufacturerDialog = null;
 
     public static OtherItemFragment newInstance(int position) {
         OtherItemFragment f = new OtherItemFragment();
@@ -171,6 +176,16 @@ public class OtherItemFragment extends Fragment {
         }
     }
 
+    @Override
+    protected String getLogTag() {
+        return TAG;
+    }
+
+    @Override
+    protected String getScreenName() {
+        return MiscUtils.getString(R.string.mt_screen_name_manufacturer_list);
+    }
+
     private class OtherItemManufacturerAdapter extends BaseAdapter {
 
         private ArrayList<MTManufacturer> mOtherItemManufacturers;
@@ -251,6 +266,8 @@ public class OtherItemFragment extends Fragment {
                             return false;
                         }
                     });
+
+                    AnalyticUtils.logScreenView(OtherItemFragment.this.getActivity(), MiscUtils.getString(R.string.mt_screen_name_mfr_option_view));
 
                     menu.show();
                 }
@@ -356,6 +373,8 @@ public class OtherItemFragment extends Fragment {
 
     private void showManufacturerDialog(final MTManufacturer manufacturer) {
 
+        mCurrentEditManufacturer = manufacturer;
+
         String title = null;
         String name = null;
 
@@ -366,15 +385,19 @@ public class OtherItemFragment extends Fragment {
             name = manufacturer.getName();
         }
 
-        final MTSimpleEntryDialog dialog = new MTSimpleEntryDialog(this.getActivity(),
+        mManufacturerDialog = new MTSimpleEntryDialog(this.getActivity(),
                 title, MiscUtils.getString(R.string.mfr_add_other_item_manufacturer_name),
                 name, 64, MiscUtils.getString(R.string.action_save));
 
-        dialog.showDialog(new MTAlertDialogListener() {
+        AnalyticUtils.logScreenView(this.getActivity(), MiscUtils.getString(R.string.mt_screen_name_add_edit_mfr));
+
+        mManufacturerDialog.showDialog(new MTAlertDialogListener() {
 
             @Override
             public void didTapCancel() {
                 UIUtils.hideKeyboard(OtherItemFragment.this.getActivity());
+
+                mManufacturerDialog = null;
             }
 
             @Override
@@ -388,6 +411,8 @@ public class OtherItemFragment extends Fragment {
                         editManufacturer(manufacturer, (String)result);
                     }
                 }
+
+                mManufacturerDialog = null;
             }
         });
     }
@@ -512,6 +537,8 @@ public class OtherItemFragment extends Fragment {
                 MiscUtils.getString(R.string.mfr_delete_confirmation_msg),
                 MiscUtils.getString(R.string.action_delete));
 
+        AnalyticUtils.logScreenView(this.getActivity(), MiscUtils.getString(R.string.mt_screen_name_add_edit_mfr));
+
         dialog.showDialog(new MTAlertDialogListener() {
 
             @Override
@@ -521,35 +548,49 @@ public class OtherItemFragment extends Fragment {
 
             @Override
             public void didTapOkWithResult(Object result) {
-                Callback<Response> responseCallback = new Callback<Response>() {
-                    @Override
-                    public void success(Response result, Response response) {
-
-                        mAddItemActivity.getProgressView().stopProgress();
-
-                        LOGD(TAG, "Successfully deleted user manufacturer");
-
-                        loadManufacturers(true);
-                    }
-
-                    @Override
-                    public void failure(RetrofitError retrofitError) {
-
-                        mAddItemActivity.getProgressView().stopProgress();
-
-                        LOGD(TAG, "Failed to delete user manufacturer");
-
-                        MTUtils.handleRetrofitError(retrofitError, mAddItemActivity, MiscUtils.getString(R.string.mfr_dialog_title_update_manufacturer_failure));
-                    }
-                };
-
-                mAddItemActivity.getProgressView().updateMessageAndStart(MiscUtils.getString(R.string.progress_bar_deleting));
-
-                MTWebInterface.sharedInstance().getUserManufacturerService().deleteManufacturer(
-                        MTUtils.getAuthHeaderForBearerToken(),
-                        manufacturer.getId(), responseCallback);
+                performDelete(manufacturer);
             }
         });
+    }
+
+    public void performDelete(final MTManufacturer manufacturer) {
+        Callback<Response> responseCallback = new Callback<Response>() {
+            @Override
+            public void success(Response result, Response response) {
+
+                mAddItemActivity.getProgressView().stopProgress();
+
+                LOGD(TAG, "Successfully deleted user manufacturer");
+
+                loadManufacturers(true);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+
+                mAddItemActivity.getProgressView().stopProgress();
+
+                LOGD(TAG, "Failed to delete user manufacturer");
+
+                MTUtils.handleRetrofitError(retrofitError, mAddItemActivity, MiscUtils.getString(R.string.mfr_dialog_title_update_manufacturer_failure));
+            }
+        };
+
+        mAddItemActivity.getProgressView().updateMessageAndStart(MiscUtils.getString(R.string.progress_bar_deleting));
+
+        MTWebInterface.sharedInstance().getUserManufacturerService().deleteManufacturer(
+                MTUtils.getAuthHeaderForBearerToken(),
+                manufacturer.getId(), responseCallback);
+    }
+
+    public void onEvent(MTimeActionEvent event) {
+        if (event.callingActivity == this.getActivity()) {
+            if (event.action == EditorInfo.IME_ACTION_GO &&
+                    event.fieldName.equalsIgnoreCase(MiscUtils.getString(R.string.mfr_add_other_item_manufacturer_name))) {
+                mManufacturerDialog.completeDialog();
+                mManufacturerDialog = null;
+            }
+        }
     }
 
 }

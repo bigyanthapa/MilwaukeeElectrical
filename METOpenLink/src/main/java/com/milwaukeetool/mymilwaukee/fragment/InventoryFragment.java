@@ -69,6 +69,16 @@ public class InventoryFragment extends MTFragment {
     }
 
     @Override
+    protected String getLogTag() {
+        return TAG;
+    }
+
+    @Override
+    protected String getScreenName() {
+        return MiscUtils.getString(R.string.mt_screen_name_inventory);
+    }
+
+    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 

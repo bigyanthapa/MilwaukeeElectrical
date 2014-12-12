@@ -214,6 +214,16 @@ public class ItemSearchResultsFragment extends MTFragment {
         setupSearchView();
     }
 
+    @Override
+    protected String getLogTag() {
+        return TAG;
+    }
+
+    @Override
+    protected String getScreenName() {
+        return MiscUtils.getString(R.string.mt_screen_name_item_search_results);
+    }
+
     private class ItemSearchResultsAdapter extends BaseAdapter {
 
         private ArrayList<MTItemSearchResult> mSearchResults;

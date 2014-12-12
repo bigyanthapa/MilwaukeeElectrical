@@ -345,4 +345,12 @@ public class CreateAccountActivity extends MTActivity implements Postable {
         }
 
     }
+
+    @Override
+    public void onBackPressed() {
+
+        if (mProgressView.isDisplayed()) {
+            return;
+        }
+    }
 }

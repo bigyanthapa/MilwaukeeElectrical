@@ -38,7 +38,7 @@ public class AddItemActivity extends MTActivity {
 
     @Override
     protected String getScreenName() {
-        return getResources().getString(R.string.mt_screen_name_add_item);
+        return null;
     }
 
     @Override
@@ -196,8 +196,11 @@ public class AddItemActivity extends MTActivity {
 
     @Override
     public void onBackPressed() {
-        // TODO: Update all activities to handle
-        super.onBackPressed();
+
+        if (mProgressView.isDisplayed()) {
+            return;
+        }
+
 //        if(mPager.getCurrentItem() == 0) {
 //            if (mAdapter.getItem(0) instanceof ItemSearchResultsFragment) {
 //                //((ItemSearchResultsFragment) mAdapter.getItem(0)).backPressed();
@@ -207,6 +210,8 @@ public class AddItemActivity extends MTActivity {
 //                super.onBackPressed();
 //            }
 //        }
+
+        super.onBackPressed();
     }
 
     public void performSearchRequest(String searchTerm, int skipCount) {
