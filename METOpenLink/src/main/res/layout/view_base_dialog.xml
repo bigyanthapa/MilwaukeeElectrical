@@ -2,14 +2,15 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="125dp"
+    android:layout_height="wrap_content"
     android:background="@color/mt_white"
     android:orientation="vertical">
 
     <com.milwaukeetool.mymilwaukee.view.MTTextView
         android:id="@+id/simpleDialogHeadingTextView"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/mt_padding_medium"
         android:layout_marginTop="@dimen/mt_margin_standard"
         android:layout_marginBottom="@dimen/mt_margin_standard"
         android:layout_marginStart="@dimen/mt_margin_large"

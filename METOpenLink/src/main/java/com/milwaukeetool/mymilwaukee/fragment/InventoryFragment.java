@@ -21,6 +21,7 @@ import com.milwaukeetool.mymilwaukee.model.response.MTUserItemResponse;
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
+import com.milwaukeetool.mymilwaukee.util.UIUtils;
 import com.milwaukeetool.mymilwaukee.view.MTButton;
 
 import retrofit.Callback;
@@ -61,6 +62,10 @@ public class InventoryFragment extends MTFragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        if (UIUtils.isViewVisible(this.getView())) {
+            loadUserItems(false);
+        }
     }
 
     @Override

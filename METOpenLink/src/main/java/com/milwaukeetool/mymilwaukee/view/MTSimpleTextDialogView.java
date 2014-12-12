@@ -74,26 +74,17 @@ public class MTSimpleTextDialogView extends LinearLayout {
         mDescriptionTextView.setTextColor(MiscUtils.getAppResources().getColor(R.color.mt_black));
         mDescriptionTextView.setText(mDescriptionText);
         mDescriptionTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-        int padding = UIUtils.getPixels(10);
-        mDescriptionTextView.setPadding(UIUtils.getPixels(20), padding, UIUtils.getPixels(20), padding);
+        int padding = UIUtils.getPixels(20);
+        mDescriptionTextView.setPadding(padding, padding, padding, padding);
 
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, UIUtils.getPixels(100));
+        LayoutParams layoutParams = new LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
         mDescriptionTextView.setLayoutParams(layoutParams);
 
         if (mContentLayout != null) {
             LOGD(TAG, "Adding text view to layout");
             mContentLayout.addView(mDescriptionTextView, mContentLayout.getChildCount());
-        }
-
-        layoutParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, UIUtils.getPixels(15));
-        View view = new View(context);
-        view.setLayoutParams(layoutParams);
-        if (mContentLayout != null) {
-            LOGD(TAG, "Adding blank view to layout");
-            mContentLayout.addView(view, mContentLayout.getChildCount());
         }
     }
 }

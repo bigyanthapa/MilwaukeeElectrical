@@ -75,12 +75,11 @@ public class MTSimpleEntryDialogView extends LinearLayout {
         mHeadingTextView = (MTTextView)root.findViewById(R.id.simpleDialogHeadingTextView);
         mHeadingTextView.setText(mHeadingText);
 
-        int padding = UIUtils.getPixels(10);
-
+        int padding = UIUtils.getPixels(20);
 
         mEntryFieldView = MTSimpleFieldView.createSimpleFieldView(mActivity, mEntryPlaceholderText)
                 .setRequired(true);
-        mEntryFieldView.setPadding(0,padding,0,0);
+        mEntryFieldView.setPadding(0,UIUtils.getPixels(15),0,padding);
 
         if (mEntryMaxLength > 0) {
             mEntryFieldView.setMaxLength(mEntryMaxLength);
@@ -89,8 +88,8 @@ public class MTSimpleEntryDialogView extends LinearLayout {
         mEntryFieldView.setTextColorResource(R.color.mt_black);
         mEntryFieldView.setHintColorTextResource(R.color.mt_common_gray);
 
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, UIUtils.getPixels(60));
+        LayoutParams layoutParams = new LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
         mEntryFieldView.setLayoutParams(layoutParams);
         mEntryFieldView.setNextActionGo();
@@ -102,15 +101,6 @@ public class MTSimpleEntryDialogView extends LinearLayout {
         if (mContentLayout != null) {
             LOGD(TAG, "Adding entry field view to layout");
             mContentLayout.addView(mEntryFieldView, mContentLayout.getChildCount());
-        }
-
-        layoutParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, UIUtils.getPixels(15));
-        View view = new View(context);
-        view.setLayoutParams(layoutParams);
-        if (mContentLayout != null) {
-            LOGD(TAG, "Adding blank view to layout");
-            mContentLayout.addView(view, mContentLayout.getChildCount());
         }
     }
 

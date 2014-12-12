@@ -244,7 +244,7 @@ public class OtherItemFragment extends Fragment {
                                     break;
 
                                 case R.id.deleteManufacturerOptionItem:
-                                    deleteManufacturer(otherItemManufacturer);
+                                    attemptToDeleteManufacturer(otherItemManufacturer);
                                     break;
 
                             }
@@ -464,7 +464,44 @@ public class OtherItemFragment extends Fragment {
 
     }
 
+    private void attemptToDeleteManufacturer(final MTManufacturer manufacturer) {
+
+        // Confirm deletion
+        if (manufacturer != null ) {
+            if (manufacturer.getItemCount() > 0) {
+                // We cannot delete
+                MTSimpleTextDialog dialog = new MTSimpleTextDialog(this.getActivity(),
+                        MiscUtils.getString(R.string.mfr_dialog_title_delete_manufacturer_failure),
+                        MiscUtils.getString(R.string.mfr_has_associated_items_msg),
+                        MiscUtils.getString(R.string.action_ok),
+                        true, false, true);
+
+                dialog.showDialog(new MTAlertDialogListener() {
+
+                    @Override
+                    public void didTapCancel() {
+
+                    }
+
+                    @Override
+                    public void didTapOkWithResult(Object result) {
+
+                    }
+                });
+            } else {
+                deleteManufacturer(manufacturer);
+            }
+        } else {
+            LOGD(TAG, "Unable to delete manufacturer, does not exist");
+        }
+    }
+
     private void deleteManufacturer(final MTManufacturer manufacturer) {
+
+        if (manufacturer == null) {
+            LOGD(TAG, "Unable to delete manufacturer, does not exist");
+            return;
+        }
 
         LOGD(TAG, "Delete Manufacturer: " + manufacturer.getName());
 
