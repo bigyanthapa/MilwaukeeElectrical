@@ -151,6 +151,7 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
         if (mProgressView.isDisplayed()) {
             return;
         }
+        super.onBackPressed();
     }
 
     public void launched(MTLaunchEvent launchEvent) {

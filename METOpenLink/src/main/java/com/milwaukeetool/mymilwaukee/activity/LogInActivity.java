@@ -244,5 +244,6 @@ public class LogInActivity extends MTActivity {
         if (mProgressView.isDisplayed()) {
             return;
         }
+        super.onBackPressed();
     }
 }

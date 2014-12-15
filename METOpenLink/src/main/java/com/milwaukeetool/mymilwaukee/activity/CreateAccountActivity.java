@@ -352,5 +352,6 @@ public class CreateAccountActivity extends MTActivity implements Postable {
         if (mProgressView.isDisplayed()) {
             return;
         }
+        super.onBackPressed();
     }
 }
