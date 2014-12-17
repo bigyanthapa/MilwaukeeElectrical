@@ -27,6 +27,7 @@ public class MTInventoryHelper {
 
     public static final int INVENTORY_ITEM_REQUEST_COUNT = 10;
     public static final int INVENTORY_INITIAL_SKIP_INDEX = 0;
+    public static final int INVENTORY_BUFFER_SIZE = 3;
 
     private static final String TAG = makeLogTag(MTInventoryHelper.class);
 

@@ -65,11 +65,7 @@ public class ItemSearchResultsFragment extends MTFragment {
     private RelativeLayout mNoItemsLayout = null;
 
     private int mVisibleThreshold = 5;
-    private int mPreviousTotal = 0;
-    private boolean mLoading = true;
-
     private boolean mLoadingSearchResults = false;
-
     private SearchView mSearchView = null;
 
     private View mListFooterView = null;
@@ -132,40 +128,54 @@ public class ItemSearchResultsFragment extends MTFragment {
 
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+                boolean shouldRequestMoreItems = true;
+
                 LOGD(TAG, "****SCROLL CHANGED");
-                int currentPosition = mListView.getLastVisiblePosition();
-                int visibleThreshold = ItemSearchResultsFragment.this.determineNumberOfItemsToDisplay();
+
+                //int visibleThreshold = ItemSearchResultsFragment.this.determineNumberOfItemsToDisplay();
 
                 int totalItemCount = 0;
                 if (mAdapter.getSearchResults() != null) {
                     totalItemCount = mAdapter.getSearchResults().size();
                 }
 
-                LOGD (TAG, "****CURRENT: " + (currentPosition + visibleThreshold) + " >= " + (totalItemCount - 1));
+                if (mLastSearchResultEvent == null) {
+                    LOGD(TAG, "****No last search result found");
+                    shouldRequestMoreItems = false;
+                }
 
-                if ((currentPosition + visibleThreshold) >= (totalItemCount - 1 - visibleThreshold)) {
-                    if (mLastSearchResultEvent != null) {
+                if (totalItemCount <= mVisibleThreshold || mLastSearchResultEvent == null) {
+                    LOGD(TAG, "Total item count is <= visible threshold:" + totalItemCount);
+                    shouldRequestMoreItems = false;
+                }
 
-                        LOGD(TAG, "****Last search result count: " + mLastSearchResultEvent.getLastSearchResultCount());
+                int currentPosition = mListView.getLastVisiblePosition();
+                LOGD (TAG, "****IS CURRENT WINDOW: " + (currentPosition + mVisibleThreshold + MTInventoryHelper.INVENTORY_BUFFER_SIZE) + " BEYOND TOTAL INDEX: " + (totalItemCount - 1));
 
-                        if (mLastSearchResultEvent.getLastSearchResultCount() != 0) {
-                            int newSkipCount = (mAdapter.getSearchResults() != null) ? mAdapter.getSearchResults().size() : 0;
-                            LOGD(TAG, "****New skip count: " + newSkipCount + " for term: " + mLastSearchResultEvent.getLastSearchTerm());
-                            mLoadingSearchResults = true;
-                            MTInventoryHelper.sharedInstance().searchForResults(mLastSearchResultEvent.getLastSearchTerm(),
-                                    newSkipCount, false, (AddItemActivity)ItemSearchResultsFragment.this.getActivity());
-                            mLastSearchResultEvent = null;
-                            mLoading = true;
-                        } else {
-                            LOGD(TAG, "****Resetting for empty result");
-                            mLoadingSearchResults = false;
-                            mLastSearchResultEvent = null;
-                        }
+                if (shouldRequestMoreItems && (currentPosition + mVisibleThreshold + MTInventoryHelper.INVENTORY_BUFFER_SIZE) >= (totalItemCount - 1)) {
+
+                    LOGD(TAG, "****Last search result count: " + mLastSearchResultEvent.getLastSearchResultCount());
+
+                    // Request if we received the max number of items back
+                    if (mLastSearchResultEvent.getLastSearchResultCount() == MTInventoryHelper.INVENTORY_ITEM_REQUEST_COUNT) {
+                        int newSkipCount = (mAdapter.getSearchResults() != null) ? mAdapter.getSearchResults().size() : 0;
+                        LOGD(TAG, "****New skip count: " + newSkipCount + " for term: " + mLastSearchResultEvent.getLastSearchTerm());
+                        mLoadingSearchResults = true;
+                        MTInventoryHelper.sharedInstance().searchForResults(mLastSearchResultEvent.getLastSearchTerm(),
+                                newSkipCount, false, (AddItemActivity)ItemSearchResultsFragment.this.getActivity());
+                        mLastSearchResultEvent = null;
                     } else {
-                        LOGD(TAG, "****No last search result found");
+                        LOGD(TAG, "****Resetting for empty result");
+                        mLoadingSearchResults = false;
+                        mLastSearchResultEvent = null;
+                        shouldRequestMoreItems = false;
                     }
                 }
-                showLoadingFooterView(mListView, mLoadingSearchResults);
+
+                if (shouldRequestMoreItems) {
+                    showLoadingFooterView(mListView, mLoadingSearchResults);
+                }
             }
         });
 
