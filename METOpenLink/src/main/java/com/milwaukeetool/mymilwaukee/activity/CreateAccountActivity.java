@@ -27,8 +27,6 @@ import com.milwaukeetool.mymilwaukee.view.MTCreateAccountHeaderView;
 import com.milwaukeetool.mymilwaukee.view.MTSelectableFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTSimpleFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTTextView;
-import com.r0adkll.postoffice.PostOffice;
-import com.r0adkll.postoffice.model.Design;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -198,13 +196,9 @@ public class CreateAccountActivity extends MTActivity implements Postable {
 
         // Check if the confirmation password matches the given password
         if (!mPasswordFieldView.getFieldValue().equals(mConfirmPasswordFieldView.getFieldValue())) {
-            //Toast.makeText(CreateAccountActivity.this, "Passwords don't match", Toast.LENGTH_SHORT).show();
-            PostOffice.newMail(CreateAccountActivity.this)
-                    .setTitle(getResources().getString(R.string.dialog_title_register_failure))
-                    .setMessage(getResources().getString(R.string.create_account_no_password_match))
-                    .setThemeColor(getResources().getColor(R.color.mt_red))
-                    .setDesign(Design.HOLO_LIGHT)
-                    .show(getFragmentManager());
+            MTUtils.displayUserMessage(CreateAccountActivity.this,
+                    getResources().getString(R.string.dialog_title_register_failure),
+                    getResources().getString(R.string.create_account_no_password_match));
             return;
         }
 

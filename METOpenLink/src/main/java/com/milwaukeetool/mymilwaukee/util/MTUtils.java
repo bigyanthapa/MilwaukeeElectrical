@@ -60,11 +60,11 @@ public class MTUtils {
         return false;
     }
 
-    public static void displayErrorMessage(Activity activity, String errorTitle, String errorMessage) {
+    public static void displayUserMessage(Activity activity, String msgTitle, String msgDescription) {
         if (activity != null) {
             PostOffice.newMail(activity)
-                    .setTitle(errorTitle)
-                    .setMessage(errorMessage)
+                    .setTitle(msgTitle)
+                    .setMessage(msgDescription)
                     .setThemeColor(MiscUtils.getAppResources().getColor(R.color.mt_red))
                     .setDesign(Design.HOLO_LIGHT)
                     .show(activity.getFragmentManager());
@@ -77,14 +77,14 @@ public class MTUtils {
         if (retrofitError.getKind() == RetrofitError.Kind.NETWORK) {
             if (retrofitError.getCause() instanceof SocketTimeoutException) {
                 // Timeout
-                MTUtils.displayErrorMessage(activity,
+                MTUtils.displayUserMessage(activity,
                         errorTitle,
                         MiscUtils.getString(R.string.error_text_offline));
                 return;
             } else {
                 // No Connection
                 EventBus.getDefault().post(new MTNetworkAvailabilityEvent(activity,false));
-                MTUtils.displayErrorMessage(activity,
+                MTUtils.displayUserMessage(activity,
                         errorTitle,
                         MiscUtils.getString(R.string.error_text_offline));
                 return;
@@ -102,7 +102,7 @@ public class MTUtils {
         }
 
         // Handle standard error
-        MTUtils.displayErrorMessage(activity, errorTitle, errorMessage);
+        MTUtils.displayUserMessage(activity, errorTitle, errorMessage);
     }
 
     public static void launchMainActivityAndFinishCurrent(Activity activity) {

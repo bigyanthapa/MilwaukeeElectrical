@@ -1,12 +1,8 @@
 package com.milwaukeetool.mymilwaukee.view;
 
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
 import com.joanzapata.android.iconify.IconDrawable;
@@ -14,15 +10,8 @@ import com.joanzapata.android.iconify.Iconify;
 import com.milwaukeetool.mymilwaukee.MilwaukeeToolApplication;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.interfaces.MTLaunchListener;
-import com.milwaukeetool.mymilwaukee.interfaces.Postable;
 import com.milwaukeetool.mymilwaukee.model.event.MTLaunchEvent;
 import com.milwaukeetool.mymilwaukee.util.MTTouchListener;
-import com.r0adkll.postoffice.PostOffice;
-import com.r0adkll.postoffice.model.Delivery;
-import com.r0adkll.postoffice.model.Design;
-import com.r0adkll.postoffice.styles.ListStyle;
-
-import java.util.EventObject;
 
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.LOGD;
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
