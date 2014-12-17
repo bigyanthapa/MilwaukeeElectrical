@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.milwaukeetool.mymilwaukee.view.MTLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.milwaukeetool.mymilwaukee.view_reuseable.MTLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -14,7 +14,7 @@
         android:scaleType="fitXY"
         android:src="@drawable/background" />
 
-    <com.milwaukeetool.mymilwaukee.view.RitalinLayout
+    <com.milwaukeetool.mymilwaukee.view_reuseable.RitalinLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:focusableInTouchMode="true"
@@ -32,7 +32,7 @@
             android:dividerHeight="0dp"
             android:descendantFocusability="afterDescendants"/>
 
-        <com.milwaukeetool.mymilwaukee.view.MTTextView
+        <com.milwaukeetool.mymilwaukee.view_reuseable.MTTextView
             android:id="@+id/noNetworkConnectivityTextView"
             android:layout_width="wrap_content"
             android:layout_height="45dp"
@@ -47,6 +47,6 @@
             android:textColor="@color/mt_white"
             android:visibility="invisible"/>
 
-    </com.milwaukeetool.mymilwaukee.view.RitalinLayout>
+    </com.milwaukeetool.mymilwaukee.view_reuseable.RitalinLayout>
 
-</com.milwaukeetool.mymilwaukee.view.MTLayout>
+</com.milwaukeetool.mymilwaukee.view_reuseable.MTLayout>

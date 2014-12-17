@@ -34,9 +34,9 @@ import com.milwaukeetool.mymilwaukee.util.AnalyticUtils;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
-import com.milwaukeetool.mymilwaukee.view.MTButton;
-import com.milwaukeetool.mymilwaukee.view.MTSimpleEntryDialog;
-import com.milwaukeetool.mymilwaukee.view.MTSimpleTextDialog;
+import com.milwaukeetool.mymilwaukee.view_reuseable.MTButton;
+import com.milwaukeetool.mymilwaukee.view_reuseable.MTSimpleEntryDialog;
+import com.milwaukeetool.mymilwaukee.view_reuseable.MTSimpleTextDialog;
 
 import java.util.ArrayList;
 
@@ -586,7 +586,7 @@ public class OtherItemFragment extends MTFragment {
     public void onEvent(MTimeActionEvent event) {
         if (event.callingActivity == this.getActivity()) {
             if (event.action == EditorInfo.IME_ACTION_GO &&
-                    event.fieldName.equalsIgnoreCase(MiscUtils.getString(R.string.mfr_add_other_item_manufacturer_name))) {
+                    event.fieldName.equalsIgnoreCase(MiscUtils.getString(R.string.mfr_add_other_item_manufacturer_name)) && mManufacturerDialog != null) {
                 mManufacturerDialog.completeDialog();
                 mManufacturerDialog = null;
             }

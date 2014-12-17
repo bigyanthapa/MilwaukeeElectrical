@@ -10,6 +10,9 @@ import android.widget.RelativeLayout;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.CreateAccountActivity;
 import com.milwaukeetool.mymilwaukee.config.MTConstants;
+import com.milwaukeetool.mymilwaukee.view_reuseable.MTButton;
+import com.milwaukeetool.mymilwaukee.view_reuseable.MTCheckBox;
+import com.milwaukeetool.mymilwaukee.view_reuseable.MTTextView;
 
 /**
  * Created by scott.hopfensperger on 11/6/2014.

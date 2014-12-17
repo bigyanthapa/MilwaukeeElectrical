@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
+import com.milwaukeetool.mymilwaukee.view_reuseable.MTTextView;
 
 /**
  * Created by cent146 on 12/4/14.

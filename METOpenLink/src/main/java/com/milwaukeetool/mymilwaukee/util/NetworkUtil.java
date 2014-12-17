@@ -6,7 +6,7 @@ import android.net.NetworkInfo;
 import android.view.View;
 
 import com.milwaukeetool.mymilwaukee.model.event.MTNetworkAvailabilityEvent;
-import com.milwaukeetool.mymilwaukee.view.MTTextView;
+import com.milwaukeetool.mymilwaukee.view_reuseable.MTTextView;
 
 import de.greenrobot.event.EventBus;
 

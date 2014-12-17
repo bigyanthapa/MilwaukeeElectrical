@@ -13,8 +13,8 @@ import com.milwaukeetool.mymilwaukee.config.MTConstants;
 import com.milwaukeetool.mymilwaukee.model.event.MTNetworkAvailabilityEvent;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.NetworkUtil;
-import com.milwaukeetool.mymilwaukee.view.MTButton;
-import com.milwaukeetool.mymilwaukee.view.MTTextView;
+import com.milwaukeetool.mymilwaukee.view_reuseable.MTButton;
+import com.milwaukeetool.mymilwaukee.view_reuseable.MTTextView;
 
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 

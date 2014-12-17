@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.util.AnalyticUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
+import com.milwaukeetool.mymilwaukee.view_reuseable.MTEditText;
 
 /**
  * Created by scott.hopfensperger on 12/7/2014.

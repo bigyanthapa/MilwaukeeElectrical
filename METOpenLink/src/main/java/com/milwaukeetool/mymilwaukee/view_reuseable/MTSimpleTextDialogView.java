@@ -1,4 +1,4 @@
-package com.milwaukeetool.mymilwaukee.view;
+package com.milwaukeetool.mymilwaukee.view_reuseable;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -45,7 +45,7 @@ public class MTSimpleTextDialogView extends MTDialogView {
         mDescriptionTextView = new MTTextView(mActivity);
         mDescriptionTextView.setTextColor(MiscUtils.getAppResources().getColor(R.color.mt_black));
         mDescriptionTextView.setText(mDescriptionText);
-        mDescriptionTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        mDescriptionTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
         int padding = UIUtils.getPixels(20);
         mDescriptionTextView.setPadding(padding, padding, padding, padding);
 

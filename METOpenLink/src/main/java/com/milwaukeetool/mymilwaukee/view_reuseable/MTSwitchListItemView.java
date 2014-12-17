@@ -1,4 +1,4 @@
-package com.milwaukeetool.mymilwaukee.view;
+package com.milwaukeetool.mymilwaukee.view_reuseable;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -6,6 +6,8 @@ import android.widget.RelativeLayout;
 
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
+import com.milwaukeetool.mymilwaukee.view.MTMyProfileSectionView;
+import com.milwaukeetool.mymilwaukee.view_reuseable.MTSwitch;
 
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 

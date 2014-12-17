@@ -1,10 +1,9 @@
-package com.milwaukeetool.mymilwaukee.view;
+package com.milwaukeetool.mymilwaukee.view_reuseable;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 
@@ -32,8 +31,6 @@ public abstract class MTDialog {
     protected AlertDialog mDialog;
     protected AlertDialog.Builder mBuilder;
     protected MTDialogView mDialogView;
-
-    protected ViewGroup mParent;
 
     protected boolean mViewHasTextEntry = false;
 
@@ -148,20 +145,26 @@ public abstract class MTDialog {
                 UIUtils.hideKeyboard(mCallingActivity, mDialogView.getEntryView());
             }
 
-            // Dismiss the dialog
-            if (mDialog.isShowing()) {
-                mDialog.dismiss();
-            }
+            dismissDialog();
 
             // Call the listener for the caller
-            mAlertDialogListener.didTapOkWithResult(mDialogView.getEntryView().getFieldValue());
-        } else {
-            // Dismiss the dialog
-            if (mDialog.isShowing()) {
-                mDialog.dismiss();
+            if (mAlertDialogListener != null) {
+                mAlertDialogListener.didTapOkWithResult(mDialogView.getEntryView().getFieldValue());
             }
+        } else {
 
-            mAlertDialogListener.didTapOkWithResult(null);
+            dismissDialog();
+
+            if (mAlertDialogListener != null) {
+                mAlertDialogListener.didTapOkWithResult(null);
+            }
+        }
+    }
+
+    private void dismissDialog() {
+        // Dismiss the dialog
+        if (mDialogView != null && mDialog.isShowing()) {
+            mDialog.dismiss();
         }
     }
 

@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true">
 
-            <com.milwaukeetool.mymilwaukee.view.MTTextView
+            <com.milwaukeetool.mymilwaukee.view_reuseable.MTTextView
                 android:id="@+id/noInventoryTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
                 android:textColor="@color/mt_common_gray"
                 android:textSize="@dimen/mt_font_size_large"/>
 
-            <com.milwaukeetool.mymilwaukee.view.MTButton
+            <com.milwaukeetool.mymilwaukee.view_reuseable.MTButton
                 android:id="@+id/addInventoryBtn"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"

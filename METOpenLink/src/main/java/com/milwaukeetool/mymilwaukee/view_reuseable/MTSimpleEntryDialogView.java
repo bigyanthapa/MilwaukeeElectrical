@@ -1,4 +1,4 @@
-package com.milwaukeetool.mymilwaukee.view;
+package com.milwaukeetool.mymilwaukee.view_reuseable;
 
 import android.content.Context;
 import android.text.TextUtils;

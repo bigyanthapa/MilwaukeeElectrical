@@ -23,7 +23,7 @@
         app:spb_progressiveStop_speed="3.4"
         />
 
-    <com.milwaukeetool.mymilwaukee.view.MTTextView
+    <com.milwaukeetool.mymilwaukee.view_reuseable.MTTextView
         android:id="@+id/progressMessageTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

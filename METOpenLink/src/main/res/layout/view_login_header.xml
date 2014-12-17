@@ -15,7 +15,7 @@
         android:layout_centerHorizontal="true"
         android:src="@drawable/ic_mtsm" />
 
-    <com.milwaukeetool.mymilwaukee.view.MTTextView
+    <com.milwaukeetool.mymilwaukee.view_reuseable.MTTextView
         android:id="@+id/loginText"
         android:layout_width="match_parent"
         android:layout_height="55dp"

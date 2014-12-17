@@ -8,6 +8,8 @@ import android.widget.RelativeLayout;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.config.MTConfig;
 import com.milwaukeetool.mymilwaukee.interfaces.MTClickListener;
+import com.milwaukeetool.mymilwaukee.view_reuseable.MTButton;
+import com.milwaukeetool.mymilwaukee.view_reuseable.MTTextView;
 
 /**
  * Created by cent146 on 11/19/14.

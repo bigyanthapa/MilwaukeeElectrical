@@ -11,6 +11,8 @@ import com.milwaukeetool.mymilwaukee.activity.MainActivity;
 import com.milwaukeetool.mymilwaukee.config.MTConfig;
 import com.milwaukeetool.mymilwaukee.model.event.MTNetworkAvailabilityEvent;
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
+import com.milwaukeetool.mymilwaukee.view_reuseable.MTDialog;
+import com.milwaukeetool.mymilwaukee.view_reuseable.MTSimpleTextDialog;
 import com.r0adkll.postoffice.PostOffice;
 import com.r0adkll.postoffice.model.Design;
 
@@ -62,12 +64,16 @@ public class MTUtils {
 
     public static void displayUserMessage(Activity activity, String msgTitle, String msgDescription) {
         if (activity != null) {
-            PostOffice.newMail(activity)
-                    .setTitle(msgTitle)
-                    .setMessage(msgDescription)
-                    .setThemeColor(MiscUtils.getAppResources().getColor(R.color.mt_red))
-                    .setDesign(Design.HOLO_LIGHT)
-                    .show(activity.getFragmentManager());
+//            PostOffice.newMail(activity)
+//                    .setTitle(msgTitle)
+//                    .setMessage(msgDescription)
+//                    .setThemeColor(MiscUtils.getAppResources().getColor(R.color.mt_red))
+//                    .setDesign(Design.HOLO_LIGHT)
+//                    .show(activity.getFragmentManager());
+
+            MTDialog dialog = new MTSimpleTextDialog(activity, msgTitle, msgDescription,
+                    MiscUtils.getString(R.string.action_ok), true, false, true);
+            dialog.showDialog(null);
         }
     }
 

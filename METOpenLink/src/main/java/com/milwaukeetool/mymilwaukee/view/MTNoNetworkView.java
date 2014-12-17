@@ -12,6 +12,7 @@ import com.joanzapata.android.iconify.Iconify;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.util.MTTouchListener;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
+import com.milwaukeetool.mymilwaukee.view_reuseable.MTTextView;
 
 /**
  * Created by scott.hopfensperger on 11/14/2014.

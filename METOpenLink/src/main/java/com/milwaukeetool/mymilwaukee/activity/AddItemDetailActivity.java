@@ -29,10 +29,10 @@ import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
-import com.milwaukeetool.mymilwaukee.view.MTLaunchableFieldView;
+import com.milwaukeetool.mymilwaukee.view_reuseable.MTLaunchableFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTNotesView;
-import com.milwaukeetool.mymilwaukee.view.MTSimpleFieldView;
-import com.milwaukeetool.mymilwaukee.view.MTToastView;
+import com.milwaukeetool.mymilwaukee.view_reuseable.MTSimpleFieldView;
+import com.milwaukeetool.mymilwaukee.view_reuseable.MTToastView;
 import com.squareup.picasso.Picasso;
 
 import de.greenrobot.event.EventBus;

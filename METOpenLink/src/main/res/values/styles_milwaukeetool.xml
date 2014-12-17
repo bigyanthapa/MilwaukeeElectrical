@@ -19,6 +19,30 @@
 
 <resources>
 
+    <style name="Theme.Milwaukeetool.NoActionBar" parent="@android:style/Theme.Holo.Light.NoActionBar">
+        <item name="android:actionBarItemBackground">@drawable/selectable_background_milwaukeetool</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu.Milwaukeetool</item>
+        <item name="android:dropDownListViewStyle">@style/DropDownListView.Milwaukeetool</item>
+        <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Milwaukeetool</item>
+        <item name="android:actionDropDownStyle">@style/DropDownNav.Milwaukeetool</item>
+        <item name="android:actionBarStyle">@style/ActionBar.Solid.Milwaukeetool</item>
+        <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_milwaukeetool</item>
+        <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Milwaukeetool</item>
+        <item name="android:actionModeStyle">@style/ActionBar.Solid.Milwaukeetool</item>
+        <item name="android:actionModeBackground">@drawable/ab_solid_milwaukeetool</item>
+        <item name="android:editTextStyle">@style/EditText.MilwaukeeTool</item>
+        <item name="android:checkboxStyle">@style/CheckBox.MilwaukeeTool</item>
+        <item name="android:radioButtonStyle">@style/RadioButton.MilwaukeeTool</item>
+        <item name="android:actionMenuTextAppearance">@style/ActionMenuTextAppearance.Milwaukeetool</item>
+        <!--<item name="android:actionModeStyle">@style/ContextualMode.MilwaukeeTool</item>-->
+
+        <!-- Light.DarkActionBar specific -->
+        <item name="android:actionBarWidgetTheme">@style/Theme.Milwaukeetool.Widget</item>
+        <item name="android:textAppearanceLargePopupMenu">@style/myPopupMenuTextAppearanceLarge</item>
+        <item name="android:textAppearanceSmallPopupMenu">@style/myPopupMenuTextAppearanceSmall</item>
+
+    </style>
+
     <style name="Theme.Milwaukeetool" parent="@android:style/Theme.Holo.Light.DarkActionBar">
         <item name="android:actionBarItemBackground">@drawable/selectable_background_milwaukeetool</item>
         <item name="android:popupMenuStyle">@style/PopupMenu.Milwaukeetool</item>
@@ -36,7 +60,7 @@
         <item name="android:actionMenuTextAppearance">@style/ActionMenuTextAppearance.Milwaukeetool</item>
         <!--<item name="android:actionModeStyle">@style/ContextualMode.MilwaukeeTool</item>-->
 
-                <!-- Light.DarkActionBar specific -->
+        <!-- Light.DarkActionBar specific -->
         <item name="android:actionBarWidgetTheme">@style/Theme.Milwaukeetool.Widget</item>
         <item name="android:textAppearanceLargePopupMenu">@style/myPopupMenuTextAppearanceLarge</item>
         <item name="android:textAppearanceSmallPopupMenu">@style/myPopupMenuTextAppearanceSmall</item>

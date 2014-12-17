@@ -6,7 +6,7 @@
     android:background="@drawable/list_bg"
     android:descendantFocusability="blocksDescendants">
 
-    <com.milwaukeetool.mymilwaukee.view.MTTextView
+    <com.milwaukeetool.mymilwaukee.view_reuseable.MTTextView
         android:id="@+id/selectableItemTextView"
         android:layout_width="wrap_content"
         android:layout_height="60dp"

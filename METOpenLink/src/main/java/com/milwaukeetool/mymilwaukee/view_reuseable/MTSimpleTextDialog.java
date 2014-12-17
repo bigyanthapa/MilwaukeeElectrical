@@ -1,4 +1,4 @@
-package com.milwaukeetool.mymilwaukee.view;
+package com.milwaukeetool.mymilwaukee.view_reuseable;
 
 import android.app.Activity;
 
@@ -41,6 +41,7 @@ public class MTSimpleTextDialog extends MTDialog {
                                boolean allowCancelOutside) {
 
         super(activity,dialogTitle,actionText,showOk,showCancel,allowCancelOutside);
+        mViewHasTextEntry = true;
         mDescriptionText = descriptionText;
         finishDialogSetup();
     }

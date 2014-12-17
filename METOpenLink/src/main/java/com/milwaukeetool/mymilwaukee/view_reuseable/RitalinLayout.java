@@ -1,4 +1,4 @@
-package com.milwaukeetool.mymilwaukee.view;
+package com.milwaukeetool.mymilwaukee.view_reuseable;
 
 /**
  * Created by cent146 on 11/20/14.

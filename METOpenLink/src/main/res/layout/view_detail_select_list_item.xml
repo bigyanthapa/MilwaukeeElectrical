@@ -5,7 +5,7 @@
     android:layout_height="45dp"
     android:descendantFocusability="blocksDescendants">
 
-    <com.milwaukeetool.mymilwaukee.view.MTTextView
+    <com.milwaukeetool.mymilwaukee.view_reuseable.MTTextView
         android:id="@+id/detailSelectListItemTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

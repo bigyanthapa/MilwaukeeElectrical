@@ -24,9 +24,9 @@ import com.milwaukeetool.mymilwaukee.util.NetworkUtil;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
 import com.milwaukeetool.mymilwaukee.view.MTCreateAccountFooterView;
 import com.milwaukeetool.mymilwaukee.view.MTCreateAccountHeaderView;
-import com.milwaukeetool.mymilwaukee.view.MTSelectableFieldView;
-import com.milwaukeetool.mymilwaukee.view.MTSimpleFieldView;
-import com.milwaukeetool.mymilwaukee.view.MTTextView;
+import com.milwaukeetool.mymilwaukee.view_reuseable.MTSelectableFieldView;
+import com.milwaukeetool.mymilwaukee.view_reuseable.MTSimpleFieldView;
+import com.milwaukeetool.mymilwaukee.view_reuseable.MTTextView;
 
 import java.util.LinkedList;
 import java.util.List;

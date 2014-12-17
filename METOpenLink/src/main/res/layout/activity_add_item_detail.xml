@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.milwaukeetool.mymilwaukee.view.MTLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.milwaukeetool.mymilwaukee.view_reuseable.MTLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -44,7 +44,7 @@
 
             </FrameLayout>
 
-            <com.milwaukeetool.mymilwaukee.view.MTHeaderTextView
+            <com.milwaukeetool.mymilwaukee.view_reuseable.MTHeaderTextView
                 android:id="@+id/addItemDetailPlaceholder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -68,4 +68,4 @@
 
     </ScrollView>
 
-</com.milwaukeetool.mymilwaukee.view.MTLayout>
+</com.milwaukeetool.mymilwaukee.view_reuseable.MTLayout>

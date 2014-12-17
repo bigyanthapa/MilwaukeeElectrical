@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.widget.RelativeLayout;
 
 import com.milwaukeetool.mymilwaukee.R;
+import com.milwaukeetool.mymilwaukee.view_reuseable.MTHeaderTextView;
 
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 

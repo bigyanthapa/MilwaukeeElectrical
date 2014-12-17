@@ -11,6 +11,7 @@ import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
 import com.milwaukeetool.mymilwaukee.MilwaukeeToolApplication;
 import com.milwaukeetool.mymilwaukee.R;
+import com.milwaukeetool.mymilwaukee.view_reuseable.MTTextView;
 
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 
@@ -24,7 +25,7 @@ public class MTDetailSelectListItemView extends RelativeLayout {
     private Activity mCallingActivity;
 
     private MTTextView mTextView;
-    private MTButton mExtraButton;
+    private RelativeLayout mExtraButton;
 
     private String mItemText;
 
@@ -66,7 +67,7 @@ public class MTDetailSelectListItemView extends RelativeLayout {
     private void setupView() {
 
         mTextView = (MTTextView) this.findViewById(R.id.detailSelectListItemTextView);
-        mExtraButton = (MTButton) this.findViewById(R.id.detailSelectListItemExtraButton);
+        mExtraButton = (RelativeLayout) this.findViewById(R.id.detailSelectListItemExtraButton);
 
         final IconDrawable ellipsis = new IconDrawable(MilwaukeeToolApplication.getAppContext(), Iconify.IconValue.fa_ellipsis_v).colorRes(R.color.mt_common_gray).sizeDp(20);
         mExtraButton.setBackground(ellipsis);

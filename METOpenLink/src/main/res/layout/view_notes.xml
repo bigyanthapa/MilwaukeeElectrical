@@ -6,7 +6,7 @@
     android:background="@color/mt_white"
     android:orientation="vertical">
 
-    <com.milwaukeetool.mymilwaukee.view.MTTextView
+    <com.milwaukeetool.mymilwaukee.view_reuseable.MTTextView
         android:id="@+id/itemDetailNotesHeader"
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -24,7 +24,7 @@
         android:layout_height="2dp"
         android:background="@color/mt_red" />
 
-    <com.milwaukeetool.mymilwaukee.view.MTEditText
+    <com.milwaukeetool.mymilwaukee.view_reuseable.MTEditText
         android:id="@+id/itemDetailNotes"
         style="@style/EditText.MilwaukeeTool"
         android:layout_width="match_parent"

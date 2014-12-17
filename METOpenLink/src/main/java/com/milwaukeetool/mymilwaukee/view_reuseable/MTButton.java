@@ -1,29 +1,29 @@
-package com.milwaukeetool.mymilwaukee.view;
+package com.milwaukeetool.mymilwaukee.view_reuseable;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.CheckBox;
+import android.widget.Button;
 
 import com.milwaukeetool.mymilwaukee.util.Typefaces;
 
 /**
- * Created by cent146 on 11/6/14.
+ * Created by cent146 on 10/24/14.
  */
-public class MTCheckBox extends CheckBox {
+public class MTButton extends Button {
 
-    public MTCheckBox(Context context, AttributeSet attrs, int defStyle) {
+    public MTButton(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
     }
 
 
-    public MTCheckBox(Context context, AttributeSet attrs) {
+    public MTButton(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
 
-    public MTCheckBox(Context context) {
+    public MTButton(Context context) {
         super(context);
         init();
     }

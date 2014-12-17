@@ -22,7 +22,7 @@ import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
-import com.milwaukeetool.mymilwaukee.view.MTButton;
+import com.milwaukeetool.mymilwaukee.view_reuseable.MTButton;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;

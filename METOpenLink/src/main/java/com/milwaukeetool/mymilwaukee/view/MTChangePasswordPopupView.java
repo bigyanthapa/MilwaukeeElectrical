@@ -9,6 +9,7 @@ import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.util.AnalyticUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
+import com.milwaukeetool.mymilwaukee.view_reuseable.MTSimpleFieldView;
 
 /**
  * Created by scott.hopfensperger on 11/24/2014.

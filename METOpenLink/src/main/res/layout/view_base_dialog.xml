@@ -6,14 +6,14 @@
     android:background="@color/mt_white"
     android:orientation="vertical">
 
-    <com.milwaukeetool.mymilwaukee.view.MTTextView
+    <com.milwaukeetool.mymilwaukee.view_reuseable.MTTextView
         android:id="@+id/simpleDialogHeadingTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/mt_padding_medium"
         android:layout_marginTop="@dimen/mt_margin_standard"
         android:layout_marginBottom="@dimen/mt_margin_standard"
-        android:layout_marginStart="@dimen/mt_margin_large"
+        android:layout_marginStart="15dp"
         android:background="@null"
         android:gravity="center_vertical"
         android:text="Heading"

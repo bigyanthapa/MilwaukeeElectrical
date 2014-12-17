@@ -1,28 +1,28 @@
-package com.milwaukeetool.mymilwaukee.view;
+package com.milwaukeetool.mymilwaukee.view_reuseable;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.EditText;
+import android.widget.Switch;
 
 import com.milwaukeetool.mymilwaukee.util.Typefaces;
 
 /**
- * Created by cent146 on 10/24/14.
+ * Created by scott.hopfensperger on 11/20/2014.
  */
-public class MTEditText extends EditText {
-    public MTEditText(Context context, AttributeSet attrs, int defStyle) {
+public class MTSwitch extends Switch {
+    public MTSwitch(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
     }
 
 
-    public MTEditText(Context context, AttributeSet attrs) {
+    public MTSwitch(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
 
-    public MTEditText(Context context) {
+    public MTSwitch(Context context) {
         super(context);
         init();
     }
