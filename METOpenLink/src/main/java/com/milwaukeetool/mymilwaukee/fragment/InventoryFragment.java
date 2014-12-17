@@ -2,6 +2,7 @@ package com.milwaukeetool.mymilwaukee.fragment;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,12 +11,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.AddItemActivity;
 import com.milwaukeetool.mymilwaukee.activity.AddItemDetailActivity;
 import com.milwaukeetool.mymilwaukee.activity.MTActivity;
+import com.milwaukeetool.mymilwaukee.config.MTConstants;
+import com.milwaukeetool.mymilwaukee.model.MTItemSearchResult;
 import com.milwaukeetool.mymilwaukee.model.event.MTAddItemEvent;
 import com.milwaukeetool.mymilwaukee.model.response.MTUserItemResponse;
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
@@ -23,6 +30,9 @@ import com.milwaukeetool.mymilwaukee.util.MTUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
 import com.milwaukeetool.mymilwaukee.view_reuseable.MTButton;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -44,12 +54,14 @@ public class InventoryFragment extends MTFragment {
     private RelativeLayout mNoInventoryLayout;
     private RelativeLayout mInventoryLayout;
 
-    private View mCurrentView;
+    private ListView mItemListView;
 
     private int position;
 
     private boolean mLoadedInventory = false;
     private MTUserItemResponse mLastResponse = null;
+
+    private LayoutInflater mInflater;
 
     public static InventoryFragment newInstance(int position) {
         InventoryFragment f = new InventoryFragment();
@@ -106,6 +118,8 @@ public class InventoryFragment extends MTFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_inventory, container, false);
+
+        mItemListView = (ListView)rootView.findViewById(R.id.inventoryItemListView);
 
         this.mAddInventoryBtn = (MTButton) rootView.findViewById(R.id.addInventoryBtn);
         this.mAddInventoryBtn.setOnClickListener(new View.OnClickListener() {
@@ -204,6 +218,89 @@ public class InventoryFragment extends MTFragment {
     public void onEvent(MTAddItemEvent event) {
         if (event.originatedFrom instanceof AddItemDetailActivity) {
             loadUserItems(true);
+        }
+    }
+
+    private class InventoryItemAdapter extends BaseAdapter {
+
+        private ArrayList<MTItemSearchResult> mSearchResults;
+
+        public InventoryItemAdapter(Context context, ArrayList<MTItemSearchResult> searchResults) {
+
+            if (searchResults != null) {
+                mSearchResults = searchResults;
+            } else {
+                mSearchResults = new ArrayList<MTItemSearchResult>();
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return mSearchResults.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mSearchResults.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View view;
+            ViewHolder holder;
+            if(convertView == null) {
+                view = mInflater.inflate(R.layout.view_item_search_result_list_item, parent, false);
+                holder = new ViewHolder();
+                holder.thumbnail = (ImageView)view.findViewById(R.id.itemImageView);
+                holder.description = (TextView)view.findViewById(R.id.itemDescriptionTextView);
+                holder.modelNumber = (TextView)view.findViewById(R.id.itemModelNumberTextView);
+                view.setTag(holder);
+            } else {
+                view = convertView;
+                holder = (ViewHolder)view.getTag();
+            }
+
+            MTItemSearchResult searchResult = mSearchResults.get(position);
+
+            Picasso.with(InventoryFragment.this.getActivity())
+                    .load(MTConstants.HTTP_PREFIX + searchResult.getImageUrl())
+                    .placeholder(R.drawable.ic_mkeplaceholder)
+                    .error(R.drawable.ic_mkeplaceholder)
+                    .into(holder.thumbnail);
+
+            holder.description.setText(searchResult.getItemDescription());
+            holder.modelNumber.setText(searchResult.getModelNumber());
+
+            return view;
+        }
+
+        private class ViewHolder {
+            public ImageView thumbnail;
+            public TextView description;
+            public TextView modelNumber;
+        }
+
+        public void clearSearchResults() {
+            mSearchResults.clear();
+            notifyDataSetChanged();
+        }
+
+        public void appendSearchResults(ArrayList<MTItemSearchResult> searchResults) {
+            mSearchResults.addAll(searchResults);
+            notifyDataSetChanged();
+        }
+
+        public ArrayList<MTItemSearchResult> getSearchResults() {
+            return mSearchResults;
+        }
+
+        public boolean hasSearchResults() {
+            return ((mSearchResults != null) && (mSearchResults.size() > 0));
         }
     }
 }
