@@ -12,6 +12,9 @@ public class MTCategory {
     @SerializedName("categoryName")
     private String name;
 
+    @SerializedName("itemCount")
+    private Integer itemCount;
+
     public Integer getId() {
         return id;
     }
@@ -26,5 +29,13 @@ public class MTCategory {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getItemCount() {
+        return itemCount;
+    }
+
+    public void setItemCount(Integer itemCount) {
+        this.itemCount = itemCount;
     }
 }

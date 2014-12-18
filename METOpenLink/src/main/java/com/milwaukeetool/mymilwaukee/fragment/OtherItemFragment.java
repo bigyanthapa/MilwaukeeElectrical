@@ -140,7 +140,7 @@ public class OtherItemFragment extends MTFragment {
         mOtherItemAddManufacturer = menu.findItem(R.id.otherItemAddManufacturer);
 
         ActionBar actionBar = this.getActivity().getActionBar();
-        actionBar.setTitle(this.getResources().getString(R.string.main_add_item_title));
+        actionBar.setTitle(this.getResources().getString(R.string.main_title_add_item));
     }
 
     @Override
@@ -188,93 +188,93 @@ public class OtherItemFragment extends MTFragment {
 
     private class OtherItemManufacturerAdapter extends BaseAdapter {
 
-        private ArrayList<MTManufacturer> mOtherItemManufacturers;
+            private ArrayList<MTManufacturer> mOtherItemManufacturers;
 
-        public OtherItemManufacturerAdapter(Context context, ArrayList<MTManufacturer> otherItemManufacturers) {
+            public OtherItemManufacturerAdapter(Context context, ArrayList<MTManufacturer> otherItemManufacturers) {
 
-            if (otherItemManufacturers != null) {
-                mOtherItemManufacturers = otherItemManufacturers;
-            } else {
-                mOtherItemManufacturers = new ArrayList<MTManufacturer>();
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return mOtherItemManufacturers.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return mOtherItemManufacturers.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            final View view;
-            final ViewHolder holder;
-            if(convertView == null) {
-
-                view = mInflater.inflate(R.layout.view_detail_select_list_item, parent, false);
-                holder = new ViewHolder();
-                holder.detailSelectLayoutButton = (RelativeLayout)view.findViewById(R.id.detailSelectListItemExtraButton);
-                holder.detailSelectImageView = (ImageView)view.findViewById(R.id.detailSelectListItemImageView);
-                holder.detailSelectTextView = (TextView)view.findViewById(R.id.detailSelectListItemTextView);
-                view.setTag(holder);
-            } else {
-                view = convertView;
-                holder = (ViewHolder)view.getTag();
-            }
-
-            final MTManufacturer otherItemManufacturer = mOtherItemManufacturers.get(position);
-
-            final IconDrawable ellipsis = new IconDrawable(MilwaukeeToolApplication.getAppContext(), Iconify.IconValue.fa_ellipsis_v).colorRes(R.color.mt_common_gray).sizeDp(20);
-            holder.detailSelectImageView.setBackground(ellipsis);
-            holder.detailSelectTextView.setText(otherItemManufacturer.getName() + " (" + otherItemManufacturer.getItemCount() + ")");
-
-            holder.detailSelectLayoutButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    LOGD(TAG, "Tapped list item extra button!!!!");
-
-                    PopupMenu menu = new PopupMenu(OtherItemFragment.this.getActivity(), holder.detailSelectLayoutButton);
-
-                    menu.getMenuInflater().inflate(R.menu.manufacturer_options_menu, menu.getMenu());
-
-                    menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-
-                            LOGD(TAG, "Clicked item in popup menu");
-
-                            switch (item.getItemId()) {
-
-                                case R.id.editManufacturerOptionItem:
-                                    showManufacturerDialog(otherItemManufacturer);
-                                    break;
-
-                                case R.id.deleteManufacturerOptionItem:
-                                    attemptToDeleteManufacturer(otherItemManufacturer);
-                                    break;
-
-                            }
-                            return false;
-                        }
-                    });
-
-                    AnalyticUtils.logScreenView(OtherItemFragment.this.getActivity(), MiscUtils.getString(R.string.mt_screen_name_mfr_option_view));
-
-                    menu.show();
+                if (otherItemManufacturers != null) {
+                    mOtherItemManufacturers = otherItemManufacturers;
+                } else {
+                    mOtherItemManufacturers = new ArrayList<MTManufacturer>();
                 }
-            });
+            }
 
-            return view;
-        }
+            @Override
+            public int getCount() {
+                return mOtherItemManufacturers.size();
+            }
+
+            @Override
+            public Object getItem(int position) {
+                return mOtherItemManufacturers.get(position);
+            }
+
+            @Override
+            public long getItemId(int position) {
+                return position;
+            }
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+            final View view;
+                final ViewHolder holder;
+                if(convertView == null) {
+
+                    view = mInflater.inflate(R.layout.view_detail_select_list_item, parent, false);
+                    holder = new ViewHolder();
+                    holder.detailSelectLayoutButton = (RelativeLayout)view.findViewById(R.id.detailSelectListItemExtraButton);
+                    holder.detailSelectImageView = (ImageView)view.findViewById(R.id.detailSelectListItemImageView);
+                    holder.detailSelectTextView = (TextView)view.findViewById(R.id.detailSelectListItemTextView);
+                    view.setTag(holder);
+                } else {
+                    view = convertView;
+                    holder = (ViewHolder)view.getTag();
+                }
+
+                final MTManufacturer otherItemManufacturer = mOtherItemManufacturers.get(position);
+
+                final IconDrawable ellipsis = new IconDrawable(MilwaukeeToolApplication.getAppContext(), Iconify.IconValue.fa_ellipsis_v).colorRes(R.color.mt_common_gray).sizeDp(20);
+                holder.detailSelectImageView.setBackground(ellipsis);
+                holder.detailSelectTextView.setText(otherItemManufacturer.getName() + " (" + otherItemManufacturer.getItemCount() + ")");
+
+                holder.detailSelectLayoutButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        LOGD(TAG, "Tapped list item extra button!!!!");
+
+                        PopupMenu menu = new PopupMenu(OtherItemFragment.this.getActivity(), holder.detailSelectLayoutButton);
+
+                        menu.getMenuInflater().inflate(R.menu.manufacturer_options_menu, menu.getMenu());
+
+                        menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem item) {
+
+                                LOGD(TAG, "Clicked item in popup menu");
+
+                                switch (item.getItemId()) {
+
+                                    case R.id.editManufacturerOptionItem:
+                                        showManufacturerDialog(otherItemManufacturer);
+                                        break;
+
+                                    case R.id.deleteManufacturerOptionItem:
+                                        attemptToDeleteManufacturer(otherItemManufacturer);
+                                        break;
+
+                                }
+                                return false;
+                            }
+                        });
+
+                        AnalyticUtils.logScreenView(OtherItemFragment.this.getActivity(), MiscUtils.getString(R.string.mt_screen_name_mfr_option_view));
+
+                        menu.show();
+                    }
+                });
+
+                return view;
+            }
 
         private class ViewHolder {
             public RelativeLayout detailSelectLayoutButton;
@@ -372,9 +372,6 @@ public class OtherItemFragment extends MTFragment {
     }
 
     private void showManufacturerDialog(final MTManufacturer manufacturer) {
-
-        mCurrentEditManufacturer = manufacturer;
-
         String title = null;
         String name = null;
 
@@ -530,7 +527,7 @@ public class OtherItemFragment extends MTFragment {
 
         LOGD(TAG, "Delete Manufacturer: " + manufacturer.getName());
 
-        String heading = MiscUtils.getString(R.string.mfr_dialog_title_delete_prefix) + " " + manufacturer.getName();
+        String heading = MiscUtils.getString(R.string.dialog_title_delete_prefix) + " " + manufacturer.getName();
 
         // Confirm deletion
         MTSimpleTextDialog dialog = new MTSimpleTextDialog(this.getActivity(), heading,

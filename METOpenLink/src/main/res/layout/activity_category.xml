@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.milwaukeetool.mymilwaukee.view.MTLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/categoryView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mt_white">
+
+        <ListView
+            android:id="@+id/categoryListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:choiceMode="singleChoice"
+            android:divider="@color/mt_divider_gray"
+            android:dividerHeight="1dp"
+            android:visibility="invisible"/>
+
+        <RelativeLayout
+            android:id="@+id/noCategoryLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true">
+
+                <com.milwaukeetool.mymilwaukee.view.MTTextView
+                    android:id="@+id/noCategoryTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:paddingBottom="@dimen/mt_padding_standard"
+                    android:paddingTop="@dimen/mt_padding_standard"
+                    android:background="@color/mt_white"
+                    android:singleLine="false"
+                    android:lineSpacingExtra="@dimen/mt_padding_standard"
+                    android:textColor="@color/mt_common_gray"
+                    android:textSize="@dimen/mt_font_size_large"
+                    android:text="@string/ctgy_no_category_msg" />
+
+                <com.milwaukeetool.mymilwaukee.view.MTButton
+                    android:id="@+id/addCateogryButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="@dimen/mt_margin_large"
+                    android:layout_marginRight="@dimen/mt_margin_large"
+                    android:layout_marginTop="@dimen/mt_margin_standard"
+                    android:background="@drawable/red_button_selector"
+                    android:textColor="@color/mt_white"
+                    android:text="@string/ctgy_add_category" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+</com.milwaukeetool.mymilwaukee.view.MTLayout>

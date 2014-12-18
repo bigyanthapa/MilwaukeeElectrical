@@ -90,7 +90,7 @@
             android:screenOrientation="sensorPortrait"></activity>
         <activity
             android:name=".activity.AddItemDetailActivity"
-            android:label="@string/main_add_item_title"
+            android:label="@string/main_title_add_item"
             android:launchMode="singleTop"
             android:parentActivityName=".activity.AddItemActivity"
             android:theme="@style/Theme.Milwaukeetool"
@@ -101,8 +101,20 @@
                 android:value=".activity.AddItemActivity" />
         </activity>
         <activity
+            android:name=".activity.CategoryActivity"
+            android:label="@string/main_title_add_category"
+            android:launchMode="singleTop"
+            android:parentActivityName=".activity.AddItemDetailActivity"
+            android:theme="@style/Theme.Milwaukeetool"
+            android:screenOrientation="sensorPortrait"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.AddItemDetailActivity" />
+        </activity>
+        <activity
             android:name=".activity.AddItemActivity"
-            android:label="@string/main_add_item_title"
+            android:label="@string/main_title_add_item"
             android:launchMode="singleTop"
             android:parentActivityName=".activity.MainActivity"
             android:screenOrientation="sensorPortrait"

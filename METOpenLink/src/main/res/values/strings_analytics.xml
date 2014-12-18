@@ -8,12 +8,16 @@
     <string name="mt_screen_name_main">Main</string>
     <string name="mt_screen_name_my_profile">My Profile</string>
     <string name="mt_screen_name_settings">Settings</string>
+    <string name="mt_screen_name_category">Category</string>
 
     <!-- Manufacturers -->
     <string name="mt_screen_name_manufacturer_list">Manufacturer List</string>
     <string name="mt_screen_name_add_edit_mfr">Add / Edit Manufacturer</string>
     <string name="mt_screen_name_delete_mfr">Delete Manufacturer</string>
     <string name="mt_screen_name_mfr_option_view">Manufacturer Option View</string>
+
+    <!-- Categories -->
+    <string name="mt_screen_name_add_edit_ctgy">Add / Edit Category</string>
 
     <!-- Inventory -->
     <string name="mt_screen_name_inventory">Inventory List</string>

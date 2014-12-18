@@ -2,6 +2,7 @@ package com.milwaukeetool.mymilwaukee.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -200,9 +201,21 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
                     });
                 }
             }
+        } else if (launchEvent.getSource() == this.category) {
+            Intent categoryActivity = new Intent(AddItemDetailActivity.this, CategoryActivity.class);
+            startActivityForResult(categoryActivity, MTConstants.CATEGORY_REQUEST);
         }
 
 
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == MTConstants.CATEGORY_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                String category = data.getStringExtra("category");
+                this.category.setFieldValue(category);
+            }
+        }
     }
 
     public void handleNotes(String notes) {
