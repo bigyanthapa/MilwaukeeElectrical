@@ -257,7 +257,7 @@ public class ItemSearchResultsFragment extends MTFragment {
             View view;
             ViewHolder holder;
             if(convertView == null) {
-                view = mInflater.inflate(R.layout.view_item_search_result_list_item, parent, false);
+                view = mInflater.inflate(R.layout.view_list_item_inventory_item, parent, false);
                 holder = new ViewHolder();
                 holder.thumbnail = (ImageView)view.findViewById(R.id.itemImageView);
                 holder.description = (TextView)view.findViewById(R.id.itemDescriptionTextView);

@@ -342,7 +342,7 @@ public class InventoryFragment extends MTFragment {
 
         public View createNewItemView(NamedObject namedObject, ViewGroup parent) {
 
-            View view = mInflater.inflate(R.layout.view_item_search_result_list_item, parent, false);
+            View view = mInflater.inflate(R.layout.view_list_item_inventory_item, parent, false);
             ViewHolder holder = new ViewHolder();
             holder.thumbnailImageView = (ImageView)view.findViewById(R.id.itemImageView);
             holder.descriptionTextView = (TextView)view.findViewById(R.id.itemDescriptionTextView);
