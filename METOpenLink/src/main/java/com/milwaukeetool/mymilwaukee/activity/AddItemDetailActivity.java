@@ -22,6 +22,7 @@ import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.config.MTConstants;
 import com.milwaukeetool.mymilwaukee.interfaces.MTFinishedListener;
 import com.milwaukeetool.mymilwaukee.interfaces.MTLaunchListener;
+import com.milwaukeetool.mymilwaukee.model.MTCategory;
 import com.milwaukeetool.mymilwaukee.model.MTItemSearchResult;
 import com.milwaukeetool.mymilwaukee.model.event.MTAddItemEvent;
 import com.milwaukeetool.mymilwaukee.model.event.MTLaunchEvent;
@@ -212,8 +213,9 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == MTConstants.CATEGORY_REQUEST) {
             if (resultCode == RESULT_OK) {
-                String category = data.getStringExtra("category");
-                this.category.setFieldValue(category);
+                MTCategory category = data.getParcelableExtra("category");
+                this.category.setFieldValue(category.getName());
+                this.category.setFieldId(category.getId());
             }
         }
     }
@@ -361,6 +363,11 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
         if (!TextUtils.isEmpty(mNotesText)) {
             request.setNotes(mNotesText);
         }
+
+        if (!TextUtils.isEmpty(this.category.getFieldValue())) {
+            request.setCategoryId(this.category.getFieldId());
+        }
+
         request.setPurchaseLocation(this.purchaseLocation.getFieldValue());
         request.setSerialNumber(this.serialNumber.getFieldValue());
         request.setCustomIdentifier(this.customIdName.getFieldValue());

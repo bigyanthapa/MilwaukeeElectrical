@@ -24,8 +24,8 @@ import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.adapter.MTAlertDialogAdapter;
 import com.milwaukeetool.mymilwaukee.config.MTConstants;
 import com.milwaukeetool.mymilwaukee.interfaces.MTAlertDialogListener;
+import com.milwaukeetool.mymilwaukee.interfaces.MTFinishedListener;
 import com.milwaukeetool.mymilwaukee.model.MTCategory;
-import com.milwaukeetool.mymilwaukee.model.MTManufacturer;
 import com.milwaukeetool.mymilwaukee.model.request.MTUserCategoryRequest;
 import com.milwaukeetool.mymilwaukee.model.response.MTUserCategoryResponse;
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
@@ -35,6 +35,7 @@ import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.view.MTButton;
 import com.milwaukeetool.mymilwaukee.view.MTSimpleEntryDialog;
 import com.milwaukeetool.mymilwaukee.view.MTSimpleTextDialog;
+import com.milwaukeetool.mymilwaukee.view.MTToastView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -179,6 +180,19 @@ public class CategoryActivity extends MTActivity {
                 CategoryActivity categoryActivity = CategoryActivity.this;
                 categoryActivity.getProgressView().stopProgress();
 
+                final IconDrawable successDrawable = new IconDrawable(MilwaukeeToolApplication.getAppContext(),
+                        Iconify.IconValue.fa_check_circle).colorRes(R.color.mt_black).sizeDp(40);
+
+                MTToastView.showMessage(CategoryActivity.this,
+                        MiscUtils.getString(R.string.message_success_save_category),
+                        MTToastView.MT_TOAST_SHORT,
+                        successDrawable,
+                        new MTFinishedListener() {
+                            @Override
+                            public void didFinish() {
+                            }
+                        });
+
                 LOGD(TAG, "Successfully added user category");
 
                 loadCategories(true);
@@ -215,6 +229,19 @@ public class CategoryActivity extends MTActivity {
                 categoryActivity.getProgressView().stopProgress();
 
                 LOGD(TAG, "Successfully edited user category");
+
+                final IconDrawable successDrawable = new IconDrawable(MilwaukeeToolApplication.getAppContext(),
+                        Iconify.IconValue.fa_check_circle).colorRes(R.color.mt_black).sizeDp(40);
+
+                MTToastView.showMessage(CategoryActivity.this,
+                        MiscUtils.getString(R.string.message_success_edit_category),
+                        MTToastView.MT_TOAST_SHORT,
+                        successDrawable,
+                        new MTFinishedListener() {
+                            @Override
+                            public void didFinish() {
+                            }
+                        });
 
                 loadCategories(true);
             }
@@ -295,7 +322,7 @@ public class CategoryActivity extends MTActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent();
-                    intent.putExtra("category", category.getName());
+                    intent.putExtra("category", category);
                     setResult(RESULT_OK, intent);
                     finish();
                 }
@@ -492,6 +519,19 @@ public class CategoryActivity extends MTActivity {
                 categoryActivity.getProgressView().stopProgress();
 
                 LOGD(TAG, "Successfully deleted user category");
+
+                final IconDrawable successDrawable = new IconDrawable(MilwaukeeToolApplication.getAppContext(),
+                        Iconify.IconValue.fa_check_circle).colorRes(R.color.mt_black).sizeDp(40);
+
+                MTToastView.showMessage(CategoryActivity.this,
+                        MiscUtils.getString(R.string.message_success_delete_category),
+                        MTToastView.MT_TOAST_SHORT,
+                        successDrawable,
+                        new MTFinishedListener() {
+                            @Override
+                            public void didFinish() {
+                            }
+                        });
 
                 loadCategories(true);
             }

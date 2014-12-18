@@ -50,6 +50,7 @@ public class MTSimpleFieldView extends RelativeLayout {
     protected boolean mResetField;
     protected MTFocusListener mFocusListener;
     protected int mTextColorResId;
+    protected int mId;
 
     protected int mListItemNumber = 0;
 
@@ -86,6 +87,7 @@ public class MTSimpleFieldView extends RelativeLayout {
         this.mMinLength = 0;
         this.mMaxLength = 0;
         this.mResetField = false;
+        this.mId = 0;
 
         this.setupView();
     }
@@ -178,6 +180,14 @@ public class MTSimpleFieldView extends RelativeLayout {
         if (!TextUtils.isEmpty(fieldValue)) {
             this.mEditText.setText(fieldValue);
         }
+    }
+
+    public void setFieldId(int id) {
+        this.mId = id;
+    }
+
+    public int getFieldId() {
+        return this.mId;
     }
 
     public FieldType getFieldType() {
