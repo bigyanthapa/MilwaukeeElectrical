@@ -24,6 +24,7 @@ import com.joanzapata.android.iconify.Iconify;
 import com.milwaukeetool.mymilwaukee.MilwaukeeToolApplication;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.AddItemActivity;
+import com.milwaukeetool.mymilwaukee.activity.MTActivity;
 import com.milwaukeetool.mymilwaukee.interfaces.MTAlertDialogListener;
 import com.milwaukeetool.mymilwaukee.model.MTManufacturer;
 import com.milwaukeetool.mymilwaukee.model.event.MTimeActionEvent;
@@ -37,6 +38,7 @@ import com.milwaukeetool.mymilwaukee.util.UIUtils;
 import com.milwaukeetool.mymilwaukee.view_reuseable.MTButton;
 import com.milwaukeetool.mymilwaukee.view_reuseable.MTSimpleEntryDialog;
 import com.milwaukeetool.mymilwaukee.view_reuseable.MTSimpleTextDialog;
+import com.milwaukeetool.mymilwaukee.view_reuseable.MTToastView;
 
 import java.util.ArrayList;
 
@@ -428,6 +430,9 @@ public class OtherItemFragment extends MTFragment {
 
                 LOGD(TAG, "Successfully added user manufacturer");
 
+                MTToastView.showSuccessMessage((MTActivity)OtherItemFragment.this.getActivity(),
+                        MiscUtils.getString(R.string.mfr_toast_saved));
+
                 loadManufacturers(true);
             }
 
@@ -463,6 +468,9 @@ public class OtherItemFragment extends MTFragment {
                 mAddItemActivity.getProgressView().stopProgress();
 
                 LOGD(TAG, "Successfully edited user manufacturer");
+
+                MTToastView.showSuccessMessage((MTActivity)OtherItemFragment.this.getActivity(),
+                        MiscUtils.getString(R.string.mfr_toast_updated));
 
                 loadManufacturers(true);
             }
@@ -561,6 +569,9 @@ public class OtherItemFragment extends MTFragment {
                 mAddItemActivity.getProgressView().stopProgress();
 
                 LOGD(TAG, "Successfully deleted user manufacturer");
+
+                MTToastView.showSuccessMessage((MTActivity)OtherItemFragment.this.getActivity(),
+                        MiscUtils.getString(R.string.mfr_toast_deleted));
 
                 loadManufacturers(true);
             }

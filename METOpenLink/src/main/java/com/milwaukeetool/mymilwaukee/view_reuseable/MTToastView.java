@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.joanzapata.android.iconify.IconDrawable;
+import com.joanzapata.android.iconify.Iconify;
+import com.milwaukeetool.mymilwaukee.MilwaukeeToolApplication;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.MTActivity;
 import com.milwaukeetool.mymilwaukee.interfaces.MTFinishedListener;
@@ -95,6 +98,23 @@ public class MTToastView extends RelativeLayout {
                 }
             }
         });
+    }
+
+    public static void showSuccessMessage(final MTActivity activity, String message) {
+        final IconDrawable successDrawable = new IconDrawable(MilwaukeeToolApplication.getAppContext(),
+                Iconify.IconValue.fa_check_circle).colorRes(R.color.mt_black).sizeDp(40);
+
+        // Show success
+        MTToastView.showMessage(activity,
+                message,
+                MTToastView.MT_TOAST_SHORT,
+                successDrawable,
+                new MTFinishedListener() {
+                    @Override
+                    public void didFinish() {
+
+                    }
+                });
     }
 
 }
