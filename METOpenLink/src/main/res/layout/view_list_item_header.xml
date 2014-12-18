@@ -6,10 +6,10 @@
     android:layout_height="wrap_content"
     android:background="@null">
 
-    <com.milwaukeetool.mymilwaukee.view_reuseable.MTHeaderTextView
+    <com.milwaukeetool.mymilwaukee.view.MTHeaderTextView
         android:id="@+id/my_profile_section_header"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="30dp"
         android:background="@color/mt_very_light_gray"
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/mt_padding_standard"

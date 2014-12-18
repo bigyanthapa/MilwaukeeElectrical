@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.milwaukeetool.mymilwaukee.view_reuseable.MTTextView
+<com.milwaukeetool.mymilwaukee.view.MTTextView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@android:id/text1"
     android:textColor="@color/mt_black"

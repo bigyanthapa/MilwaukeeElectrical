@@ -36,8 +36,8 @@ import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.NamedObject;
 import com.milwaukeetool.mymilwaukee.util.StringHelper;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
-import com.milwaukeetool.mymilwaukee.view_reuseable.MTListItemHeaderView;
-import com.milwaukeetool.mymilwaukee.view_reuseable.MTButton;
+import com.milwaukeetool.mymilwaukee.view.MTButton;
+import com.milwaukeetool.mymilwaukee.view.MTListItemHeaderView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -367,11 +367,20 @@ public class InventoryFragment extends MTFragment {
             MTUserItem userItem = (MTUserItem)namedObject.object;
 
             if (userItem != null && holder != null) {
-                Picasso.with(InventoryFragment.this.getActivity())
-                        .load(MTConstants.HTTP_PREFIX + userItem.getImageUrl())
-                        .placeholder(R.drawable.ic_mkeplaceholder)
-                        .error(R.drawable.ic_mkeplaceholder)
-                        .into(holder.thumbnailImageView);
+
+                if (userItem.getManufacturer().isPrimary()) {
+                    Picasso.with(InventoryFragment.this.getActivity())
+                            .load(MTConstants.HTTP_PREFIX + userItem.getImageUrl())
+                            .placeholder(R.drawable.ic_mkeplaceholder)
+                            .error(R.drawable.ic_mkeplaceholder)
+                            .into(holder.thumbnailImageView);
+                } else {
+                    Picasso.with(InventoryFragment.this.getActivity())
+                            .load(MTConstants.HTTP_PREFIX + userItem.getImageUrl())
+                            .placeholder(R.drawable.ic_otherplaceholder)
+                            .error(R.drawable.ic_otherplaceholder)
+                            .into(holder.thumbnailImageView);
+                }
 
                 Date serverDate = StringHelper.parseServerDate(userItem.getDateAdded());
                 String formattedDateString = StringHelper.getDateFull(serverDate);

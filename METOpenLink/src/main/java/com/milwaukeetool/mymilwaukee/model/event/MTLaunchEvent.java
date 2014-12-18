@@ -1,6 +1,6 @@
 package com.milwaukeetool.mymilwaukee.model.event;
 
-import com.milwaukeetool.mymilwaukee.view_reuseable.MTLaunchableFieldView;
+import com.milwaukeetool.mymilwaukee.view.MTLaunchableFieldView;
 
 import java.util.EventObject;
 

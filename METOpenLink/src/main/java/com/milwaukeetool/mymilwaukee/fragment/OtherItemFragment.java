@@ -35,10 +35,10 @@ import com.milwaukeetool.mymilwaukee.util.AnalyticUtils;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
-import com.milwaukeetool.mymilwaukee.view_reuseable.MTButton;
-import com.milwaukeetool.mymilwaukee.view_reuseable.MTSimpleEntryDialog;
-import com.milwaukeetool.mymilwaukee.view_reuseable.MTSimpleTextDialog;
-import com.milwaukeetool.mymilwaukee.view_reuseable.MTToastView;
+import com.milwaukeetool.mymilwaukee.view.MTButton;
+import com.milwaukeetool.mymilwaukee.view.MTSimpleEntryDialog;
+import com.milwaukeetool.mymilwaukee.view.MTSimpleTextDialog;
+import com.milwaukeetool.mymilwaukee.view.MTToastView;
 
 import java.util.ArrayList;
 
@@ -71,7 +71,6 @@ public class OtherItemFragment extends MTFragment {
     private RelativeLayout mNoManufacturerLayout;
     private MTButton mAddManufacturerButton;
 
-    private MTManufacturer mCurrentEditManufacturer = null;
     private MTSimpleEntryDialog mManufacturerDialog = null;
 
     public static OtherItemFragment newInstance(int position) {
@@ -142,7 +141,7 @@ public class OtherItemFragment extends MTFragment {
         mOtherItemAddManufacturer = menu.findItem(R.id.otherItemAddManufacturer);
 
         ActionBar actionBar = this.getActivity().getActionBar();
-        actionBar.setTitle(this.getResources().getString(R.string.main_add_item_title));
+        actionBar.setTitle(this.getResources().getString(R.string.main_title_add_item));
     }
 
     @Override
@@ -374,9 +373,6 @@ public class OtherItemFragment extends MTFragment {
     }
 
     private void showManufacturerDialog(final MTManufacturer manufacturer) {
-
-        mCurrentEditManufacturer = manufacturer;
-
         String title = null;
         String name = null;
 
@@ -538,7 +534,7 @@ public class OtherItemFragment extends MTFragment {
 
         LOGD(TAG, "Delete Manufacturer: " + manufacturer.getName());
 
-        String heading = MiscUtils.getString(R.string.mfr_dialog_title_delete_prefix) + " " + manufacturer.getName();
+        String heading = MiscUtils.getString(R.string.dialog_title_delete_prefix) + " " + manufacturer.getName() + "?";
 
         // Confirm deletion
         MTSimpleTextDialog dialog = new MTSimpleTextDialog(this.getActivity(), heading,

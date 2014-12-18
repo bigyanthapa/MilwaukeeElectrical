@@ -29,13 +29,13 @@ import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
-import com.milwaukeetool.mymilwaukee.view.MTChangePasswordPopupView;
-import com.milwaukeetool.mymilwaukee.view_reuseable.MTLaunchableFieldView;
-import com.milwaukeetool.mymilwaukee.view_reuseable.MTListItemHeaderView;
-import com.milwaukeetool.mymilwaukee.view_reuseable.MTSelectableFieldView;
-import com.milwaukeetool.mymilwaukee.view_reuseable.MTSimpleFieldView;
-import com.milwaukeetool.mymilwaukee.view_reuseable.MTSwitchListItemView;
-import com.milwaukeetool.mymilwaukee.view_reuseable.MTToastView;
+import com.milwaukeetool.mymilwaukee.view_custom.MTChangePasswordPopupView;
+import com.milwaukeetool.mymilwaukee.view.MTLaunchableFieldView;
+import com.milwaukeetool.mymilwaukee.view.MTListItemHeaderView;
+import com.milwaukeetool.mymilwaukee.view.MTSelectableFieldView;
+import com.milwaukeetool.mymilwaukee.view.MTSimpleFieldView;
+import com.milwaukeetool.mymilwaukee.view.MTSwitchListItemView;
+import com.milwaukeetool.mymilwaukee.view.MTToastView;
 
 import java.util.LinkedList;
 

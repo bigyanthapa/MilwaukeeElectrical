@@ -24,7 +24,7 @@
             android:scaleType="fitXY"
             android:src="@drawable/ic_mtred" />
 
-        <com.milwaukeetool.mymilwaukee.view_reuseable.MTTextView
+        <com.milwaukeetool.mymilwaukee.view.MTTextView
             android:id="@+id/searchMilwaukeeModelText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
             android:textColor="@color/mt_common_gray"
             android:textSize="@dimen/mt_font_size_large" />
 
-        <com.milwaukeetool.mymilwaukee.view_reuseable.MTTextView
+        <com.milwaukeetool.mymilwaukee.view.MTTextView
             android:id="@+id/searchOtherModelText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

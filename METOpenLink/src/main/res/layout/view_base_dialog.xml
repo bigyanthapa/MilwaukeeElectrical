@@ -6,7 +6,7 @@
     android:background="@color/mt_white"
     android:orientation="vertical">
 
-    <com.milwaukeetool.mymilwaukee.view_reuseable.MTTextView
+    <com.milwaukeetool.mymilwaukee.view.MTTextView
         android:id="@+id/simpleDialogHeadingTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

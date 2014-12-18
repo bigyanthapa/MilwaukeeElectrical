@@ -14,9 +14,9 @@ import com.milwaukeetool.mymilwaukee.util.AnalyticUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.NetworkUtil;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
-import com.milwaukeetool.mymilwaukee.view_reuseable.MTLayout;
-import com.milwaukeetool.mymilwaukee.view.MTNoNetworkView;
-import com.milwaukeetool.mymilwaukee.view_reuseable.MTProgressView;
+import com.milwaukeetool.mymilwaukee.view.MTLayout;
+import com.milwaukeetool.mymilwaukee.view_custom.MTNoNetworkView;
+import com.milwaukeetool.mymilwaukee.view.MTProgressView;
 
 import de.greenrobot.event.EventBus;
 

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/mt_white">
 
-        <com.milwaukeetool.mymilwaukee.view.MTMilwaukeeItemView
+        <com.milwaukeetool.mymilwaukee.view_custom.MTMilwaukeeItemView
             android:id="@+id/itemSearchResultsMilwaukeeView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -27,7 +27,7 @@
             android:background="@color/mt_white"
             android:visibility="invisible">
 
-            <com.milwaukeetool.mymilwaukee.view_reuseable.MTTextView
+            <com.milwaukeetool.mymilwaukee.view.MTTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"

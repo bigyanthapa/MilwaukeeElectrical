@@ -2,6 +2,7 @@ package com.milwaukeetool.mymilwaukee.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.config.MTConstants;
 import com.milwaukeetool.mymilwaukee.interfaces.MTFinishedListener;
 import com.milwaukeetool.mymilwaukee.interfaces.MTLaunchListener;
+import com.milwaukeetool.mymilwaukee.model.MTCategory;
 import com.milwaukeetool.mymilwaukee.model.MTItemSearchResult;
 import com.milwaukeetool.mymilwaukee.model.event.MTAddItemEvent;
 import com.milwaukeetool.mymilwaukee.model.event.MTLaunchEvent;
@@ -29,10 +31,10 @@ import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
-import com.milwaukeetool.mymilwaukee.view_reuseable.MTLaunchableFieldView;
+import com.milwaukeetool.mymilwaukee.view.MTLaunchableFieldView;
 import com.milwaukeetool.mymilwaukee.view.MTNotesView;
-import com.milwaukeetool.mymilwaukee.view_reuseable.MTSimpleFieldView;
-import com.milwaukeetool.mymilwaukee.view_reuseable.MTToastView;
+import com.milwaukeetool.mymilwaukee.view.MTSimpleFieldView;
+import com.milwaukeetool.mymilwaukee.view.MTToastView;
 import com.squareup.picasso.Picasso;
 
 import de.greenrobot.event.EventBus;
@@ -49,15 +51,15 @@ import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 public class AddItemDetailActivity extends MTActivity implements MTLaunchListener {
     private static final String TAG = makeLogTag(AddItemDetailActivity.class);
 
-    private MTSimpleFieldView description;
-    private MTSimpleFieldView modelNumber;
-    private MTSimpleFieldView customIdName;
-    private MTSimpleFieldView serialNumber;
-    private MTSimpleFieldView purchaseLocation;
+    private MTSimpleFieldView descriptionFieldView;
+    private MTSimpleFieldView modelNumberFieldView;
+    private MTSimpleFieldView customIdNameFieldView;
+    private MTSimpleFieldView serialNumberFieldView;
+    private MTSimpleFieldView purchaseLocationFieldView;
 
-    private MTLaunchableFieldView category;
-    private MTLaunchableFieldView notes;
-    private MTLaunchableFieldView proof;
+    private MTLaunchableFieldView categoryFieldView;
+    private MTLaunchableFieldView notesFieldView;
+    private MTLaunchableFieldView proofFieldView;
 
     private String mNotesText = null;
 
@@ -89,54 +91,54 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
         mFooter.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 UIUtils.getPixels(20)));
 
-        this.description = this.createSimpleFieldView(R.string.tool_detail_description,
+        this.descriptionFieldView = this.createSimpleFieldView(R.string.tool_detail_description,
                 R.color.mt_red,
                 256,
                 true,
                 false);
 
-        this.modelNumber = this.createSimpleFieldView(R.string.tool_detail_model_number,
+        this.modelNumberFieldView = this.createSimpleFieldView(R.string.tool_detail_model_number,
                 R.color.mt_red,
                 32,
                 true,
                 false);
 
-        this.customIdName = this.createSimpleFieldView(R.string.tool_detail_name,
+        this.customIdNameFieldView = this.createSimpleFieldView(R.string.tool_detail_name,
                 R.color.mt_black,
                 20,
                 false,
                 true);
 
-        this.serialNumber = this.createSimpleFieldView(R.string.tool_detail_serial_number,
+        this.serialNumberFieldView = this.createSimpleFieldView(R.string.tool_detail_serial_number,
                 R.color.mt_black,
                 64,
                 false,
                 true);
 
-        this.purchaseLocation = this.createSimpleFieldView(R.string.tool_detail_purchase_location,
+        this.purchaseLocationFieldView = this.createSimpleFieldView(R.string.tool_detail_purchase_location,
                 R.color.mt_black,
                 64,
                 false,
                 true);
-        this.purchaseLocation.setNextActionDone();
+        this.purchaseLocationFieldView.setNextActionDone();
 
-        this.notes = this.createLaunchableFieldView(R.string.tool_detail_notes,
+        this.notesFieldView = this.createLaunchableFieldView(R.string.tool_detail_notes,
                 R.color.mt_black,
                 256,
                 false);
-        this.notes.setHintColorTextResource(R.color.mt_black);
+        this.notesFieldView.setHintColorTextResource(R.color.mt_black);
 
-        this.proof = this.createLaunchableFieldView(R.string.tool_detail_proof,
+        this.proofFieldView = this.createLaunchableFieldView(R.string.tool_detail_proof,
                 R.color.mt_black,
                 0,
                 false);
-        this.proof.setHintColorTextResource(R.color.mt_black);
+        this.proofFieldView.setHintColorTextResource(R.color.mt_black);
 
-        this.category = this.createLaunchableFieldView(R.string.tool_detail_category,
+        this.categoryFieldView = this.createLaunchableFieldView(R.string.tool_detail_category,
                 R.color.mt_black,
                 0,
                 false);
-        this.category.setHintColorTextResource(R.color.mt_black);
+        this.categoryFieldView.setHintColorTextResource(R.color.mt_black);
 
         this.mapSearchResults(mItemSearchResult);
 
@@ -156,7 +158,7 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
 
     public void launched(MTLaunchEvent launchEvent) {
 
-        if (launchEvent.getSource() == this.notes) {
+        if (launchEvent.getSource() == this.notesFieldView) {
 
             LayoutInflater inflater = this.getLayoutInflater();
 
@@ -200,9 +202,22 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
                     });
                 }
             }
+        } else if (launchEvent.getSource() == this.categoryFieldView) {
+            Intent categoryActivity = new Intent(AddItemDetailActivity.this, CategoryActivity.class);
+            startActivityForResult(categoryActivity, MTConstants.SELECT_CATEGORY_REQUEST);
         }
 
 
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == MTConstants.SELECT_CATEGORY_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                MTCategory category = data.getParcelableExtra("category");
+                this.categoryFieldView.setFieldValue(category.getName());
+                this.categoryFieldView.setFieldId(category.getId());
+            }
+        }
     }
 
     public void handleNotes(String notes) {
@@ -215,8 +230,8 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
     }
 
     protected void mapSearchResults(MTItemSearchResult mtItemSearchResult) {
-        this.modelNumber.setFieldValue(mtItemSearchResult.getModelNumber());
-        this.description.setFieldValue(mtItemSearchResult.getItemDescription());
+        this.modelNumberFieldView.setFieldValue(mtItemSearchResult.getModelNumber());
+        this.descriptionFieldView.setFieldValue(mtItemSearchResult.getItemDescription());
     }
 
     @Override
@@ -324,14 +339,14 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
     }
 
     protected boolean isFieldsValid() {
-        if (this.description.isValid() &&
-                this.modelNumber.isValid() &&
-                this.customIdName.isValid() &&
-                this.serialNumber.isValid() &&
-                this.purchaseLocation.isValid() &&
-                this.category.isValid() &&
-                this.notes.isValid() &&
-                this.proof.isValid()) {
+        if (this.descriptionFieldView.isValid() &&
+                this.modelNumberFieldView.isValid() &&
+                this.customIdNameFieldView.isValid() &&
+                this.serialNumberFieldView.isValid() &&
+                this.purchaseLocationFieldView.isValid() &&
+                this.categoryFieldView.isValid() &&
+                this.notesFieldView.isValid() &&
+                this.proofFieldView.isValid()) {
             return true;
         }
 
@@ -341,16 +356,21 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
     protected MTItemDetailRequest constructMTItemDetailRequest() {
         MTItemDetailRequest request = new MTItemDetailRequest();
 
-        request.setModelNumber(this.modelNumber.getFieldValue());
-        request.setItemDescription(this.description.getFieldValue());
+        request.setModelNumber(this.modelNumberFieldView.getFieldValue());
+        request.setItemDescription(this.descriptionFieldView.getFieldValue());
 
         request.setImageUrl(mItemSearchResult.getImageUrl());
         if (!TextUtils.isEmpty(mNotesText)) {
             request.setNotes(mNotesText);
         }
-        request.setPurchaseLocation(this.purchaseLocation.getFieldValue());
-        request.setSerialNumber(this.serialNumber.getFieldValue());
-        request.setCustomIdentifier(this.customIdName.getFieldValue());
+
+        if (!TextUtils.isEmpty(this.categoryFieldView.getFieldValue())) {
+            request.setCategoryId(this.categoryFieldView.getFieldId());
+        }
+
+        request.setPurchaseLocation(this.purchaseLocationFieldView.getFieldValue());
+        request.setSerialNumber(this.serialNumberFieldView.getFieldValue());
+        request.setCustomIdentifier(this.customIdNameFieldView.getFieldValue());
 
 //        request.setManufacturerId(-1);
 //        request.setCategoryId(-1);
@@ -363,15 +383,15 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
 
     protected void assembleLayout() {
         this.mProductDetailLayout = (LinearLayout) this.findViewById(R.id.addItemDetailLayout);
-        this.mProductDetailLayout.addView(this.description);
-        this.mProductDetailLayout.addView(this.modelNumber);
+        this.mProductDetailLayout.addView(this.descriptionFieldView);
+        this.mProductDetailLayout.addView(this.modelNumberFieldView);
         this.mProductDetailLayout.addView(mSpacer);
-        this.mProductDetailLayout.addView(this.category);
-        this.mProductDetailLayout.addView(this.customIdName);
-        this.mProductDetailLayout.addView(this.serialNumber);
-        this.mProductDetailLayout.addView(this.purchaseLocation);
-        this.mProductDetailLayout.addView(this.notes);
-        this.mProductDetailLayout.addView(this.proof);
+        this.mProductDetailLayout.addView(this.categoryFieldView);
+        this.mProductDetailLayout.addView(this.customIdNameFieldView);
+        this.mProductDetailLayout.addView(this.serialNumberFieldView);
+        this.mProductDetailLayout.addView(this.purchaseLocationFieldView);
+        this.mProductDetailLayout.addView(this.notesFieldView);
+        this.mProductDetailLayout.addView(this.proofFieldView);
         this.mProductDetailLayout.addView(mFooter);
     }
 

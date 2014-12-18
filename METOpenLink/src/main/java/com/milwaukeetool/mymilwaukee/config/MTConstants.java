@@ -14,7 +14,10 @@ public class MTConstants {
 
     public static final String SEARCH_ITEM_RESULT = "MTItemSearchResult";
 
+    public static final String EMPTY_STRING = "";
+
     public static final int CREATE_ACCOUNT_REQUEST = 1000;
     public static final int LOGIN_REQUEST = 1001;
+    public static final int SELECT_CATEGORY_REQUEST = 2000;
 
 }

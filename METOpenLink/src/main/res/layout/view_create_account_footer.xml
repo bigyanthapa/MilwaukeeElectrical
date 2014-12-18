@@ -7,7 +7,7 @@
     android:layout_centerVertical="true"
     android:background="@null">
 
-    <com.milwaukeetool.mymilwaukee.view_reuseable.MTCheckBox
+    <com.milwaukeetool.mymilwaukee.view.MTCheckBox
         android:id="@+id/emailCommunicationCheckbox"
         style="@style/CheckBox.MilwaukeeTool"
         android:layout_width="match_parent"
@@ -23,7 +23,7 @@
         android:checked="true"
         android:text="@string/text_receive_email_communications" />
 
-    <com.milwaukeetool.mymilwaukee.view_reuseable.MTButton
+    <com.milwaukeetool.mymilwaukee.view.MTButton
         android:id="@+id/footerCreateAccountButton"
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -35,7 +35,7 @@
         android:layout_below="@+id/emailCommunicationCheckbox"
         android:textColor="@color/mt_white" />
 
-    <com.milwaukeetool.mymilwaukee.view_reuseable.MTTextView
+    <com.milwaukeetool.mymilwaukee.view.MTTextView
         android:id="@+id/privacyPolicyTextView"
         android:layout_width="match_parent"
         android:layout_height="35dp"

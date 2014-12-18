@@ -35,7 +35,7 @@ import com.milwaukeetool.mymilwaukee.model.event.MTSearchResultEvent;
 import com.milwaukeetool.mymilwaukee.services.MTInventoryHelper;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
-import com.milwaukeetool.mymilwaukee.view.MTMilwaukeeItemView;
+import com.milwaukeetool.mymilwaukee.view_custom.MTMilwaukeeItemView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -322,7 +322,7 @@ public class ItemSearchResultsFragment extends MTFragment {
         inflater.inflate(R.menu.inventory_add_item_menu, menu);
 
         final ActionBar actionBar = this.getActivity().getActionBar();
-        actionBar.setTitle(this.getResources().getString(R.string.main_add_item_title));
+        actionBar.setTitle(this.getResources().getString(R.string.main_title_add_item));
 
         final SearchView searchView =
                 (SearchView) menu.findItem(R.id.inventory_search).getActionView();

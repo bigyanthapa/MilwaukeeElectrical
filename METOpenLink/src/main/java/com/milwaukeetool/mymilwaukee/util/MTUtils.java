@@ -11,8 +11,8 @@ import com.milwaukeetool.mymilwaukee.activity.MainActivity;
 import com.milwaukeetool.mymilwaukee.config.MTConfig;
 import com.milwaukeetool.mymilwaukee.model.event.MTNetworkAvailabilityEvent;
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
-import com.milwaukeetool.mymilwaukee.view_reuseable.MTDialog;
-import com.milwaukeetool.mymilwaukee.view_reuseable.MTSimpleTextDialog;
+import com.milwaukeetool.mymilwaukee.view.MTDialog;
+import com.milwaukeetool.mymilwaukee.view.MTSimpleTextDialog;
 import com.r0adkll.postoffice.PostOffice;
 import com.r0adkll.postoffice.model.Design;
 

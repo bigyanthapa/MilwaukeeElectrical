@@ -32,6 +32,8 @@ public class MTWebInterface {
 
     private MTUserManufacturerService mUserManufacturerService = null;
 
+    private MTUserCategoryService mtUserCategoryService = null;
+
     Converter DATA_CONVERTER = new GsonConverter(new Gson());
     String SERVICE_ENDPOINT = MTConfig.getWebServicesBaseURL();
 
@@ -89,6 +91,14 @@ public class MTWebInterface {
             mUserManufacturerService = mRestAdapter.create(MTUserManufacturerService.class);
         }
         return mUserManufacturerService;
+    }
+
+    public MTUserCategoryService getUserCategoryService() {
+        if (this.mtUserCategoryService == null) {
+            // Create the user service
+            this.mtUserCategoryService = mRestAdapter.create(MTUserCategoryService.class);
+        }
+        return this.mtUserCategoryService;
     }
 
     public static String getErrorMessage(RetrofitError retrofitError) {

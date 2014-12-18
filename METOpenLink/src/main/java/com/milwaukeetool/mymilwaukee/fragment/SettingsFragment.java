@@ -22,8 +22,8 @@ import com.milwaukeetool.mymilwaukee.interfaces.MTClickListener;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
-import com.milwaukeetool.mymilwaukee.view_reuseable.MTSelectableItemView;
-import com.milwaukeetool.mymilwaukee.view.MTSettingsFooterView;
+import com.milwaukeetool.mymilwaukee.view.MTSelectableItemView;
+import com.milwaukeetool.mymilwaukee.view_custom.MTSettingsFooterView;
 
 import java.util.LinkedList;
 import java.util.List;

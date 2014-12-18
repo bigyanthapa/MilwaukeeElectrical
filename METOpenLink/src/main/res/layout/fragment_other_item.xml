@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true">
 
-            <com.milwaukeetool.mymilwaukee.view_reuseable.MTTextView
+            <com.milwaukeetool.mymilwaukee.view.MTTextView
                 android:id="@+id/otherItemNoManufacturerTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
                 android:textSize="@dimen/mt_font_size_large"
                 android:text="@string/mfr_no_manufacturer_msg" />
 
-            <com.milwaukeetool.mymilwaukee.view_reuseable.MTButton
+            <com.milwaukeetool.mymilwaukee.view.MTButton
                 android:id="@+id/otherItemAddManufacturerButton"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
