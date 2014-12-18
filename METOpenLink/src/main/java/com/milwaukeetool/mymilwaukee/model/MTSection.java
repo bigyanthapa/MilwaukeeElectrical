@@ -3,7 +3,6 @@ package com.milwaukeetool.mymilwaukee.model;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by scott.hopfensperger on 12/9/2014.
@@ -38,7 +37,7 @@ public class MTSection {
         return items;
     }
 
-    public void setItem(ArrayList<MTUserItem> items) {
+    public void setItems(ArrayList<MTUserItem> items) {
         this.items = items;
     }
 
@@ -46,7 +45,6 @@ public class MTSection {
         if (this.items != null && !this.items.isEmpty()) {
             return true;
         }
-
         return false;
     }
 }

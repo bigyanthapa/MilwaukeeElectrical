@@ -31,7 +31,7 @@ import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
 import com.milwaukeetool.mymilwaukee.view.MTChangePasswordPopupView;
 import com.milwaukeetool.mymilwaukee.view_reuseable.MTLaunchableFieldView;
-import com.milwaukeetool.mymilwaukee.view.MTMyProfileSectionView;
+import com.milwaukeetool.mymilwaukee.view_reuseable.MTListItemHeaderView;
 import com.milwaukeetool.mymilwaukee.view_reuseable.MTSelectableFieldView;
 import com.milwaukeetool.mymilwaukee.view_reuseable.MTSimpleFieldView;
 import com.milwaukeetool.mymilwaukee.view_reuseable.MTSwitchListItemView;
@@ -55,14 +55,14 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
 
     private static final String TAG = makeLogTag(MyProfileActivity.class);
 
-    private MTMyProfileSectionView userInformation;
+    private MTListItemHeaderView userInformation;
     private MTSimpleFieldView mEmailFieldView;
     private MTSimpleFieldView mFirstNameFieldView;
     private MTSimpleFieldView mLastNameFieldView;
     private MTSelectableFieldView mTradeOccupationFieldView;
     private MTLaunchableFieldView mPassword;
 
-    private MTMyProfileSectionView companyInformation;
+    private MTListItemHeaderView companyInformation;
     private MTSimpleFieldView title;
     private MTSimpleFieldView companyName;
     private MTSimpleFieldView address1;
@@ -72,7 +72,7 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
     private MTSimpleFieldView zipcode;
     private MTSimpleFieldView country;
 
-    private MTMyProfileSectionView contactInformation;
+    private MTListItemHeaderView contactInformation;
     private MTSimpleFieldView phone;
     private MTSimpleFieldView cellPhone;
     private MTSimpleFieldView fax;
@@ -278,7 +278,7 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
         mMyProfileLayout = (LinearLayout)findViewById(R.id.myProfileLayout);
 
         for(View view : mViews) {
-            if (view instanceof MTMyProfileSectionView) {
+            if (view instanceof MTListItemHeaderView) {
                 view.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, UIUtils.getPixels(50)));
             } else if (view == mPassword || view == country || view == emailCommunications) {
                 view.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, UIUtils.getPixels(55)));
@@ -358,7 +358,7 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
     }
 
     protected void setupCompanyInformation(LinkedList<View> views) {
-        this.companyInformation = new MTMyProfileSectionView(this);
+        this.companyInformation = new MTListItemHeaderView(this);
         this.companyInformation.setHeader(MiscUtils.getString(R.string.company_information));
         views.add(this.companyInformation);
 
@@ -382,7 +382,7 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
     }
 
     protected void setupContactInformation(LinkedList<View> views) {
-        this.contactInformation = new MTMyProfileSectionView(this);
+        this.contactInformation = new MTListItemHeaderView(this);
         this.contactInformation.setHeader(MiscUtils.getString(R.string.contact_information));
         views.add(contactInformation);
 
@@ -403,7 +403,7 @@ public class MyProfileActivity extends MTActivity implements Postable, MTLaunchL
     }
 
     protected void setupUserInformation(LinkedList<View> views) {
-        this.userInformation = new MTMyProfileSectionView(this);
+        this.userInformation = new MTListItemHeaderView(this);
         this.userInformation.setHeader(MiscUtils.getString(R.string.user_information));
         this.userInformation.setMargins(0, 0, 0, UIUtils.getPixels(5));
         views.add(userInformation);

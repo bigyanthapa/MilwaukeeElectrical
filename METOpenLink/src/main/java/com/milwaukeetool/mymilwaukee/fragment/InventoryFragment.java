@@ -17,18 +17,25 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.joanzapata.android.iconify.IconDrawable;
+import com.joanzapata.android.iconify.Iconify;
+import com.milwaukeetool.mymilwaukee.MilwaukeeToolApplication;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.AddItemActivity;
 import com.milwaukeetool.mymilwaukee.activity.AddItemDetailActivity;
 import com.milwaukeetool.mymilwaukee.activity.MTActivity;
 import com.milwaukeetool.mymilwaukee.config.MTConstants;
-import com.milwaukeetool.mymilwaukee.model.MTItemSearchResult;
+import com.milwaukeetool.mymilwaukee.model.MTSection;
+import com.milwaukeetool.mymilwaukee.model.MTUserItem;
 import com.milwaukeetool.mymilwaukee.model.event.MTAddItemEvent;
 import com.milwaukeetool.mymilwaukee.model.response.MTUserItemResponse;
+import com.milwaukeetool.mymilwaukee.services.MTUserItemHelper;
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
+import com.milwaukeetool.mymilwaukee.util.NamedObject;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
+import com.milwaukeetool.mymilwaukee.view_reuseable.MTListItemHeaderView;
 import com.milwaukeetool.mymilwaukee.view_reuseable.MTButton;
 import com.squareup.picasso.Picasso;
 
@@ -55,6 +62,7 @@ public class InventoryFragment extends MTFragment {
     private RelativeLayout mInventoryLayout;
 
     private ListView mItemListView;
+    private InventoryItemAdapter mAdapter;
 
     private int position;
 
@@ -77,6 +85,10 @@ public class InventoryFragment extends MTFragment {
 
         if (UIUtils.isViewVisible(this.getView())) {
             loadUserItems(false);
+        }
+
+        if (mAdapter != null) {
+            mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -116,7 +128,17 @@ public class InventoryFragment extends MTFragment {
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        LOGD(TAG, "View was destroyed, need to request my inventory");
+        mLoadedInventory = false;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        mInflater = inflater;//LayoutInflater.from(this.getActivity());
+
         View rootView = inflater.inflate(R.layout.fragment_inventory, container, false);
 
         mItemListView = (ListView)rootView.findViewById(R.id.inventoryItemListView);
@@ -135,6 +157,12 @@ public class InventoryFragment extends MTFragment {
 
         mInventoryLayout.setVisibility(View.INVISIBLE);
         mNoInventoryLayout.setVisibility(View.INVISIBLE);
+
+        mAdapter = new InventoryItemAdapter(this.getActivity(), null);
+
+        if (mItemListView != null) {
+            mItemListView.setAdapter(mAdapter);
+        }
 
         return rootView;
     }
@@ -173,8 +201,8 @@ public class InventoryFragment extends MTFragment {
             @Override
             public void success(MTUserItemResponse result, Response response) {
                 mLoadedInventory = true;
-                mLastResponse = result;
                 mActivity.getProgressView().stopProgress();
+                mAdapter.setListItems(result);
                 InventoryFragment.this.updateView();
             }
 
@@ -199,7 +227,7 @@ public class InventoryFragment extends MTFragment {
 
     public void updateView() {
 
-        boolean hasItems = mLastResponse.isEmpty();
+        boolean hasItems = mAdapter.hasUserItems();
 
         // Update both layouts always
         this.mNoInventoryLayout.setVisibility(hasItems ? View.INVISIBLE : View.VISIBLE);
@@ -223,25 +251,31 @@ public class InventoryFragment extends MTFragment {
 
     private class InventoryItemAdapter extends BaseAdapter {
 
-        private ArrayList<MTItemSearchResult> mSearchResults;
+        private ArrayList<NamedObject> _listItems = null;
 
-        public InventoryItemAdapter(Context context, ArrayList<MTItemSearchResult> searchResults) {
+        public InventoryItemAdapter(Context context, ArrayList<NamedObject> listItems) {
 
-            if (searchResults != null) {
-                mSearchResults = searchResults;
+            if (listItems != null) {
+                _listItems = listItems;
             } else {
-                mSearchResults = new ArrayList<MTItemSearchResult>();
+                _listItems = new ArrayList<NamedObject>();
             }
         }
 
         @Override
         public int getCount() {
-            return mSearchResults.size();
+            if (_listItems == null) {
+                return 0;
+            }
+            return _listItems.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return mSearchResults.get(position);
+            if (_listItems == null) {
+                return null;
+            }
+            return _listItems.get(position);
         }
 
         @Override
@@ -251,56 +285,134 @@ public class InventoryFragment extends MTFragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            View view;
-            ViewHolder holder;
+
+            View view = null;
+            NamedObject namedObject = _listItems.get(position);
+
+            LOGD(TAG, "Get View for type: " + namedObject.name + " at index: " + position);
+
             if(convertView == null) {
-                view = mInflater.inflate(R.layout.view_item_search_result_list_item, parent, false);
-                holder = new ViewHolder();
-                holder.thumbnail = (ImageView)view.findViewById(R.id.itemImageView);
-                holder.description = (TextView)view.findViewById(R.id.itemDescriptionTextView);
-                holder.modelNumber = (TextView)view.findViewById(R.id.itemModelNumberTextView);
-                view.setTag(holder);
+                if (MTUserItemHelper.isSection(namedObject) && (namedObject.object instanceof MTSection)) {
+                    view = createNewHeaderView(namedObject);
+                    updateHeader(namedObject, view);
+
+                } else if (MTUserItemHelper.isUserItem(namedObject) && (namedObject.object instanceof MTUserItem)) {
+                    view = createNewItemView(namedObject, parent);
+                    updateItem(namedObject, view);
+                }
             } else {
-                view = convertView;
-                holder = (ViewHolder)view.getTag();
+
+                if (MTUserItemHelper.isSection(namedObject) && (namedObject.object instanceof MTSection)) {
+
+                    if (view != null && view instanceof MTListItemHeaderView) {
+                        view = convertView;
+                    } else {
+                        view = createNewHeaderView(namedObject);
+                    }
+
+                    updateHeader(namedObject, view);
+
+                } else if (MTUserItemHelper.isUserItem(namedObject) && (namedObject.object instanceof MTUserItem)) {
+
+                    if (view != null && !(view instanceof MTListItemHeaderView)) {
+                        view = convertView;
+                    } else {
+                        view = createNewItemView(namedObject, parent);
+                    }
+
+                    updateItem(namedObject, view);
+                }
             }
 
-            MTItemSearchResult searchResult = mSearchResults.get(position);
-
-            Picasso.with(InventoryFragment.this.getActivity())
-                    .load(MTConstants.HTTP_PREFIX + searchResult.getImageUrl())
-                    .placeholder(R.drawable.ic_mkeplaceholder)
-                    .error(R.drawable.ic_mkeplaceholder)
-                    .into(holder.thumbnail);
-
-            holder.description.setText(searchResult.getItemDescription());
-            holder.modelNumber.setText(searchResult.getModelNumber());
+            if (view == null) {
+                view = new View(InventoryFragment.this.getActivity());
+            }
 
             return view;
         }
 
+        public View createNewHeaderView(NamedObject namedObject) {
+            MTSection section = (MTSection)namedObject.object;
+
+            View view = new MTListItemHeaderView(InventoryFragment.this.getActivity());
+            ((MTListItemHeaderView)view).setMargins(0, 0, 0, UIUtils.getPixels(0));
+
+            return view;
+        }
+
+        public View createNewItemView(NamedObject namedObject, ViewGroup parent) {
+
+            View view = mInflater.inflate(R.layout.view_item_search_result_list_item, parent, false);
+            ViewHolder holder = new ViewHolder();
+            holder.thumbnailImageView = (ImageView)view.findViewById(R.id.itemImageView);
+            holder.descriptionTextView = (TextView)view.findViewById(R.id.itemDescriptionTextView);
+            holder.modelNumberTextView = (TextView)view.findViewById(R.id.itemModelNumberTextView);
+            holder.actionImageView = (ImageView)view.findViewById(R.id.addItemImageView);
+            view.setTag(holder);
+
+
+            final IconDrawable arrowRight = new IconDrawable(MilwaukeeToolApplication.getAppContext(),
+                    Iconify.IconValue.fa_angle_right).colorRes(R.color.mt_common_gray).sizeDp(25);
+            holder.actionImageView.setImageDrawable(arrowRight);
+
+            return view;
+        }
+
+        public void updateItem(NamedObject namedObject, View view) {
+
+            ViewHolder holder = (ViewHolder)view.getTag();
+
+            MTUserItem userItem = (MTUserItem)namedObject.object;
+
+            if (userItem != null && holder != null) {
+                Picasso.with(InventoryFragment.this.getActivity())
+                        .load(MTConstants.HTTP_PREFIX + userItem.getImageUrl())
+                        .placeholder(R.drawable.ic_mkeplaceholder)
+                        .error(R.drawable.ic_mkeplaceholder)
+                        .into(holder.thumbnailImageView);
+
+                holder.descriptionTextView.setText(userItem.getItemDescription());
+                holder.modelNumberTextView.setText(userItem.getModelNumber());
+            }
+        }
+
+        public void updateHeader(NamedObject namedObject, View view) {
+            MTSection section = (MTSection)namedObject.object;
+
+            if (view instanceof MTListItemHeaderView) {
+                ((MTListItemHeaderView)view).setHeader(section.getTitle());
+            }
+        }
+
         private class ViewHolder {
-            public ImageView thumbnail;
-            public TextView description;
-            public TextView modelNumber;
+            public ImageView thumbnailImageView;
+            public TextView descriptionTextView;
+            public TextView modelNumberTextView;
+            public ImageView actionImageView;
         }
 
-        public void clearSearchResults() {
-            mSearchResults.clear();
+        public void clearListItems() {
+            mLastResponse = null;
+            _listItems.clear();
             notifyDataSetChanged();
         }
 
-        public void appendSearchResults(ArrayList<MTItemSearchResult> searchResults) {
-            mSearchResults.addAll(searchResults);
+        public void setListItems(MTUserItemResponse response) {
+            mLastResponse = response;
+            _listItems = MTUserItemHelper.getAllListItemsForResponse(response);
             notifyDataSetChanged();
         }
 
-        public ArrayList<MTItemSearchResult> getSearchResults() {
-            return mSearchResults;
+        public ArrayList<NamedObject> getListItems() {
+            return _listItems;
         }
 
-        public boolean hasSearchResults() {
-            return ((mSearchResults != null) && (mSearchResults.size() > 0));
+        public boolean hasUserItems() {
+            if (mLastResponse == null) {
+                return false;
+            }
+
+            return mLastResponse.isEmpty();
         }
     }
 }

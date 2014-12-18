@@ -7,7 +7,7 @@
         android:id="@+id/inventoryNormalLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/mt_very_light_gray"
+        android:background="@color/mt_white"
         android:visibility="visible">
 
         <!--<TextView-->
@@ -23,8 +23,7 @@
             android:layout_height="match_parent"
             android:choiceMode="singleChoice"
             android:divider="@color/mt_divider_gray"
-            android:dividerHeight="1dp"
-            android:visibility="invisible" />
+            android:dividerHeight="1dp" />
 
     </RelativeLayout>
 
