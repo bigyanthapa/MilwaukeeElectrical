@@ -2,8 +2,6 @@ package com.milwaukeetool.mymilwaukee.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Date;
-
 /**
  * Created by scott.hopfensperger on 12/9/2014.
  */
@@ -17,6 +15,9 @@ public class MTUserItem {
 
     @SerializedName("manufacturer")
     private MTManufacturer manufacturer;
+
+    @SerializedName("imageUrl")
+    private String imageUrl;
 
     @SerializedName("isBluetoothCapable")
     private boolean bluetoothEnabled;
@@ -43,7 +44,7 @@ public class MTUserItem {
     private String purchaseLocation;
 
     @SerializedName("orderInformationImageUrl")
-    private String orderImformationImageUrl;
+    private String orderInformationImageUrl;
 
     @SerializedName("itemizationImageUrl")
     private String itemizationImageUrl;
@@ -136,12 +137,12 @@ public class MTUserItem {
         this.purchaseLocation = purchaseLocation;
     }
 
-    public String getOrderImformationImageUrl() {
-        return orderImformationImageUrl;
+    public String getOrderInformationImageUrl() {
+        return orderInformationImageUrl;
     }
 
-    public void setOrderImformationImageUrl(String orderImformationImageUrl) {
-        this.orderImformationImageUrl = orderImformationImageUrl;
+    public void setOrderInformationImageUrl(String orderInformationImageUrl) {
+        this.orderInformationImageUrl = orderInformationImageUrl;
     }
 
     public String getItemizationImageUrl() {
@@ -150,5 +151,13 @@ public class MTUserItem {
 
     public void setItemizationImageUrl(String itemizationImageUrl) {
         this.itemizationImageUrl = itemizationImageUrl;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

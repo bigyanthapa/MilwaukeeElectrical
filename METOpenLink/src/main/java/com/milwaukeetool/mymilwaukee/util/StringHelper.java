@@ -1,5 +1,9 @@
 package com.milwaukeetool.mymilwaukee.util;
 
+import java.text.Format;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -61,5 +65,27 @@ public class StringHelper {
             return false;
         }
         return true;
+    }
+
+    public static String getDateFull(Date d) {
+        String returnVal = "";
+        if (d != null) {
+            Format formatter = new SimpleDateFormat("MM/d/yyyy");
+            returnVal = formatter.format(d);
+        }
+        return returnVal;
+    }
+
+    public static Date parseServerDate(String rawDate) {
+        Date returnDate = null;
+        if (rawDate != null) {
+            SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+            try {
+                returnDate = sd.parse(rawDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return returnDate;
     }
 }

@@ -6,8 +6,6 @@ import android.widget.RelativeLayout;
 
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
-import com.milwaukeetool.mymilwaukee.view.MTMyProfileSectionView;
-import com.milwaukeetool.mymilwaukee.view_reuseable.MTSwitch;
 
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 
@@ -15,7 +13,7 @@ import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
  * Created by scott.hopfensperger on 11/20/2014.
  */
 public class MTSwitchListItemView extends RelativeLayout {
-    private static final String TAG = makeLogTag(MTMyProfileSectionView.class);
+    private static final String TAG = makeLogTag(MTListItemHeaderView.class);
 
     private MTSwitch mSwitch;
 

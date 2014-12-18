@@ -7,15 +7,16 @@
         android:id="@+id/inventoryNormalLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/mt_very_light_gray"
+        android:background="@color/mt_white"
         android:visibility="visible">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/main_title_inventory"
-            android:textSize="@dimen/mt_font_size_large"
-            android:layout_centerInParent="true"/>
+        <ListView
+            android:id="@+id/inventoryItemListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:choiceMode="singleChoice"
+            android:divider="@color/mt_divider_gray"
+            android:dividerHeight="1dp" />
 
     </RelativeLayout>
 

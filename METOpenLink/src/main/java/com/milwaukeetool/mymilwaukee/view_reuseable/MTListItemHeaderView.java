@@ -1,25 +1,24 @@
-package com.milwaukeetool.mymilwaukee.view;
+package com.milwaukeetool.mymilwaukee.view_reuseable;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
 import android.widget.RelativeLayout;
 
 import com.milwaukeetool.mymilwaukee.R;
-import com.milwaukeetool.mymilwaukee.view_reuseable.MTHeaderTextView;
 
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 
 /**
  * Created by scott.hopfensperger on 11/18/2014.
  */
-public class MTMyProfileSectionView extends RelativeLayout {
-    private static final String TAG = makeLogTag(MTMyProfileSectionView.class);
+public class MTListItemHeaderView extends RelativeLayout {
+    private static final String TAG = makeLogTag(MTListItemHeaderView.class);
 
     private MTHeaderTextView mtTextView;
 
-    public MTMyProfileSectionView(Activity activity) {
+    public MTListItemHeaderView(Activity activity) {
         super(activity);
-        LayoutInflater.from(activity).inflate(R.layout.view_my_profile_section, this);
+        LayoutInflater.from(activity).inflate(R.layout.view_list_item_header, this);
 
         mtTextView = (MTHeaderTextView) this.findViewById(R.id.my_profile_section_header);
     }
