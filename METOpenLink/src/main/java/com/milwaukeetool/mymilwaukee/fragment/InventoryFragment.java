@@ -34,12 +34,14 @@ import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.NamedObject;
+import com.milwaukeetool.mymilwaukee.util.StringHelper;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
 import com.milwaukeetool.mymilwaukee.view_reuseable.MTListItemHeaderView;
 import com.milwaukeetool.mymilwaukee.view_reuseable.MTButton;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -371,8 +373,14 @@ public class InventoryFragment extends MTFragment {
                         .error(R.drawable.ic_mkeplaceholder)
                         .into(holder.thumbnailImageView);
 
-                holder.descriptionTextView.setText(userItem.getItemDescription());
-                holder.modelNumberTextView.setText(userItem.getModelNumber());
+                Date serverDate = StringHelper.parseServerDate(userItem.getDateAdded());
+                String formattedDateString = StringHelper.getDateFull(serverDate);
+
+                String descriptionString = userItem.getManufacturer().getName() + " " + userItem.getItemDescription();
+                String modelNumberString = userItem.getModelNumber() + " • " + MiscUtils.getString(R.string.all_inventory_details_date) + formattedDateString;
+
+                holder.descriptionTextView.setText(descriptionString);
+                holder.modelNumberTextView.setText(modelNumberString);
             }
         }
 

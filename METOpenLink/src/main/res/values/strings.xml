@@ -89,6 +89,7 @@
     <string name="add_inventory_item">Search for a model number using the @style/ icon above.</string>
     <string name="no_inventory_message">Add an item to your inventory\nto view it in this list.</string>
     <string name="btn_add_inventory">Add Inventory</string>
+    <string name="all_inventory_details_date">Added: </string>
 
     <!-- Progress Indicator -->
     <string name="progress_bar_default_message">Loading...</string>
