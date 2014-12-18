@@ -164,6 +164,6 @@
     <string name="ctgy_dialog_title_update_category_failure">Unable to Update Category</string>
     <string name="ctgy_dialog_title_delete_category_failure">Unable to Delete Category</string>
     <string name="ctgy_has_associated_items_msg">Unable to delete category that has associated items.</string>
-    <string name="ctgy_delete_confirmation_msg">You are about to delete this category.  All items assigned to this category will be marked as \&#39;Uncategorized\&#39;.</string>
+    <string name="ctgy_delete_confirmation_msg">You are about to delete this category.  All items assigned to this category will be marked as \&#39;Uncategorized.\&#39;</string>
 
 </resources>
