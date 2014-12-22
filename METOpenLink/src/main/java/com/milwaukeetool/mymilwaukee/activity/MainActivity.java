@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.TypedValue;
 import android.view.MenuItem;
 
@@ -12,15 +13,18 @@ import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.fragment.InventoryFragment;
 import com.milwaukeetool.mymilwaukee.fragment.NearbyFragment;
 import com.milwaukeetool.mymilwaukee.fragment.SettingsFragment;
+import com.milwaukeetool.mymilwaukee.model.event.MTRefreshInventoryEvent;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.ZoomOutPageTransformer;
+
+import de.greenrobot.event.EventBus;
 
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 
 /**
  * Created by cent146 on 11/12/14.
  */
-public class MainActivity extends MTActivity {
+public class MainActivity extends MTActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = makeLogTag(CreateAccountActivity.class);
 
@@ -105,6 +109,11 @@ public class MainActivity extends MTActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onRefresh() {
+        EventBus.getDefault().post(new MTRefreshInventoryEvent(MainActivity.this));
+    }
+
     public class MainTabAdapter extends android.support.v13.app.FragmentPagerAdapter {
 
         private final String[] TITLES = {
@@ -132,7 +141,7 @@ public class MainActivity extends MTActivity {
             Fragment fragment = null;
             switch (position) {
                 case 0:
-                    fragment = InventoryFragment.newInstance(position);
+                    fragment = InventoryFragment.newInstance();
                     break;
 
                 case 1:

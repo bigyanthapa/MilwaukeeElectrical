@@ -22,8 +22,11 @@ public class MTUserItem {
     @SerializedName("isBluetoothCapable")
     private boolean bluetoothEnabled;
 
-    @SerializedName("serialNumerId")
-    private Integer serialNumber;
+    @SerializedName("serialNumber")
+    private String serialNumber;
+
+    @SerializedName("serialNumberId")
+    private Integer serialNumberId;
 
     @SerializedName("dateAdded")
     private String dateAdded;
@@ -81,11 +84,11 @@ public class MTUserItem {
         this.bluetoothEnabled = bluetoothEnabled;
     }
 
-    public Integer getSerialNumber() {
+    public String getSerialNumber() {
         return serialNumber;
     }
 
-    public void setSerialNumber(Integer serialNumber) {
+    public void setSerialNumber(String serialNumber) {
         this.serialNumber = serialNumber;
     }
 
@@ -159,5 +162,13 @@ public class MTUserItem {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public Integer getSerialNumberId() {
+        return serialNumberId;
+    }
+
+    public void setSerialNumberId(Integer serialNumberId) {
+        this.serialNumberId = serialNumberId;
     }
 }

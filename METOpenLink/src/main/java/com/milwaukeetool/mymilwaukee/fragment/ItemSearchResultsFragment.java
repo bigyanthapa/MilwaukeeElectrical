@@ -5,7 +5,6 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -215,7 +214,7 @@ public class ItemSearchResultsFragment extends MTFragment {
         // Determine if the results should be shown
         showSearchResults(mAdapter.hasSearchResults() || mLastSearchResultEvent != null);
 
-        mVisibleThreshold = determineNumberOfItemsToDisplay();
+        mVisibleThreshold = UIUtils.determineNumberOfItemsToDisplay(this.getActivity(),UIUtils.getPixels(80));
         LOGD(TAG, "Number of items in threshold: " + mVisibleThreshold);
 
         // Hide the keyboard
@@ -426,28 +425,6 @@ public class ItemSearchResultsFragment extends MTFragment {
             //searchEditText.setHintTextColor(MiscUtils.getAppResources().getColor(R.color.mt_very_light_gray));
             mSearchView.setQueryHint("Search Model #");
         }
-    }
-
-    private int determineNumberOfItemsToDisplay() {
-
-        // Determine the height of the screen
-        Point screenSize = UIUtils.getScreenSize(this.getActivity());
-
-        int actionBarHeight = UIUtils.getActionBarHeight(this.getActivity());
-        int statusBarHeight = UIUtils.getStatusBarHeight();
-        int pagerTabStripHeight = UIUtils.getPixels(45);
-
-        // Determine the top header space (actionbar +  pager tab strip + status bar)
-        int remainingHeight = screenSize.y - (actionBarHeight + statusBarHeight + pagerTabStripHeight);
-
-        // Determine the number of list items that can fit on the screen
-        int listItemHeight = UIUtils.getPixels(80);
-
-        int numberOfListItems = (remainingHeight / listItemHeight) + 1;
-
-        LOGD(TAG, "Number of list items for search results: " + numberOfListItems);
-
-        return numberOfListItems;
     }
 
     private void showSearchResults(boolean showSearchResults) {

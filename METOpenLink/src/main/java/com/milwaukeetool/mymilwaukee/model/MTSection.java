@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class MTSection {
     @SerializedName("sectionId")
-    private String id;
+    private String sectionId;
 
     @SerializedName("title")
     private String title;
@@ -17,12 +17,12 @@ public class MTSection {
     @SerializedName("items")
     private ArrayList<MTUserItem> items;
 
-    public String getId() {
-        return id;
+    public String getSectionId() {
+        return sectionId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setSectionId(String id) {
+        this.sectionId = id;
     }
 
     public String getTitle() {
@@ -46,5 +46,16 @@ public class MTSection {
             return true;
         }
         return false;
+    }
+
+    public void addItems(ArrayList<MTUserItem> items) {
+        this.items.addAll(items);
+    }
+
+    public int getItemCount() {
+        if (containsItems()) {
+            return getItems().size();
+        }
+        return 0;
     }
 }

@@ -25,6 +25,7 @@ import com.milwaukeetool.mymilwaukee.adapter.MTAlertDialogAdapter;
 import com.milwaukeetool.mymilwaukee.config.MTConstants;
 import com.milwaukeetool.mymilwaukee.interfaces.MTAlertDialogListener;
 import com.milwaukeetool.mymilwaukee.model.MTCategory;
+import com.milwaukeetool.mymilwaukee.model.event.MTChangeInventoryEvent;
 import com.milwaukeetool.mymilwaukee.model.request.MTUserCategoryRequest;
 import com.milwaukeetool.mymilwaukee.model.response.MTUserCategoryResponse;
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
@@ -39,6 +40,7 @@ import com.milwaukeetool.mymilwaukee.view.MTToastView;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.greenrobot.event.EventBus;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -229,6 +231,8 @@ public class CategoryActivity extends MTActivity {
                         MiscUtils.getString(R.string.message_success_edit_category));
 
                 loadCategories(true);
+
+                EventBus.getDefault().post(new MTChangeInventoryEvent(CategoryActivity.this));
             }
 
             @Override
@@ -490,6 +494,8 @@ public class CategoryActivity extends MTActivity {
                         MiscUtils.getString(R.string.message_success_delete_category));
 
                 loadCategories(true);
+
+                EventBus.getDefault().post(new MTChangeInventoryEvent(CategoryActivity.this));
             }
 
             @Override

@@ -34,6 +34,7 @@ import com.milwaukeetool.mymilwaukee.MilwaukeeToolApplication;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
+import static com.milwaukeetool.mymilwaukee.util.LogUtils.LOGD;
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 
 /**
@@ -449,5 +450,24 @@ public class UIUtils {
             InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    public static int determineNumberOfItemsToDisplay(Activity activity, int listItemHeight) {
+
+        // Determine the height of the screen
+        Point screenSize = UIUtils.getScreenSize(activity);
+
+        int actionBarHeight = UIUtils.getActionBarHeight(activity);
+        int statusBarHeight = UIUtils.getStatusBarHeight();
+        int pagerTabStripHeight = UIUtils.getPixels(45);
+
+        // Determine the top header space (actionbar +  pager tab strip + status bar)
+        int remainingHeight = screenSize.y - (actionBarHeight + statusBarHeight + pagerTabStripHeight);
+
+        int numberOfListItems = (remainingHeight / listItemHeight) + 1;
+
+        LOGD(TAG, "Number of list items for search results: " + numberOfListItems);
+
+        return numberOfListItems;
     }
 }
