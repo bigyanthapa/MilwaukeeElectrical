@@ -70,7 +70,7 @@ public class InventoryFragment extends MTFragment {
     public void onResume() {
         super.onResume();
 
-        if (!mInventoryLoaded) {
+        if (!mInventoryLoaded || (mUserItemManager != null && mUserItemManager.isDirty())) {
             retrieveInventory(true);
         }
     }
@@ -214,10 +214,6 @@ public class InventoryFragment extends MTFragment {
         if (visible) {
             LOGD(TAG, "Fragment menu is visible");
             retrieveInventory(false);
-
-            if (mAdapter != null) {
-                mAdapter.notifyDataSetChanged();
-            }
         }
     }
 
@@ -279,7 +275,6 @@ public class InventoryFragment extends MTFragment {
             mAdapter.updateListItems(mUserItemManager);
             updateView();
         }
-
     }
 
     public void updateView() {
