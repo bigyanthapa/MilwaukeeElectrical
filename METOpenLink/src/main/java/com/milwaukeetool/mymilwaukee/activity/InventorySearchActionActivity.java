@@ -1,98 +1,55 @@
-package com.milwaukeetool.mymilwaukee.fragment;
+package com.milwaukeetool.mymilwaukee.activity;
 
-import android.app.ActionBar;
-import android.app.Activity;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
 import com.milwaukeetool.mymilwaukee.MilwaukeeToolApplication;
 import com.milwaukeetool.mymilwaukee.R;
-import com.milwaukeetool.mymilwaukee.activity.AddItemActivity;
-import com.milwaukeetool.mymilwaukee.activity.AddItemDetailActivity;
-import com.milwaukeetool.mymilwaukee.activity.InventorySearchActivity;
-import com.milwaukeetool.mymilwaukee.activity.MTActivity;
 import com.milwaukeetool.mymilwaukee.config.MTConstants;
 import com.milwaukeetool.mymilwaukee.model.MTSection;
 import com.milwaukeetool.mymilwaukee.model.MTUserItem;
-import com.milwaukeetool.mymilwaukee.model.event.MTAddItemEvent;
 import com.milwaukeetool.mymilwaukee.model.response.MTUserItemResponse;
 import com.milwaukeetool.mymilwaukee.services.MTUserItemHelper;
-import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
-import com.milwaukeetool.mymilwaukee.util.MTUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.NamedObject;
 import com.milwaukeetool.mymilwaukee.util.StringHelper;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
-import com.milwaukeetool.mymilwaukee.view.MTButton;
 import com.milwaukeetool.mymilwaukee.view.MTListItemHeaderView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Date;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import java.util.List;
 
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.LOGD;
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 
 /**
- * Created by cent146 on 11/19/14.
+ * Created by scott.hopfensperger on 12/19/2014.
  */
-public class InventoryFragment extends MTFragment {
+public class InventorySearchActionActivity extends MTActivity {
 
-    private static final String TAG = makeLogTag(NearbyFragment.class);
-    private static final String ARG_POSITION = "position";
-    private MTActivity mActivity = null;
-    private MTButton mAddInventoryBtn;
-
-    private RelativeLayout mNoInventoryLayout;
-    private RelativeLayout mInventoryLayout;
-
-    private ListView mItemListView;
-    private InventoryItemAdapter mAdapter;
-
-    private int position;
-
-    private boolean mLoadedInventory = false;
+    private static final String TAG = makeLogTag(InventorySearchActionActivity.class);
     private MTUserItemResponse mLastResponse = null;
-
     private LayoutInflater mInflater;
-
-    public static InventoryFragment newInstance(int position) {
-        InventoryFragment f = new InventoryFragment();
-        Bundle b = new Bundle();
-        b.putInt(ARG_POSITION, position);
-        f.setArguments(b);
-        return f;
-    }
+    private ListView mItemListView;
+    private InventorySearchActionAdapter mAdapter;
 
     @Override
-    public void onResume() {
-        super.onResume();
-
-        if (UIUtils.isViewVisible(this.getView())) {
-            loadUserItems(false);
-        }
-
-        if (mAdapter != null) {
-            mAdapter.notifyDataSetChanged();
-        }
+    protected void setupActivityView() {
+        setContentView(R.layout.activity_inventory_search_action);
     }
 
     @Override
@@ -102,169 +59,43 @@ public class InventoryFragment extends MTFragment {
 
     @Override
     protected String getScreenName() {
-        return MiscUtils.getString(R.string.mt_screen_name_inventory);
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        if (activity instanceof MTActivity) {
-            mActivity = (MTActivity)activity;
-        }
-    }
-
-    @Override
-    public void setMenuVisibility(final boolean visible) {
-        super.setMenuVisibility(visible);
-        if (visible) {
-            LOGD(TAG, "Fragment menu is visible");
-            loadUserItems(false);
-        }
+        return null;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setHasOptionsMenu(true);
-        position = getArguments().getInt(ARG_POSITION);
+
+        this.mItemListView = (ListView) this.findViewById(R.id.inventorySearchResultsListView);
+
+        mAdapter = new InventorySearchActionAdapter(this, null);
+
+        if (this.mItemListView != null) {
+            this.mItemListView.setAdapter(mAdapter);
+        }
+
+        setContentView(R.layout.activity_inventory_search_action);
+        handleIntent(this.getIntent());
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        LOGD(TAG, "View was destroyed, need to request my inventory");
-        mLoadedInventory = false;
+    protected void onNewIntent(Intent intent) {
+        setIntent(intent);
+        handleIntent(intent);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        mInflater = inflater;//LayoutInflater.from(this.getActivity());
-
-        View rootView = inflater.inflate(R.layout.fragment_inventory, container, false);
-
-        mItemListView = (ListView)rootView.findViewById(R.id.inventoryItemListView);
-
-        this.mAddInventoryBtn = (MTButton) rootView.findViewById(R.id.addInventoryBtn);
-        this.mAddInventoryBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startAddItemActivity();
-            }
-        });
-
-        // Pull back layouts to set visibility
-        mNoInventoryLayout = (RelativeLayout)rootView.findViewById(R.id.inventoryEmptyLayout);
-        mInventoryLayout = (RelativeLayout)rootView.findViewById(R.id.inventoryNormalLayout);
-
-        mInventoryLayout.setVisibility(View.INVISIBLE);
-        mNoInventoryLayout.setVisibility(View.INVISIBLE);
-
-        mAdapter = new InventoryItemAdapter(this.getActivity(), null);
-
-        if (mItemListView != null) {
-            mItemListView.setAdapter(mAdapter);
-        }
-
-        return rootView;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        if (mActivity != null && mActivity.getProgressView() != null && mActivity.getProgressView().isDisplayed()) {
-            return super.onOptionsItemSelected(item);
-        }
-
-        switch (item.getItemId()) {
-            case R.id.actionAdd:
-                this.startAddItemActivity();
-                break;
-            case R.id.actionRefresh:
-                this.loadUserItems(true);
-                break;
-            case R.id.actionSearch:
-                this.startInventorySearchResultsActivity();
-                break;
-        }
-        return true;
-    }
-
-    protected void startInventorySearchResultsActivity() {
-        Intent intent = new Intent(this.getActivity(), InventorySearchActivity.class);
-        startActivity(intent);
-    }
-
-    protected void startAddItemActivity() {
-        Intent intent = new Intent(this.getActivity(), AddItemActivity.class);
-        startActivity(intent);
-    }
-
-    protected void loadUserItems(boolean refresh) {
-
-        if (mLoadedInventory && !refresh) {
-            updateView();
-            return;
-        }
-
-        Callback<MTUserItemResponse> responseCallback = new Callback<MTUserItemResponse>() {
-            @Override
-            public void success(MTUserItemResponse result, Response response) {
-                mLoadedInventory = true;
-                mActivity.getProgressView().stopProgress();
-                mAdapter.setListItems(result);
-                InventoryFragment.this.updateView();
-            }
-
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                mActivity.getProgressView().stopProgress();
-
-                MTUtils.handleRetrofitError(retrofitError, InventoryFragment.this.getActivity(),
-                        MiscUtils.getString(R.string.dialog_title_retrieve_inventory_failure));
-            }
-        };
-
-        // Start progress before making web service call
-        if (mActivity != null) {
-            mActivity.getProgressView().updateMessageAndStart(MiscUtils.getString(R.string.progress_bar_default_message));
-        }
-
-        MTWebInterface.sharedInstance().getUserService().getItems(
-                MTUtils.getAuthHeaderForBearerToken(),
-                responseCallback);
-    }
-
-    public void updateView() {
-
-        boolean hasItems = mAdapter.hasUserItems();
-
-        // Update both layouts always
-        this.mNoInventoryLayout.setVisibility(hasItems ? View.INVISIBLE : View.VISIBLE);
-        this.mInventoryLayout.setVisibility(hasItems ? View.VISIBLE : View.INVISIBLE);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(
-            Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.inventory_menu, menu);
-
-        ActionBar actionBar = this.getActivity().getActionBar();
-        actionBar.setTitle(this.getResources().getString(R.string.main_title_inventory_title));
-    }
-
-    public void onEvent(MTAddItemEvent event) {
-        if (event.originatedFrom instanceof AddItemDetailActivity) {
-            loadUserItems(true);
+    private void handleIntent(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            //TODO: webservices call
         }
     }
 
-    private class InventoryItemAdapter extends BaseAdapter {
+    private class InventorySearchActionAdapter extends BaseAdapter {
 
-        private ArrayList<NamedObject> _listItems = null;
+        private List<NamedObject> _listItems = null;
 
-        public InventoryItemAdapter(Context context, ArrayList<NamedObject> listItems) {
+        public InventorySearchActionAdapter(Context context, List<NamedObject> listItems) {
 
             if (listItems != null) {
                 _listItems = listItems;
@@ -336,7 +167,7 @@ public class InventoryFragment extends MTFragment {
             }
 
             if (view == null) {
-                view = new View(InventoryFragment.this.getActivity());
+                view = new View(InventorySearchActionActivity.this);
             }
 
             return view;
@@ -345,14 +176,13 @@ public class InventoryFragment extends MTFragment {
         public View createNewHeaderView(NamedObject namedObject) {
             MTSection section = (MTSection)namedObject.object;
 
-            View view = new MTListItemHeaderView(InventoryFragment.this.getActivity());
+            View view = new MTListItemHeaderView(InventorySearchActionActivity.this);
             ((MTListItemHeaderView)view).setMargins(0, 0, 0, UIUtils.getPixels(0));
 
             return view;
         }
 
         public View createNewItemView(NamedObject namedObject, ViewGroup parent) {
-
             View view = mInflater.inflate(R.layout.view_list_item_inventory_item, parent, false);
             ViewHolder holder = new ViewHolder();
             holder.thumbnailImageView = (ImageView)view.findViewById(R.id.itemImageView);
@@ -378,13 +208,13 @@ public class InventoryFragment extends MTFragment {
             if (userItem != null && holder != null) {
 
                 if (userItem.getManufacturer().isPrimary()) {
-                    Picasso.with(InventoryFragment.this.getActivity())
+                    Picasso.with(InventorySearchActionActivity.this)
                             .load(MTConstants.HTTP_PREFIX + userItem.getImageUrl())
                             .placeholder(R.drawable.ic_mkeplaceholder)
                             .error(R.drawable.ic_mkeplaceholder)
                             .into(holder.thumbnailImageView);
                 } else {
-                    Picasso.with(InventoryFragment.this.getActivity())
+                    Picasso.with(InventorySearchActionActivity.this)
                             .load(MTConstants.HTTP_PREFIX + userItem.getImageUrl())
                             .placeholder(R.drawable.ic_otherplaceholder)
                             .error(R.drawable.ic_otherplaceholder)
@@ -429,7 +259,7 @@ public class InventoryFragment extends MTFragment {
             notifyDataSetChanged();
         }
 
-        public ArrayList<NamedObject> getListItems() {
+        public List<NamedObject> getListItems() {
             return _listItems;
         }
 
