@@ -130,11 +130,10 @@ public class InventoryFragment extends MTFragment {
         // Pull back layouts to set visibility
         mNoInventoryLayout = (RelativeLayout)rootView.findViewById(R.id.inventoryEmptyLayout);
         mInventoryLayout = (SwipeRefreshLayout)rootView.findViewById(R.id.inventoryNormalLayout);
-        mInventoryLayout.setOnRefreshListener((MainActivity)this.getActivity());
-//        mInventoryLayout.setColorScheme(android.R.color.holo_blue_bright,
-//                android.R.color.holo_green_light,
-//                android.R.color.holo_orange_light,
-//                android.R.color.holo_red_light);
+
+        if (this.getActivity() instanceof MainActivity) {
+            mInventoryLayout.setOnRefreshListener((MainActivity) this.getActivity());
+        }
 
         mInventoryLayout.setVisibility(View.INVISIBLE);
         mNoInventoryLayout.setVisibility(View.INVISIBLE);
