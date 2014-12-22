@@ -30,6 +30,7 @@
     <string name="main_title_other_item_title">Other</string>
     <string name="main_title_add_item">Add Item</string>
     <string name="main_title_select_category">Select Category</string>
+    <string name="main_title_inventory_search_results">Inventory Search Results</string>
     
     <!-- Landing Page -->
     <string name="title_create_account">Create Account</string>
@@ -96,6 +97,11 @@
     <string name="no_inventory_message">Add an item to your inventory\nto view it in this list.</string>
     <string name="btn_add_inventory">Add Inventory</string>
     <string name="all_inventory_details_date">Added: </string>
+
+    <!-- Inventory Search -->
+    <string name="inventory_search_no_inventory">No items returned in search results.</string>
+    <string name="title_inventory_search_results">Search Inventory</string>
+    <string name="search_inventory_hint">Search Inventory</string>
 
     <!-- Progress Indicator -->
     <string name="progress_bar_default_message">Loading...</string>

@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.AddItemActivity;
+import com.milwaukeetool.mymilwaukee.activity.InventorySearchActivity;
 import com.milwaukeetool.mymilwaukee.activity.MTActivity;
 import com.milwaukeetool.mymilwaukee.activity.MainActivity;
 import com.milwaukeetool.mymilwaukee.adapter.InventoryItemAdapter;
@@ -225,14 +226,22 @@ public class InventoryFragment extends MTFragment {
         }
 
         switch (item.getItemId()) {
-            case R.id.actionSearch:
+            case R.id.actionAdd:
                 this.startAddItemActivity();
                 break;
             case R.id.actionRefresh:
                 this.retrieveInventory(true);
                 break;
+            case R.id.actionSearch:
+                this.startInventorySearchResultsActivity();
+                break;
         }
         return true;
+    }
+
+    protected void startInventorySearchResultsActivity() {
+        Intent intent = new Intent(this.getActivity(), InventorySearchActivity.class);
+        startActivity(intent);
     }
 
     @Override
