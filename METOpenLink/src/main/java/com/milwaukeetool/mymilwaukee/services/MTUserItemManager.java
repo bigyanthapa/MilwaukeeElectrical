@@ -1,5 +1,7 @@
 package com.milwaukeetool.mymilwaukee.services;
 
+import android.text.TextUtils;
+
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.AddItemDetailActivity;
 import com.milwaukeetool.mymilwaukee.activity.MTActivity;
@@ -92,6 +94,10 @@ public class MTUserItemManager {
         getItems(activity,skipCount,showProgress,-1,-1,null);
     }
 
+    public void getItems(final MTActivity activity, final int skipCount, final boolean showProgress, final String searchTerm) {
+        getItems(activity,skipCount,showProgress,-1,-1,searchTerm);
+    }
+
     public void getItems(final MTActivity activity, final int skipCount, final boolean showProgress, final int filterId, final UserItemFilterType filterType) {
 
         switch (filterType) {
@@ -168,7 +174,6 @@ public class MTUserItemManager {
         LOGD(TAG, "Skip: " + skipCount + " Take: " + USER_ITEM_REQUEST_COUNT);
 
         MTUserItemRequest request = new MTUserItemRequest();
-        request.setSearchTerm(searchTerm);
         request.setSkipCount(skipCount);
         request.setTakeCount(USER_ITEM_REQUEST_COUNT);
         if (categoryId != -1) {
@@ -176,6 +181,9 @@ public class MTUserItemManager {
         }
         if (manufacturerId != -1) {
             request.setManufacturerId(manufacturerId);
+        }
+        if (!TextUtils.isEmpty(searchTerm)) {
+            request.setSearchTerm(searchTerm);
         }
 
         if (showProgress && activity != null) {
@@ -224,6 +232,7 @@ public class MTUserItemManager {
     public static ArrayList<MTSection> sectionsWithAppendedResponse(ArrayList<MTSection> sections, MTUserItemResponse response) {
 
         ArrayList<MTSection> finalSections = new ArrayList<>();
+        ArrayList<MTSection> newSections = new ArrayList<>();
 
         boolean foundSection;
 
@@ -245,11 +254,12 @@ public class MTUserItemManager {
             }
 
             if (!foundSection) {
-                finalSections.add(newSection);
+                newSections.add(newSection);
             }
         }
 
         finalSections.addAll(sections);
+        finalSections.addAll(newSections);
 
         return finalSections;
     }
