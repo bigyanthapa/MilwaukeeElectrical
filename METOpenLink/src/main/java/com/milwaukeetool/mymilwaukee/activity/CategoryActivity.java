@@ -96,6 +96,19 @@ public class CategoryActivity extends MTActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 LOGD(TAG, "Clicked list item at position: " + position);
 
+
+                MTCategory selectedCategory = null;
+                List<MTCategory> categories = mAdapter.getCategories();
+                if (categories != null && categories.size() > position) {
+                    selectedCategory = categories.get(position);
+                }
+
+                if (selectedCategory != null) {
+                    Intent intent = new Intent();
+                    intent.putExtra("category", selectedCategory);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
             }
         });
     }
@@ -310,16 +323,6 @@ public class CategoryActivity extends MTActivity {
             final IconDrawable ellipsis = new IconDrawable(MilwaukeeToolApplication.getAppContext(), Iconify.IconValue.fa_ellipsis_v).colorRes(R.color.mt_common_gray).sizeDp(20);
             holder.detailSelectImageView.setBackground(ellipsis);
             holder.detailSelectTextView.setText(category.getName() + " (" + category.getItemCount() + ")");
-
-            holder.detailSelectTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent();
-                    intent.putExtra("category", category);
-                    setResult(RESULT_OK, intent);
-                    finish();
-                }
-            });
 
             holder.detailSelectLayoutButton.setOnClickListener(new View.OnClickListener() {
                 @Override
