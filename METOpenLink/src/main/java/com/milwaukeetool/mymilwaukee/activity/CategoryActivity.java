@@ -9,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -21,17 +22,17 @@ import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
 import com.milwaukeetool.mymilwaukee.MilwaukeeToolApplication;
 import com.milwaukeetool.mymilwaukee.R;
-import com.milwaukeetool.mymilwaukee.adapter.MTAlertDialogAdapter;
-import com.milwaukeetool.mymilwaukee.config.MTConstants;
 import com.milwaukeetool.mymilwaukee.interfaces.MTAlertDialogListener;
 import com.milwaukeetool.mymilwaukee.model.MTCategory;
 import com.milwaukeetool.mymilwaukee.model.event.MTChangeInventoryEvent;
+import com.milwaukeetool.mymilwaukee.model.event.MTimeActionEvent;
 import com.milwaukeetool.mymilwaukee.model.request.MTUserCategoryRequest;
 import com.milwaukeetool.mymilwaukee.model.response.MTUserCategoryResponse;
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
 import com.milwaukeetool.mymilwaukee.util.AnalyticUtils;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
+import com.milwaukeetool.mymilwaukee.util.UIUtils;
 import com.milwaukeetool.mymilwaukee.view.MTButton;
 import com.milwaukeetool.mymilwaukee.view.MTSimpleEntryDialog;
 import com.milwaukeetool.mymilwaukee.view.MTSimpleTextDialog;
@@ -60,6 +61,7 @@ public class CategoryActivity extends MTActivity {
     private LayoutInflater mInflater;
     private CategoryAdapter mAdapter;
     private boolean mLoadedCategories = false;
+    private MTSimpleEntryDialog mCategoryDialog = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +77,7 @@ public class CategoryActivity extends MTActivity {
         mAddCategoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAddCategoryDialog();
+                showCategoryDialog(null);
             }
         });
 
@@ -125,7 +127,7 @@ public class CategoryActivity extends MTActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.actionCategoryAdd) {
             LOGD(TAG, "Adding a category");
-            showAddCategoryDialog();
+            showCategoryDialog(null);
 
             return true;
         }
@@ -133,43 +135,45 @@ public class CategoryActivity extends MTActivity {
 
     }
 
-    private void showAddCategoryDialog() {
-        String title = MiscUtils.getString(R.string.ctgy_add_category);
+    private void showCategoryDialog(final MTCategory category) {
+        String title = null;
+        String name = null;
 
-        MTSimpleEntryDialog dialog = this.constructSimpleEntryDialog(title, MTConstants.EMPTY_STRING);
-        dialog.showDialog(new MTAlertDialogAdapter(this) {
-            @Override
-            public void didTapOkWithResult(Object result) {
-                if (result instanceof String) {
-                    addCategory((String)result);
-                }
-            }
-        });
-    }
+        if (category == null) {
+            title = MiscUtils.getString(R.string.ctgy_add_category);
+        } else {
+            title = MiscUtils.getString(R.string.ctgy_edit_category);
+            name = category.getName();
+        }
 
-    private void showEditCategoryDialog(final MTCategory category) {
-        String title = MiscUtils.getString(R.string.ctgy_edit_category);
-        String name = category.getName();
-
-        MTSimpleEntryDialog dialog = this.constructSimpleEntryDialog(title, name);
-        dialog.showDialog(new MTAlertDialogAdapter(this) {
-            @Override
-            public void didTapOkWithResult(Object result) {
-                if (result instanceof String) {
-                    editCategory(category, (String)result);
-                }
-            }
-        });
-    }
-
-    private MTSimpleEntryDialog constructSimpleEntryDialog(String title, String name) {
-        MTSimpleEntryDialog dialog = new MTSimpleEntryDialog(this,
+        mCategoryDialog = new MTSimpleEntryDialog(this,
                 title, MiscUtils.getString(R.string.ctgy_category_hint),
                 name, 64, MiscUtils.getString(R.string.action_save));
 
         AnalyticUtils.logScreenView(this, MiscUtils.getString(R.string.mt_screen_name_add_edit_category));
 
-        return dialog;
+        mCategoryDialog.showDialog(new MTAlertDialogListener() {
+
+            @Override
+            public void didTapCancel() {
+                UIUtils.hideKeyboard(CategoryActivity.this);
+
+                mCategoryDialog = null;
+            }
+
+            @Override
+            public void didTapOkWithResult(Object result) {
+
+                if (result instanceof String) {
+                    if (category == null) {
+                        addCategory((String)result);
+                    } else {
+                        editCategory(category, (String)result);
+                    }
+                }
+                mCategoryDialog = null;
+            }
+        });
     }
 
     public void addCategory(String categoryName) {
@@ -242,7 +246,7 @@ public class CategoryActivity extends MTActivity {
 
                 LOGD(TAG, "Failed to edit user category");
 
-                MTUtils.handleRetrofitError(retrofitError, categoryActivity, MiscUtils.getString(R.string.mfr_dialog_title_update_manufacturer_failure));
+                MTUtils.handleRetrofitError(retrofitError, categoryActivity, MiscUtils.getString(R.string.ctgy_dialog_title_update_category_failure));
             }
         };
 
@@ -335,7 +339,7 @@ public class CategoryActivity extends MTActivity {
                             switch (item.getItemId()) {
 
                                 case R.id.editCategoryOptionItem:
-                                    showEditCategoryDialog(category);
+                                    showCategoryDialog(category);
                                     break;
 
                                 case R.id.deleteCategoryOptionItem:
@@ -514,5 +518,15 @@ public class CategoryActivity extends MTActivity {
         MTWebInterface.sharedInstance().getUserCategoryService().deleteCategory(
                 MTUtils.getAuthHeaderForBearerToken(),
                 category.getId(), responseCallback);
+    }
+
+    public void onEvent(MTimeActionEvent event) {
+        if (event.callingActivity == this) {
+            if (event.action == EditorInfo.IME_ACTION_GO &&
+                    event.fieldName.equalsIgnoreCase(MiscUtils.getString(R.string.ctgy_category_hint)) && mCategoryDialog != null) {
+                mCategoryDialog.completeDialog();
+                mCategoryDialog = null;
+            }
+        }
     }
 }
