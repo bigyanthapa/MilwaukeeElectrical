@@ -258,7 +258,7 @@ public class InventoryFragment extends MTFragment {
             mInventoryLoaded = true;
             mLastUserItemResultEvent = event;
             loadInventory();
-            showLoadingFooterView(mItemListView,false);
+            showLoadingFooterView(mItemListView, false);
         }
     }
 

@@ -19,4 +19,21 @@
             android:dividerHeight="1dp" />
 
     </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/inventorySearchResultsNoInventoryLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/mt_white">
+
+        <com.milwaukeetool.mymilwaukee.view.MTTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:text="No Items Found"
+            android:textSize="@dimen/mt_font_size_standard"
+            android:textColorLink="@color/mt_common_gray" />
+
+    </RelativeLayout>
 </com.milwaukeetool.mymilwaukee.view.MTLayout>
