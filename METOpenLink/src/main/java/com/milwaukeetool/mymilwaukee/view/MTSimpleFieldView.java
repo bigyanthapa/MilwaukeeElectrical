@@ -178,7 +178,8 @@ public class MTSimpleFieldView extends RelativeLayout {
 
     public void setFieldValue(String fieldValue) {
         if (!TextUtils.isEmpty(fieldValue)) {
-            this.mEditText.setText(fieldValue);
+            mEditText.setText(fieldValue);
+            mEditText.setSelection(mEditText.getText().length());
         }
     }
 
