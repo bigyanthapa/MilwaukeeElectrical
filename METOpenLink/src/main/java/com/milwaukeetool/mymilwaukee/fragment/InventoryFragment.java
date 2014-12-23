@@ -226,6 +226,9 @@ public class InventoryFragment extends MTFragment {
         }
 
         switch (item.getItemId()) {
+            case R.id.actionFilter:
+
+                break;
             case R.id.actionAdd:
                 this.startAddItemActivity();
                 break;
