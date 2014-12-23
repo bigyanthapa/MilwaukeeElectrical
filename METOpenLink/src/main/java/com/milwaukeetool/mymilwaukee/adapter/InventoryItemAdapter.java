@@ -211,12 +211,10 @@ public class InventoryItemAdapter extends BaseAdapter {
     public void clearListItems() {
         _listItems.clear();
         notifyDataSetChanged();
-        //updateView();
     }
 
     public void updateListItems(MTUserItemManager userItemManager) {
         _listItems = MTUserItemManager.getAllListItemsForResponse(userItemManager.getInventorySections());
         notifyDataSetChanged();
-        //updateView();
     }
 }

@@ -280,7 +280,6 @@ public class InventoryFragment extends MTFragment {
 
     public void loadInventory() {
         if (mAdapter != null) {
-            mAdapter.clearListItems();
             mAdapter.updateListItems(mUserItemManager);
             updateView();
         }
