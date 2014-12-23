@@ -165,7 +165,8 @@ public class OtherItemFragment extends MTFragment {
     @Override
     public void onResume() {
         super.onResume();
-
+        // Revert the theme back always
+        this.getActivity().setTheme(R.style.Theme_Milwaukeetool);
     }
 
     @Override
@@ -314,21 +315,13 @@ public class OtherItemFragment extends MTFragment {
         Callback<MTUserManufacturerDetailsResponse> responseCallback = new Callback<MTUserManufacturerDetailsResponse>() {
             @Override
             public void success(MTUserManufacturerDetailsResponse result, Response response) {
-
                 mAddItemActivity.getProgressView().stopProgress();
-
                 updateManufacturersWithResponse(result);
             }
 
             @Override
             public void failure(RetrofitError retrofitError) {
-
-                mAddItemActivity.getProgressView().stopProgress();
-
-                LOGD(TAG, "Failed to retrieve user manufacturers");
-
-                MTUtils.handleRetrofitError(retrofitError, mAddItemActivity, MiscUtils.getString(R.string.mfr_dialog_title_get_manufacturers_failure));
-
+                handleWebServiceError(retrofitError, MiscUtils.getString(R.string.mfr_dialog_title_get_manufacturers_failure));
                 mAdapter.updateManufacturers(null);
             }
         };
@@ -434,12 +427,7 @@ public class OtherItemFragment extends MTFragment {
 
             @Override
             public void failure(RetrofitError retrofitError) {
-
-                mAddItemActivity.getProgressView().stopProgress();
-
-                LOGD(TAG, "Failed to add user manufacturer");
-
-                MTUtils.handleRetrofitError(retrofitError, mAddItemActivity, MiscUtils.getString(R.string.mfr_dialog_title_add_manufacturer_failure));
+                handleWebServiceError(retrofitError, MiscUtils.getString(R.string.mfr_dialog_title_add_manufacturer_failure));
             }
         };
 
@@ -473,12 +461,7 @@ public class OtherItemFragment extends MTFragment {
 
             @Override
             public void failure(RetrofitError retrofitError) {
-
-                mAddItemActivity.getProgressView().stopProgress();
-
-                LOGD(TAG, "Failed to edit user manufacturer");
-
-                MTUtils.handleRetrofitError(retrofitError, mAddItemActivity, MiscUtils.getString(R.string.mfr_dialog_title_update_manufacturer_failure));
+                handleWebServiceError(retrofitError, MiscUtils.getString(R.string.mfr_dialog_title_update_manufacturer_failure));
             }
         };
 
@@ -574,12 +557,7 @@ public class OtherItemFragment extends MTFragment {
 
             @Override
             public void failure(RetrofitError retrofitError) {
-
-                mAddItemActivity.getProgressView().stopProgress();
-
-                LOGD(TAG, "Failed to delete user manufacturer");
-
-                MTUtils.handleRetrofitError(retrofitError, mAddItemActivity, MiscUtils.getString(R.string.mfr_dialog_title_update_manufacturer_failure));
+                handleWebServiceError(retrofitError, MiscUtils.getString(R.string.mfr_dialog_title_delete_manufacturer_failure));
             }
         };
 
@@ -594,10 +572,24 @@ public class OtherItemFragment extends MTFragment {
         if (event.callingActivity == this.getActivity()) {
             if (event.action == EditorInfo.IME_ACTION_GO &&
                     event.fieldName.equalsIgnoreCase(MiscUtils.getString(R.string.mfr_add_other_item_manufacturer_name)) && mManufacturerDialog != null) {
-                mManufacturerDialog.completeDialog();
-                mManufacturerDialog = null;
+                if (mManufacturerDialog.completeDialog()) {
+                    mManufacturerDialog = null;
+                }
             }
         }
     }
 
+    public void handleWebServiceError(RetrofitError retrofitError, String errorTitle) {
+
+        // Stop progress
+        MTActivity activity = (MTActivity)OtherItemFragment.this.getActivity();
+        activity.getProgressView().stopProgress();
+
+        // Process error message
+        MTUtils.handleRetrofitError(retrofitError, activity, errorTitle);
+        LOGD(TAG, errorTitle);
+
+        // Revert the theme back always
+        activity.setTheme(R.style.Theme_Milwaukeetool);
+    }
 }

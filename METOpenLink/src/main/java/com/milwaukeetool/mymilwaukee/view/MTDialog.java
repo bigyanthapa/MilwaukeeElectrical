@@ -137,7 +137,6 @@ public abstract class MTDialog {
         // Validate the field
         if (mViewHasTextEntry && mDialogView.getEntryView() != null) {
 
-
             if (mDialogView.getEntryView().isValid()) {
                 UIUtils.hideKeyboard(mCallingActivity, mDialogView.getEntryView());
 
@@ -159,6 +158,9 @@ public abstract class MTDialog {
             return false;
 
         } else {
+
+            // Return the theme
+            mCallingActivity.setTheme(R.style.Theme_Milwaukeetool);
 
             dismissDialog();
 

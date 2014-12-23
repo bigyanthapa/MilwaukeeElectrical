@@ -514,8 +514,9 @@ public class CategoryActivity extends MTActivity {
         if (event.callingActivity == this) {
             if (event.action == EditorInfo.IME_ACTION_GO &&
                     event.fieldName.equalsIgnoreCase(MiscUtils.getString(R.string.ctgy_category_hint)) && mCategoryDialog != null) {
-                mCategoryDialog.completeDialog();
-                mCategoryDialog = null;
+                if (mCategoryDialog.completeDialog()) {
+                    mCategoryDialog = null;
+                }
             }
         }
     }
