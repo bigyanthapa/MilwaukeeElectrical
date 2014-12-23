@@ -114,6 +114,14 @@ public class CategoryActivity extends MTActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Revert the theme back always
+        setTheme(R.style.Theme_Milwaukeetool);
+    }
+
+    @Override
     protected void setupActivityView() {
         setContentView(R.layout.activity_category);
     }
@@ -211,12 +219,7 @@ public class CategoryActivity extends MTActivity {
 
             @Override
             public void failure(RetrofitError retrofitError) {
-                CategoryActivity categoryActivity = CategoryActivity.this;
-                categoryActivity.getProgressView().stopProgress();
-
-                LOGD(TAG, "Failed to add user category");
-
-                MTUtils.handleRetrofitError(retrofitError, categoryActivity, MiscUtils.getString(R.string.ctgy_dialog_title_add_category_failure));
+                handleWebServiceError(retrofitError, MiscUtils.getString(R.string.ctgy_dialog_title_add_category_failure));
             }
         };
 
@@ -254,12 +257,7 @@ public class CategoryActivity extends MTActivity {
 
             @Override
             public void failure(RetrofitError retrofitError) {
-                CategoryActivity categoryActivity = CategoryActivity.this;
-                categoryActivity.getProgressView().stopProgress();
-
-                LOGD(TAG, "Failed to edit user category");
-
-                MTUtils.handleRetrofitError(retrofitError, categoryActivity, MiscUtils.getString(R.string.ctgy_dialog_title_update_category_failure));
+                handleWebServiceError(retrofitError,MiscUtils.getString(R.string.ctgy_dialog_title_update_category_failure));
             }
         };
 
@@ -408,13 +406,7 @@ public class CategoryActivity extends MTActivity {
 
             @Override
             public void failure(RetrofitError retrofitError) {
-                CategoryActivity categoryActivity = CategoryActivity.this;
-                categoryActivity.getProgressView().stopProgress();
-
-                LOGD(TAG, "Failed to retrieve user categories");
-
-                MTUtils.handleRetrofitError(retrofitError, categoryActivity, MiscUtils.getString(R.string.ctgy_dialog_title_get_categories_failure));
-
+                handleWebServiceError(retrofitError, MiscUtils.getString(R.string.ctgy_dialog_title_get_categories_failure));
                 mAdapter.updateCategories(null);
             }
         };
@@ -507,12 +499,7 @@ public class CategoryActivity extends MTActivity {
 
             @Override
             public void failure(RetrofitError retrofitError) {
-                CategoryActivity categoryActivity = CategoryActivity.this;
-                categoryActivity.getProgressView().stopProgress();
-
-                LOGD(TAG, "Failed to delete user category");
-
-                MTUtils.handleRetrofitError(retrofitError, categoryActivity, MiscUtils.getString(R.string.ctgy_dialog_title_delete_category_failure));
+                handleWebServiceError(retrofitError, MiscUtils.getString(R.string.ctgy_dialog_title_delete_category_failure));
             }
         };
 
@@ -531,5 +518,19 @@ public class CategoryActivity extends MTActivity {
                 mCategoryDialog = null;
             }
         }
+    }
+
+    public void handleWebServiceError(RetrofitError retrofitError, String errorTitle) {
+
+        // Stop progress
+        CategoryActivity categoryActivity = CategoryActivity.this;
+        categoryActivity.getProgressView().stopProgress();
+
+        // Process error message
+        MTUtils.handleRetrofitError(retrofitError, categoryActivity, errorTitle);
+        LOGD(TAG, errorTitle);
+
+        // Revert the theme back always
+        setTheme(R.style.Theme_Milwaukeetool);
     }
 }
