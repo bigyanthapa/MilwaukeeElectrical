@@ -37,6 +37,8 @@ public class InventorySearchActionActivity extends MTActivity {
     private View mListFooterLoadingView ;
     private View mListFooterEmptyView;
 
+    private String mLastSearchTerm;
+
     @Override
     protected void setupActivityView() {
         setContentView(R.layout.activity_inventory_search_action);
@@ -118,7 +120,7 @@ public class InventorySearchActionActivity extends MTActivity {
                     LOGD(TAG, "****New skip count: " + newSkipCount + " for term: " + mLastUserItemResultEvent.getLastSearchTerm());
                     mLoadingResults = true;
                     mLastUserItemResultEvent = null;
-                    mUserItemManager.getItems((MTActivity)InventorySearchActionActivity.this, newSkipCount, false);
+                    mUserItemManager.getItems((MTActivity)InventorySearchActionActivity.this, newSkipCount, false, mLastSearchTerm);
                 }
 
                 if (shouldRequestMoreItems) {
@@ -159,9 +161,11 @@ public class InventorySearchActionActivity extends MTActivity {
 
     private void handleIntent(Intent intent) {
         String action = intent.getAction();
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            this.mUserItemManager.getItems(this, 0, true, -1, -1, query);
+        if (Intent.ACTION_SEARCH.equals(action)) {
+            mLastSearchTerm = intent.getStringExtra(SearchManager.QUERY);
+            this.mUserItemManager.getItems(this, 0, true, mLastSearchTerm);
+        } else {
+            mLastSearchTerm = null;
         }
     }
 
