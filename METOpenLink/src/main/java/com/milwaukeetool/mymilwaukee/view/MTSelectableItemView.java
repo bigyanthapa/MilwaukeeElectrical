@@ -3,7 +3,7 @@ package com.milwaukeetool.mymilwaukee.view;
 import android.app.Activity;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 
 import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
@@ -15,7 +15,7 @@ import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 /**
  * Created by cent146 on 11/19/14.
  */
-public class MTSelectableItemView extends RelativeLayout {
+public class MTSelectableItemView extends LinearLayout {
 
     private static final String TAG = makeLogTag(MTSelectableItemView.class);
 
