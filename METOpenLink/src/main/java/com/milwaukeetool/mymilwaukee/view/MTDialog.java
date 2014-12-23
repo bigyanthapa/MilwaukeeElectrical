@@ -132,25 +132,32 @@ public abstract class MTDialog {
         }
     }
 
-    public void completeDialog() {
+    public boolean completeDialog() {
 
         // Validate the field
-        if (mViewHasTextEntry && mDialogView.getEntryView() != null && mDialogView.getEntryView().isValid()) {
+        if (mViewHasTextEntry && mDialogView.getEntryView() != null) {
 
-            UIUtils.hideKeyboard(mCallingActivity, mDialogView.getEntryView());
 
-            // Return the theme and keyboard
-            if (mCallingActivity != null) {
-                mCallingActivity.setTheme(R.style.Theme_Milwaukeetool);
+            if (mDialogView.getEntryView().isValid()) {
                 UIUtils.hideKeyboard(mCallingActivity, mDialogView.getEntryView());
+
+                // Return the theme and keyboard
+                if (mCallingActivity != null) {
+                    mCallingActivity.setTheme(R.style.Theme_Milwaukeetool);
+                    UIUtils.hideKeyboard(mCallingActivity, mDialogView.getEntryView());
+                }
+
+                dismissDialog();
+
+                // Call the listener for the caller
+                if (mAlertDialogListener != null) {
+                    mAlertDialogListener.didTapOkWithResult(mDialogView.getEntryView().getFieldValue());
+                }
+                return true;
             }
 
-            dismissDialog();
+            return false;
 
-            // Call the listener for the caller
-            if (mAlertDialogListener != null) {
-                mAlertDialogListener.didTapOkWithResult(mDialogView.getEntryView().getFieldValue());
-            }
         } else {
 
             dismissDialog();
@@ -158,6 +165,7 @@ public abstract class MTDialog {
             if (mAlertDialogListener != null) {
                 mAlertDialogListener.didTapOkWithResult(null);
             }
+            return true;
         }
     }
 

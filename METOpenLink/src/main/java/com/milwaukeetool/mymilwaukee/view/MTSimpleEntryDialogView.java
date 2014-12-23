@@ -59,6 +59,7 @@ public class MTSimpleEntryDialogView extends MTDialogView {
 
         mEntryFieldView.setTextColorResource(R.color.mt_black);
         mEntryFieldView.setHintColorTextResource(R.color.mt_common_gray);
+        mEntryFieldView.setRequired(true);
 
         LayoutParams layoutParams = new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
