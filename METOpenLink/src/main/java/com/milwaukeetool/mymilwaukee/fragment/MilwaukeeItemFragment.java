@@ -27,20 +27,21 @@ public class MilwaukeeItemFragment extends MTFragment {
 
     private AddItemActivity mAddItemActivity = null;
 
+    public MilwaukeeItemFragment() {
+    }
+
     public static MilwaukeeItemFragment newInstance(int position, FirstPageFragmentListener listener) {
-        MilwaukeeItemFragment f = new MilwaukeeItemFragment(listener);
+        MilwaukeeItemFragment f = new MilwaukeeItemFragment();
+        f.setFirstPageFragmentListener(listener);
         Bundle b = new Bundle();
         b.putInt(ARG_POSITION, position);
         f.setArguments(b);
         return f;
     }
 
-    public MilwaukeeItemFragment(FirstPageFragmentListener listener) {
-
-        mFirstPageListener = listener;
-
+    public void setFirstPageFragmentListener(FirstPageFragmentListener listener) {
+        this.mFirstPageListener = listener;
     }
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
