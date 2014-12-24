@@ -22,7 +22,7 @@ public class MTNotesView extends LinearLayout {
 
         AnalyticUtils.logScreenView(activity, MiscUtils.getString(R.string.mt_screen_name_add_notes));
 
-        activity.setTheme(android.R.style.Theme_Holo_Light);
+        //activity.setTheme(android.R.style.Theme_Holo_Light);
 
         LayoutInflater.from(activity).inflate(R.layout.view_notes, this);
 
