@@ -212,9 +212,7 @@ public class InventorySearchActionActivity extends MTActivity {
 
         // Assumes current activity is the searchable activity
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        //searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
         searchView.setQueryHint(MiscUtils.getString(R.string.search_inventory_hint));
-        searchView.setFocusable(true);
         searchView.setIconified(false);
         searchView.requestFocus();
 
