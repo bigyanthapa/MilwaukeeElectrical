@@ -16,8 +16,16 @@ public class MTConstants {
 
     public static final String EMPTY_STRING = "";
 
+    public static final String INTENT_EXTRA_INVENTORY_FILTER_TYPE = "Intent_InventoryFilterType";
+    public static final String INTENT_EXTRA_SELECT_ITEM_ARRAY_LIST = "Intent_SelectItemArrayList";
+    public static final String INTENT_EXTRA_CATEGORY = "Intent_Category";
+    public static final String INTENT_EXTRA_MANUFACTURER = "Intent_Manufacturer";
+    public static final String INTENT_EXTRA_SELECTED_INDEX = "Intent_SelectedIndex";
+
     public static final int CREATE_ACCOUNT_REQUEST = 1000;
     public static final int LOGIN_REQUEST = 1001;
     public static final int SELECT_CATEGORY_REQUEST = 2000;
+    public static final int SELECT_CATEGORY_ITEM_REQUEST = 2010;
+    public static final int SELECT_MANUFACTURER_ITEM_REQUEST = 2011;
 
 }

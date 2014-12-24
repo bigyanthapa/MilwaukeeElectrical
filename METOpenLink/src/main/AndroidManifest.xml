@@ -164,6 +164,18 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity" />
         </activity>
+        <activity
+            android:name=".activity.SelectItemActivity"
+            android:label="@string/filter_select_manufacturer"
+            android:launchMode="singleTop"
+            android:parentActivityName=".activity.MyInventoryFilterActivity"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/Theme.Milwaukeetool"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MyInventoryFilterActivity" />
+        </activity>
         <activity android:name="net.hockeyapp.android.UpdateActivity" />
     </application>
 

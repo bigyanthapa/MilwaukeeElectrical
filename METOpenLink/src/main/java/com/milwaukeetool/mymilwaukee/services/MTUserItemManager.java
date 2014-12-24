@@ -33,7 +33,7 @@ import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
 public class MTUserItemManager {
 
     public enum UserItemFilterType {
-        FILTER_TYPE_NONE, FILTER_TYPE_MANUFACTURER, FILTER_TYPE_CATEGORY, FILTER_TYPE_ALL
+        FILTER_TYPE_NONE, FILTER_TYPE_MANUFACTURER, FILTER_TYPE_CATEGORY
     }
 
     public static final int USER_ITEM_REQUEST_COUNT = 10;

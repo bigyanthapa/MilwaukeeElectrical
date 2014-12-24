@@ -185,5 +185,6 @@
     <string name="filter_view_category">View Category</string>
     <string name="filter_select_manufacturer">Select Manufacturer</string>
     <string name="filter_select_category">Select Category</string>
+    <string name="filter_no_items_found">No Items Found</string>
 
 </resources>

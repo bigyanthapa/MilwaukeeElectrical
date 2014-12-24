@@ -219,7 +219,7 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == MTConstants.SELECT_CATEGORY_REQUEST) {
             if (resultCode == RESULT_OK) {
-                MTCategory category = data.getParcelableExtra("category");
+                MTCategory category = data.getParcelableExtra(MTConstants.INTENT_EXTRA_CATEGORY);
                 this.categoryFieldView.setFieldValue(category.getName());
                 this.categoryFieldView.setFieldId(category.getId());
             }

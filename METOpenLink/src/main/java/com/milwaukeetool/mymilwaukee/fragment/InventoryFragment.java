@@ -23,6 +23,9 @@ import com.milwaukeetool.mymilwaukee.activity.MTActivity;
 import com.milwaukeetool.mymilwaukee.activity.MainActivity;
 import com.milwaukeetool.mymilwaukee.activity.MyInventoryFilterActivity;
 import com.milwaukeetool.mymilwaukee.adapter.InventoryItemAdapter;
+import com.milwaukeetool.mymilwaukee.config.MTConstants;
+import com.milwaukeetool.mymilwaukee.manager.MyInventoryManager;
+import com.milwaukeetool.mymilwaukee.model.event.MTChangeFilterEvent;
 import com.milwaukeetool.mymilwaukee.model.event.MTRefreshInventoryEvent;
 import com.milwaukeetool.mymilwaukee.model.event.MTUserItemResultEvent;
 import com.milwaukeetool.mymilwaukee.services.MTInventoryHelper;
@@ -46,6 +49,7 @@ public class InventoryFragment extends MTFragment {
     private MTActivity mActivity = null;
     private MTButton mAddInventoryBtn;
 
+    private RelativeLayout mNoItemsFoundLayout;
     private RelativeLayout mNoInventoryLayout;
     private SwipeRefreshLayout mInventoryLayout;
 
@@ -60,6 +64,8 @@ public class InventoryFragment extends MTFragment {
 
     private boolean mLoadingResults = false;
     private boolean mInventoryLoaded = false;
+
+    private MyInventoryManager mInventoryManager = null;
 
     public static InventoryFragment newInstance() {
         InventoryFragment f = new InventoryFragment();
@@ -103,6 +109,7 @@ public class InventoryFragment extends MTFragment {
 
         mUserItemManager = new MTUserItemManager();
         mInventoryLoaded = false;
+        mInventoryManager = new MyInventoryManager();
     }
 
     @Override
@@ -132,6 +139,7 @@ public class InventoryFragment extends MTFragment {
         // Pull back layouts to set visibility
         mNoInventoryLayout = (RelativeLayout)rootView.findViewById(R.id.inventoryEmptyLayout);
         mInventoryLayout = (SwipeRefreshLayout)rootView.findViewById(R.id.inventoryNormalLayout);
+        mNoItemsFoundLayout = (RelativeLayout)rootView.findViewById(R.id.inventoryNoItemsFoundLayout);
 
         if (this.getActivity() instanceof MainActivity) {
             mInventoryLayout.setOnRefreshListener((MainActivity) this.getActivity());
@@ -229,6 +237,9 @@ public class InventoryFragment extends MTFragment {
         switch (item.getItemId()) {
             case R.id.actionFilter:
                 Intent intent = new Intent(this.getActivity(), MyInventoryFilterActivity.class);
+                intent.putExtra(MTConstants.INTENT_EXTRA_INVENTORY_FILTER_TYPE, mInventoryManager.getInventoryFilterType());
+                intent.putExtra(MTConstants.INTENT_EXTRA_CATEGORY, mInventoryManager.getCurrentCategory());
+                intent.putExtra(MTConstants.INTENT_EXTRA_MANUFACTURER, mInventoryManager.getCurrentManufacturer());
                 startActivity(intent);
                 break;
             case R.id.actionAdd:
@@ -264,6 +275,10 @@ public class InventoryFragment extends MTFragment {
             mLastUserItemResultEvent = event;
             loadInventory();
             showLoadingFooterView(mItemListView,false);
+        } else if (mUserItemManager.getTotalNumberOfItems() == 0) {
+            mInventoryLoaded = true;
+            mLastUserItemResultEvent = event;
+            loadInventory();
         }
     }
 
@@ -274,6 +289,43 @@ public class InventoryFragment extends MTFragment {
                 mInventoryLayout.setRefreshing(false);
             }
             retrieveInventory(true);
+        }
+    }
+
+    public void onEvent(MTChangeFilterEvent event) {
+
+        if (event != null) {
+            switch (event.getFilterType()) {
+                case FILTER_TYPE_CATEGORY:
+                    if (event.getCategory() != null) {
+                        // reload we have an id, and previously didn't
+                        if (mUserItemManager != null) {
+                            mUserItemManager.getItems((MTActivity) InventoryFragment.this.getActivity(), 0, true,
+                                    event.getCategory().getId(),
+                                    MTUserItemManager.UserItemFilterType.FILTER_TYPE_CATEGORY);
+                        }
+                    }
+                    break;
+
+                case FILTER_TYPE_BY_MANUFACTURER:
+                    if (event.getManufacturer() != null) {
+                        // reload we have an id, and previously didn't
+                        if (mUserItemManager != null) {
+                            mUserItemManager.getItems((MTActivity) InventoryFragment.this.getActivity(), 0, true,
+                                    event.getManufacturer().getId(),
+                                    MTUserItemManager.UserItemFilterType.FILTER_TYPE_MANUFACTURER);
+                        }
+                    }
+                    break;
+                case FILTER_TYPE_ALL_INVENTORY:
+                case FILTER_TYPE_DEFAULT:
+                default:
+                    // We need to reload id's are different
+                    if (mUserItemManager != null) {
+                        mUserItemManager.getItems((MTActivity) InventoryFragment.this.getActivity(), 0, true);
+                    }
+                    break;
+            }
         }
     }
 
@@ -295,8 +347,20 @@ public class InventoryFragment extends MTFragment {
         if (mUserItemManager != null) {
             boolean hasItems = (mUserItemManager.getTotalNumberOfItems() > 0);
 
-            // Update both layouts always
-            this.mNoInventoryLayout.setVisibility(hasItems ? View.INVISIBLE : View.VISIBLE);
+            boolean filtered = (mInventoryManager.getInventoryFilterType() ==
+                    MyInventoryManager.MyInventoryFilterType.FILTER_TYPE_BY_MANUFACTURER ||
+                    mInventoryManager.getInventoryFilterType() ==
+                            MyInventoryManager.MyInventoryFilterType.FILTER_TYPE_BY_MANUFACTURER
+            );
+
+            // TODO: FIX THIS!!!!
+            if (filtered) {
+                this.mNoInventoryLayout.setVisibility(View.INVISIBLE);
+                this.mNoItemsFoundLayout.setVisibility(hasItems ? View.INVISIBLE : View.VISIBLE);
+            } else {
+                this.mNoItemsFoundLayout.setVisibility(View.INVISIBLE);
+                this.mNoInventoryLayout.setVisibility(hasItems ? View.INVISIBLE : View.VISIBLE);
+            }
             this.mInventoryLayout.setVisibility(hasItems ? View.VISIBLE : View.INVISIBLE);
         }
     }

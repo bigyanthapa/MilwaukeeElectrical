@@ -19,24 +19,12 @@ public class MyInventoryManager {
         FILTER_TYPE_BY_MODEL_NUMBER
     }
 
-    private static MyInventoryManager instance;
-
-    // MyInventoryManager prevents any other class from instantiating
-    private MyInventoryManager() {
-        EventBus.getDefault().register(this);
-    }
-
-    // Providing Global point of access
-    public static MyInventoryManager sharedInstance() {
-
-        if (null == instance) {
-            instance = new MyInventoryManager();
-        }
-        return instance;
-    }
-
     private MTManufacturer mCurrentManufacturer;
     private MTCategory mCurrentCategory;
+
+    public MyInventoryManager() {
+        EventBus.getDefault().register(this);
+    }
 
     private MyInventoryFilterType mInventoryFilterType = MyInventoryFilterType.FILTER_TYPE_DEFAULT;
 
@@ -44,6 +32,8 @@ public class MyInventoryManager {
     public void onEvent(MTChangeFilterEvent event) {
         if (event != null) {
             mInventoryFilterType = event.getFilterType();
+            mCurrentCategory = event.getCategory();
+            mCurrentManufacturer = event.getManufacturer();
         }
     }
 

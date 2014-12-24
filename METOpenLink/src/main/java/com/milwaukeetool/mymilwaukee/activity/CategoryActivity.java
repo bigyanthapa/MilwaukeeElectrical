@@ -22,6 +22,7 @@ import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
 import com.milwaukeetool.mymilwaukee.MilwaukeeToolApplication;
 import com.milwaukeetool.mymilwaukee.R;
+import com.milwaukeetool.mymilwaukee.config.MTConstants;
 import com.milwaukeetool.mymilwaukee.interfaces.MTAlertDialogListener;
 import com.milwaukeetool.mymilwaukee.model.MTCategory;
 import com.milwaukeetool.mymilwaukee.model.event.MTChangeInventoryEvent;
@@ -105,7 +106,7 @@ public class CategoryActivity extends MTActivity {
 
                 if (selectedCategory != null) {
                     Intent intent = new Intent();
-                    intent.putExtra("category", selectedCategory);
+                    intent.putExtra(MTConstants.INTENT_EXTRA_CATEGORY, selectedCategory);
                     setResult(RESULT_OK, intent);
                     finish();
                 }
