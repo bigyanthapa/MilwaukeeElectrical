@@ -84,21 +84,6 @@
                 android:value=".activity.MainActivity" />
         </activity>
         <activity
-            android:name=".activity.InventorySearchActivity"
-            android:label="@string/title_inventory_search_results"
-            android:launchMode="singleTop"
-            android:parentActivityName=".activity.MainActivity"
-            android:theme="@style/Theme.Milwaukeetool"
-            android:screenOrientation="sensorPortrait"
-            android:windowSoftInputMode="stateHidden|adjustResize">
-            <meta-data
-                android:name="android.app.default_searchable"
-                android:value=".activity.InventorySearchActionActivity" />
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MainActivity" />
-        </activity>
-        <activity
             android:name=".activity.MainActivity"
             android:label="@string/title_my_milwaukee"
             android:launchMode="singleTop"
@@ -116,17 +101,12 @@
                 android:value=".activity.AddItemActivity" />
         </activity>
         <activity android:name=".activity.InventorySearchActionActivity"
-                  android:parentActivityName=".activity.InventorySearchActivity"
+                  android:parentActivityName=".activity.MainActivity"
                   android:label="@string/main_title_inventory_search_results"
                   android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-            <meta-data android:name="android.app.searchable"
-                android:resource="@xml/inventory_search"/>
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.InventorySearchResultsActivity" />
+                android:value=".activity.MainActivity" />
         </activity>
         <activity
             android:name=".activity.CategoryActivity"

@@ -1,13 +1,18 @@
 package com.milwaukeetool.mymilwaukee.activity;
 
 import android.app.SearchManager;
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.SearchView;
 
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.adapter.InventoryItemAdapter;
@@ -15,6 +20,7 @@ import com.milwaukeetool.mymilwaukee.model.event.MTUserItemResultEvent;
 import com.milwaukeetool.mymilwaukee.model.response.MTUserItemResponse;
 import com.milwaukeetool.mymilwaukee.services.MTInventoryHelper;
 import com.milwaukeetool.mymilwaukee.services.MTUserItemManager;
+import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
 
 import static com.milwaukeetool.mymilwaukee.util.LogUtils.LOGD;
@@ -120,7 +126,7 @@ public class InventorySearchActionActivity extends MTActivity {
                     LOGD(TAG, "****New skip count: " + newSkipCount + " for term: " + mLastUserItemResultEvent.getLastSearchTerm());
                     mLoadingResults = true;
                     mLastUserItemResultEvent = null;
-                    mUserItemManager.getItems((MTActivity)InventorySearchActionActivity.this, newSkipCount, false, mLastSearchTerm);
+                    mUserItemManager.getItems((MTActivity) InventorySearchActionActivity.this, newSkipCount, false, mLastSearchTerm);
                 }
 
                 if (shouldRequestMoreItems) {
@@ -129,7 +135,7 @@ public class InventorySearchActionActivity extends MTActivity {
             }
         });
 
-        handleIntent(this.getIntent());
+        //handleIntent(this.getIntent());
     }
 
     public void showLoadingFooterView(ListView listView, boolean isLoading) {
@@ -153,21 +159,21 @@ public class InventorySearchActionActivity extends MTActivity {
         }
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        setIntent(intent);
-        handleIntent(intent);
-    }
+//    @Override
+//    protected void onNewIntent(Intent intent) {
+//        setIntent(intent);
+//        handleIntent(intent);
+//    }
 
-    private void handleIntent(Intent intent) {
-        String action = intent.getAction();
-        if (Intent.ACTION_SEARCH.equals(action)) {
-            mLastSearchTerm = intent.getStringExtra(SearchManager.QUERY);
-            this.mUserItemManager.getItems(this, 0, true, mLastSearchTerm);
-        } else {
-            mLastSearchTerm = null;
-        }
-    }
+//    private void handleIntent(Intent intent) {
+//        String action = intent.getAction();
+//        if (Intent.ACTION_SEARCH.equals(action)) {
+//            mLastSearchTerm = intent.getStringExtra(SearchManager.QUERY);
+//            this.mUserItemManager.getItems(this, 0, true, mLastSearchTerm);
+//        } else {
+//            mLastSearchTerm = null;
+//        }
+//    }
 
     public void onEvent(MTUserItemResultEvent event) {
         if (event.getLastResultCount() > 0) {
@@ -194,5 +200,53 @@ public class InventorySearchActionActivity extends MTActivity {
             this.mNoInventoryLayout.setVisibility(hasItems ? View.INVISIBLE : View.VISIBLE);
             this.mInventoryLayout.setVisibility(hasItems ? View.VISIBLE : View.INVISIBLE);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = this.getMenuInflater();
+        inflater.inflate(R.menu.inventory_search_menu, menu);
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.actionInventorySearch).getActionView();
+
+        // Assumes current activity is the searchable activity
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+        searchView.setQueryHint(MiscUtils.getString(R.string.search_inventory_hint));
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+
+                mLastSearchTerm = s;
+
+                if (!TextUtils.isEmpty(mLastSearchTerm)) {
+                    UIUtils.hideKeyboard(InventorySearchActionActivity.this);
+                    InventorySearchActionActivity.this.mUserItemManager.getItems(
+                            InventorySearchActionActivity.this, 0, true, mLastSearchTerm);
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                return true;
+            }
+
+        });
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.actionCategoryAdd) {
+            LOGD(TAG, "Adding a category");
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+
     }
 }
