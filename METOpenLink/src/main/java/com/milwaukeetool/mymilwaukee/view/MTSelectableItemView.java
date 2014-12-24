@@ -1,6 +1,7 @@
 package com.milwaukeetool.mymilwaukee.view;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -40,6 +41,16 @@ public class MTSelectableItemView extends LinearLayout {
 
     public void setItemText(String text) {
         mSelectableItemTextView.setText(text);
+    }
+
+    public void setItemDrawable(Drawable drawable) {
+
+        if (drawable == null) {
+            mSelectableItemImageView.setVisibility(INVISIBLE);
+        } else {
+            mSelectableItemImageView.setVisibility(VISIBLE);
+            mSelectableItemImageView.setImageDrawable(drawable);
+        }
     }
 
 

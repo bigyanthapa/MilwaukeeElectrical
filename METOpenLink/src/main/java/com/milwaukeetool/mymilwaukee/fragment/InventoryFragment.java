@@ -21,6 +21,7 @@ import com.milwaukeetool.mymilwaukee.activity.AddItemActivity;
 import com.milwaukeetool.mymilwaukee.activity.InventorySearchActivity;
 import com.milwaukeetool.mymilwaukee.activity.MTActivity;
 import com.milwaukeetool.mymilwaukee.activity.MainActivity;
+import com.milwaukeetool.mymilwaukee.activity.MyInventoryFilterActivity;
 import com.milwaukeetool.mymilwaukee.adapter.InventoryItemAdapter;
 import com.milwaukeetool.mymilwaukee.model.event.MTRefreshInventoryEvent;
 import com.milwaukeetool.mymilwaukee.model.event.MTUserItemResultEvent;
@@ -227,7 +228,8 @@ public class InventoryFragment extends MTFragment {
 
         switch (item.getItemId()) {
             case R.id.actionFilter:
-
+                Intent intent = new Intent(this.getActivity(), MyInventoryFilterActivity.class);
+                startActivity(intent);
                 break;
             case R.id.actionAdd:
                 this.startAddItemActivity();

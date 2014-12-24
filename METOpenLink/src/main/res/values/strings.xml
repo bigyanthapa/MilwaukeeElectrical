@@ -32,6 +32,7 @@
     <string name="main_title_add_item">Add Item</string>
     <string name="main_title_select_category">Select Category</string>
     <string name="main_title_inventory_search_results">Inventory Search Results</string>
+    <string name="main_title_filter">Filter</string>
     
     <!-- Landing Page -->
     <string name="title_create_account">Create Account</string>
@@ -176,5 +177,13 @@
     <string name="ctgy_dialog_title_delete_category_failure">Unable to Delete Category</string>
     <string name="ctgy_has_associated_items_msg">Unable to delete category that has associated items.</string>
     <string name="ctgy_delete_confirmation_msg">You are about to delete this category.  All items assigned to this category will be marked as \&#39;Uncategorized.\&#39;</string>
+
+    <!-- Inventory Filter -->
+    <string name="filter_view_by_model_number">View by Model #</string>
+    <string name="filter_view_all_inventory">View all Inventory</string>
+    <string name="filter_view_by_manufacturer">View by Manufacturer</string>
+    <string name="filter_view_category">View Category</string>
+    <string name="filter_select_manufacturer">Select Manufacturer</string>
+    <string name="filter_select_category">Select Category</string>
 
 </resources>

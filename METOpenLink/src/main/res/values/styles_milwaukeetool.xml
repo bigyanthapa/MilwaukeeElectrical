@@ -34,6 +34,7 @@
         <item name="android:checkboxStyle">@style/CheckBox.MilwaukeeTool</item>
         <item name="android:radioButtonStyle">@style/RadioButton.MilwaukeeTool</item>
         <item name="android:actionMenuTextAppearance">@style/ActionMenuTextAppearance.Milwaukeetool</item>
+        <item name="android:actionButtonStyle">@style/ActionButtonStyle.MilwaukeeTool</item>
         <!--<item name="android:actionModeStyle">@style/ContextualMode.MilwaukeeTool</item>-->
 
         <!-- Light.DarkActionBar specific -->
@@ -58,6 +59,7 @@
         <item name="android:checkboxStyle">@style/CheckBox.MilwaukeeTool</item>
         <item name="android:radioButtonStyle">@style/RadioButton.MilwaukeeTool</item>
         <item name="android:actionMenuTextAppearance">@style/ActionMenuTextAppearance.Milwaukeetool</item>
+        <item name="android:actionButtonStyle">@style/ActionButtonStyle.MilwaukeeTool</item>
         <!--<item name="android:actionModeStyle">@style/ContextualMode.MilwaukeeTool</item>-->
 
         <!-- Light.DarkActionBar specific -->
@@ -147,6 +149,12 @@
 
     <style name="myPopupMenuTextAppearanceLarge" parent="@style/TextAppearance.AppCompat.Base.Widget.PopupMenu.Large">
         <item name="android:textColor">@color/mt_white</item>
+    </style>
+
+    <style name="ActionButtonStyle.MilwaukeeTool" parent="@android:style/Widget.Holo.Light.ActionButton">
+        <item name="android:minWidth">0dip</item>
+        <item name="android:paddingLeft">@dimen/mt_padding_medium</item>
+        <item name="android:paddingRight">@dimen/mt_padding_medium</item>
     </style>
 
 </resources>

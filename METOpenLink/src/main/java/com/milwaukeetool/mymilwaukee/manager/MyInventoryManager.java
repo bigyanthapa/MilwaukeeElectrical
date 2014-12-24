@@ -46,4 +46,28 @@ public class MyInventoryManager {
             mInventoryFilterType = event.getFilterType();
         }
     }
+
+    public MTManufacturer getCurrentManufacturer() {
+        return mCurrentManufacturer;
+    }
+
+    public void setCurrentManufacturer(MTManufacturer mCurrentManufacturer) {
+        this.mCurrentManufacturer = mCurrentManufacturer;
+    }
+
+    public MTCategory getCurrentCategory() {
+        return mCurrentCategory;
+    }
+
+    public void setCurrentCategory(MTCategory mCurrentCategory) {
+        this.mCurrentCategory = mCurrentCategory;
+    }
+
+    public MyInventoryFilterType getInventoryFilterType() {
+        return mInventoryFilterType;
+    }
+
+    public void setInventoryFilterType(MyInventoryFilterType mInventoryFilterType) {
+        this.mInventoryFilterType = mInventoryFilterType;
+    }
 }
