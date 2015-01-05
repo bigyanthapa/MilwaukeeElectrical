@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -150,6 +151,8 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
     @Override
     public void onBackPressed() {
 
+        this.setTheme(R.style.Theme_Milwaukeetool);
+
         if (mProgressView.isDisplayed()) {
             return;
         }
@@ -165,7 +168,9 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
             final MTNotesView notesView = new MTNotesView(this);
             notesView.setNotes(mNotesText);
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(AddItemDetailActivity.this,
+                    android.R.style.Theme_Holo_Light_Dialog_NoActionBar));
+
             builder.setNegativeButton(MiscUtils.getString(R.string.action_cancel), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -186,6 +191,7 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
                 // Change the soft input mode to make sure the keyboard is visible for the popup
                 notesDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
+                this.setTheme(android.R.style.Theme_Holo_Light);
                 notesDialog.show();
 
                 Button changeButton = notesDialog.getButton(AlertDialog.BUTTON_POSITIVE);
@@ -213,7 +219,7 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == MTConstants.SELECT_CATEGORY_REQUEST) {
             if (resultCode == RESULT_OK) {
-                MTCategory category = data.getParcelableExtra("category");
+                MTCategory category = data.getParcelableExtra(MTConstants.INTENT_EXTRA_CATEGORY);
                 this.categoryFieldView.setFieldValue(category.getName());
                 this.categoryFieldView.setFieldId(category.getId());
             }

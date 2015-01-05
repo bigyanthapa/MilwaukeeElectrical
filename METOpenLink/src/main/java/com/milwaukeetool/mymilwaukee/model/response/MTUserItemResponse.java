@@ -22,9 +22,11 @@ public class MTUserItemResponse {
     }
 
     public boolean isEmpty() {
-        if (this.sections != null && !this.sections.isEmpty()) {
+        if (this.sections == null || this.sections.isEmpty()) {
+            return true;
+        } else {
             for (MTSection section : this.sections) {
-                if (section != null && section.containsItems()) {
+                if (section == null && !section.containsItems()) {
                     return true;
                 }
             }

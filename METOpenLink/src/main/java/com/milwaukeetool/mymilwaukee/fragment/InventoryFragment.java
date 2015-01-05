@@ -22,8 +22,13 @@ import com.milwaukeetool.mymilwaukee.activity.AddItemActivity;
 import com.milwaukeetool.mymilwaukee.activity.InventorySearchActionActivity;
 import com.milwaukeetool.mymilwaukee.activity.MTActivity;
 import com.milwaukeetool.mymilwaukee.activity.MainActivity;
+import com.milwaukeetool.mymilwaukee.activity.MyInventoryFilterActivity;
 import com.milwaukeetool.mymilwaukee.adapter.InventoryItemAdapter;
 import com.milwaukeetool.mymilwaukee.config.MTConstants;
+import com.milwaukeetool.mymilwaukee.manager.MyInventoryManager;
+import com.milwaukeetool.mymilwaukee.model.MTCategory;
+import com.milwaukeetool.mymilwaukee.model.MTManufacturer;
+import com.milwaukeetool.mymilwaukee.model.event.MTChangeFilterEvent;
 import com.milwaukeetool.mymilwaukee.model.event.MTRefreshInventoryEvent;
 import com.milwaukeetool.mymilwaukee.model.event.MTUserItemResultEvent;
 import com.milwaukeetool.mymilwaukee.services.MTInventoryHelper;
@@ -48,6 +53,8 @@ public class InventoryFragment extends MTFragment {
     private MTButton mAddInventoryBtn;
     private MenuItem mSearchMenuItem;
     private SearchView mSearchView;
+
+    private RelativeLayout mNoItemsFoundLayout;
     private RelativeLayout mNoInventoryLayout;
     private SwipeRefreshLayout mInventoryLayout;
 
@@ -63,6 +70,8 @@ public class InventoryFragment extends MTFragment {
     private boolean mLoadingResults = false;
     private boolean mInventoryLoaded = false;
 
+    private boolean mHasInventory = false;
+
     public static InventoryFragment newInstance() {
         InventoryFragment f = new InventoryFragment();
         Bundle b = new Bundle();
@@ -73,10 +82,13 @@ public class InventoryFragment extends MTFragment {
     @Override
     public void onResume() {
         super.onResume();
+        checkForInventory(true);
+    }
 
-        if (!mInventoryLoaded || (mUserItemManager != null && mUserItemManager.isDirty())) {
-            retrieveInventory(true);
-        }
+    @Override
+    public void onPause() {
+        super.onPause();
+
     }
 
     @Override
@@ -105,6 +117,7 @@ public class InventoryFragment extends MTFragment {
 
         mUserItemManager = new MTUserItemManager();
         mInventoryLoaded = false;
+        mHasInventory = false;
     }
 
     @Override
@@ -112,6 +125,7 @@ public class InventoryFragment extends MTFragment {
         super.onDestroyView();
         LOGD(TAG, "View was destroyed, need to request my inventory");
         mInventoryLoaded = false;
+        mHasInventory = false;
     }
 
     @Override
@@ -134,6 +148,7 @@ public class InventoryFragment extends MTFragment {
         // Pull back layouts to set visibility
         mNoInventoryLayout = (RelativeLayout)rootView.findViewById(R.id.inventoryEmptyLayout);
         mInventoryLayout = (SwipeRefreshLayout)rootView.findViewById(R.id.inventoryNormalLayout);
+        mNoItemsFoundLayout = (RelativeLayout)rootView.findViewById(R.id.inventoryNoItemsFoundLayout);
 
         if (this.getActivity() instanceof MainActivity) {
             mInventoryLayout.setOnRefreshListener((MainActivity) this.getActivity());
@@ -215,7 +230,7 @@ public class InventoryFragment extends MTFragment {
     @Override
     public void setMenuVisibility(final boolean visible) {
         super.setMenuVisibility(visible);
-        if (visible) {
+        if (visible && mInventoryLoaded) {
             LOGD(TAG, "Fragment menu is visible");
             retrieveInventory(false);
         }
@@ -224,16 +239,27 @@ public class InventoryFragment extends MTFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+        MyInventoryManager inventoryManager = MyInventoryManager.sharedInstance();
+
         if (mActivity != null && mActivity.getProgressView() != null && mActivity.getProgressView().isDisplayed()) {
             return super.onOptionsItemSelected(item);
         }
 
         switch (item.getItemId()) {
+            case R.id.actionFilter:
+                Intent intent = new Intent(this.getActivity(), MyInventoryFilterActivity.class);
+                intent.putExtra(MTConstants.INTENT_EXTRA_INVENTORY_FILTER_TYPE, inventoryManager.getInventoryFilterType());
+                intent.putExtra(MTConstants.INTENT_EXTRA_CATEGORY, inventoryManager.getCurrentCategory());
+                intent.putExtra(MTConstants.INTENT_EXTRA_MANUFACTURER, inventoryManager.getCurrentManufacturer());
+                startActivity(intent);
+                break;
             case R.id.actionAdd:
                 this.startAddItemActivity();
                 break;
             case R.id.actionRefresh:
-                this.retrieveInventory(true);
+                mInventoryLoaded = false;
+                mHasInventory = false;
+                checkForInventory(true);
                 break;
         }
         return true;
@@ -296,11 +322,23 @@ public class InventoryFragment extends MTFragment {
     }
 
     public void onEvent(MTUserItemResultEvent event) {
-        if (event.getLastResultCount() > 0) {
+
+        if (event != null && event.isSingleRequest()) {
             mInventoryLoaded = true;
-            mLastUserItemResultEvent = event;
-            loadInventory();
-            showLoadingFooterView(mItemListView, false);
+            if (event.getUserItemResponse() != null) {
+                mHasInventory = !(event.getUserItemResponse().isEmpty());
+                loadInventory();
+                retrieveInventory(true);
+            }
+        } else if (event != null) {
+            if (event.getLastResultCount() > 0) {
+                mLastUserItemResultEvent = event;
+                loadInventory();
+                showLoadingFooterView(mItemListView,false);
+            } else if (mUserItemManager.getTotalNumberOfItems() == 0) {
+                mLastUserItemResultEvent = event;
+                loadInventory();
+            }
         }
     }
 
@@ -310,13 +348,69 @@ public class InventoryFragment extends MTFragment {
             if (mInventoryLayout != null) {
                 mInventoryLayout.setRefreshing(false);
             }
-            retrieveInventory(true);
+            mInventoryLoaded = false;
+            mHasInventory = false;
+            checkForInventory(true);
+        }
+    }
+
+    public void onEvent(MTChangeFilterEvent event) {
+        if (event != null) {
+            updateInventory(event.getFilterType(), event.getCategory(), event.getManufacturer());
+        }
+    }
+
+    public void checkForInventory(boolean recheck) {
+        if (!mInventoryLoaded || (recheck && (mUserItemManager != null && (mUserItemManager.isDirty())))) {
+            if (mUserItemManager != null) {
+                mUserItemManager.getItemsSingleRequest((MTActivity) InventoryFragment.this.getActivity(), true);
+            }
         }
     }
 
     public void retrieveInventory(boolean refresh) {
         if (mUserItemManager != null && (mUserItemManager.isDirty() || refresh)) {
-            mUserItemManager.getItems((MTActivity) InventoryFragment.this.getActivity(), 0, true);
+
+            MyInventoryManager manager = MyInventoryManager.sharedInstance();
+
+            updateInventory(manager.getInventoryFilterType(),
+                    manager.getCurrentCategory(),
+                    manager.getCurrentManufacturer());
+        }
+    }
+
+    public void updateInventory(MyInventoryManager.MyInventoryFilterType inventoryFilterType,
+                                    MTCategory category, MTManufacturer manufacturer) {
+        switch (inventoryFilterType) {
+            case FILTER_TYPE_CATEGORY:
+                if (category != null) {
+                    // reload we have an id, and previously didn't
+                    if (mUserItemManager != null) {
+                        mUserItemManager.getItems((MTActivity) InventoryFragment.this.getActivity(), 0, true,
+                                category.getId(),
+                                MTUserItemManager.UserItemFilterType.FILTER_TYPE_CATEGORY);
+                    }
+                }
+                break;
+
+            case FILTER_TYPE_BY_MANUFACTURER:
+                if (manufacturer != null) {
+                    // reload we have an id, and previously didn't
+                    if (mUserItemManager != null) {
+                        mUserItemManager.getItems((MTActivity) InventoryFragment.this.getActivity(), 0, true,
+                                manufacturer.getId(),
+                                MTUserItemManager.UserItemFilterType.FILTER_TYPE_MANUFACTURER);
+                    }
+                }
+                break;
+            case FILTER_TYPE_ALL_INVENTORY:
+            case FILTER_TYPE_DEFAULT:
+            default:
+                // We need to reload id's are different
+                if (mUserItemManager != null) {
+                    mUserItemManager.getItems((MTActivity) InventoryFragment.this.getActivity(), 0, true);
+                }
+                break;
         }
     }
 
@@ -330,11 +424,26 @@ public class InventoryFragment extends MTFragment {
     public void updateView() {
 
         if (mUserItemManager != null) {
+
+            MyInventoryManager inventoryManager = MyInventoryManager.sharedInstance();
+
             boolean hasItems = (mUserItemManager.getTotalNumberOfItems() > 0);
 
-            // Update both layouts always
-            this.mNoInventoryLayout.setVisibility(hasItems ? View.INVISIBLE : View.VISIBLE);
-            this.mInventoryLayout.setVisibility(hasItems ? View.VISIBLE : View.INVISIBLE);
+            boolean filtered = (inventoryManager.getInventoryFilterType() ==
+                    MyInventoryManager.MyInventoryFilterType.FILTER_TYPE_BY_MANUFACTURER ||
+                    inventoryManager.getInventoryFilterType() ==
+                            MyInventoryManager.MyInventoryFilterType.FILTER_TYPE_BY_MANUFACTURER
+            );
+
+            if (filtered && mHasInventory) {
+                this.mNoInventoryLayout.setVisibility(View.INVISIBLE);
+                this.mNoItemsFoundLayout.setVisibility(hasItems ? View.INVISIBLE : View.VISIBLE);
+            } else {
+                this.mNoItemsFoundLayout.setVisibility(View.INVISIBLE);
+                this.mNoInventoryLayout.setVisibility(mHasInventory ? View.INVISIBLE : View.VISIBLE);
+            }
+
+            this.mInventoryLayout.setVisibility((mHasInventory && hasItems) ? View.VISIBLE : View.INVISIBLE);
         }
     }
 
