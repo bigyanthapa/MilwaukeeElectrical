@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,13 +16,16 @@ import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.SearchView;
 
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.AddItemActivity;
+import com.milwaukeetool.mymilwaukee.activity.CategoryActivity;
 import com.milwaukeetool.mymilwaukee.activity.InventorySearchActionActivity;
 import com.milwaukeetool.mymilwaukee.activity.MTActivity;
 import com.milwaukeetool.mymilwaukee.activity.MainActivity;
 import com.milwaukeetool.mymilwaukee.adapter.InventoryItemAdapter;
+import com.milwaukeetool.mymilwaukee.config.MTConstants;
 import com.milwaukeetool.mymilwaukee.model.event.MTRefreshInventoryEvent;
 import com.milwaukeetool.mymilwaukee.model.event.MTUserItemResultEvent;
 import com.milwaukeetool.mymilwaukee.services.MTInventoryHelper;
@@ -44,7 +48,8 @@ public class InventoryFragment extends MTFragment {
 
     private MTActivity mActivity = null;
     private MTButton mAddInventoryBtn;
-
+    private MenuItem mSearchMenuItem;
+    private SearchView mSearchView;
     private RelativeLayout mNoInventoryLayout;
     private SwipeRefreshLayout mInventoryLayout;
 
@@ -232,9 +237,6 @@ public class InventoryFragment extends MTFragment {
             case R.id.actionRefresh:
                 this.retrieveInventory(true);
                 break;
-            case R.id.actionSearch:
-                this.startInventorySearchResultsActivity();
-                break;
         }
         return true;
     }
@@ -251,6 +253,48 @@ public class InventoryFragment extends MTFragment {
 
         ActionBar actionBar = this.getActivity().getActionBar();
         actionBar.setTitle(this.getResources().getString(R.string.main_title_inventory_title));
+
+        final SearchView searchView =
+                (SearchView) menu.findItem(R.id.actionSearch).getActionView();
+
+        mSearchView = searchView;
+        mSearchMenuItem = menu.findItem(R.id.actionSearch);
+
+        searchView.setQueryHint(MiscUtils.getString(R.string.search_inventory_hint));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                LOGD(TAG, "Submitting search query: " + s);
+
+                Activity parentActivity = InventoryFragment.this.getActivity();
+
+                // Hide the keyboard
+                UIUtils.hideKeyboard(parentActivity);
+
+                Intent intent = new Intent(parentActivity, InventorySearchActionActivity.class);
+                intent.setAction(MTConstants.INVENTORY_SEARCH_ACTION);
+                intent.putExtra(MTConstants.INVENTORY_SEARCH_QUERY, s);
+                startActivity(intent);
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                return true;
+            }
+
+        });
+
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                // Remove the search from actionbar
+                mSearchMenuItem.collapseActionView();
+                return false;
+            }
+        });
     }
 
     public void onEvent(MTUserItemResultEvent event) {

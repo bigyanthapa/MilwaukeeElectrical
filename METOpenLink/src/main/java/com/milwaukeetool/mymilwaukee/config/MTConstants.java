@@ -14,6 +14,9 @@ public class MTConstants {
 
     public static final String SEARCH_ITEM_RESULT = "MTItemSearchResult";
 
+    public static final String INVENTORY_SEARCH_QUERY = "InventorySearchQuery";
+    public static final String INVENTORY_SEARCH_ACTION = "InventorySearchAction";
+
     public static final String EMPTY_STRING = "";
 
     public static final int CREATE_ACCOUNT_REQUEST = 1000;
