@@ -2,6 +2,7 @@ package com.milwaukeetool.mymilwaukee.activity;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -16,6 +17,7 @@ import android.widget.SearchView;
 
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.adapter.InventoryItemAdapter;
+import com.milwaukeetool.mymilwaukee.config.MTConstants;
 import com.milwaukeetool.mymilwaukee.model.event.MTUserItemResultEvent;
 import com.milwaukeetool.mymilwaukee.model.response.MTUserItemResponse;
 import com.milwaukeetool.mymilwaukee.services.MTInventoryHelper;
@@ -135,7 +137,7 @@ public class InventorySearchActionActivity extends MTActivity {
             }
         });
 
-        //handleIntent(this.getIntent());
+        handleIntent(this.getIntent());
     }
 
     public void showLoadingFooterView(ListView listView, boolean isLoading) {
@@ -159,21 +161,21 @@ public class InventorySearchActionActivity extends MTActivity {
         }
     }
 
-//    @Override
-//    protected void onNewIntent(Intent intent) {
-//        setIntent(intent);
-//        handleIntent(intent);
-//    }
+    private void handleIntent(Intent intent) {
+        String action = intent.getAction();
 
-//    private void handleIntent(Intent intent) {
-//        String action = intent.getAction();
-//        if (Intent.ACTION_SEARCH.equals(action)) {
-//            mLastSearchTerm = intent.getStringExtra(SearchManager.QUERY);
-//            this.mUserItemManager.getItems(this, 0, true, mLastSearchTerm);
-//        } else {
-//            mLastSearchTerm = null;
-//        }
-//    }
+        if (MTConstants.INVENTORY_SEARCH_ACTION.equals(action)) {
+            String query = intent.getExtras().getString(MTConstants.INVENTORY_SEARCH_QUERY);
+
+            mLastSearchTerm = query;
+
+            if (!TextUtils.isEmpty(mLastSearchTerm)) {
+                UIUtils.hideKeyboard(InventorySearchActionActivity.this);
+                InventorySearchActionActivity.this.mUserItemManager.getItems(
+                        InventorySearchActionActivity.this, 0, true, mLastSearchTerm);
+            }
+        }
+    }
 
     public void onEvent(MTUserItemResultEvent event) {
         if (event.getLastResultCount() > 0) {
@@ -213,8 +215,6 @@ public class InventorySearchActionActivity extends MTActivity {
         // Assumes current activity is the searchable activity
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setQueryHint(MiscUtils.getString(R.string.search_inventory_hint));
-        searchView.setIconified(false);
-        searchView.requestFocus();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
