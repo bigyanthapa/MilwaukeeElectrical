@@ -10,6 +10,8 @@ public class MTUserItemResultEvent extends MTResponseEvent {
 
     private MTUserItemResponse userItemResponse = null;
 
+    private boolean singleRequest = false;
+
     private int lastCategoryId = 0;
 
     private int lastManufacturerId = 0;
@@ -81,5 +83,13 @@ public class MTUserItemResultEvent extends MTResponseEvent {
             lastResultCount = count;
         }
         return lastResultCount;
+    }
+
+    public boolean isSingleRequest() {
+        return singleRequest;
+    }
+
+    public void setSingleRequest(boolean singleRequest) {
+        this.singleRequest = singleRequest;
     }
 }

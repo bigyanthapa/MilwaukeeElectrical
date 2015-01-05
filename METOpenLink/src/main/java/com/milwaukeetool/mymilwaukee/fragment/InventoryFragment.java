@@ -25,6 +25,8 @@ import com.milwaukeetool.mymilwaukee.activity.MyInventoryFilterActivity;
 import com.milwaukeetool.mymilwaukee.adapter.InventoryItemAdapter;
 import com.milwaukeetool.mymilwaukee.config.MTConstants;
 import com.milwaukeetool.mymilwaukee.manager.MyInventoryManager;
+import com.milwaukeetool.mymilwaukee.model.MTCategory;
+import com.milwaukeetool.mymilwaukee.model.MTManufacturer;
 import com.milwaukeetool.mymilwaukee.model.event.MTChangeFilterEvent;
 import com.milwaukeetool.mymilwaukee.model.event.MTRefreshInventoryEvent;
 import com.milwaukeetool.mymilwaukee.model.event.MTUserItemResultEvent;
@@ -65,7 +67,7 @@ public class InventoryFragment extends MTFragment {
     private boolean mLoadingResults = false;
     private boolean mInventoryLoaded = false;
 
-    private MyInventoryManager mInventoryManager = null;
+    private boolean mHasInventory = false;
 
     public static InventoryFragment newInstance() {
         InventoryFragment f = new InventoryFragment();
@@ -77,10 +79,13 @@ public class InventoryFragment extends MTFragment {
     @Override
     public void onResume() {
         super.onResume();
+        checkForInventory(true);
+    }
 
-        if (!mInventoryLoaded || (mUserItemManager != null && mUserItemManager.isDirty())) {
-            retrieveInventory(true);
-        }
+    @Override
+    public void onPause() {
+        super.onPause();
+
     }
 
     @Override
@@ -109,7 +114,7 @@ public class InventoryFragment extends MTFragment {
 
         mUserItemManager = new MTUserItemManager();
         mInventoryLoaded = false;
-        mInventoryManager = new MyInventoryManager();
+        mHasInventory = false;
     }
 
     @Override
@@ -117,6 +122,7 @@ public class InventoryFragment extends MTFragment {
         super.onDestroyView();
         LOGD(TAG, "View was destroyed, need to request my inventory");
         mInventoryLoaded = false;
+        mHasInventory = false;
     }
 
     @Override
@@ -221,7 +227,7 @@ public class InventoryFragment extends MTFragment {
     @Override
     public void setMenuVisibility(final boolean visible) {
         super.setMenuVisibility(visible);
-        if (visible) {
+        if (visible && mInventoryLoaded) {
             LOGD(TAG, "Fragment menu is visible");
             retrieveInventory(false);
         }
@@ -230,6 +236,8 @@ public class InventoryFragment extends MTFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+        MyInventoryManager inventoryManager = MyInventoryManager.sharedInstance();
+
         if (mActivity != null && mActivity.getProgressView() != null && mActivity.getProgressView().isDisplayed()) {
             return super.onOptionsItemSelected(item);
         }
@@ -237,16 +245,18 @@ public class InventoryFragment extends MTFragment {
         switch (item.getItemId()) {
             case R.id.actionFilter:
                 Intent intent = new Intent(this.getActivity(), MyInventoryFilterActivity.class);
-                intent.putExtra(MTConstants.INTENT_EXTRA_INVENTORY_FILTER_TYPE, mInventoryManager.getInventoryFilterType());
-                intent.putExtra(MTConstants.INTENT_EXTRA_CATEGORY, mInventoryManager.getCurrentCategory());
-                intent.putExtra(MTConstants.INTENT_EXTRA_MANUFACTURER, mInventoryManager.getCurrentManufacturer());
+                intent.putExtra(MTConstants.INTENT_EXTRA_INVENTORY_FILTER_TYPE, inventoryManager.getInventoryFilterType());
+                intent.putExtra(MTConstants.INTENT_EXTRA_CATEGORY, inventoryManager.getCurrentCategory());
+                intent.putExtra(MTConstants.INTENT_EXTRA_MANUFACTURER, inventoryManager.getCurrentManufacturer());
                 startActivity(intent);
                 break;
             case R.id.actionAdd:
                 this.startAddItemActivity();
                 break;
             case R.id.actionRefresh:
-                this.retrieveInventory(true);
+                mInventoryLoaded = false;
+                mHasInventory = false;
+                checkForInventory(true);
                 break;
             case R.id.actionSearch:
                 this.startInventorySearchResultsActivity();
@@ -270,15 +280,23 @@ public class InventoryFragment extends MTFragment {
     }
 
     public void onEvent(MTUserItemResultEvent event) {
-        if (event.getLastResultCount() > 0) {
+
+        if (event != null && event.isSingleRequest()) {
             mInventoryLoaded = true;
-            mLastUserItemResultEvent = event;
-            loadInventory();
-            showLoadingFooterView(mItemListView,false);
-        } else if (mUserItemManager.getTotalNumberOfItems() == 0) {
-            mInventoryLoaded = true;
-            mLastUserItemResultEvent = event;
-            loadInventory();
+            if (event.getUserItemResponse() != null) {
+                mHasInventory = !(event.getUserItemResponse().isEmpty());
+                loadInventory();
+                retrieveInventory(true);
+            }
+        } else if (event != null) {
+            if (event.getLastResultCount() > 0) {
+                mLastUserItemResultEvent = event;
+                loadInventory();
+                showLoadingFooterView(mItemListView,false);
+            } else if (mUserItemManager.getTotalNumberOfItems() == 0) {
+                mLastUserItemResultEvent = event;
+                loadInventory();
+            }
         }
     }
 
@@ -288,50 +306,69 @@ public class InventoryFragment extends MTFragment {
             if (mInventoryLayout != null) {
                 mInventoryLayout.setRefreshing(false);
             }
-            retrieveInventory(true);
+            mInventoryLoaded = false;
+            mHasInventory = false;
+            checkForInventory(true);
         }
     }
 
     public void onEvent(MTChangeFilterEvent event) {
-
         if (event != null) {
-            switch (event.getFilterType()) {
-                case FILTER_TYPE_CATEGORY:
-                    if (event.getCategory() != null) {
-                        // reload we have an id, and previously didn't
-                        if (mUserItemManager != null) {
-                            mUserItemManager.getItems((MTActivity) InventoryFragment.this.getActivity(), 0, true,
-                                    event.getCategory().getId(),
-                                    MTUserItemManager.UserItemFilterType.FILTER_TYPE_CATEGORY);
-                        }
-                    }
-                    break;
+            updateInventory(event.getFilterType(), event.getCategory(), event.getManufacturer());
+        }
+    }
 
-                case FILTER_TYPE_BY_MANUFACTURER:
-                    if (event.getManufacturer() != null) {
-                        // reload we have an id, and previously didn't
-                        if (mUserItemManager != null) {
-                            mUserItemManager.getItems((MTActivity) InventoryFragment.this.getActivity(), 0, true,
-                                    event.getManufacturer().getId(),
-                                    MTUserItemManager.UserItemFilterType.FILTER_TYPE_MANUFACTURER);
-                        }
-                    }
-                    break;
-                case FILTER_TYPE_ALL_INVENTORY:
-                case FILTER_TYPE_DEFAULT:
-                default:
-                    // We need to reload id's are different
-                    if (mUserItemManager != null) {
-                        mUserItemManager.getItems((MTActivity) InventoryFragment.this.getActivity(), 0, true);
-                    }
-                    break;
+    public void checkForInventory(boolean recheck) {
+        if (!mInventoryLoaded || (recheck && (mUserItemManager != null && (mUserItemManager.isDirty())))) {
+            if (mUserItemManager != null) {
+                mUserItemManager.getItemsSingleRequest((MTActivity) InventoryFragment.this.getActivity(), true);
             }
         }
     }
 
     public void retrieveInventory(boolean refresh) {
         if (mUserItemManager != null && (mUserItemManager.isDirty() || refresh)) {
-            mUserItemManager.getItems((MTActivity) InventoryFragment.this.getActivity(), 0, true);
+
+            MyInventoryManager manager = MyInventoryManager.sharedInstance();
+
+            updateInventory(manager.getInventoryFilterType(),
+                    manager.getCurrentCategory(),
+                    manager.getCurrentManufacturer());
+        }
+    }
+
+    public void updateInventory(MyInventoryManager.MyInventoryFilterType inventoryFilterType,
+                                    MTCategory category, MTManufacturer manufacturer) {
+        switch (inventoryFilterType) {
+            case FILTER_TYPE_CATEGORY:
+                if (category != null) {
+                    // reload we have an id, and previously didn't
+                    if (mUserItemManager != null) {
+                        mUserItemManager.getItems((MTActivity) InventoryFragment.this.getActivity(), 0, true,
+                                category.getId(),
+                                MTUserItemManager.UserItemFilterType.FILTER_TYPE_CATEGORY);
+                    }
+                }
+                break;
+
+            case FILTER_TYPE_BY_MANUFACTURER:
+                if (manufacturer != null) {
+                    // reload we have an id, and previously didn't
+                    if (mUserItemManager != null) {
+                        mUserItemManager.getItems((MTActivity) InventoryFragment.this.getActivity(), 0, true,
+                                manufacturer.getId(),
+                                MTUserItemManager.UserItemFilterType.FILTER_TYPE_MANUFACTURER);
+                    }
+                }
+                break;
+            case FILTER_TYPE_ALL_INVENTORY:
+            case FILTER_TYPE_DEFAULT:
+            default:
+                // We need to reload id's are different
+                if (mUserItemManager != null) {
+                    mUserItemManager.getItems((MTActivity) InventoryFragment.this.getActivity(), 0, true);
+                }
+                break;
         }
     }
 
@@ -345,23 +382,26 @@ public class InventoryFragment extends MTFragment {
     public void updateView() {
 
         if (mUserItemManager != null) {
+
+            MyInventoryManager inventoryManager = MyInventoryManager.sharedInstance();
+
             boolean hasItems = (mUserItemManager.getTotalNumberOfItems() > 0);
 
-            boolean filtered = (mInventoryManager.getInventoryFilterType() ==
+            boolean filtered = (inventoryManager.getInventoryFilterType() ==
                     MyInventoryManager.MyInventoryFilterType.FILTER_TYPE_BY_MANUFACTURER ||
-                    mInventoryManager.getInventoryFilterType() ==
+                    inventoryManager.getInventoryFilterType() ==
                             MyInventoryManager.MyInventoryFilterType.FILTER_TYPE_BY_MANUFACTURER
             );
 
-            // TODO: FIX THIS!!!!
-            if (filtered) {
+            if (filtered && mHasInventory) {
                 this.mNoInventoryLayout.setVisibility(View.INVISIBLE);
                 this.mNoItemsFoundLayout.setVisibility(hasItems ? View.INVISIBLE : View.VISIBLE);
             } else {
                 this.mNoItemsFoundLayout.setVisibility(View.INVISIBLE);
-                this.mNoInventoryLayout.setVisibility(hasItems ? View.INVISIBLE : View.VISIBLE);
+                this.mNoInventoryLayout.setVisibility(mHasInventory ? View.INVISIBLE : View.VISIBLE);
             }
-            this.mInventoryLayout.setVisibility(hasItems ? View.VISIBLE : View.INVISIBLE);
+
+            this.mInventoryLayout.setVisibility((mHasInventory && hasItems) ? View.VISIBLE : View.INVISIBLE);
         }
     }
 

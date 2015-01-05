@@ -90,31 +90,35 @@ public class MTUserItemManager {
         return itemTotal;
     }
 
+    public void getItemsSingleRequest(final MTActivity activity, final boolean showProgress) {
+        getItems(activity,0,showProgress,-1,-1,null,true);
+    }
+
     public void getItems(final MTActivity activity, final int skipCount, final boolean showProgress) {
-        getItems(activity,skipCount,showProgress,-1,-1,null);
+        getItems(activity,skipCount,showProgress,-1,-1,null,false);
     }
 
     public void getItems(final MTActivity activity, final int skipCount, final boolean showProgress, final String searchTerm) {
-        getItems(activity,skipCount,showProgress,-1,-1,searchTerm);
+        getItems(activity,skipCount,showProgress,-1,-1,searchTerm,false);
     }
 
     public void getItems(final MTActivity activity, final int skipCount, final boolean showProgress, final int filterId, final UserItemFilterType filterType) {
 
         switch (filterType) {
             case FILTER_TYPE_CATEGORY:
-                getItems(activity, skipCount, showProgress, -1, filterId, null);
+                getItems(activity, skipCount, showProgress, -1, filterId, null, false);
                 break;
             case FILTER_TYPE_MANUFACTURER:
-                getItems(activity, skipCount, showProgress, filterId, -1, null);
+                getItems(activity, skipCount, showProgress, filterId, -1, null, false);
                 break;
             case FILTER_TYPE_NONE:
             default:
-                getItems(activity, skipCount, showProgress, -1, -1, null);
+                getItems(activity, skipCount, showProgress, -1, -1, null, false);
                 break;
         }
     }
 
-    public void getItems(final MTActivity activity, final int skipCount, final boolean showProgress, final int manufacturerId, final int categoryId, final String searchTerm) {
+    public void getItems(final MTActivity activity, final int skipCount, final boolean showProgress, final int manufacturerId, final int categoryId, final String searchTerm, final boolean singleRequest) {
 
         if (skipCount == 0) {
             mInventorySections.clear();
@@ -136,6 +140,7 @@ public class MTUserItemManager {
                 mInventorySections = MTUserItemManager.sectionsWithAppendedResponse(mInventorySections, result);
 
                 MTUserItemResultEvent event = new MTUserItemResultEvent(activity,result);
+                event.setSingleRequest(singleRequest);
                 event.setLastSearchTerm(searchTerm);
                 event.setLastSkipCount(skipCount);
                 event.setLastCategoryId(categoryId);

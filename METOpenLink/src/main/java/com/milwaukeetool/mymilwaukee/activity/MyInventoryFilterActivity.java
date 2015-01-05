@@ -137,7 +137,7 @@ public class MyInventoryFilterActivity extends MTActivity {
 
         mViews = new LinkedList<View>();
 
-        // TODO: FUTURE: Add view by model number
+        // TODO: FUTURE - Add view by model number
 
         // Add view all inventory
         MTSelectableItemView allInventoryView = new MTSelectableItemView(this);
@@ -245,7 +245,7 @@ public class MyInventoryFilterActivity extends MTActivity {
             @Override
             public void failure(RetrofitError retrofitError) {
                 handleWebServiceError(retrofitError, MiscUtils.getString(R.string.mfr_dialog_title_get_manufacturers_failure));
-                // TODO: Anything else ?
+                // TODO: FUTURE - Anything else ?
             }
         };
 
@@ -316,7 +316,7 @@ public class MyInventoryFilterActivity extends MTActivity {
                 for(int i = 0; i < mManufacturers.size(); i++) {
                     MTManufacturer manufacturer = mManufacturers.get(i);
                     if (manufacturer != null) {
-                        mfrStringArray.add(manufacturer.getName() + "(" + manufacturer.getItemCount() + ")");
+                        mfrStringArray.add(manufacturer.getName() + " (" + manufacturer.getItemCount() + ")");
                     }
                 }
 
@@ -326,7 +326,7 @@ public class MyInventoryFilterActivity extends MTActivity {
                 startActivityForResult(selectItemActivity, MTConstants.SELECT_MANUFACTURER_ITEM_REQUEST);
 
             } else {
-                // TODO: ERROR MESSAGE
+                // TODO: FUTURE - ERROR MESSAGE
             }
         }
     }

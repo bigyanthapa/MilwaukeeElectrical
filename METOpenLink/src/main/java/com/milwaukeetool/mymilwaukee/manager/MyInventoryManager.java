@@ -22,7 +22,18 @@ public class MyInventoryManager {
     private MTManufacturer mCurrentManufacturer;
     private MTCategory mCurrentCategory;
 
-    public MyInventoryManager() {
+    private static MyInventoryManager instance;
+
+    // Providing Global point of access
+    public static MyInventoryManager sharedInstance() {
+
+        if (null == instance) {
+            instance = new MyInventoryManager();
+        }
+        return instance;
+    }
+
+    private MyInventoryManager() {
         EventBus.getDefault().register(this);
     }
 
