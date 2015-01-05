@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,7 +19,6 @@ import android.widget.SearchView;
 
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.AddItemActivity;
-import com.milwaukeetool.mymilwaukee.activity.CategoryActivity;
 import com.milwaukeetool.mymilwaukee.activity.InventorySearchActionActivity;
 import com.milwaukeetool.mymilwaukee.activity.MTActivity;
 import com.milwaukeetool.mymilwaukee.activity.MainActivity;
