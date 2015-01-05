@@ -30,7 +30,7 @@
     <string name="main_title_other_item_title">Other</string>
     <string name="main_title_add_item">Add Item</string>
     <string name="main_title_select_category">Select Category</string>
-    <string name="main_title_inventory_search_results">Inventory Search Results</string>
+    <string name="main_title_inventory_search_results">Search Results</string>
     
     <!-- Landing Page -->
     <string name="title_create_account">Create Account</string>
