@@ -87,7 +87,7 @@
     <!-- Tool Detail -->
     <string name="tool_detail_description">Description</string>
     <string name="tool_detail_model_number">Model Number</string>
-    <string name="tool_detail_name">Custom ID/Name</string>
+    <string name="tool_detail_name">Tool Number</string>
     <string name="tool_detail_serial_number">Serial Number</string>
     <string name="tool_detail_purchase_location">Purchase Location</string>
     <string name="tool_detail_category">Category</string>
