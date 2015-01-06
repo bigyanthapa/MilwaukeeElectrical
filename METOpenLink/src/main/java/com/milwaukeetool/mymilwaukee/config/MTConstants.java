@@ -24,6 +24,7 @@ public class MTConstants {
     public static final String INTENT_EXTRA_CATEGORY = "Intent_Category";
     public static final String INTENT_EXTRA_MANUFACTURER = "Intent_Manufacturer";
     public static final String INTENT_EXTRA_SELECTED_INDEX = "Intent_SelectedIndex";
+    public static final String INTENT_EXTRA_TITLE = "Intent_Title";
 
     public static final int CREATE_ACCOUNT_REQUEST = 1000;
     public static final int LOGIN_REQUEST = 1001;

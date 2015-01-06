@@ -28,6 +28,7 @@ import com.milwaukeetool.mymilwaukee.view.MTSelectableItemView;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import de.greenrobot.event.EventBus;
 import retrofit.Callback;
@@ -49,10 +50,11 @@ public class MyInventoryFilterActivity extends MTActivity {
     private LinkedList<View> mViews;
 
     private MyInventoryManager.MyInventoryFilterType mInventoryFilterType;
-    private MTCategory mSelectedCategory = null;
+    private MTCategory mSelectedCategory;
     private MTManufacturer mSelectedManufacturer = null;
 
     private ArrayList<MTManufacturer> mManufacturers = null;
+    private List<MTCategory> mCategories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -263,8 +265,18 @@ public class MyInventoryFilterActivity extends MTActivity {
         if (resultCode == RESULT_OK) {
 
             if (requestCode == MTConstants.SELECT_CATEGORY_ITEM_REQUEST) {
-                // TODO: like manufacturer
+                int selectedIndex = data.getIntExtra(MTConstants.INTENT_EXTRA_SELECTED_INDEX, -1);
 
+                MTCategory category = null;
+                if (selectedIndex != -1 && mCategories != null && mCategories.size() > selectedIndex) {
+                    category = mCategories.get(selectedIndex);
+                }
+
+                EventBus.getDefault().post(new MTChangeFilterEvent(MyInventoryFilterActivity.this,
+                        MyInventoryManager.MyInventoryFilterType.FILTER_TYPE_BY_CATEGORY,
+                        category));
+
+                finish();
             } else if (requestCode == MTConstants.SELECT_MANUFACTURER_ITEM_REQUEST) {
 
                 // Get the position
@@ -323,6 +335,7 @@ public class MyInventoryFilterActivity extends MTActivity {
                 selectItemActivity.putExtra(MTConstants.INTENT_EXTRA_SELECT_ITEM_ARRAY_LIST,
                         mfrStringArray);
                 selectItemActivity.putExtra(MTConstants.INTENT_EXTRA_SELECTED_INDEX, selectedManufacturerIndex);
+                selectItemActivity.putExtra(MTConstants.INTENT_EXTRA_TITLE, MiscUtils.getString(R.string.filter_select_manufacturer));
                 startActivityForResult(selectItemActivity, MTConstants.SELECT_MANUFACTURER_ITEM_REQUEST);
 
             } else {
@@ -332,11 +345,73 @@ public class MyInventoryFilterActivity extends MTActivity {
     }
 
     private void loadCategories() {
-        // TODO: like loadManufacturers
+        Callback<MTUserCategoryResponse> responseCallback = new Callback<MTUserCategoryResponse>() {
+            @Override
+            public void success(MTUserCategoryResponse result, Response response) {
+                getProgressView().stopProgress();
+                processCategoriesWithResponse(result);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                handleWebServiceError(retrofitError, MiscUtils.getString(R.string.ctgy_dialog_title_get_categories_failure));
+            }
+        };
+
+        getProgressView().updateMessageAndStart(MiscUtils.getString(R.string.progress_bar_default_message));
+
+        MTWebInterface.sharedInstance().getUserCategoryService().getCategories(MTUtils.getAuthHeaderForBearerToken(),
+                true, responseCallback);
     }
 
     private void processCategoriesWithResponse(MTUserCategoryResponse response) {
-        // TODO: like processManufacturersWithResponse
+        if (response != null) {
+            mCategories = response.getItems();
+
+            if (mCategories != null && !mCategories.isEmpty()) {
+                    LOGD(TAG, "Successfully retrieved user categories: " + mCategories.size());
+
+                int selectedCategoryIndex = -1;
+
+                if (mSelectedCategory != null) {
+                    for(int i = 0; i < mCategories.size(); i++) {
+
+                        MTCategory category = mCategories.get(i);
+
+                        if (category != null) {
+                            LOGD(TAG, "Comparing: " + category.getId() + " to: " + mSelectedCategory.getId());
+                            if (category.getId().compareTo(mSelectedCategory.getId()) == 0) {
+                                LOGD(TAG, "Successful comparison: " + category.getId() + " to: " + mSelectedCategory.getId());
+                                selectedCategoryIndex = i;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                ArrayList<String> ctgyStringArray = new ArrayList<String>();
+                for (MTCategory category : mCategories) {
+                    StringBuilder str = new StringBuilder(100);
+                    str.append(category.getName());
+                    str.append(" (");
+                    str.append(category.getItemCount());
+                    str.append(")");
+
+                    ctgyStringArray.add(str.toString());
+                }
+
+
+                Intent selectItemActivity = new Intent(MyInventoryFilterActivity.this, SelectItemActivity.class);
+                selectItemActivity.putExtra(MTConstants.INTENT_EXTRA_SELECT_ITEM_ARRAY_LIST,
+                        ctgyStringArray);
+                selectItemActivity.putExtra(MTConstants.INTENT_EXTRA_SELECTED_INDEX, selectedCategoryIndex);
+                selectItemActivity.putExtra(MTConstants.INTENT_EXTRA_TITLE, MiscUtils.getString(R.string.filter_select_category));
+                startActivityForResult(selectItemActivity, MTConstants.SELECT_CATEGORY_ITEM_REQUEST);
+
+            } else {
+                // TODO: FUTURE - ERROR MESSAGE
+            }
+        }
     }
 
 }

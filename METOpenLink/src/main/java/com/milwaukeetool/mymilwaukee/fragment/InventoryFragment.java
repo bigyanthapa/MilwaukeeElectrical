@@ -382,7 +382,7 @@ public class InventoryFragment extends MTFragment {
     public void updateInventory(MyInventoryManager.MyInventoryFilterType inventoryFilterType,
                                     MTCategory category, MTManufacturer manufacturer) {
         switch (inventoryFilterType) {
-            case FILTER_TYPE_CATEGORY:
+            case FILTER_TYPE_BY_CATEGORY:
                 if (category != null) {
                     // reload we have an id, and previously didn't
                     if (mUserItemManager != null) {

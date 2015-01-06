@@ -14,7 +14,7 @@ public class MyInventoryManager {
     public enum MyInventoryFilterType {
         FILTER_TYPE_DEFAULT,
         FILTER_TYPE_BY_MANUFACTURER,
-        FILTER_TYPE_CATEGORY,
+        FILTER_TYPE_BY_CATEGORY,
         FILTER_TYPE_ALL_INVENTORY,
         FILTER_TYPE_BY_MODEL_NUMBER
     }
