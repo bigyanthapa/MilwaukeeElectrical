@@ -56,9 +56,6 @@ public class MyInventoryFilterActivity extends MTActivity {
     private ArrayList<MTManufacturer> mManufacturers = null;
     private List<MTCategory> mCategories;
 
-    public static String CATEGORY_TITLE = "Select Category";
-    public static String MANUFACTURER_TITLE = "Select Manufacturer";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -338,7 +335,7 @@ public class MyInventoryFilterActivity extends MTActivity {
                 selectItemActivity.putExtra(MTConstants.INTENT_EXTRA_SELECT_ITEM_ARRAY_LIST,
                         mfrStringArray);
                 selectItemActivity.putExtra(MTConstants.INTENT_EXTRA_SELECTED_INDEX, selectedManufacturerIndex);
-                selectItemActivity.putExtra(MTConstants.INTENT_EXTRA_TITLE, MANUFACTURER_TITLE);
+                selectItemActivity.putExtra(MTConstants.INTENT_EXTRA_TITLE, MiscUtils.getString(R.string.filter_select_manufacturer));
                 startActivityForResult(selectItemActivity, MTConstants.SELECT_MANUFACTURER_ITEM_REQUEST);
 
             } else {
@@ -394,7 +391,7 @@ public class MyInventoryFilterActivity extends MTActivity {
 
                 ArrayList<String> ctgyStringArray = new ArrayList<String>();
                 for (MTCategory category : mCategories) {
-                    StringBuilder str = new StringBuilder(50);
+                    StringBuilder str = new StringBuilder(100);
                     str.append(category.getName());
                     str.append(" (");
                     str.append(category.getItemCount());
@@ -408,7 +405,7 @@ public class MyInventoryFilterActivity extends MTActivity {
                 selectItemActivity.putExtra(MTConstants.INTENT_EXTRA_SELECT_ITEM_ARRAY_LIST,
                         ctgyStringArray);
                 selectItemActivity.putExtra(MTConstants.INTENT_EXTRA_SELECTED_INDEX, selectedCategoryIndex);
-                selectItemActivity.putExtra(MTConstants.INTENT_EXTRA_TITLE, CATEGORY_TITLE);
+                selectItemActivity.putExtra(MTConstants.INTENT_EXTRA_TITLE, MiscUtils.getString(R.string.filter_select_category));
                 startActivityForResult(selectItemActivity, MTConstants.SELECT_CATEGORY_ITEM_REQUEST);
 
             } else {
