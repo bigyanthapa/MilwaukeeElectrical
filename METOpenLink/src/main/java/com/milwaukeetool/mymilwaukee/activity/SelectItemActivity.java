@@ -39,6 +39,8 @@ public class SelectItemActivity extends MTActivity {
 
     private BaseAdapter mAdapter;
 
+    private String mTitle;
+
     @Override
     protected void setupActivityView() {
         setContentView(R.layout.activity_select_item);
@@ -104,6 +106,9 @@ public class SelectItemActivity extends MTActivity {
         if (currentIntent != null && currentIntent.getExtras() != null) {
             mItems = currentIntent.getStringArrayListExtra(MTConstants.INTENT_EXTRA_SELECT_ITEM_ARRAY_LIST);
             mSelectedPosition = currentIntent.getIntExtra(MTConstants.INTENT_EXTRA_SELECTED_INDEX, -1);
+            mTitle = currentIntent.getStringExtra(MTConstants.INTENT_EXTRA_TITLE);
+
+            this.setTitle(mTitle);
         }
     }
 
