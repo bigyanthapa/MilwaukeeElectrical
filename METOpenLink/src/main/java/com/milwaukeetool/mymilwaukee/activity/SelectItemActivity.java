@@ -31,15 +31,12 @@ public class SelectItemActivity extends MTActivity {
 
     private static final String TAG = makeLogTag(MyInventoryFilterActivity.class);
 
-    private ArrayList<String> mItems;
-
+    private ArrayList<String> mItems = null;
     private ListView mSelectItemListView;
-
-    private int mSelectedPosition = -1;
-
     private BaseAdapter mAdapter;
 
-    private String mTitle;
+    private int mSelectedPosition = -1;
+    private String mTitle = null;
 
     @Override
     protected void setupActivityView() {
@@ -53,7 +50,7 @@ public class SelectItemActivity extends MTActivity {
 
     @Override
     protected String getScreenName() {
-        return null;
+        return mTitle;
     }
 
     @Override

@@ -5,7 +5,6 @@
     <string name="mt_screen_name_create_account">Register</string>
     <string name="mt_screen_name_sign_in">Sign In</string>
     <string name="mt_screen_name_landing">Sign Up / Log In</string>
-    <string name="mt_screen_name_main">Main</string>
     <string name="mt_screen_name_my_profile">My Profile</string>
     <string name="mt_screen_name_settings">Settings</string>
     <string name="mt_screen_name_category">Select Category</string>
@@ -28,7 +27,7 @@
     <string name="mt_screen_name_edit_milwaukee_item">Edit Milwaukee Inventory</string>
     <string name="mt_screen_name_add_other_mfr_item">Add Other Inventory</string>
     <string name="mt_screen_name_edit_other_mfr_item">Edit Other Inventory</string>
-    <string name="mt_screen_name_add_item_details">Inventory Item Detail View</string>
+    <string name="mt_screen_name_add_item_details">Add Milwaukee Tool</string>
 
     <!-- Dialogs -->
     <string name="mt_screen_name_add_notes">Add Notes</string>
@@ -41,6 +40,9 @@
     <string name="mt_screen_name_add_kit_item">Milwaukee Add Kit Item Inventory</string>
     <string name="mt_screen_name_manage_tool">Manage Tool</string>
     <string name="mt_screen_name_model_group_detail">Model Group Detail View</string>
+
+    <!-- Not Used -->
+    <string name="mt_screen_name_main">Milwaukee Tool - Main</string>
 
 
 </resources>

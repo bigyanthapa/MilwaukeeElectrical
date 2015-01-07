@@ -79,21 +79,6 @@ public class InventoryFragment extends MTFragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        //checkForInventory(true);
-        if (!mInventoryLoaded) {
-            retrieveInventory(true);
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-    }
-
-    @Override
     protected String getLogTag() {
         return TAG;
     }
@@ -101,6 +86,29 @@ public class InventoryFragment extends MTFragment {
     @Override
     protected String getScreenName() {
         return MiscUtils.getString(R.string.mt_screen_name_inventory);
+    }
+
+    @Override
+    public void setMenuVisibility(final boolean visible) {
+        super.setMenuVisibility(visible);
+        if (visible && !mInventoryLoaded) {
+            retrieveInventory(false);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //checkForInventory(true);
+//        if (!mInventoryLoaded) {
+//            retrieveInventory(true);
+//        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
     }
 
     @Override
@@ -126,7 +134,7 @@ public class InventoryFragment extends MTFragment {
     public void onDestroyView() {
         super.onDestroyView();
         LOGD(TAG, "View was destroyed, need to request my inventory");
-        //mInventoryLoaded = false;
+        mInventoryLoaded = false;
         //mHasInventory = false;
         mInventoryLoaded = false;
     }
@@ -238,15 +246,6 @@ public class InventoryFragment extends MTFragment {
         }
 
         return rootView;
-    }
-
-    @Override
-    public void setMenuVisibility(final boolean visible) {
-        super.setMenuVisibility(visible);
-        if (visible && mInventoryLoaded) {
-            LOGD(TAG, "Fragment menu is visible");
-            retrieveInventory(false);
-        }
     }
 
     @Override

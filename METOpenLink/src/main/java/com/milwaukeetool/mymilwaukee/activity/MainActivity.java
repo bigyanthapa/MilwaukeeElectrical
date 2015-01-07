@@ -35,7 +35,7 @@ public class MainActivity extends MTActivity implements SwipeRefreshLayout.OnRef
 
     @Override
     protected String getScreenName() {
-        return getResources().getString(R.string.mt_screen_name_main);
+        return null;
     }
 
     @Override
