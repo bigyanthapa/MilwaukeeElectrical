@@ -19,8 +19,8 @@ public class MyInventoryManager {
         FILTER_TYPE_BY_MODEL_NUMBER
     }
 
-    private MTManufacturer mCurrentManufacturer;
-    private MTCategory mCurrentCategory;
+    private MTManufacturer mCurrentManufacturer = null;
+    private MTCategory mCurrentCategory = null;
 
     private static MyInventoryManager instance;
 

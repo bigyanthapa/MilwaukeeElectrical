@@ -69,7 +69,6 @@ public class InventoryFragment extends MTFragment {
 
     private boolean mLoadingResults = false;
     private boolean mInventoryLoaded = false;
-
     //private boolean mHasInventory = false;
 
     public static InventoryFragment newInstance() {
@@ -91,7 +90,7 @@ public class InventoryFragment extends MTFragment {
     @Override
     public void onPause() {
         super.onPause();
-        mInventoryLoaded = false;
+
     }
 
     @Override
@@ -119,7 +118,7 @@ public class InventoryFragment extends MTFragment {
         this.setHasOptionsMenu(true);
 
         mUserItemManager = new MTUserItemManager();
-        //mInventoryLoaded = false;
+        mInventoryLoaded = false;
         //mHasInventory = false;
     }
 
@@ -129,6 +128,7 @@ public class InventoryFragment extends MTFragment {
         LOGD(TAG, "View was destroyed, need to request my inventory");
         //mInventoryLoaded = false;
         //mHasInventory = false;
+        mInventoryLoaded = false;
     }
 
     @Override
@@ -177,6 +177,7 @@ public class InventoryFragment extends MTFragment {
             public void onScrollStateChanged(AbsListView view, int scrollState) {
 
                 if (mLastUserItemResultEvent == null) {
+                    mLoadingResults = false;
                     return;
                 }
 
@@ -208,7 +209,7 @@ public class InventoryFragment extends MTFragment {
                 int currentPosition = mItemListView.getLastVisiblePosition();
                 LOGD (TAG, "****IS CURRENT WINDOW: " + (currentPosition + visibleThreshold + MTInventoryHelper.INVENTORY_BUFFER_SIZE) + " BEYOND TOTAL INDEX: " + (totalItemCount - 1));
 
-                if (shouldRequestMoreItems &&
+                if (shouldRequestMoreItems && !mLoadingResults &&
                         (currentPosition + visibleThreshold + MTInventoryHelper.INVENTORY_BUFFER_SIZE) >= (totalItemCount - 1)) {
 
                     LOGD(TAG, "****Last result count: " + mLastUserItemResultEvent.getLastResultCount());
@@ -242,7 +243,7 @@ public class InventoryFragment extends MTFragment {
     @Override
     public void setMenuVisibility(final boolean visible) {
         super.setMenuVisibility(visible);
-        if (visible) {// && mInventoryLoaded) {
+        if (visible && mInventoryLoaded) {
             LOGD(TAG, "Fragment menu is visible");
             retrieveInventory(false);
         }
@@ -345,6 +346,7 @@ public class InventoryFragment extends MTFragment {
 //            }
 //        } else
         if (event != null) {
+            mLoadingResults = false;
             if (event.getLastResultCount() > 0) {
                 mLastUserItemResultEvent = event;
                 loadInventory();

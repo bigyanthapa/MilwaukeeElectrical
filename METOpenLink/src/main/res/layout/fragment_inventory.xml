@@ -24,7 +24,7 @@
         android:id="@+id/inventoryEmptyLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
+        android:visibility="invisible">
 
         <LinearLayout
             android:orientation="vertical"
@@ -70,7 +70,7 @@
         android:id="@+id/inventoryNoItemsFoundLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
+        android:visibility="invisible">
 
         <com.milwaukeetool.mymilwaukee.view.MTTextView
             android:layout_width="wrap_content"

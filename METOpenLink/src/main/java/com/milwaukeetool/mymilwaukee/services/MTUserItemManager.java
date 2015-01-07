@@ -91,9 +91,9 @@ public class MTUserItemManager {
         return itemTotal;
     }
 
-    public void getItemsSingleRequest(final MTActivity activity, final boolean showProgress) {
-        getItems(activity,0,showProgress, MTConstants.FILTER_INVALID_MANUFACTURER,MTConstants.FILTER_INVALID_CATEGORY,null,true);
-    }
+//    public void getItemsSingleRequest(final MTActivity activity, final boolean showProgress) {
+//        getItems(activity,0,showProgress, MTConstants.FILTER_INVALID_MANUFACTURER,MTConstants.FILTER_INVALID_CATEGORY,null,true);
+//    }
 
     public void getItems(final MTActivity activity, final int skipCount, final boolean showProgress) {
         getItems(activity,skipCount,showProgress,MTConstants.FILTER_INVALID_MANUFACTURER,MTConstants.FILTER_INVALID_CATEGORY,null,false);
@@ -141,7 +141,7 @@ public class MTUserItemManager {
                 mInventorySections = MTUserItemManager.sectionsWithAppendedResponse(mInventorySections, result);
 
                 MTUserItemResultEvent event = new MTUserItemResultEvent(activity,result);
-                event.setSingleRequest(singleRequest);
+//                event.setSingleRequest(singleRequest);
                 event.setLastSearchTerm(searchTerm);
                 event.setLastSkipCount(skipCount);
                 event.setLastCategoryId(categoryId);

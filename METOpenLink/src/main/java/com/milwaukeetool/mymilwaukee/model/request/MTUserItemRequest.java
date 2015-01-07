@@ -11,19 +11,19 @@ import java.util.Map;
  */
 public class MTUserItemRequest {
     @SerializedName("SearchTerm")
-    private String searchTerm;
+    private String searchTerm = null;
 
     @SerializedName("Skip")
-    private int skipCount;
+    private int skipCount = 0;
 
     @SerializedName("Take")
-    private int takeCount;
+    private int takeCount = 0;
 
     @SerializedName("CategoryId")
-    private int categoryId;
+    private int categoryId = 0;
 
     @SerializedName("ManufacturerId")
-    private int manufacturerId;
+    private int manufacturerId = -1;
 
     public String getSearchTerm() {
         return searchTerm;
