@@ -17,7 +17,8 @@ import static com.milwaukeetool.mymilwaukee.util.LogUtils.LOGD;
  */
 public abstract class MTFragment extends Fragment {
 
-    private boolean mActivityAvailable = false;
+    protected boolean mActivityAvailable = false;
+    protected boolean mIsVisible = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,8 @@ public abstract class MTFragment extends Fragment {
     @Override
     public void setMenuVisibility(boolean menuVisible) {
         super.setMenuVisibility(menuVisible);
+
+        mIsVisible = menuVisible;
 
         if (menuVisible && this.getActivity() != null) {
             mActivityAvailable = true;
@@ -60,7 +63,7 @@ public abstract class MTFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (!mActivityAvailable) {
+        if (!mActivityAvailable && mIsVisible) {
             mActivityAvailable = true;
             logScreenView();
         }
