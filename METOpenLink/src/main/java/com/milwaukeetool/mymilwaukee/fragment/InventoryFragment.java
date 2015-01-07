@@ -449,7 +449,7 @@ public class InventoryFragment extends MTFragment {
             boolean hasItems = (mUserItemManager.getTotalNumberOfItems() > 0);
 
             boolean filtered = (inventoryManager.getInventoryFilterType() ==
-                    MyInventoryManager.MyInventoryFilterType.FILTER_TYPE_BY_MANUFACTURER ||
+                    MyInventoryManager.MyInventoryFilterType.FILTER_TYPE_BY_CATEGORY ||
                     inventoryManager.getInventoryFilterType() ==
                             MyInventoryManager.MyInventoryFilterType.FILTER_TYPE_BY_MANUFACTURER
             );
