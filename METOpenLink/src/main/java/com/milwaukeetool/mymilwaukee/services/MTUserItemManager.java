@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.AddItemDetailActivity;
 import com.milwaukeetool.mymilwaukee.activity.MTActivity;
+import com.milwaukeetool.mymilwaukee.config.MTConstants;
 import com.milwaukeetool.mymilwaukee.model.MTSection;
 import com.milwaukeetool.mymilwaukee.model.MTUserItem;
 import com.milwaukeetool.mymilwaukee.model.event.MTAddItemEvent;
@@ -91,29 +92,29 @@ public class MTUserItemManager {
     }
 
     public void getItemsSingleRequest(final MTActivity activity, final boolean showProgress) {
-        getItems(activity,0,showProgress,-1,-1,null,true);
+        getItems(activity,0,showProgress, MTConstants.FILTER_INVALID_MANUFACTURER,MTConstants.FILTER_INVALID_CATEGORY,null,true);
     }
 
     public void getItems(final MTActivity activity, final int skipCount, final boolean showProgress) {
-        getItems(activity,skipCount,showProgress,-1,-1,null,false);
+        getItems(activity,skipCount,showProgress,MTConstants.FILTER_INVALID_MANUFACTURER,MTConstants.FILTER_INVALID_CATEGORY,null,false);
     }
 
     public void getItems(final MTActivity activity, final int skipCount, final boolean showProgress, final String searchTerm) {
-        getItems(activity,skipCount,showProgress,-1,-1,searchTerm,false);
+        getItems(activity,skipCount,showProgress,MTConstants.FILTER_INVALID_MANUFACTURER,MTConstants.FILTER_INVALID_CATEGORY,searchTerm,false);
     }
 
     public void getItems(final MTActivity activity, final int skipCount, final boolean showProgress, final int filterId, final UserItemFilterType filterType) {
 
         switch (filterType) {
             case FILTER_TYPE_CATEGORY:
-                getItems(activity, skipCount, showProgress, -1, filterId, null, false);
+                getItems(activity, skipCount, showProgress, MTConstants.FILTER_INVALID_MANUFACTURER, filterId, null, false);
                 break;
             case FILTER_TYPE_MANUFACTURER:
-                getItems(activity, skipCount, showProgress, filterId, -1, null, false);
+                getItems(activity, skipCount, showProgress, filterId, MTConstants.FILTER_INVALID_CATEGORY, null, false);
                 break;
             case FILTER_TYPE_NONE:
             default:
-                getItems(activity, skipCount, showProgress, -1, -1, null, false);
+                getItems(activity, skipCount, showProgress, MTConstants.FILTER_INVALID_MANUFACTURER, MTConstants.FILTER_INVALID_CATEGORY, null, false);
                 break;
         }
     }
@@ -181,10 +182,10 @@ public class MTUserItemManager {
         MTUserItemRequest request = new MTUserItemRequest();
         request.setSkipCount(skipCount);
         request.setTakeCount(USER_ITEM_REQUEST_COUNT);
-        if (categoryId != -1) {
+        if (categoryId != MTConstants.FILTER_INVALID_CATEGORY) {
             request.setCategoryId(categoryId);
         }
-        if (manufacturerId != -1) {
+        if (manufacturerId != MTConstants.FILTER_INVALID_MANUFACTURER) {
             request.setManufacturerId(manufacturerId);
         }
         if (!TextUtils.isEmpty(searchTerm)) {

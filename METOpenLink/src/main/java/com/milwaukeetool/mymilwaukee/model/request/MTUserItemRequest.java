@@ -1,6 +1,7 @@
 package com.milwaukeetool.mymilwaukee.model.request;
 
 import com.google.gson.annotations.SerializedName;
+import com.milwaukeetool.mymilwaukee.config.MTConstants;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -71,10 +72,10 @@ public class MTUserItemRequest {
         if (getSearchTerm() != null) {
             map.put("SearchTerm", getSearchTerm());
         }
-        if (getManufacturerId() != -1) {
+        if (getManufacturerId() != MTConstants.FILTER_INVALID_MANUFACTURER) {
             map.put("ManufacturerId", Integer.toString(getManufacturerId()));
         }
-        if (getCategoryId() != -1) {
+        if (getCategoryId() != MTConstants.FILTER_INVALID_CATEGORY) {
             map.put("CategoryId", Integer.toString(getCategoryId()));
         }
         return map;

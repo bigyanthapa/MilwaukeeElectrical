@@ -173,6 +173,10 @@ public class InventoryFragment extends MTFragment {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
 
+                if (mLastUserItemResultEvent == null) {
+                    return;
+                }
+
                 boolean shouldRequestMoreItems = true;
 
                 LOGD(TAG, "****SCROLL CHANGED");
@@ -184,12 +188,13 @@ public class InventoryFragment extends MTFragment {
                     totalItemCount = mUserItemManager.getTotalNumberOfItems();
                 }
 
-                if (mUserItemManager.isEndOfResults() || mLastUserItemResultEvent == null) {
+                if (mUserItemManager.isEndOfResults()) {
                     LOGD(TAG, "****No last search result found");
                     shouldRequestMoreItems = false;
                     mLoadingResults = false;
                     mLastUserItemResultEvent = null;
                     LOGD(TAG, "****Resetting for empty result");
+                    showLoadingFooterView(mItemListView, false);
                 }
 
                 if (totalItemCount <= visibleThreshold) {
@@ -200,7 +205,7 @@ public class InventoryFragment extends MTFragment {
                 int currentPosition = mItemListView.getLastVisiblePosition();
                 LOGD (TAG, "****IS CURRENT WINDOW: " + (currentPosition + visibleThreshold + MTInventoryHelper.INVENTORY_BUFFER_SIZE) + " BEYOND TOTAL INDEX: " + (totalItemCount - 1));
 
-                if (mLastUserItemResultEvent != null && shouldRequestMoreItems &&
+                if (shouldRequestMoreItems &&
                         (currentPosition + visibleThreshold + MTInventoryHelper.INVENTORY_BUFFER_SIZE) >= (totalItemCount - 1)) {
 
                     LOGD(TAG, "****Last result count: " + mLastUserItemResultEvent.getLastResultCount());
@@ -208,8 +213,12 @@ public class InventoryFragment extends MTFragment {
                     int newSkipCount = (mAdapter != null) ?  mUserItemManager.getTotalNumberOfItems() : 0;
                     LOGD(TAG, "****New skip count: " + newSkipCount + " for term: " + mLastUserItemResultEvent.getLastSearchTerm());
                     mLoadingResults = true;
-                    mLastUserItemResultEvent = null;
-                    mUserItemManager.getItems((MTActivity)InventoryFragment.this.getActivity(), newSkipCount, false);
+
+                    MyInventoryManager manager = MyInventoryManager.sharedInstance();
+                    updateInventory(manager.getInventoryFilterType(),
+                            manager.getCurrentCategory(),
+                            manager.getCurrentManufacturer(),
+                            newSkipCount);
                 }
 
                 if (shouldRequestMoreItems) {
@@ -327,7 +336,7 @@ public class InventoryFragment extends MTFragment {
             mInventoryLoaded = true;
             if (event.getUserItemResponse() != null) {
                 mHasInventory = !(event.getUserItemResponse().isEmpty());
-                loadInventory();
+                // Now retrieve the user's current inventory
                 retrieveInventory(true);
             }
         } else if (event != null) {
@@ -338,6 +347,7 @@ public class InventoryFragment extends MTFragment {
             } else if (mUserItemManager.getTotalNumberOfItems() == 0) {
                 mLastUserItemResultEvent = event;
                 loadInventory();
+                showLoadingFooterView(mItemListView,false);
             }
         }
     }
@@ -380,13 +390,17 @@ public class InventoryFragment extends MTFragment {
     }
 
     public void updateInventory(MyInventoryManager.MyInventoryFilterType inventoryFilterType,
-                                    MTCategory category, MTManufacturer manufacturer) {
+                                MTCategory category, MTManufacturer manufacturer, int skipCount) {
+
+        // Show progress only for initial updates
+        boolean showProgress = (skipCount > 0) ? false : true;
+
         switch (inventoryFilterType) {
             case FILTER_TYPE_BY_CATEGORY:
                 if (category != null) {
                     // reload we have an id, and previously didn't
                     if (mUserItemManager != null) {
-                        mUserItemManager.getItems((MTActivity) InventoryFragment.this.getActivity(), 0, true,
+                        mUserItemManager.getItems((MTActivity) InventoryFragment.this.getActivity(), skipCount, showProgress,
                                 category.getId(),
                                 MTUserItemManager.UserItemFilterType.FILTER_TYPE_CATEGORY);
                     }
@@ -397,7 +411,7 @@ public class InventoryFragment extends MTFragment {
                 if (manufacturer != null) {
                     // reload we have an id, and previously didn't
                     if (mUserItemManager != null) {
-                        mUserItemManager.getItems((MTActivity) InventoryFragment.this.getActivity(), 0, true,
+                        mUserItemManager.getItems((MTActivity) InventoryFragment.this.getActivity(), skipCount, showProgress,
                                 manufacturer.getId(),
                                 MTUserItemManager.UserItemFilterType.FILTER_TYPE_MANUFACTURER);
                     }
@@ -408,10 +422,15 @@ public class InventoryFragment extends MTFragment {
             default:
                 // We need to reload id's are different
                 if (mUserItemManager != null) {
-                    mUserItemManager.getItems((MTActivity) InventoryFragment.this.getActivity(), 0, true);
+                    mUserItemManager.getItems((MTActivity) InventoryFragment.this.getActivity(), skipCount, showProgress);
                 }
                 break;
         }
+    }
+
+    public void updateInventory(MyInventoryManager.MyInventoryFilterType inventoryFilterType,
+                                    MTCategory category, MTManufacturer manufacturer) {
+        updateInventory(inventoryFilterType, category, manufacturer, 0);
     }
 
     public void loadInventory() {
