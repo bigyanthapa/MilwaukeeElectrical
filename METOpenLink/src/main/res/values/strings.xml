@@ -101,7 +101,7 @@
     <string name="all_inventory_details_date">Added: </string>
 
     <!-- Inventory Search -->
-    <string name="inventory_search_no_inventory">No items returned in search results.</string>
+    <string name="inventory_search_no_inventory">No items match your search criteria.</string>
     <string name="title_inventory_search_results">Search Inventory</string>
     <string name="search_inventory_hint">Search Inventory</string>
 
@@ -185,6 +185,6 @@
     <string name="filter_view_category">View Category</string>
     <string name="filter_select_manufacturer">Select Manufacturer</string>
     <string name="filter_select_category">Select Category</string>
-    <string name="filter_no_items_found">No Items Found</string>
+    <string name="filter_no_items_found">No items match your filtering criteria.</string>
 
 </resources>

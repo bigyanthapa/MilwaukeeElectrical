@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:gravity="center"
-                android:text="No Items Found"
+                android:text="@string/inventory_search_no_inventory"
                 android:textSize="@dimen/mt_font_size_standard"
                 android:textColorLink="@color/mt_common_gray" />
 

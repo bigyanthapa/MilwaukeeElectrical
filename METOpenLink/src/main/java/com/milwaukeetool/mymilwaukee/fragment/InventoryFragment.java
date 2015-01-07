@@ -70,7 +70,7 @@ public class InventoryFragment extends MTFragment {
     private boolean mLoadingResults = false;
     private boolean mInventoryLoaded = false;
 
-    private boolean mHasInventory = false;
+    //private boolean mHasInventory = false;
 
     public static InventoryFragment newInstance() {
         InventoryFragment f = new InventoryFragment();
@@ -82,13 +82,16 @@ public class InventoryFragment extends MTFragment {
     @Override
     public void onResume() {
         super.onResume();
-        checkForInventory(true);
+        //checkForInventory(true);
+        if (!mInventoryLoaded) {
+            retrieveInventory(true);
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-
+        mInventoryLoaded = false;
     }
 
     @Override
@@ -116,16 +119,16 @@ public class InventoryFragment extends MTFragment {
         this.setHasOptionsMenu(true);
 
         mUserItemManager = new MTUserItemManager();
-        mInventoryLoaded = false;
-        mHasInventory = false;
+        //mInventoryLoaded = false;
+        //mHasInventory = false;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         LOGD(TAG, "View was destroyed, need to request my inventory");
-        mInventoryLoaded = false;
-        mHasInventory = false;
+        //mInventoryLoaded = false;
+        //mHasInventory = false;
     }
 
     @Override
@@ -239,7 +242,7 @@ public class InventoryFragment extends MTFragment {
     @Override
     public void setMenuVisibility(final boolean visible) {
         super.setMenuVisibility(visible);
-        if (visible && mInventoryLoaded) {
+        if (visible) {// && mInventoryLoaded) {
             LOGD(TAG, "Fragment menu is visible");
             retrieveInventory(false);
         }
@@ -266,9 +269,10 @@ public class InventoryFragment extends MTFragment {
                 this.startAddItemActivity();
                 break;
             case R.id.actionRefresh:
-                mInventoryLoaded = false;
-                mHasInventory = false;
-                checkForInventory(true);
+                //mInventoryLoaded = false;
+                //mHasInventory = false;
+                //checkForInventory(true);
+                retrieveInventory(true);
                 break;
         }
         return true;
@@ -332,14 +336,15 @@ public class InventoryFragment extends MTFragment {
 
     public void onEvent(MTUserItemResultEvent event) {
 
-        if (event != null && event.isSingleRequest()) {
-            mInventoryLoaded = true;
-            if (event.getUserItemResponse() != null) {
-                mHasInventory = !(event.getUserItemResponse().isEmpty());
-                // Now retrieve the user's current inventory
-                retrieveInventory(true);
-            }
-        } else if (event != null) {
+//        if (event != null && event.isSingleRequest()) {
+//            mInventoryLoaded = true;
+//            if (event.getUserItemResponse() != null) {
+//                mHasInventory = !(event.getUserItemResponse().isEmpty());
+//                // Now retrieve the user's current inventory
+//                retrieveInventory(true);
+//            }
+//        } else
+        if (event != null) {
             if (event.getLastResultCount() > 0) {
                 mLastUserItemResultEvent = event;
                 loadInventory();
@@ -358,9 +363,10 @@ public class InventoryFragment extends MTFragment {
             if (mInventoryLayout != null) {
                 mInventoryLayout.setRefreshing(false);
             }
-            mInventoryLoaded = false;
-            mHasInventory = false;
-            checkForInventory(true);
+            //mInventoryLoaded = false;
+            //mHasInventory = false;
+            //checkForInventory(true);
+            retrieveInventory(true);
         }
     }
 
@@ -370,13 +376,13 @@ public class InventoryFragment extends MTFragment {
         }
     }
 
-    public void checkForInventory(boolean recheck) {
-        if (!mInventoryLoaded || (recheck && (mUserItemManager != null && (mUserItemManager.isDirty())))) {
-            if (mUserItemManager != null) {
-                mUserItemManager.getItemsSingleRequest((MTActivity) InventoryFragment.this.getActivity(), true);
-            }
-        }
-    }
+//    public void checkForInventory(boolean recheck) {
+//        if (!mInventoryLoaded || (recheck && (mUserItemManager != null && (mUserItemManager.isDirty())))) {
+//            if (mUserItemManager != null) {
+//                mUserItemManager.getItemsSingleRequest((MTActivity) InventoryFragment.this.getActivity(), true);
+//            }
+//        }
+//    }
 
     public void retrieveInventory(boolean refresh) {
         if (mUserItemManager != null && (mUserItemManager.isDirty() || refresh)) {
@@ -426,6 +432,8 @@ public class InventoryFragment extends MTFragment {
                 }
                 break;
         }
+
+        mInventoryLoaded = true;
     }
 
     public void updateInventory(MyInventoryManager.MyInventoryFilterType inventoryFilterType,
@@ -436,6 +444,7 @@ public class InventoryFragment extends MTFragment {
     public void loadInventory() {
         if (mAdapter != null) {
             mAdapter.updateListItems(mUserItemManager);
+            mItemListView.setSelection(0);
             updateView();
         }
     }
@@ -454,15 +463,26 @@ public class InventoryFragment extends MTFragment {
                             MyInventoryManager.MyInventoryFilterType.FILTER_TYPE_BY_MANUFACTURER
             );
 
-            if (filtered && mHasInventory) {
+//            if (filtered && mHasInventory) {
+//                this.mNoInventoryLayout.setVisibility(View.INVISIBLE);
+//                this.mNoItemsFoundLayout.setVisibility(hasItems ? View.INVISIBLE : View.VISIBLE);
+//            } else {
+//                this.mNoItemsFoundLayout.setVisibility(View.INVISIBLE);
+//                this.mNoInventoryLayout.setVisibility(mHasInventory ? View.INVISIBLE : View.VISIBLE);
+//            }
+//
+//            this.mInventoryLayout.setVisibility((mHasInventory && hasItems) ? View.VISIBLE : View.INVISIBLE);
+
+            if (filtered) {
                 this.mNoInventoryLayout.setVisibility(View.INVISIBLE);
                 this.mNoItemsFoundLayout.setVisibility(hasItems ? View.INVISIBLE : View.VISIBLE);
             } else {
                 this.mNoItemsFoundLayout.setVisibility(View.INVISIBLE);
-                this.mNoInventoryLayout.setVisibility(mHasInventory ? View.INVISIBLE : View.VISIBLE);
+                this.mNoInventoryLayout.setVisibility(hasItems ? View.INVISIBLE : View.VISIBLE);
             }
 
-            this.mInventoryLayout.setVisibility((mHasInventory && hasItems) ? View.VISIBLE : View.INVISIBLE);
+            this.mInventoryLayout.setVisibility(hasItems ? View.VISIBLE : View.INVISIBLE);
+
         }
     }
 
