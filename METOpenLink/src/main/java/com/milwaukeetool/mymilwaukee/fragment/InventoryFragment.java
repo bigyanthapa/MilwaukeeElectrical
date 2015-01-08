@@ -33,7 +33,7 @@ import com.milwaukeetool.mymilwaukee.model.event.MTChangeFilterEvent;
 import com.milwaukeetool.mymilwaukee.model.event.MTRefreshInventoryEvent;
 import com.milwaukeetool.mymilwaukee.model.event.MTUserItemResultEvent;
 import com.milwaukeetool.mymilwaukee.services.MTInventoryHelper;
-import com.milwaukeetool.mymilwaukee.services.MTUserItemManager;
+import com.milwaukeetool.mymilwaukee.manager.MTUserItemManager;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
 import com.milwaukeetool.mymilwaukee.view.MTButton;

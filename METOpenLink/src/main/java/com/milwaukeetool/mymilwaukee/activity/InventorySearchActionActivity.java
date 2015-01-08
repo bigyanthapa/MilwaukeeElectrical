@@ -18,10 +18,13 @@ import android.widget.SearchView;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.adapter.InventoryItemAdapter;
 import com.milwaukeetool.mymilwaukee.config.MTConstants;
+import com.milwaukeetool.mymilwaukee.manager.MyInventoryManager;
+import com.milwaukeetool.mymilwaukee.model.MTCategory;
+import com.milwaukeetool.mymilwaukee.model.MTManufacturer;
 import com.milwaukeetool.mymilwaukee.model.event.MTUserItemResultEvent;
 import com.milwaukeetool.mymilwaukee.model.response.MTUserItemResponse;
 import com.milwaukeetool.mymilwaukee.services.MTInventoryHelper;
-import com.milwaukeetool.mymilwaukee.services.MTUserItemManager;
+import com.milwaukeetool.mymilwaukee.manager.MTUserItemManager;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.UIUtils;
 
@@ -35,7 +38,7 @@ public class InventorySearchActionActivity extends MTActivity {
 
     private static final String TAG = makeLogTag(InventorySearchActionActivity.class);
     private MTUserItemResponse mLastResponse = null;
-    private ListView mInventoryLayout;
+    private ListView mSearchResultsListView;
     private InventoryItemAdapter mAdapter;
     private MTUserItemManager mUserItemManager;
     private RelativeLayout mNoInventoryLayout;
@@ -67,14 +70,14 @@ public class InventorySearchActionActivity extends MTActivity {
         super.onCreate(savedInstanceState);
         this.mLoadingResults = false;
         this.mUserItemManager = new MTUserItemManager();
-        this.mInventoryLayout = (ListView) this.findViewById(R.id.inventorySearchResultsListView);
+        this.mSearchResultsListView = (ListView) this.findViewById(R.id.inventorySearchResultsListView);
         this.mNoInventoryLayout = (RelativeLayout) this.findViewById(R.id.inventorySearchResultsNoInventoryLayout);
         this.mNoInventoryLayout.setVisibility(View.INVISIBLE);
 
         mAdapter = new InventoryItemAdapter(this, null);
 
-        if (this.mInventoryLayout != null) {
-            this.mInventoryLayout.setAdapter(mAdapter);
+        if (this.mSearchResultsListView != null) {
+            this.mSearchResultsListView.setAdapter(mAdapter);
         }
 
         mListFooterLoadingView = this.getLayoutInflater().inflate(R.layout.view_footer_load_item, null, false);
@@ -83,7 +86,7 @@ public class InventorySearchActionActivity extends MTActivity {
         mListFooterEmptyView = new View(this);
         mListFooterEmptyView.setLayoutParams(lp);
 
-        this.mInventoryLayout.setOnScrollListener(new AbsListView.OnScrollListener() {
+        this.mSearchResultsListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem,
                                  int visibleItemCount, int totalItemCount) {
@@ -91,6 +94,11 @@ public class InventorySearchActionActivity extends MTActivity {
 
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+                if (mLastUserItemResultEvent == null) {
+                    mLoadingResults = false;
+                    return;
+                }
 
                 boolean shouldRequestMoreItems = true;
 
@@ -103,12 +111,13 @@ public class InventorySearchActionActivity extends MTActivity {
                     totalItemCount = mUserItemManager.getTotalNumberOfItems();
                 }
 
-                if (mUserItemManager.isEndOfResults() || mLastUserItemResultEvent == null) {
+                if (mUserItemManager.isEndOfResults()) {
                     LOGD(TAG, "****No last search result found");
                     shouldRequestMoreItems = false;
                     mLoadingResults = false;
                     mLastUserItemResultEvent = null;
                     LOGD(TAG, "****Resetting for empty result");
+                    showLoadingFooterView(mSearchResultsListView, false);
                 }
 
                 if (totalItemCount <= visibleThreshold) {
@@ -116,10 +125,10 @@ public class InventorySearchActionActivity extends MTActivity {
                     shouldRequestMoreItems = false;
                 }
 
-                int currentPosition = mInventoryLayout.getLastVisiblePosition();
+                int currentPosition = mSearchResultsListView.getLastVisiblePosition();
                 LOGD (TAG, "****IS CURRENT WINDOW: " + (currentPosition + visibleThreshold + MTInventoryHelper.INVENTORY_BUFFER_SIZE) + " BEYOND TOTAL INDEX: " + (totalItemCount - 1));
 
-                if (mLastUserItemResultEvent != null && shouldRequestMoreItems &&
+                if (shouldRequestMoreItems && !mLoadingResults &&
                         (currentPosition + visibleThreshold + MTInventoryHelper.INVENTORY_BUFFER_SIZE) >= (totalItemCount - 1)) {
 
                     LOGD(TAG, "****Last result count: " + mLastUserItemResultEvent.getLastResultCount());
@@ -127,17 +136,70 @@ public class InventorySearchActionActivity extends MTActivity {
                     int newSkipCount = (mAdapter != null) ?  mUserItemManager.getTotalNumberOfItems() : 0;
                     LOGD(TAG, "****New skip count: " + newSkipCount + " for term: " + mLastUserItemResultEvent.getLastSearchTerm());
                     mLoadingResults = true;
-                    mLastUserItemResultEvent = null;
-                    mUserItemManager.getItems((MTActivity) InventorySearchActionActivity.this, newSkipCount, false, mLastSearchTerm);
+
+                    MyInventoryManager manager = MyInventoryManager.sharedInstance();
+                    updateInventory(manager.getInventoryFilterType(),
+                            manager.getCurrentCategory(),
+                            manager.getCurrentManufacturer(),
+                            mLastSearchTerm,
+                            newSkipCount);
                 }
 
                 if (shouldRequestMoreItems) {
-                    showLoadingFooterView(mInventoryLayout, mLoadingResults);
+                    showLoadingFooterView(mSearchResultsListView, mLoadingResults);
                 }
             }
         });
 
         handleIntent(this.getIntent());
+    }
+
+    public void updateInventory(MyInventoryManager.MyInventoryFilterType inventoryFilterType,
+                                MTCategory category, MTManufacturer manufacturer,
+                                String searchTerm, int skipCount) {
+
+        // Show progress only for initial updates
+        boolean showProgress = (skipCount > 0) ? false : true;
+
+        switch (inventoryFilterType) {
+            case FILTER_TYPE_BY_CATEGORY:
+                if (category != null) {
+                    // reload we have an id, and previously didn't
+                    if (mUserItemManager != null) {
+                        mUserItemManager.getItems((MTActivity) InventorySearchActionActivity.this,
+                                skipCount, showProgress, category.getId(),
+                                MTUserItemManager.UserItemFilterType.FILTER_TYPE_CATEGORY,
+                                searchTerm);
+                    }
+                }
+                break;
+
+            case FILTER_TYPE_BY_MANUFACTURER:
+                if (manufacturer != null) {
+                    // reload we have an id, and previously didn't
+                    if (mUserItemManager != null) {
+                        mUserItemManager.getItems((MTActivity) InventorySearchActionActivity.this,
+                                skipCount, showProgress, manufacturer.getId(),
+                                MTUserItemManager.UserItemFilterType.FILTER_TYPE_MANUFACTURER,
+                                searchTerm);
+                    }
+                }
+                break;
+            case FILTER_TYPE_ALL_INVENTORY:
+            case FILTER_TYPE_DEFAULT:
+            default:
+                // We need to reload id's are different
+                if (mUserItemManager != null) {
+                    mUserItemManager.getItems((MTActivity) InventorySearchActionActivity.this,
+                            skipCount, showProgress, searchTerm);
+                }
+                break;
+        }
+    }
+
+    public void updateInventory(MyInventoryManager.MyInventoryFilterType inventoryFilterType,
+                                MTCategory category, MTManufacturer manufacturer, String searchTerm) {
+        updateInventory(inventoryFilterType, category, manufacturer, searchTerm, 0);
     }
 
     public void showLoadingFooterView(ListView listView, boolean isLoading) {
@@ -171,25 +233,33 @@ public class InventorySearchActionActivity extends MTActivity {
 
             if (!TextUtils.isEmpty(mLastSearchTerm)) {
                 UIUtils.hideKeyboard(InventorySearchActionActivity.this);
-                InventorySearchActionActivity.this.mUserItemManager.getItems(
-                        InventorySearchActionActivity.this, 0, true, mLastSearchTerm);
+
+                MyInventoryManager manager = MyInventoryManager.sharedInstance();
+                updateInventory(manager.getInventoryFilterType(),
+                        manager.getCurrentCategory(),
+                        manager.getCurrentManufacturer(),
+                        mLastSearchTerm);
             }
         }
     }
 
     public void onEvent(MTUserItemResultEvent event) {
-        if (event.getLastResultCount() > 0) {
-            mLastUserItemResultEvent = event;
-            loadInventory();
-            showLoadingFooterView(mInventoryLayout, false);
+
+        if (event != null) {
+            mLoadingResults = false;
+            if (event.getLastResultCount() > 0 || mUserItemManager.getTotalNumberOfItems() == 0) {
+                mLastUserItemResultEvent = event;
+                loadInventory();
+                showLoadingFooterView(mSearchResultsListView, false);
+            }
         }
-        updateView();
     }
 
     public void loadInventory() {
         if (mAdapter != null) {
-            mAdapter.clearListItems();
             mAdapter.updateListItems(mUserItemManager);
+            //mSearchResultsListView.setSelection(0);
+            updateView();
         }
     }
 
@@ -200,7 +270,7 @@ public class InventorySearchActionActivity extends MTActivity {
 
             // Update both layouts always
             this.mNoInventoryLayout.setVisibility(hasItems ? View.INVISIBLE : View.VISIBLE);
-            this.mInventoryLayout.setVisibility(hasItems ? View.VISIBLE : View.INVISIBLE);
+            this.mSearchResultsListView.setVisibility(hasItems ? View.VISIBLE : View.INVISIBLE);
         }
     }
 
@@ -225,8 +295,12 @@ public class InventorySearchActionActivity extends MTActivity {
 
                 if (!TextUtils.isEmpty(mLastSearchTerm)) {
                     UIUtils.hideKeyboard(InventorySearchActionActivity.this);
-                    InventorySearchActionActivity.this.mUserItemManager.getItems(
-                            InventorySearchActionActivity.this, 0, true, mLastSearchTerm);
+
+                    MyInventoryManager manager = MyInventoryManager.sharedInstance();
+                    updateInventory(manager.getInventoryFilterType(),
+                            manager.getCurrentCategory(),
+                            manager.getCurrentManufacturer(),
+                            mLastSearchTerm);
                 }
                 return false;
             }

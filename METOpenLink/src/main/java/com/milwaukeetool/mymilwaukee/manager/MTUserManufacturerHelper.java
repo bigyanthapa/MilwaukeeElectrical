@@ -1,4 +1,4 @@
-package com.milwaukeetool.mymilwaukee.services;
+package com.milwaukeetool.mymilwaukee.manager;
 
 /**
  * Created by cent146 on 12/10/14.

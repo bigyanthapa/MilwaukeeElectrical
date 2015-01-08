@@ -1,4 +1,4 @@
-package com.milwaukeetool.mymilwaukee.services;
+package com.milwaukeetool.mymilwaukee.manager;
 
 import android.text.TextUtils;
 
@@ -14,6 +14,7 @@ import com.milwaukeetool.mymilwaukee.model.event.MTSearchResultEvent;
 import com.milwaukeetool.mymilwaukee.model.event.MTUserItemResultEvent;
 import com.milwaukeetool.mymilwaukee.model.request.MTUserItemRequest;
 import com.milwaukeetool.mymilwaukee.model.response.MTUserItemResponse;
+import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.NamedObject;
@@ -115,6 +116,23 @@ public class MTUserItemManager {
             case FILTER_TYPE_NONE:
             default:
                 getItems(activity, skipCount, showProgress, MTConstants.FILTER_INVALID_MANUFACTURER, MTConstants.FILTER_INVALID_CATEGORY, null, false);
+                break;
+        }
+    }
+
+    public void getItems(final MTActivity activity, final int skipCount, final boolean showProgress,
+                         final int filterId, final UserItemFilterType filterType, final String searchTerm) {
+
+        switch (filterType) {
+            case FILTER_TYPE_CATEGORY:
+                getItems(activity, skipCount, showProgress, MTConstants.FILTER_INVALID_MANUFACTURER, filterId, searchTerm, false);
+                break;
+            case FILTER_TYPE_MANUFACTURER:
+                getItems(activity, skipCount, showProgress, filterId, MTConstants.FILTER_INVALID_CATEGORY, searchTerm, false);
+                break;
+            case FILTER_TYPE_NONE:
+            default:
+                getItems(activity, skipCount, showProgress, MTConstants.FILTER_INVALID_MANUFACTURER, MTConstants.FILTER_INVALID_CATEGORY, searchTerm, false);
                 break;
         }
     }

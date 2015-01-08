@@ -21,7 +21,7 @@ import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.config.MTConstants;
 import com.milwaukeetool.mymilwaukee.model.MTSection;
 import com.milwaukeetool.mymilwaukee.model.MTUserItem;
-import com.milwaukeetool.mymilwaukee.services.MTUserItemManager;
+import com.milwaukeetool.mymilwaukee.manager.MTUserItemManager;
 import com.milwaukeetool.mymilwaukee.util.MiscUtils;
 import com.milwaukeetool.mymilwaukee.util.NamedObject;
 import com.milwaukeetool.mymilwaukee.util.StringHelper;
