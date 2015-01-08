@@ -136,6 +136,18 @@
                 android:value=".activity.MainActivity" />
         </activity>
         <activity
+            android:name=".activity.AddKitItemsActivity"
+            android:label="@string/add_kit_items_title"
+            android:launchMode="singleTop"
+            android:parentActivityName=".activity.AddItemActivity"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/Theme.Milwaukeetool"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.AddItemActivity" />
+        </activity>
+        <activity
             android:name=".activity.MyInventoryFilterActivity"
             android:label="@string/main_title_filter"
             android:launchMode="singleTop"

@@ -85,6 +85,13 @@ public class MTItemSearchResult implements Parcelable {
         return children;
     }
 
+    public boolean hasChildren() {
+        if (this.children != null && this.children.size() > 0) {
+            return true;
+        }
+        return false;
+    }
+
     public void setChildren(ArrayList<MTItemSearchResult> children) {
         this.children = children;
     }

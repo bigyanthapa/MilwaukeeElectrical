@@ -22,7 +22,7 @@ import static com.milwaukeetool.mymilwaukee.util.LogUtils.makeLogTag;
  * Created by scott.hopfensperger on 11/25/2014.
  */
 public class AddItemActivity extends MTActivity {
-    private static final String TAG = makeLogTag(CreateAccountActivity.class);
+    private static final String TAG = makeLogTag(AddItemActivity.class);
 
     private Fragment mOtherFragment = null;
 

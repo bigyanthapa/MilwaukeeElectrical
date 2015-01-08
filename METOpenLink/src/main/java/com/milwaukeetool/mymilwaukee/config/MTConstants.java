@@ -12,8 +12,6 @@ public class MTConstants {
     public static final String DEVICE_MFR_SAMSUNG = "samsung";
     public static final String HTTP_PREFIX = "http:";
 
-    public static final String SEARCH_ITEM_RESULT = "MTItemSearchResult";
-
     public static final String INVENTORY_SEARCH_QUERY = "InventorySearchQuery";
     public static final String INVENTORY_SEARCH_ACTION = "InventorySearchAction";
 
@@ -25,6 +23,8 @@ public class MTConstants {
     public static final String INTENT_EXTRA_MANUFACTURER = "Intent_Manufacturer";
     public static final String INTENT_EXTRA_SELECTED_INDEX = "Intent_SelectedIndex";
     public static final String INTENT_EXTRA_TITLE = "Intent_Title";
+    public static final String INTENT_EXTRA_SEARCH_ITEM_RESULT = "Intent_MTItemSearchResult";
+    public static final String INTENT_EXTRA_KIT_ITEM_ARRAY_LIST = "Intent_KitItemArrayList";
 
     public static final int FILTER_INVALID_MANUFACTURER = -1;
     public static final int FILTER_INVALID_CATEGORY = 0;

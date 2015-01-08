@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.milwaukeetool.mymilwaukee.view.MTLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/addKitItemsLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mt_white">
+
+    <RelativeLayout
+        android:id="@+id/addKitItemsContentLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/mt_white">
+
+        <ListView
+            android:id="@+id/addKitItemsListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:choiceMode="singleChoice"
+            android:divider="@color/mt_divider_gray"
+            android:dividerHeight="1dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/addKitItemsEmptyLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible">
+
+        <com.milwaukeetool.mymilwaukee.view.MTTextView
+            android:id="@+id/addKitItemsEmptyMessageTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_inventory_message"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/mt_margin_xl"
+            android:layout_marginBottom="@dimen/mt_margin_small"
+            android:background="@color/mt_white"
+            android:singleLine="false"
+            android:lineSpacingExtra="@dimen/mt_padding_standard"
+            android:textColor="@color/mt_common_gray"
+            android:textSize="@dimen/mt_font_size_large"/>
+
+    </RelativeLayout>
+
+</com.milwaukeetool.mymilwaukee.view.MTLayout>

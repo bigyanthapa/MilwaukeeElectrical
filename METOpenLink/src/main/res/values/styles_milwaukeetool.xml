@@ -153,9 +153,8 @@
 
     <style name="ActionButtonStyle.MilwaukeeTool" parent="@android:style/Widget.Holo.Light.ActionButton">
         <item name="android:minWidth">0dp</item>
-        <item name="android:maxWidth">40dp</item>
-        <item name="android:layout_marginLeft">@dimen/mt_padding_medium</item>
-        <item name="android:layout_marginRight">@dimen/mt_padding_medium</item>
+        <item name="android:paddingLeft">@dimen/mt_padding_medium</item>
+        <item name="android:paddingRight">@dimen/mt_padding_medium</item>
     </style>
 
     <style name="AlertDialog_MilwaukeeTool" parent="@android:style/Theme.Holo.Light.Dialog.NoActionBar">

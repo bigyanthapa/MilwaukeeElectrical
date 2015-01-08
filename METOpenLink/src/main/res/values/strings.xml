@@ -148,6 +148,10 @@
     <string name="add_item_notes_hint">Enter notes here...</string>
     <string name="add_item_loading_inventory">Loading Inventory...</string>
 
+    <!-- Add Kit Items -->
+    <string name="add_kit_items_title">Add Kit Items</string>
+    <string name="add_kit_items_entries">entries</string>
+
     <!-- Add Item Details-->
     <string name="item_detail_product_information">PRODUCT INFORMATION</string>
 

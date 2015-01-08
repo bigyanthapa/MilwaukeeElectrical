@@ -27,6 +27,7 @@ import android.widget.TextView;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.AddItemActivity;
 import com.milwaukeetool.mymilwaukee.activity.AddItemDetailActivity;
+import com.milwaukeetool.mymilwaukee.activity.AddKitItemsActivity;
 import com.milwaukeetool.mymilwaukee.config.MTConstants;
 import com.milwaukeetool.mymilwaukee.interfaces.FirstPageFragmentListener;
 import com.milwaukeetool.mymilwaukee.model.MTItemSearchResult;
@@ -196,10 +197,18 @@ public class ItemSearchResultsFragment extends MTFragment {
                 }
 
                 if (result != null) {
-                    Activity activity = ItemSearchResultsFragment.this.getActivity();
-                    Intent intent = new Intent(activity, AddItemDetailActivity.class);
-                    intent.putExtra(MTConstants.SEARCH_ITEM_RESULT, result);
-                    startActivity(intent);
+
+                    if (result.hasChildren()) {
+                        Activity activity = ItemSearchResultsFragment.this.getActivity();
+                        Intent intent = new Intent(activity, AddKitItemsActivity.class);
+                        intent.putExtra(MTConstants.INTENT_EXTRA_KIT_ITEM_ARRAY_LIST, result.getChildren());
+                        startActivity(intent);
+                    } else {
+                        Activity activity = ItemSearchResultsFragment.this.getActivity();
+                        Intent intent = new Intent(activity, AddItemDetailActivity.class);
+                        intent.putExtra(MTConstants.INTENT_EXTRA_SEARCH_ITEM_RESULT, result);
+                        startActivity(intent);
+                    }
                 }
             }
         });
@@ -286,7 +295,14 @@ public class ItemSearchResultsFragment extends MTFragment {
                     .into(holder.thumbnail);
 
             holder.description.setText(searchResult.getItemDescription());
-            holder.modelNumber.setText(searchResult.getModelNumber());
+
+            // Add entries for kits
+            String modelText = searchResult.getModelNumber();
+            if (searchResult.hasChildren()) {
+                ArrayList<MTItemSearchResult> searchResultArrayList = searchResult.getChildren();
+                modelText = modelText + " • " + searchResultArrayList.size() + " " + MiscUtils.getString(R.string.add_kit_items_entries);
+            }
+            holder.modelNumber.setText(modelText);
 
             return view;
         }

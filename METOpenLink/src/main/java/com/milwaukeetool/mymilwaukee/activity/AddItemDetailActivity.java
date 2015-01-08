@@ -80,7 +80,7 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mItemSearchResult = (MTItemSearchResult)getIntent().getParcelableExtra(MTConstants.SEARCH_ITEM_RESULT);
+        mItemSearchResult = (MTItemSearchResult)getIntent().getParcelableExtra(MTConstants.INTENT_EXTRA_SEARCH_ITEM_RESULT);
 
         mItemImageView = (ImageView)this.findViewById(R.id.addItemImageView);
 

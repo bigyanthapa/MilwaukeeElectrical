@@ -28,6 +28,7 @@
     <string name="mt_screen_name_add_other_mfr_item">Add Other Inventory</string>
     <string name="mt_screen_name_edit_other_mfr_item">Edit Other Inventory</string>
     <string name="mt_screen_name_add_item_details">Add Milwaukee Tool</string>
+    <string name="mt_screen_name_add_kit_item">Milwaukee Add Kit Item Inventory</string>
 
     <!-- Dialogs -->
     <string name="mt_screen_name_add_notes">Add Notes</string>
@@ -37,7 +38,6 @@
     <string name="mt_screen_name_nearby_devices">Nearby Devices</string>
 
     <!-- Future Screens -->
-    <string name="mt_screen_name_add_kit_item">Milwaukee Add Kit Item Inventory</string>
     <string name="mt_screen_name_manage_tool">Manage Tool</string>
     <string name="mt_screen_name_model_group_detail">Model Group Detail View</string>
 

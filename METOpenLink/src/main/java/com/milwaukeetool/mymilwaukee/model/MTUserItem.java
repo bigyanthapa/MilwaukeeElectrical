@@ -1,14 +1,18 @@
 package com.milwaukeetool.mymilwaukee.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by scott.hopfensperger on 12/9/2014.
  */
-public class MTUserItem {
+public class MTUserItem implements Parcelable {
 
     @SerializedName("itemId")
-    private Integer id;
+    private Integer itemId;
 
     @SerializedName("category")
     private MTCategory category;
@@ -53,11 +57,11 @@ public class MTUserItem {
     private String itemizationImageUrl;
 
     public Integer getId() {
-        return id;
+        return itemId;
     }
 
     public void setId(Integer id) {
-        this.id = id;
+        this.itemId = id;
     }
 
     public MTCategory getCategory() {
@@ -170,5 +174,47 @@ public class MTUserItem {
 
     public void setSerialNumberId(Integer serialNumberId) {
         this.serialNumberId = serialNumberId;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(new Gson().toJson(this));
+    }
+
+    public static final Creator<MTUserItem> CREATOR = new Creator<MTUserItem>() {
+        public MTUserItem createFromParcel(Parcel in) {
+            return new MTUserItem(in);
+        }
+        public MTUserItem[] newArray(int size) {
+            return new MTUserItem[size];
+        }
+    };
+
+    private MTUserItem(Parcel in) {
+        String serializedJson = in.readString();
+        Gson gson = new Gson();
+        MTUserItem tempResult = gson.fromJson(serializedJson, MTUserItem.class);
+        if (tempResult != null) {
+            this.itemId = tempResult.itemId;
+            this.category = tempResult.category;
+            this.manufacturer = tempResult.manufacturer;
+            this.imageUrl = tempResult.imageUrl;
+            this.bluetoothEnabled = tempResult.bluetoothEnabled;
+            this.serialNumber = tempResult.serialNumber;
+            this.serialNumberId = tempResult.serialNumberId;
+            this.dateAdded = tempResult.dateAdded;
+            this.modelNumber = tempResult.modelNumber;
+            this.itemDescription = tempResult.itemDescription;
+            this.customIdentifier = tempResult.customIdentifier;
+            this.notes = tempResult.notes;
+            this.purchaseLocation = tempResult.purchaseLocation;
+            this.orderInformationImageUrl = tempResult.orderInformationImageUrl;
+            this.itemizationImageUrl = tempResult.itemizationImageUrl;
+        }
     }
 }
