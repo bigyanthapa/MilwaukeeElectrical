@@ -4,18 +4,18 @@
     <item android:id="@+id/actionSearch"
         android:icon="@drawable/ic_menu_search"
         android:title="@string/action_search_item"
-        android:showAsAction="collapseActionView|ifRoom"
+        android:showAsAction="collapseActionView|always"
         android:actionViewClass="android.widget.SearchView" />
     <item android:id="@+id/actionAdd"
         android:icon="@drawable/ic_menu_add"
         android:title="@string/action_add_item"
-        android:showAsAction="ifRoom" />
+        android:showAsAction="always" />
     <item android:id="@+id/actionFilter"
         android:icon="@drawable/ic_menu_view"
         android:title="@string/action_filter"
-        android:showAsAction="ifRoom" />
+        android:showAsAction="always" />
     <item android:id="@+id/actionRefresh"
         android:icon="@drawable/ic_menu_refresh"
         android:title="@string/action_refresh"
-        android:showAsAction="ifRoom" />
+        android:showAsAction="always"/>
 </menu>

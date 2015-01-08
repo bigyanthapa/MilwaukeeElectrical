@@ -290,7 +290,7 @@ public class InventoryFragment extends MTFragment {
 
     @Override
     public void onCreateOptionsMenu(
-            Menu menu, MenuInflater inflater) {
+            final Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.inventory_menu, menu);
 
         ActionBar actionBar = this.getActivity().getActionBar();
@@ -332,9 +332,33 @@ public class InventoryFragment extends MTFragment {
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
+
                 // Remove the search from actionbar
                 mSearchMenuItem.collapseActionView();
+
                 return false;
+            }
+        });
+
+        // Change between ifRoom <--> Always, depending on when ActionView is shown
+        mSearchMenuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                if (menu != null) {
+                    menu.findItem(R.id.actionFilter).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+                    menu.findItem(R.id.actionRefresh).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+                    //menu.findItem(R.id.actionAdd).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+                }
+                return true;
+            }
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                if (menu != null) {
+                    menu.findItem(R.id.actionFilter).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+                    menu.findItem(R.id.actionRefresh).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+                    //menu.findItem(R.id.actionAdd).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+                }
+                return true;
             }
         });
     }
@@ -354,7 +378,7 @@ public class InventoryFragment extends MTFragment {
             if (event.getLastResultCount() > 0) {
                 mLastUserItemResultEvent = event;
                 loadInventory();
-                showLoadingFooterView(mItemListView,false);
+                showLoadingFooterView(mItemListView, false);
             } else if (mUserItemManager.getTotalNumberOfItems() == 0) {
                 mLastUserItemResultEvent = event;
                 loadInventory();
