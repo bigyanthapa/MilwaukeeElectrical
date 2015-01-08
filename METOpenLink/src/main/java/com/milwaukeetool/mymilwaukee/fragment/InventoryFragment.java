@@ -3,6 +3,7 @@ package com.milwaukeetool.mymilwaukee.fragment;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -293,6 +294,15 @@ public class InventoryFragment extends MTFragment {
             final Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.inventory_menu, menu);
 
+        if (menu != null) {
+            String mfr = Build.MANUFACTURER;
+            if (!mfr.equalsIgnoreCase(MTConstants.DEVICE_MFR_SAMSUNG)) {
+                menu.findItem(R.id.actionFilter).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+                menu.findItem(R.id.actionRefresh).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+                menu.findItem(R.id.actionAdd).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+            }
+        }
+
         ActionBar actionBar = this.getActivity().getActionBar();
         actionBar.setTitle(this.getResources().getString(R.string.main_title_inventory_title));
 
@@ -345,18 +355,24 @@ public class InventoryFragment extends MTFragment {
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 if (menu != null) {
-                    menu.findItem(R.id.actionFilter).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-                    menu.findItem(R.id.actionRefresh).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-                    //menu.findItem(R.id.actionAdd).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+                    String mfr = Build.MANUFACTURER;
+                    if (!mfr.equalsIgnoreCase(MTConstants.DEVICE_MFR_SAMSUNG)) {
+                        menu.findItem(R.id.actionFilter).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+                        menu.findItem(R.id.actionRefresh).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+                        menu.findItem(R.id.actionAdd).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+                    }
                 }
                 return true;
             }
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
                 if (menu != null) {
-                    menu.findItem(R.id.actionFilter).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-                    menu.findItem(R.id.actionRefresh).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-                    //menu.findItem(R.id.actionAdd).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+                    String mfr = Build.MANUFACTURER;
+                    if (!mfr.equalsIgnoreCase(MTConstants.DEVICE_MFR_SAMSUNG)) {
+                        menu.findItem(R.id.actionFilter).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+                        menu.findItem(R.id.actionRefresh).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+                        menu.findItem(R.id.actionAdd).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+                    }
                 }
                 return true;
             }
