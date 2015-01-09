@@ -40,6 +40,7 @@ public class MTNotesView extends LinearLayout {
 
     public void setNotes(String notes) {
         this.mNotes.setText(notes);
+        this.mNotes.setSelection(this.mNotes.getText().length());
     }
 
 }

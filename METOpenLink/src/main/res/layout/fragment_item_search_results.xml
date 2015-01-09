@@ -34,7 +34,7 @@
                 android:gravity="center"
                 android:text="@string/inventory_search_no_inventory"
                 android:textSize="@dimen/mt_font_size_standard"
-                android:textColorLink="@color/mt_common_gray" />
+                android:textColor="@color/mt_common_gray" />
 
         </RelativeLayout>
 
