@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,6 +29,7 @@ import com.milwaukeetool.mymilwaukee.model.MTItemSearchResult;
 import com.milwaukeetool.mymilwaukee.model.MTManufacturer;
 import com.milwaukeetool.mymilwaukee.model.event.MTAddItemEvent;
 import com.milwaukeetool.mymilwaukee.model.event.MTLaunchEvent;
+import com.milwaukeetool.mymilwaukee.model.event.MTimeActionEvent;
 import com.milwaukeetool.mymilwaukee.model.request.MTItemDetailRequest;
 import com.milwaukeetool.mymilwaukee.services.MTWebInterface;
 import com.milwaukeetool.mymilwaukee.util.MTUtils;
@@ -144,19 +146,21 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
                 64,
                 false,
                 true);
-        this.purchaseLocationFieldView.setNextActionDone();
+        //this.purchaseLocationFieldView.setNextActionDone();
 
         this.notesFieldView = this.createLaunchableFieldView(R.string.tool_detail_notes,
                 R.color.mt_black,
                 256,
                 false);
         this.notesFieldView.setHintColorTextResource(R.color.mt_black);
+        this.notesFieldView.setNextActionDone();
 
         this.proofFieldView = this.createLaunchableFieldView(R.string.tool_detail_proof,
                 R.color.mt_black,
                 0,
                 false);
         this.proofFieldView.setHintColorTextResource(R.color.mt_black);
+        this.proofFieldView.setNextActionDone();
 
         this.categoryFieldView = this.createLaunchableFieldView(R.string.tool_detail_category,
                 R.color.mt_black,
@@ -201,56 +205,63 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
     public void launched(MTLaunchEvent launchEvent) {
 
         if (launchEvent.getSource() == this.notesFieldView) {
-
-            LayoutInflater inflater = this.getLayoutInflater();
-
-            final MTNotesView notesView = new MTNotesView(this);
-            notesView.setNotes(mNotesText);
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(AddItemDetailActivity.this,
-                    android.R.style.Theme_Holo_Light_Dialog_NoActionBar));
-
-            builder.setNegativeButton(MiscUtils.getString(R.string.action_cancel), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    AddItemDetailActivity.this.setTheme(R.style.Theme_Milwaukeetool);
-                    UIUtils.hideKeyboard(AddItemDetailActivity.this, notesView);
-                }
-            });
-            builder.setPositiveButton(MiscUtils.getString(R.string.action_done),null);
-            builder.setView(notesView);
-
-            notesDialog = builder.create();
-
-            // Don't allow user to cancel by tapping outside
-            notesDialog.setCanceledOnTouchOutside(false);
-
-            if (notesDialog != null) {
-
-                // Change the soft input mode to make sure the keyboard is visible for the popup
-                notesDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-
-                this.setTheme(android.R.style.Theme_Holo_Light);
-                notesDialog.show();
-
-                Button changeButton = notesDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                if (changeButton != null) {
-                    changeButton.setOnClickListener(new View.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View v)
-                        {
-                            AddItemDetailActivity.this.setTheme(R.style.Theme_Milwaukeetool);
-                            UIUtils.hideKeyboard(AddItemDetailActivity.this, notesView);
-                            AddItemDetailActivity.this.handleNotes(notesView.getNotes());
-                        }
-                    });
-                }
-            }
+            showNotesView();
         } else if (launchEvent.getSource() == this.categoryFieldView) {
-            Intent categoryActivity = new Intent(AddItemDetailActivity.this, CategoryActivity.class);
-            startActivityForResult(categoryActivity, MTConstants.SELECT_CATEGORY_REQUEST);
+            showCategorySelectionView();
         }
+    }
+
+    private void showNotesView() {
+        LayoutInflater inflater = this.getLayoutInflater();
+
+        final MTNotesView notesView = new MTNotesView(this);
+        notesView.setNotes(mNotesText);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(AddItemDetailActivity.this,
+                android.R.style.Theme_Holo_Light_Dialog_NoActionBar));
+
+        builder.setNegativeButton(MiscUtils.getString(R.string.action_cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                AddItemDetailActivity.this.setTheme(R.style.Theme_Milwaukeetool);
+                UIUtils.hideKeyboard(AddItemDetailActivity.this, notesView);
+            }
+        });
+        builder.setPositiveButton(MiscUtils.getString(R.string.action_done),null);
+        builder.setView(notesView);
+
+        notesDialog = builder.create();
+
+        // Don't allow user to cancel by tapping outside
+        notesDialog.setCanceledOnTouchOutside(false);
+
+        if (notesDialog != null) {
+
+            // Change the soft input mode to make sure the keyboard is visible for the popup
+            notesDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+            this.setTheme(android.R.style.Theme_Holo_Light);
+            notesDialog.show();
+
+            Button changeButton = notesDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            if (changeButton != null) {
+                changeButton.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        AddItemDetailActivity.this.setTheme(R.style.Theme_Milwaukeetool);
+                        UIUtils.hideKeyboard(AddItemDetailActivity.this, notesView);
+                        AddItemDetailActivity.this.handleNotes(notesView.getNotes());
+                    }
+                });
+            }
+        }
+    }
+
+    private void showCategorySelectionView() {
+        Intent categoryActivity = new Intent(AddItemDetailActivity.this, CategoryActivity.class);
+        startActivityForResult(categoryActivity, MTConstants.SELECT_CATEGORY_REQUEST);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -297,16 +308,16 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
             }
 
             if (!TextUtils.isEmpty(url)) {
-                mItemImageView.setVisibility(View.VISIBLE);
-                mBackgroundItemImageView.setVisibility(View.VISIBLE);
+                //mItemImageView.setVisibility(View.VISIBLE);
+                //mBackgroundItemImageView.setVisibility(View.VISIBLE);
                 Picasso.with(this)
                         .load(MTConstants.HTTP_PREFIX + url)
                         .placeholder(placeholderResId)
                         .error(placeholderResId)
                         .into(mItemImageView);
             } else {
-                mItemImageView.setVisibility(View.INVISIBLE);
-                mBackgroundItemImageView.setVisibility(View.INVISIBLE);
+                //mItemImageView.setVisibility(View.INVISIBLE);
+                //mBackgroundItemImageView.setVisibility(View.INVISIBLE);
                 Picasso.with(this)
                         .load(placeholderResId)
                         .placeholder(placeholderResId)
@@ -520,5 +531,19 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
             view.setUneditable();
         }
         return view;
+    }
+
+    public void onEvent(MTimeActionEvent event) {
+        if (event.callingActivity == this) {
+            if (event.action == EditorInfo.IME_ACTION_NEXT &&
+                    event.fieldName.equalsIgnoreCase(this.modelNumberFieldView.getFieldName())) {
+                showCategorySelectionView();
+            } else if (event.action == EditorInfo.IME_ACTION_NEXT &&
+                    event.fieldName.equalsIgnoreCase(this.purchaseLocationFieldView.getFieldName())) {
+                showNotesView();
+            } else if (event.action == EditorInfo.IME_ACTION_GO) {
+                // TODO: Do anything?
+            }
+        }
     }
 }
