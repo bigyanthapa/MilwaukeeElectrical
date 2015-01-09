@@ -92,7 +92,7 @@ public class InventoryFragment extends MTFragment {
     @Override
     public void setMenuVisibility(final boolean visible) {
         super.setMenuVisibility(visible);
-        if (visible && !mInventoryLoaded) {
+        if (mIsVisible && (!mInventoryLoaded || (mUserItemManager != null && mUserItemManager.isDirty()))) {
             retrieveInventory(true);
         }
     }
@@ -106,7 +106,7 @@ public class InventoryFragment extends MTFragment {
 //        }
         super.onResume();
 
-        if (mIsVisible && !mInventoryLoaded) {
+        if (mIsVisible && (!mInventoryLoaded || (mUserItemManager != null && mUserItemManager.isDirty()))) {
             retrieveInventory(true);
         }
     }
