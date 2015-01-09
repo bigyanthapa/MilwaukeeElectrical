@@ -23,6 +23,15 @@
         android:paddingTop="@dimen/mt_padding_standard"
         android:paddingBottom="@dimen/mt_padding_standard"
         />
+
+    <ImageView
+        android:id="@+id/selectableItemAltImageView"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@android:color/transparent"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="@dimen/mt_margin_standard"
+        />
     
     <ImageView
         android:id="@+id/selectableItemImageView"

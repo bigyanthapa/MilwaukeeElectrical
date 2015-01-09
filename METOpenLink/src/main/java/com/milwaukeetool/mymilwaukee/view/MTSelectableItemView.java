@@ -22,6 +22,7 @@ public class MTSelectableItemView extends LinearLayout {
 
     private MTTextView mSelectableItemTextView;
     private ImageView mSelectableItemImageView;
+    private ImageView mSelectableItemAltImageView;
 
     private Activity mCallingActivity;
 
@@ -34,6 +35,7 @@ public class MTSelectableItemView extends LinearLayout {
 
         mSelectableItemImageView = (ImageView)findViewById(R.id.selectableItemImageView);
         mSelectableItemTextView = (MTTextView)findViewById(R.id.selectableItemTextView);
+        mSelectableItemAltImageView = (ImageView)findViewById(R.id.selectableItemAltImageView);
 
         final IconDrawable arrowDrawable = new IconDrawable(MilwaukeeToolApplication.getAppContext(), Iconify.IconValue.fa_angle_right).colorRes(R.color.mt_common_gray).sizeDp(30);
         mSelectableItemImageView.setImageDrawable(arrowDrawable);
@@ -50,6 +52,15 @@ public class MTSelectableItemView extends LinearLayout {
         } else {
             mSelectableItemImageView.setVisibility(VISIBLE);
             mSelectableItemImageView.setImageDrawable(drawable);
+        }
+    }
+
+    public void setItemAltDrawable(Drawable drawable) {
+        if (drawable == null) {
+            mSelectableItemAltImageView.setVisibility(INVISIBLE);
+        } else {
+            mSelectableItemAltImageView.setVisibility(VISIBLE);
+            mSelectableItemAltImageView.setImageDrawable(drawable);
         }
     }
 

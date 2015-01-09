@@ -186,8 +186,8 @@
     <!-- Inventory Filter -->
     <string name="filter_view_by_model_number">View by Model #</string>
     <string name="filter_view_all_inventory">View all Inventory</string>
-    <string name="filter_view_by_manufacturer">View by Manufacturer</string>
-    <string name="filter_view_category">View Category</string>
+    <string name="filter_view_by_manufacturer">Filter by Manufacturer</string>
+    <string name="filter_view_category">Filter by Category</string>
     <string name="filter_select_manufacturer">Select Manufacturer</string>
     <string name="filter_select_category">Select Category</string>
     <string name="filter_no_items_found">No items match your filtering criteria.</string>
