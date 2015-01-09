@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -79,13 +78,24 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
     private MTManufacturer mManufacturer;
 
     private ImageView mItemImageView;
+    private ImageView mBackgroundItemImageView;
+    private ImageView mBackgroundHeaderImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         this.handleIntent();
-        this.setBackground();
+
+        mItemImageView = (ImageView)this.findViewById(R.id.addItemImageView);
+        mBackgroundHeaderImageView = (ImageView)this.findViewById(R.id.backgroundHeaderImageView);
+        mBackgroundItemImageView = (ImageView)this.findViewById(R.id.addItemBackgroundImageView);
+
+        if (MTConstants.MILWAUKEE_ITEM.equals(this.mItemType)) {
+            mBackgroundHeaderImageView.setImageResource(R.drawable.mtdetails_background);
+        } else {
+            mBackgroundHeaderImageView.setImageResource(R.drawable.otherdetails_background);
+        }
 
         mSpacer = new View(this);
         mSpacer.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
@@ -96,13 +106,13 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
                 UIUtils.getPixels(20)));
 
         this.descriptionFieldView = this.createSimpleFieldView(R.string.tool_detail_description,
-                R.color.mt_red,
+                MTConstants.MILWAUKEE_ITEM.equals(this.mItemType) ? R.color.mt_red : R.color.mt_black,
                 256,
                 true,
                 MTConstants.MILWAUKEE_ITEM.equals(this.mItemType) ? false : true);
 
         this.modelNumberFieldView = this.createSimpleFieldView(R.string.tool_detail_model_number,
-                R.color.mt_red,
+                MTConstants.MILWAUKEE_ITEM.equals(this.mItemType) ? R.color.mt_red : R.color.mt_black,
                 32,
                 true,
                 MTConstants.MILWAUKEE_ITEM.equals(this.mItemType) ? false : true);
@@ -121,9 +131,9 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
 
         if (MTConstants.OTHER_ITEM.equals(this.mItemType) && this.mManufacturer != null) {
             this.manufacturerFieldView = this.createSimpleFieldView(R.string.tool_detail_manufacturer,
-                    R.color.mt_black,
+                    R.color.mt_red,
                     64,
-                    false,
+                    true,
                     false);
             this.manufacturerFieldView.setFieldValue(this.mManufacturer.getName());
             this.manufacturerFieldView.setFieldId(this.mManufacturer.getId());
@@ -161,21 +171,6 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
         this.assembleLayout();
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-    }
-
-    protected void setBackground() {
-        FrameLayout milwaukeeItemBackground = (FrameLayout) this.findViewById(R.id.addMilwaukeeItemBackground);
-        FrameLayout otherItemBackground = (FrameLayout) this.findViewById(R.id.addOtherItemBackground);
-
-        if (MTConstants.MILWAUKEE_ITEM.equals(this.mItemType)) {
-            milwaukeeItemBackground.setVisibility(View.VISIBLE);
-            otherItemBackground.setVisibility(View.GONE);
-
-            this.mItemImageView = (ImageView) this.findViewById(R.id.addItemImageView);
-        } else if (MTConstants.OTHER_ITEM.equals(this.mItemType)) {
-            milwaukeeItemBackground.setVisibility(View.GONE);
-            otherItemBackground.setVisibility(View.VISIBLE);
-        }
     }
 
     protected void handleIntent() {
@@ -288,12 +283,38 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
     protected void onResume() {
         super.onResume();
 
-        if (mItemImageView != null && mItemSearchResult != null) {
-            Picasso.with(this)
-                    .load(MTConstants.HTTP_PREFIX + mItemSearchResult.getImageUrl())
-                    .placeholder(R.drawable.ic_mkeplaceholder)
-                    .error(R.drawable.ic_mkeplaceholder)
-                    .into(mItemImageView);
+        if (mItemImageView != null) {
+
+            String url = null;
+
+            if (mItemSearchResult != null) {
+                url = mItemSearchResult.getImageUrl();
+            }
+
+            int placeholderResId;
+            if (MTConstants.MILWAUKEE_ITEM.equals(this.mItemType)) {
+                placeholderResId = R.drawable.ic_mkeplaceholder;
+            } else {
+                placeholderResId = R.drawable.ic_otherplaceholder;
+            }
+
+            if (!TextUtils.isEmpty(url)) {
+                mItemImageView.setVisibility(View.VISIBLE);
+                mBackgroundItemImageView.setVisibility(View.VISIBLE);
+                Picasso.with(this)
+                        .load(MTConstants.HTTP_PREFIX + url)
+                        .placeholder(placeholderResId)
+                        .error(placeholderResId)
+                        .into(mItemImageView);
+            } else {
+                mItemImageView.setVisibility(View.INVISIBLE);
+                mBackgroundItemImageView.setVisibility(View.INVISIBLE);
+                Picasso.with(this)
+                        .load(placeholderResId)
+                        .placeholder(placeholderResId)
+                        .into(mItemImageView);
+            }
+
         }
     }
 
@@ -439,14 +460,15 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
 
     protected void assembleLayout() {
         this.mProductDetailLayout = (LinearLayout) this.findViewById(R.id.addItemDetailLayout);
+
+        if (this.manufacturerFieldView != null && MTConstants.OTHER_ITEM.equals(this.mItemType)) {
+            this.mProductDetailLayout.addView(this.manufacturerFieldView);
+        }
+
         this.mProductDetailLayout.addView(this.descriptionFieldView);
         this.mProductDetailLayout.addView(this.modelNumberFieldView);
         this.mProductDetailLayout.addView(mSpacer);
         this.mProductDetailLayout.addView(this.categoryFieldView);
-
-        if (this.manufacturerFieldView != null) {
-            this.mProductDetailLayout.addView(this.manufacturerFieldView);
-        }
 
         this.mProductDetailLayout.addView(this.customIdNameFieldView);
         this.mProductDetailLayout.addView(this.serialNumberFieldView);

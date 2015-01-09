@@ -15,25 +15,12 @@
             android:orientation="vertical">
 
             <FrameLayout
-                android:id="@+id/addOtherItemBackground"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null">
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/otherdetails_background"
-                    android:scaleType="centerCrop"/>
-            </FrameLayout>
-
-            <FrameLayout
-                android:id="@+id/addMilwaukeeItemBackground"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@null">
-
-                <ImageView
+                    android:id="@+id/backgroundHeaderImageView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/mtdetails_background"
