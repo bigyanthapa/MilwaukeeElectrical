@@ -20,6 +20,7 @@
                 android:background="@null">
 
                 <ImageView
+                    android:id="@+id/backgroundHeaderImageView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/mtdetails_background"
@@ -41,7 +42,6 @@
                     android:layout_gravity="center"
                     android:background="@null"
                     android:src="@drawable/tool"/>
-
             </FrameLayout>
 
             <com.milwaukeetool.mymilwaukee.view.MTHeaderTextView

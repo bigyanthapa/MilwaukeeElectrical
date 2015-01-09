@@ -25,14 +25,19 @@ public class MTConstants {
     public static final String INTENT_EXTRA_TITLE = "Intent_Title";
     public static final String INTENT_EXTRA_SEARCH_ITEM_RESULT = "Intent_MTItemSearchResult";
     public static final String INTENT_EXTRA_KIT_ITEM_ARRAY_LIST = "Intent_KitItemArrayList";
+    public static final String INTENT_EXTRA_ITEM_TYPE = "Intent_ItemType";
 
     public static final int FILTER_INVALID_MANUFACTURER = -1;
     public static final int FILTER_INVALID_CATEGORY = 0;
+
+    public static final String MILWAUKEE_ITEM = "MilwaukeeItem";
+    public static final String OTHER_ITEM = "OtherItem";
 
     public static final int CREATE_ACCOUNT_REQUEST = 1000;
     public static final int LOGIN_REQUEST = 1001;
     public static final int SELECT_CATEGORY_REQUEST = 2000;
     public static final int SELECT_CATEGORY_ITEM_REQUEST = 2010;
     public static final int SELECT_MANUFACTURER_ITEM_REQUEST = 2011;
+    public static final int ADD_OTHER_ITEM_REQUEST = 3000;
 
 }

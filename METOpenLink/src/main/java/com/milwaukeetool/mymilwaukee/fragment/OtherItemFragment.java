@@ -3,6 +3,7 @@ package com.milwaukeetool.mymilwaukee.fragment;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,7 +25,9 @@ import com.joanzapata.android.iconify.Iconify;
 import com.milwaukeetool.mymilwaukee.MilwaukeeToolApplication;
 import com.milwaukeetool.mymilwaukee.R;
 import com.milwaukeetool.mymilwaukee.activity.AddItemActivity;
+import com.milwaukeetool.mymilwaukee.activity.AddItemDetailActivity;
 import com.milwaukeetool.mymilwaukee.activity.MTActivity;
+import com.milwaukeetool.mymilwaukee.config.MTConstants;
 import com.milwaukeetool.mymilwaukee.interfaces.MTAlertDialogListener;
 import com.milwaukeetool.mymilwaukee.model.MTManufacturer;
 import com.milwaukeetool.mymilwaukee.model.event.MTimeActionEvent;
@@ -128,10 +131,23 @@ public class OtherItemFragment extends MTFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 LOGD(TAG, "Clicked list item at position: " + position);
 
+                MTManufacturer manufacturer = (MTManufacturer) mAdapter.getItem(position);
+
+                Intent intent = new Intent(OtherItemFragment.this.getActivity(), AddItemDetailActivity.class);
+                intent.putExtra(MTConstants.INTENT_EXTRA_MANUFACTURER, manufacturer);
+                intent.putExtra(MTConstants.INTENT_EXTRA_ITEM_TYPE, MTConstants.OTHER_ITEM);
+                startActivityForResult(intent, MTConstants.ADD_OTHER_ITEM_REQUEST);
             }
         });
 
         return rootView;
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == MTConstants.ADD_OTHER_ITEM_REQUEST) {
+            this.loadManufacturers(true);
+        }
     }
 
     @Override

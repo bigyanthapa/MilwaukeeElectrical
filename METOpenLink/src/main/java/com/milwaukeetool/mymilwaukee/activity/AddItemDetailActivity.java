@@ -25,6 +25,7 @@ import com.milwaukeetool.mymilwaukee.interfaces.MTFinishedListener;
 import com.milwaukeetool.mymilwaukee.interfaces.MTLaunchListener;
 import com.milwaukeetool.mymilwaukee.model.MTCategory;
 import com.milwaukeetool.mymilwaukee.model.MTItemSearchResult;
+import com.milwaukeetool.mymilwaukee.model.MTManufacturer;
 import com.milwaukeetool.mymilwaukee.model.event.MTAddItemEvent;
 import com.milwaukeetool.mymilwaukee.model.event.MTLaunchEvent;
 import com.milwaukeetool.mymilwaukee.model.request.MTItemDetailRequest;
@@ -57,13 +58,14 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
     private MTSimpleFieldView customIdNameFieldView;
     private MTSimpleFieldView serialNumberFieldView;
     private MTSimpleFieldView purchaseLocationFieldView;
+    private MTSimpleFieldView manufacturerFieldView;
 
     private MTLaunchableFieldView categoryFieldView;
     private MTLaunchableFieldView notesFieldView;
     private MTLaunchableFieldView proofFieldView;
 
     private String mNotesText = null;
-
+    private String mItemType;
     private View mSpacer;
     private View mFooter;
 
@@ -73,16 +75,27 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
     private boolean mSaveInProgress = false;
 
     private MTItemSearchResult mItemSearchResult;
+    private MTManufacturer mManufacturer;
 
     private ImageView mItemImageView;
+    private ImageView mBackgroundItemImageView;
+    private ImageView mBackgroundHeaderImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mItemSearchResult = (MTItemSearchResult)getIntent().getParcelableExtra(MTConstants.INTENT_EXTRA_SEARCH_ITEM_RESULT);
+        this.handleIntent();
 
         mItemImageView = (ImageView)this.findViewById(R.id.addItemImageView);
+        mBackgroundHeaderImageView = (ImageView)this.findViewById(R.id.backgroundHeaderImageView);
+        mBackgroundItemImageView = (ImageView)this.findViewById(R.id.addItemBackgroundImageView);
+
+        if (MTConstants.MILWAUKEE_ITEM.equals(this.mItemType)) {
+            mBackgroundHeaderImageView.setImageResource(R.drawable.mtdetails_background);
+        } else {
+            mBackgroundHeaderImageView.setImageResource(R.drawable.otherdetails_background);
+        }
 
         mSpacer = new View(this);
         mSpacer.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
@@ -93,16 +106,16 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
                 UIUtils.getPixels(20)));
 
         this.descriptionFieldView = this.createSimpleFieldView(R.string.tool_detail_description,
-                R.color.mt_red,
+                MTConstants.MILWAUKEE_ITEM.equals(this.mItemType) ? R.color.mt_red : R.color.mt_black,
                 256,
                 true,
-                false);
+                MTConstants.MILWAUKEE_ITEM.equals(this.mItemType) ? false : true);
 
         this.modelNumberFieldView = this.createSimpleFieldView(R.string.tool_detail_model_number,
-                R.color.mt_red,
+                MTConstants.MILWAUKEE_ITEM.equals(this.mItemType) ? R.color.mt_red : R.color.mt_black,
                 32,
                 true,
-                false);
+                MTConstants.MILWAUKEE_ITEM.equals(this.mItemType) ? false : true);
 
         this.customIdNameFieldView = this.createSimpleFieldView(R.string.tool_detail_name,
                 R.color.mt_black,
@@ -115,6 +128,16 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
                 64,
                 false,
                 true);
+
+        if (MTConstants.OTHER_ITEM.equals(this.mItemType) && this.mManufacturer != null) {
+            this.manufacturerFieldView = this.createSimpleFieldView(R.string.tool_detail_manufacturer,
+                    R.color.mt_red,
+                    64,
+                    true,
+                    false);
+            this.manufacturerFieldView.setFieldValue(this.mManufacturer.getName());
+            this.manufacturerFieldView.setFieldId(this.mManufacturer.getId());
+        }
 
         this.purchaseLocationFieldView = this.createSimpleFieldView(R.string.tool_detail_purchase_location,
                 R.color.mt_black,
@@ -141,13 +164,29 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
                 false);
         this.categoryFieldView.setHintColorTextResource(R.color.mt_black);
 
-        this.mapSearchResults(mItemSearchResult);
+        if (mItemSearchResult != null) {
+            this.mapSearchResults(mItemSearchResult);
+        }
 
         this.assembleLayout();
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
+    protected void handleIntent() {
+        this.mItemType = MTConstants.MILWAUKEE_ITEM;
+
+        Intent intent = this.getIntent();
+        if (intent != null) {
+            this.mItemSearchResult = getIntent().getParcelableExtra(MTConstants.INTENT_EXTRA_SEARCH_ITEM_RESULT);
+            this.mManufacturer = this.getIntent().getParcelableExtra(MTConstants.INTENT_EXTRA_MANUFACTURER);
+
+            String itemType = intent.getStringExtra(MTConstants.INTENT_EXTRA_ITEM_TYPE);
+            if (!TextUtils.isEmpty(itemType)) {
+                this.mItemType = itemType;
+            }
+        }
+    }
     @Override
     public void onBackPressed() {
 
@@ -212,8 +251,6 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
             Intent categoryActivity = new Intent(AddItemDetailActivity.this, CategoryActivity.class);
             startActivityForResult(categoryActivity, MTConstants.SELECT_CATEGORY_REQUEST);
         }
-
-
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -244,12 +281,38 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
     protected void onResume() {
         super.onResume();
 
-        if (mItemImageView != null && mItemSearchResult != null) {
-            Picasso.with(this)
-                    .load(MTConstants.HTTP_PREFIX + mItemSearchResult.getImageUrl())
-                    .placeholder(R.drawable.ic_mkeplaceholder)
-                    .error(R.drawable.ic_mkeplaceholder)
-                    .into(mItemImageView);
+        if (mItemImageView != null) {
+
+            String url = null;
+
+            if (mItemSearchResult != null) {
+                url = mItemSearchResult.getImageUrl();
+            }
+
+            int placeholderResId;
+            if (MTConstants.MILWAUKEE_ITEM.equals(this.mItemType)) {
+                placeholderResId = R.drawable.ic_mkeplaceholder;
+            } else {
+                placeholderResId = R.drawable.ic_otherplaceholder;
+            }
+
+            if (!TextUtils.isEmpty(url)) {
+                mItemImageView.setVisibility(View.VISIBLE);
+                mBackgroundItemImageView.setVisibility(View.VISIBLE);
+                Picasso.with(this)
+                        .load(MTConstants.HTTP_PREFIX + url)
+                        .placeholder(placeholderResId)
+                        .error(placeholderResId)
+                        .into(mItemImageView);
+            } else {
+                mItemImageView.setVisibility(View.INVISIBLE);
+                mBackgroundItemImageView.setVisibility(View.INVISIBLE);
+                Picasso.with(this)
+                        .load(placeholderResId)
+                        .placeholder(placeholderResId)
+                        .into(mItemImageView);
+            }
+
         }
     }
 
@@ -365,7 +428,9 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
         request.setModelNumber(this.modelNumberFieldView.getFieldValue());
         request.setItemDescription(this.descriptionFieldView.getFieldValue());
 
-        request.setImageUrl(mItemSearchResult.getImageUrl());
+        if (mItemSearchResult != null) {
+            request.setImageUrl(mItemSearchResult.getImageUrl());
+        }
         if (!TextUtils.isEmpty(mNotesText)) {
             request.setNotes(mNotesText);
         }
@@ -378,6 +443,10 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
         request.setSerialNumber(this.serialNumberFieldView.getFieldValue());
         request.setCustomIdentifier(this.customIdNameFieldView.getFieldValue());
 
+        if (this.manufacturerFieldView != null) {
+            request.setManufacturerId(this.manufacturerFieldView.getFieldId());
+        }
+
 //        request.setManufacturerId(-1);
 //        request.setCategoryId(-1);
 
@@ -389,10 +458,16 @@ public class AddItemDetailActivity extends MTActivity implements MTLaunchListene
 
     protected void assembleLayout() {
         this.mProductDetailLayout = (LinearLayout) this.findViewById(R.id.addItemDetailLayout);
+
+        if (this.manufacturerFieldView != null && MTConstants.OTHER_ITEM.equals(this.mItemType)) {
+            this.mProductDetailLayout.addView(this.manufacturerFieldView);
+        }
+
         this.mProductDetailLayout.addView(this.descriptionFieldView);
         this.mProductDetailLayout.addView(this.modelNumberFieldView);
         this.mProductDetailLayout.addView(mSpacer);
         this.mProductDetailLayout.addView(this.categoryFieldView);
+
         this.mProductDetailLayout.addView(this.customIdNameFieldView);
         this.mProductDetailLayout.addView(this.serialNumberFieldView);
         this.mProductDetailLayout.addView(this.purchaseLocationFieldView);
