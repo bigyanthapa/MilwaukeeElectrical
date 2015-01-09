@@ -156,21 +156,14 @@ public class MyInventoryFilterActivity extends MTActivity {
                 finish();
             }
         });
+        setCheckedItemInSelectableView(allInventoryView, MyInventoryManager.MyInventoryFilterType.FILTER_TYPE_ALL_INVENTORY, false);
         mViews.add(allInventoryView);
 
-        if (mInventoryFilterType == MyInventoryManager.MyInventoryFilterType.FILTER_TYPE_ALL_INVENTORY) {
-            // Set as checked
-            final IconDrawable checkedDrawable = new IconDrawable(MilwaukeeToolApplication.getAppContext(),
-                    Iconify.IconValue.fa_check_circle_o).colorRes(R.color.mt_red).sizeDp(20);
-            allInventoryView.setItemDrawable(checkedDrawable);
-        } else {
-            allInventoryView.setItemDrawable(null);
-        }
         mViews.add(createDividerView());
 
         // Add view by manufacturer
         MTSelectableItemView manufacturerView = new MTSelectableItemView(this);
-        manufacturerView.setItemText(MiscUtils.getString(R.string.filter_select_manufacturer));
+        manufacturerView.setItemText(MiscUtils.getString(R.string.filter_view_by_manufacturer));
         manufacturerView.setBackground(MiscUtils.getAppResources().getDrawable(R.drawable.selectable_background_milwaukeetool));
         manufacturerView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,12 +174,13 @@ public class MyInventoryFilterActivity extends MTActivity {
                 loadManufacturers();
             }
         });
+        setCheckedItemInSelectableView(manufacturerView, MyInventoryManager.MyInventoryFilterType.FILTER_TYPE_BY_MANUFACTURER, true);
         mViews.add(manufacturerView);
         mViews.add(createDividerView());
 
         // Add view category
         MTSelectableItemView categoryView = new MTSelectableItemView(this);
-        categoryView.setItemText(MiscUtils.getString(R.string.filter_select_category));
+        categoryView.setItemText(MiscUtils.getString(R.string.filter_view_category));
         categoryView.setBackground(MiscUtils.getAppResources().getDrawable(R.drawable.selectable_background_milwaukeetool));
         categoryView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -197,6 +191,7 @@ public class MyInventoryFilterActivity extends MTActivity {
                 loadCategories();
             }
         });
+        setCheckedItemInSelectableView(categoryView, MyInventoryManager.MyInventoryFilterType.FILTER_TYPE_BY_CATEGORY, true);
         mViews.add(categoryView);
         mViews.add(createDividerView());
 
@@ -207,6 +202,24 @@ public class MyInventoryFilterActivity extends MTActivity {
                 view.setLayoutParams(getStandardLayoutParams());
             }
             mLayout.addView(view);
+        }
+    }
+
+    private void setCheckedItemInSelectableView(MTSelectableItemView selectableItemView,
+                                                MyInventoryManager.MyInventoryFilterType checkAgainstFilterType,
+                                                boolean isAlternateImage) {
+        IconDrawable newDrawable = null;
+
+        if (mInventoryFilterType == checkAgainstFilterType) {
+            // Set as checked
+            newDrawable = new IconDrawable(MilwaukeeToolApplication.getAppContext(),
+                    Iconify.IconValue.fa_check_circle_o).colorRes(R.color.mt_red).sizeDp(20);
+        }
+
+        if (isAlternateImage) {
+            selectableItemView.setItemAltDrawable(newDrawable);
+        } else {
+            selectableItemView.setItemDrawable(newDrawable);
         }
     }
 
