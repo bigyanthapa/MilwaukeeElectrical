@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,12 +21,13 @@ public class CustomListAdapter extends BaseAdapter {
 
 
     private List<CityModel> cityModelList = new ArrayList<>();
+    private List<String> displayList = new ArrayList<>();
     private Context context;
 
     private View newView;
 
-    public CustomListAdapter(List<CityModel> cityModelList, Context context) {
-        this.cityModelList = cityModelList;
+    public CustomListAdapter(List<String> cityModelList, Context context) {
+        this.displayList = cityModelList;
         this.context = context;
     }
 
@@ -57,12 +59,16 @@ public class CustomListAdapter extends BaseAdapter {
 
         CityModel cityModel = cityModelList.get(i);
 
+
         // we will set values here later
 
-        cityText.setText(cityModel.getCityName());
-        statusText.setText(cityModel.getCityStatus());
+        Toast.makeText(context,""+cityModel.getCityName(),Toast.LENGTH_LONG).show();
 
 
-        return null;
+
+
+
+
+        return newView;
     }
 }

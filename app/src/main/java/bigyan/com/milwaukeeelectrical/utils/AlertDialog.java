@@ -15,7 +15,7 @@ public class AlertDialog {
     private String title;
     private String message;
 
-    private SQliteHandler database;
+    private SQliteHandler database1;
 
     public AlertDialog(){
 
@@ -32,8 +32,8 @@ public class AlertDialog {
             public void onClick(DialogInterface dialog, int which) {
                 // Write your code here to execute after dialog closed
                 //add to database
-                database = new SQliteHandler(context);
-                database.addCity(context,city);
+                database1 = new SQliteHandler(context);
+                database1.addCity(context,city);
             }
         });
 
@@ -106,7 +106,32 @@ public class AlertDialog {
         alertDialog.show();
     }
 
+    public void deleteCityAlert(final Context context, String title, String message,final String city){
 
+        android.app.AlertDialog.Builder alertDialog = new android.app.AlertDialog.Builder(context);
+        alertDialog.setTitle(title);
+        alertDialog.setMessage(message);
+        alertDialog.setIcon(R.drawable.ic_warning_black);
+        // Setting OK Button
+        alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                database1 = new SQliteHandler(context);
+                database1.deleteCity(context,city);
+            }
+        });
+
+        //set negative Button
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Toast.makeText(context, "Item not deleted", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        // Showing Alert Message
+        alertDialog.show();
+    }
 
 
 }

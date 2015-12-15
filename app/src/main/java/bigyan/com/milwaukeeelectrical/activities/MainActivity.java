@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bigyan.com.milwaukeeelectrical.CustomListAdapter;
+import bigyan.com.milwaukeeelectrical.ListArrayAdapter;
 import bigyan.com.milwaukeeelectrical.R;
 import bigyan.com.milwaukeeelectrical.model.CityModel;
 import bigyan.com.milwaukeeelectrical.model.Model;
@@ -50,8 +51,10 @@ public class MainActivity extends AppCompatActivity {
     //initializ listview
     private ListView displayView;
     private CustomListAdapter listAdapter;
-    private List<CityModel> cityModelList;
+    private ArrayList<CityModel> cityModelList;
 
+    private ListArrayAdapter newArrayAdapter;
+    private AlertDialog alertDialog;
     private CityModel cityModel;
 
     @Override
@@ -66,27 +69,14 @@ public class MainActivity extends AppCompatActivity {
 
         displayView = (ListView)findViewById(R.id.displayAllListView);
 
-        listAdapter = new CustomListAdapter(cityModelList, this);
-        displayView.setAdapter(listAdapter);
+        //listAdapter = new CustomListAdapter(cityModelList, MainActivity.this);
+        //displayView.setAdapter(listAdapter);
 
-        //Check for database
-        if(isNetworkAvailable()){
-            //get all cities from database and display
-            try{
-                List<String> cityList = database.getAllCities();
-                for(String s: cityList){
-                    //get Weather Data
-                    displayAll(s);
-                }
-            }catch (NullPointerException e){
-                e.printStackTrace();
-            }
-        }
-        else {
-            AlertDialog alertDialog = new AlertDialog();
-            alertDialog.displayNetworkAlert(MainActivity.this, "Network Alert", "Internet is not available. Please check your connection");
-        }
+        newArrayAdapter = new ListArrayAdapter(MainActivity.this, cityModelList);
+        displayView.setAdapter(newArrayAdapter);
 
+
+        getWeatherOfSavedCities();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_item_fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -94,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent mIntent = new Intent(MainActivity.this, AddItemActivity.class);
                 startActivity(mIntent);
+
             }
         });
 
@@ -117,6 +108,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> av, View v, int pos, long id) {
 
+                String cityToDelete = (String) newArrayAdapter.getCityName(pos);
+
+                alertDialog  = new AlertDialog();
+                alertDialog.deleteCityAlert(MainActivity.this,"Delete Alert","Do you want to Delete this City from Database",cityToDelete);
 
                 return true;
             }
@@ -134,12 +129,39 @@ public class MainActivity extends AppCompatActivity {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
+    /**
+     * Get Weather of the cities stored in database
+     * */
+    public void getWeatherOfSavedCities(){
+        //Check for database
+        if(!isNetworkAvailable()){
+            AlertDialog alertDialog = new AlertDialog();
+            alertDialog.displayNetworkAlert(MainActivity.this, "Network Alert", "Internet is not available. Please check your connection");
+        }
+        else {
+
+            /**Get Cities from Databse and Display the Weather**/
+            List<String> cities = new ArrayList<String>();
+            cities = database.getAllCities(); int count = 0;
+            for(String city:cities){
+                if(city != null && !city.isEmpty()){
+
+                    displayAll(city);
+                }
+
+            }
+
+        }
+
+    }
+
 
     /**
     * Populate ListView by retrieving data for all cities in the database
     * */
     public void displayAll(final String s){
 
+        final List<String> displayList = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
 
         client.interceptors().add(new Interceptor() {
@@ -171,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Response<Model> response, Retrofit retrofit) {
 
-                Model result = response.body();
+                cityModel = new CityModel();
 
                 try {
 
@@ -185,8 +207,11 @@ public class MainActivity extends AppCompatActivity {
                     cityModel.setCityHumidity(humidity);
                     cityModel.setCityPressure(pressure);
 
+                    displayList.add(city);
+                    displayList.add(status);
+
                     cityModelList.add(cityModel);
-                    listAdapter.notifyDataSetChanged();
+                    newArrayAdapter.notifyDataSetChanged();
 
 
                 } catch (Exception e) {
@@ -201,7 +226,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 
 
     @Override

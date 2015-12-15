@@ -1,16 +1,15 @@
 package bigyan.com.milwaukeeelectrical.activities;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import bigyan.com.milwaukeeelectrical.R;
+import bigyan.com.milwaukeeelectrical.utils.AlertDialog;
 
 public class DetailsViewActivity extends AppCompatActivity {
 
@@ -19,6 +18,9 @@ public class DetailsViewActivity extends AppCompatActivity {
     private TextView humidityView;
     private TextView pressureView;
     private FloatingActionButton floatingActionButton;
+
+    private AlertDialog alertDialog;
+    Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +32,7 @@ public class DetailsViewActivity extends AppCompatActivity {
         //initialize
         initialize();
 
-        Bundle bundle = getIntent().getExtras();
+        bundle = getIntent().getExtras();
 
         //Extract the data…
         String venName = bundle.getString("VENUE_NAME");
@@ -49,40 +51,10 @@ public class DetailsViewActivity extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(DetailsViewActivity.this);
-
-                // Setting Dialog Title
-                alertDialog.setTitle("Warning");
-
-                // Setting Dialog Message
-                alertDialog.setMessage("Do you Want to Add this City to Database");
-
-                // Setting Icon to Dialog
-                alertDialog.setIcon(R.drawable.ic_warning_black);
-
-                // Setting OK Button
-                alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Write your code here to execute after dialog closed
-                        Toast.makeText(DetailsViewActivity.this, "Item Added to Database", Toast.LENGTH_SHORT).show();
-
-                    }
-                });
-
-                //set negative Button
-                alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(DetailsViewActivity.this, "Item Not Added to Database",Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-                // Showing Alert Message
-                alertDialog.show();
+                alertDialog = new AlertDialog();
+                alertDialog.displayAddItemAlert(DetailsViewActivity.this, "Alert", "You are about to add this city to your database", bundle.getString("City"));
             }
         });
-
-
 
     }
 

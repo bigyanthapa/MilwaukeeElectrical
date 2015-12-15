@@ -27,7 +27,7 @@ public class AddItemActivity extends AppCompatActivity {
         addCityButotn = (Button)findViewById(R.id.buttonAddFavoriteCity);
         inputCity = (EditText)findViewById(R.id.inputFavoriteCity);
 
-        final String input = inputCity.getText().toString();
+
 
         //Add this City to Database
         addCityButotn.setOnClickListener(new View.OnClickListener() {
@@ -39,9 +39,10 @@ public class AddItemActivity extends AppCompatActivity {
                             .setAction("Action", null).show();
                     inputCity.requestFocus();
                 }else{
-                    inputCity.setText("");
+                    String city = inputCity.getText().toString();
                     alertDialog = new AlertDialog();
-                    alertDialog.displayAddItemAlert(AddItemActivity.this,"Alert","You are about to add this city to your database",input);
+                    alertDialog.displayAddItemAlert(AddItemActivity.this,"Alert","You are about to add this city to your database",city);
+
                 }
 
             }

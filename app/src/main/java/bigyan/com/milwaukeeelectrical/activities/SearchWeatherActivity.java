@@ -25,6 +25,7 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
+
 public class SearchWeatherActivity extends AppCompatActivity {
 
     private static final String API_URL = "http://api.openweathermap.org";
@@ -58,7 +59,7 @@ public class SearchWeatherActivity extends AppCompatActivity {
                             .setAction("Action", null).show();
                     inputText.requestFocus();
                 }else{
-                    inputText.setText("");
+
                     final String input = inputText.getText().toString();
 
                     OkHttpClient client = new OkHttpClient();
@@ -97,7 +98,7 @@ public class SearchWeatherActivity extends AppCompatActivity {
                             try {
 
 
-                                String city = response.body().getName();
+                                String city = response.body().getName();    //city name
                                 String status = response.body().getWeather().get(0).getDescription();
                                 String humidity = response.body().getMain().getHumidity().toString();
                                 String pressure = response.body().getMain().getPressure().toString();
@@ -113,6 +114,8 @@ public class SearchWeatherActivity extends AppCompatActivity {
                                 //Add the bundle to the intent
                                 i.putExtras(bundle);
                                 startActivity(i);
+
+                                inputText.setText("");
 
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -131,6 +134,7 @@ public class SearchWeatherActivity extends AppCompatActivity {
             }
         });
     }
+
 
     //Initialize widgets here
     public void initializeWidgets(){

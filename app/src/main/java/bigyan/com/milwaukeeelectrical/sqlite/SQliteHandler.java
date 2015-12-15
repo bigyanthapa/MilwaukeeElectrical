@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ public class SQliteHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     // Database Name
-    private static final String DATABASE_NAME = "milwaukee.db";
+    private static final String DATABASE_NAME = "milwaukeeTools.db";
 
     // search data table name
     private static final String TABLE_WEATHER_DATA = "weatherData";
@@ -131,6 +132,16 @@ public class SQliteHandler extends SQLiteOpenHelper {
 
         // return search list
         return searchList;
+    }
+
+    public void deleteCity(Context context, String city){
+        String query = "DELETE FROM " +TABLE_WEATHER_DATA+ " WHERE "  + KEY_CITY+ " = " + "'"+city +"'" ;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL(query);
+        db.close();
+        Toast.makeText(context, " "+city+" Successfully Deleted ",Toast.LENGTH_SHORT).show();
+
     }
 
     public void deleteAll() {
