@@ -7,24 +7,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:hint="City/State/Zip"
-        android:textColor="#FFFF00"
-        android:id="@+id/titleTextView"
+        android:hint="City"
+        android:id="@+id/cityNameTextView"
         android:layout_gravity="center_horizontal"
         android:layout_alignParentTop="true"
         android:textStyle="bold|italic"
-        android:layout_marginLeft="10dp" />
+        android:layout_marginLeft="10dp"
+        android:textSize="20dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:hint="Temp"
-        android:id="@+id/temperatureTextView"
+        android:id="@+id/statusTextView"
         android:layout_gravity="center_horizontal"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="39dp"
-        android:layout_marginLeft="10dp" />
+        android:layout_below="@+id/cityNameTextView"
+        android:layout_alignLeft="@+id/cityNameTextView"
+        android:layout_alignStart="@+id/cityNameTextView" />
 
 </RelativeLayout>

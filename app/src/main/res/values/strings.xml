@@ -8,5 +8,12 @@
 
     <string name="search_menu">Search</string>
     <string name="title_activity_search_weather">SearchWeatherActivity</string>
+    <string name="title_activity_add_item">AddItemActivity</string>
+
+    <string name="addItem_Title">Add Your Favorite City</string>
+    <string name="addFavoriteCityButton">Add</string>
+    <string name="title_activity_details_view">DetailsViewActivity</string>
+    <string name="title_activity_list_details">ListDetails</string>
+    <string name="title_activity_main2">Main2Activity</string>
 
 </resources>

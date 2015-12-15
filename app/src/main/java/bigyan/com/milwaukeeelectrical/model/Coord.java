@@ -3,7 +3,7 @@ package bigyan.com.milwaukeeelectrical.model;
 import com.google.gson.annotations.Expose;
 
 /**
- * Created by kundan on 8/8/2015.
+ * Created by bigyanthapa on 12/14/15.
  */
 public class Coord {
 

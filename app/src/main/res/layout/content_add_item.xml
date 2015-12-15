@@ -9,41 +9,38 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="bigyan.com.milwaukeeelectrical.activities.SearchWeatherActivity"
-    tools:showIn="@layout/activity_search_weather">
+    tools:context="bigyan.com.milwaukeeelectrical.activities.AddItemActivity"
+    tools:showIn="@layout/activity_add_item">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Input City"
-        android:id="@+id/titleSearchActivity"
+        android:text="@string/addItem_Title"
+        android:id="@+id/textView"
         android:textSize="25dp"
         android:textStyle="bold"
-        android:layout_marginTop="42dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:id="@+id/searchInput"
-        android:layout_below="@+id/titleSearchActivity"
-        android:layout_marginTop="42dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:hint="Input City" />
+        android:id="@+id/inputFavoriteCity"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="53dp"
+        android:hint="Insert City"
+        android:textSize="25dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ok"
-        android:id="@+id/buttonOk"
-        android:textSize="25dp"
-        android:textStyle="bold"
-        android:layout_below="@+id/searchInput"
+        android:id="@+id/buttonAddFavoriteCity"
+        android:text="@string/addFavoriteCityButton"
+        android:layout_marginTop="61dp"
+        android:layout_below="@+id/inputFavoriteCity"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="44dp" />
-
-
+        android:textSize="25dp"
+        android:textStyle="bold" />
 </RelativeLayout>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="bigyan.com.milwaukeeelectrical.activities.ListDetails"
+    tools:showIn="@layout/activity_list_details">
+
+    <TextView
+        android:layout_width="105dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="City"
+        android:id="@+id/listCityTextView"
+        android:textSize="25dp"
+        android:textColor="#0553fc"
+        android:layout_above="@+id/listStatusTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="105dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Status"
+        android:id="@+id/listStatusTextView"
+        android:textSize="25dp"
+        android:textColor="#0553fc"
+        android:layout_above="@+id/listPressureTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="105dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Humidity"
+        android:id="@+id/listHumidityTextView"
+        android:textSize="25dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textColor="#0553fc" />
+
+    <TextView
+        android:layout_width="105dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Pressure"
+        android:id="@+id/listPressureTextView"
+        android:textSize="25dp"
+        android:textColor="#0553fc"
+        android:layout_above="@+id/listDisplayHumidityText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/listDisplayCityText"
+        android:textSize="20dp"
+        android:layout_alignTop="@+id/listCityTextView"
+        android:layout_alignLeft="@+id/listDetailsViewText"
+        android:layout_alignStart="@+id/listDetailsViewText" />
+
+    <TextView
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/listDisplayStatusText"
+        android:textSize="20dp"
+        android:layout_alignBottom="@+id/listStatusTextView"
+        android:layout_alignLeft="@+id/listDisplayPressureText"
+        android:layout_alignStart="@+id/listDisplayPressureText" />
+
+    <TextView
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/listDisplayHumidityText"
+        android:textSize="20dp"
+        android:layout_alignBottom="@+id/listHumidityTextView"
+        android:layout_alignLeft="@+id/listDetailsViewText"
+        android:layout_alignStart="@+id/listDetailsViewText" />
+
+    <TextView
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/listDisplayPressureText"
+        android:textSize="20dp"
+        android:layout_below="@+id/listStatusTextView"
+        android:layout_alignLeft="@+id/listDisplayHumidityText"
+        android:layout_alignStart="@+id/listDisplayHumidityText" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Details"
+        android:id="@+id/listDetailsViewText"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="56dp"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:textColor="#19039a" />
+
+</RelativeLayout>
