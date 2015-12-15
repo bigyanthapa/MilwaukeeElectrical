@@ -117,6 +117,7 @@ public class AlertDialog {
             public void onClick(DialogInterface dialog, int which) {
                 database1 = new SQliteHandler(context);
                 database1.deleteCity(context,city);
+                //Toast.makeText(context,""+result,Toast.LENGTH_SHORT).show();
             }
         });
 

@@ -25,7 +25,7 @@
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="50dp"
         android:id="@+id/inputFavoriteCity"
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"

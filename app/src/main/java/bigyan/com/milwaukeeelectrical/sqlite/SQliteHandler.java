@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -135,13 +134,11 @@ public class SQliteHandler extends SQLiteOpenHelper {
     }
 
     public void deleteCity(Context context, String city){
-        String query = "DELETE FROM " +TABLE_WEATHER_DATA+ " WHERE "  + KEY_CITY+ " = " + "'"+city +"'" ;
+        String query = "DELETE FROM " +TABLE_WEATHER_DATA+ " WHERE "  + KEY_CITY + " = " + "'"+city+"'" ;
 
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(query);
         db.close();
-        Toast.makeText(context, " "+city+" Successfully Deleted ",Toast.LENGTH_SHORT).show();
-
     }
 
     public void deleteAll() {
